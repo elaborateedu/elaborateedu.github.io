@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <!-- E. centered: total content 132px wide, left offset 14 -->
+
+  <!-- Main vertical stroke -->
+  <rect x="32" y="26" width="18" height="108" rx="3" fill="#0D1B2A"/>
+  <!-- Top horizontal bar -->
+  <rect x="32" y="26" width="66" height="18" rx="3" fill="#0D1B2A"/>
+  <!-- Middle horizontal bar -->
+  <rect x="32" y="71" width="52" height="16" rx="3" fill="#0D1B2A"/>
+  <!-- Bottom horizontal bar -->
+  <rect x="32" y="116" width="66" height="18" rx="3" fill="#0D1B2A"/>
+
+  <!-- Orange period dot (right of E, baseline-aligned) -->
+  <circle cx="132" cy="130" r="14" fill="#FF5733"/>
+</svg>
