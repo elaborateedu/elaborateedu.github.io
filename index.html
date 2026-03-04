@@ -591,8 +591,10 @@ window.doGoogleSignIn = async function() {
       await saveProfile();
     }
     // onAuthStateChanged handles the rest
-  } catch(e) {
-    if (e.code !== 'auth/popup-closed-by-user') {
+} catch(e) {
+    if (e.code === 'auth/user-disabled') {
+      window.location.href = 'disabled.html';
+    } else if (e.code !== 'auth/popup-closed-by-user') {
       console.error('Google sign-in error:', e);
     }
   }
@@ -622,7 +624,13 @@ window.doLogin = async function() {
   if (!pass)  return authErr(err, 'Please enter your password.');
   try {
     await signInWithEmailAndPassword(auth, email, pass);
-  } catch(e) { authErr(err, firebaseErrMsg(e.code)); }
+} catch(e) {
+    if (e.code === 'auth/user-disabled') {
+      window.location.href = 'disabled.html';
+    } else {
+      authErr(err, firebaseErrMsg(e.code));
+    }
+  }
 };
 
 window.logout = async function() {
