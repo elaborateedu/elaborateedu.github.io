@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — Elaborate</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream:#F5F0E8; --navy:#0D1B2A; --coral:#FF5733; --gold:#F4C542;
+    --sage:#7DBE8E; --lavender:#A78BFA;
+    --card-bg:#FFFFFF; --text:#1A1A2E; --muted:#6B7280;
+    --radius:16px;
+    --shadow:0 4px 24px rgba(13,27,42,.10);
+    --tr:.2s cubic-bezier(.4,0,.2,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:#0D1B2A;color:#F9FAFB;min-height:100vh}
+
+  /* ── LOGIN SCREEN ── */
+  #loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0D1B2A;position:relative;overflow:hidden}
+  #loginScreen::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(255,87,51,.07);top:-180px;right:-120px;pointer-events:none}
+  #loginScreen::after{content:'';position:absolute;width:320px;height:320px;border-radius:50%;background:rgba(244,197,66,.05);bottom:-100px;left:-80px;pointer-events:none}
+  .login-card{background:#1F2937;border-radius:24px;padding:48px 44px;width:100%;max-width:400px;box-shadow:0 24px 80px rgba(0,0,0,.4);border:1.5px solid rgba(255,255,255,.06);position:relative;z-index:1;animation:fadeUp .5s both}
+  .login-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.4rem;color:#F9FAFB;margin-bottom:8px}
+  .login-logo span{color:var(--coral)}
+  .login-badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--coral);background:rgba(255,87,51,.15);border:1.5px solid rgba(255,87,51,.25);padding:4px 12px;border-radius:50px;margin-bottom:28px}
+  .login-card h2{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;color:#F9FAFB;margin-bottom:6px}
+  .login-sub{font-size:.88rem;color:rgba(255,255,255,.4);margin-bottom:32px}
+  .login-group{margin-bottom:18px}
+  .login-group label{display:block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px}
+  .login-group input{width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,.08);background:#111827;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color var(--tr)}
+  .login-group input:focus{border-color:var(--coral)}
+  .login-btn{width:100%;margin-top:8px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;padding:14px;border-radius:50px;border:none;background:var(--coral);color:#fff;cursor:pointer;transition:all var(--tr)}
+  .login-btn:hover{background:#e04a28;transform:translateY(-1px)}
+  .login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .login-error{background:rgba(255,87,51,.12);border:1.5px solid rgba(255,87,51,.3);color:var(--coral);border-radius:10px;padding:10px 14px;font-size:.84rem;font-weight:500;margin-bottom:16px;display:none}
+  .login-error.show{display:block}
+
+  /* ── DASHBOARD ── */
+  #dashboard{display:none;min-height:100vh;background:#0F172A}
+  #dashboard.active{display:block}
+
+  /* Top bar */
+  .topbar{background:#1E293B;border-bottom:1.5px solid rgba(255,255,255,.06);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+  .topbar-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.3rem;color:#F9FAFB}
+  .topbar-logo span{color:var(--coral)}
+  .topbar-logo small{font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-left:10px}
+  .topbar-right{display:flex;align-items:center;gap:16px}
+  .admin-email{font-size:.82rem;color:rgba(255,255,255,.4);font-weight:500}
+  .signout-btn{font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;padding:7px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;transition:all var(--tr)}
+  .signout-btn:hover{border-color:var(--coral);color:var(--coral)}
+
+  /* Main */
+  .dash-main{padding:36px 32px 80px;max-width:1200px;margin:0 auto}
+
+  /* Stats row */
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px}
+  .stat-card{background:#1E293B;border-radius:var(--radius);padding:22px 24px;border:1.5px solid rgba(255,255,255,.06)}
+  .stat-value{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;letter-spacing:-.02em;margin-bottom:4px}
+  .stat-label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em}
+
+  /* Controls */
+  .controls{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+  .search-wrap{position:relative;flex:1;min-width:200px}
+  .search-wrap input{width:100%;padding:10px 16px 10px 40px;border-radius:50px;border:1.5px solid rgba(255,255,255,.08);background:#1E293B;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color var(--tr)}
+  .search-wrap input:focus{border-color:var(--coral)}
+  .search-wrap input::placeholder{color:rgba(255,255,255,.25)}
+  .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.25);font-size:.9rem;pointer-events:none}
+  .filter-select{padding:10px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,.08);background:#1E293B;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;cursor:pointer;transition:border-color var(--tr)}
+  .filter-select:focus{border-color:var(--coral)}
+
+  /* Ticket table */
+  .tickets-wrap{background:#1E293B;border-radius:var(--radius);border:1.5px solid rgba(255,255,255,.06);overflow:hidden}
+  .tickets-header{display:grid;grid-template-columns:110px 1fr 140px 110px 120px 100px;gap:0;padding:12px 20px;border-bottom:1.5px solid rgba(255,255,255,.06);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+  .ticket-row{display:grid;grid-template-columns:110px 1fr 140px 110px 120px 100px;gap:0;padding:16px 20px;border-bottom:1.5px solid rgba(255,255,255,.04);transition:background var(--tr);align-items:center}
+  .ticket-row:last-child{border-bottom:none}
+  .ticket-row:hover{background:rgba(255,255,255,.03)}
+  .ticket-cell{font-size:.85rem;color:rgba(255,255,255,.75);padding-right:12px;overflow:hidden}
+  .ticket-id-cell{font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:700;color:var(--coral);letter-spacing:.04em}
+  .ticket-subject-cell{font-weight:600;color:#F9FAFB}
+  .ticket-subject-cell .ticket-from{font-size:.75rem;font-weight:400;color:rgba(255,255,255,.4);margin-top:2px}
+
+  /* Status badge */
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:50px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all var(--tr)}
+  .status-badge.open{background:rgba(255,87,51,.15);color:#FF8C7A;border:1px solid rgba(255,87,51,.25)}
+  .status-badge.in-progress{background:rgba(244,197,66,.12);color:#F4C542;border:1px solid rgba(244,197,66,.25)}
+  .status-badge.resolved{background:rgba(125,190,142,.12);color:#7DBE8E;border:1px solid rgba(125,190,142,.25)}
+  .status-badge:hover{filter:brightness(1.15);transform:scale(1.04)}
+
+  /* Action buttons */
+  .action-btns{display:flex;gap:6px}
+  .action-btn{width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all var(--tr)}
+  .action-btn.reply{background:rgba(56,189,248,.12);color:#38BDF8} .action-btn.reply:hover{background:rgba(56,189,248,.25)}
+  .action-btn.delete{background:rgba(255,87,51,.1);color:var(--coral)} .action-btn.delete:hover{background:rgba(255,87,51,.25)}
+
+  /* Empty state */
+  .empty-state{text-align:center;padding:64px 24px;color:rgba(255,255,255,.25)}
+  .empty-state .empty-icon{font-size:2.5rem;margin-bottom:14px;opacity:.5}
+  .empty-state p{font-size:.9rem}
+
+  /* Loading */
+  .loading-state{text-align:center;padding:48px;color:rgba(255,255,255,.3);font-size:.9rem}
+  .mini-spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,.1);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
+
+  /* Ticket detail modal */
+  .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
+  .modal-overlay.open{opacity:1;pointer-events:all}
+  .modal{background:#1E293B;border-radius:24px;padding:40px;width:100%;max-width:580px;box-shadow:0 24px 80px rgba(0,0,0,.5);border:1.5px solid rgba(255,255,255,.08);transform:translateY(16px) scale(.97);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto}
+  .modal-overlay.open .modal{transform:translateY(0) scale(1)}
+  .modal-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+  .modal-close{width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.06);cursor:pointer;font-size:1rem;color:rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;transition:all var(--tr);flex-shrink:0}
+  .modal-close:hover{background:rgba(255,87,51,.2);color:var(--coral)}
+  .modal h3{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:900;color:#F9FAFB;margin-bottom:4px}
+  .modal-meta{font-size:.8rem;color:rgba(255,255,255,.35);margin-bottom:20px}
+  .modal-field{margin-bottom:18px}
+  .modal-field-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:6px}
+  .modal-field-value{font-size:.9rem;color:rgba(255,255,255,.8);line-height:1.7;background:#111827;border-radius:10px;padding:12px 16px}
+  .modal-actions{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
+  .modal-btn{font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;padding:10px 22px;border-radius:50px;border:none;cursor:pointer;transition:all var(--tr);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .modal-btn.primary{background:var(--coral);color:#fff} .modal-btn.primary:hover{background:#e04a28;transform:translateY(-1px)}
+  .modal-btn.ghost{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);border:1.5px solid rgba(255,255,255,.08)} .modal-btn.ghost:hover{background:rgba(255,255,255,.1)}
+  .modal-btn.danger{background:rgba(255,87,51,.12);color:var(--coral);border:1.5px solid rgba(255,87,51,.2)} .modal-btn.danger:hover{background:var(--coral);color:#fff}
+
+  /* Toast */
+  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#F9FAFB;padding:12px 24px;border-radius:50px;font-size:.88rem;font-weight:600;opacity:0;transition:all .3s;z-index:999;pointer-events:none;border:1.5px solid rgba(255,255,255,.08)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  @media(max-width:900px){
+    .tickets-header,.ticket-row{grid-template-columns:90px 1fr 100px 90px}
+    .col-category,.col-actions-h{display:none}
+    .action-btns{display:none}
+  }
+  @media(max-width:600px){
+    .topbar{padding:0 16px}
+    .dash-main{padding:24px 16px 60px}
+    .admin-email{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">Elaborate<span>.</span></div>
+    <div class="login-badge">Admin Access Only</div>
+    <h2>Sign in</h2>
+    <p class="login-sub">Only authorised administrators can access this page.</p>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-group">
+      <label>Email</label>
+      <input type="email" id="adminEmail" placeholder="admin@example.com" />
+    </div>
+    <div class="login-group">
+      <label>Password</label>
+      <input type="password" id="adminPassword" placeholder="••••••••" />
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doAdminLogin()">Sign In →</button>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-logo">Elaborate<span>.</span> <small>Admin</small></div>
+    <div class="topbar-right">
+      <span class="admin-email" id="adminEmailDisplay"></span>
+      <button class="signout-btn" onclick="doSignOut()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="dash-main">
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="statTotal" style="color:#F9FAFB">—</div>
+        <div class="stat-label">Total Tickets</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statOpen" style="color:var(--coral)">—</div>
+        <div class="stat-label">Open</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statProgress" style="color:var(--gold)">—</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statResolved" style="color:var(--sage)">—</div>
+        <div class="stat-label">Resolved</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search by name, email, subject, or ticket ID…" oninput="renderTickets()" />
+      </div>
+      <select class="filter-select" id="statusFilter" onchange="renderTickets()">
+        <option value="all">All Statuses</option>
+        <option value="open">Open</option>
+        <option value="in-progress">In Progress</option>
+        <option value="resolved">Resolved</option>
+      </select>
+      <select class="filter-select" id="categoryFilter" onchange="renderTickets()">
+        <option value="all">All Categories</option>
+        <option value="bug">Bug</option>
+        <option value="account">Account</option>
+        <option value="feature">Feature Request</option>
+        <option value="appeal">Suspension Appeal</option>
+        <option value="privacy">Privacy</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <!-- Tickets table -->
+    <div class="tickets-wrap">
+      <div class="tickets-header">
+        <div>Ticket ID</div>
+        <div>Subject / From</div>
+        <div>Category</div>
+        <div>Date</div>
+        <div>Status</div>
+        <div class="col-actions-h">Actions</div>
+      </div>
+      <div id="ticketsList">
+        <div class="loading-state"><span class="mini-spinner"></span>Loading tickets…</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ TICKET DETAIL MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-top">
+      <div>
+        <h3 id="modalSubject"></h3>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-field">
+      <div class="modal-field-label">From</div>
+      <div class="modal-field-value" id="modalFrom"></div>
+    </div>
+    <div class="modal-field">
+      <div class="modal-field-label">Category</div>
+      <div class="modal-field-value" id="modalCategory"></div>
+    </div>
+    <div class="modal-field">
+      <div class="modal-field-label">Description</div>
+      <div class="modal-field-value" id="modalBody"></div>
+    </div>
+    <div class="modal-field">
+      <div class="modal-field-label">Status</div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="status-badge open"        onclick="setStatus('open')"       >● Open</button>
+        <button class="status-badge in-progress" onclick="setStatus('in-progress')">● In Progress</button>
+        <button class="status-badge resolved"    onclick="setStatus('resolved')"   >● Resolved</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <a class="modal-btn primary" id="modalReplyBtn" href="#" target="_blank">✉ Reply via Email</a>
+      <button class="modal-btn danger" onclick="deleteCurrentTicket()">🗑 Delete Ticket</button>
+      <button class="modal-btn ghost" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+/* ── Firebase config ── */
+const firebaseConfig = {
+  apiKey:            "AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs",
+  authDomain:        "elaborate-edc16.firebaseapp.com",
+  projectId:         "elaborate-edc16",
+  storageBucket:     "elaborate-edc16.firebasestorage.app",
+  messagingSenderId: "923385978777",
+  appId:             "1:923385978777:web:7d0fdb0472e14e8500bd08"
+};
+
+/* ── AUTHORISED ADMIN EMAIL ── */
+const ADMIN_EMAIL = "jonnyschoen29@gmail.com";
+
+import { initializeApp }                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword,
+         signOut, onAuthStateChanged }            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, getDocs,
+         doc, updateDoc, deleteDoc,
+         orderBy, query }                         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth        = getAuth(firebaseApp);
+const db          = getFirestore(firebaseApp);
+
+let allTickets      = [];   // full list from Firestore
+let currentTicketId = null; // Firestore doc id of open modal ticket
+
+/* ════════════════════════
+   AUTH
+════════════════════════ */
+onAuthStateChanged(auth, user => {
+  if (user && user.email === ADMIN_EMAIL) {
+    document.getElementById('loginScreen').style.display    = 'none';
+    document.getElementById('dashboard').classList.add('active');
+    document.getElementById('adminEmailDisplay').textContent = user.email;
+    loadTickets();
+  } else if (user) {
+    // Signed in but NOT the admin — boot them out
+    signOut(auth);
+    showLoginError('Access denied. This account is not authorised.');
+  } else {
+    document.getElementById('loginScreen').style.display    = 'flex';
+    document.getElementById('dashboard').classList.remove('active');
+  }
+});
+
+window.doAdminLogin = async function() {
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass  = document.getElementById('adminPassword').value;
+  const btn   = document.getElementById('loginBtn');
+  if (!email || !pass) return showLoginError('Please enter your email and password.');
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    const msgs = {
+      'auth/invalid-credential':  'Incorrect email or password.',
+      'auth/user-not-found':      'No account found with that email.',
+      'auth/wrong-password':      'Incorrect password.',
+      'auth/too-many-requests':   'Too many attempts. Try again later.',
+      'auth/user-disabled':       'This account has been disabled.',
+    };
+    showLoginError(msgs[e.code] || 'Sign in failed. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+  }
+};
+
+window.doSignOut = async function() {
+  await signOut(auth);
+};
+
+function showLoginError(msg) {
+  const el = document.getElementById('loginError');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+// Allow Enter key on login form
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
+    doAdminLogin();
+  }
+});
+
+/* ════════════════════════
+   LOAD TICKETS
+════════════════════════ */
+async function loadTickets() {
+  try {
+    const q    = query(collection(db, 'tickets'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    allTickets = snap.docs.map(d => ({ _docId: d.id, ...d.data() }));
+    updateStats();
+    renderTickets();
+  } catch(e) {
+    console.error(e);
+    document.getElementById('ticketsList').innerHTML =
+      '<div class="loading-state">Failed to load tickets. Check your Firestore rules.</div>';
+  }
+}
+
+/* ════════════════════════
+   STATS
+════════════════════════ */
+function updateStats() {
+  document.getElementById('statTotal').textContent    = allTickets.length;
+  document.getElementById('statOpen').textContent     = allTickets.filter(t => (t.status||'open') === 'open').length;
+  document.getElementById('statProgress').textContent = allTickets.filter(t => t.status === 'in-progress').length;
+  document.getElementById('statResolved').textContent = allTickets.filter(t => t.status === 'resolved').length;
+}
+
+/* ════════════════════════
+   RENDER TICKETS
+════════════════════════ */
+window.renderTickets = function() {
+  const search   = (document.getElementById('searchInput').value || '').toLowerCase();
+  const status   = document.getElementById('statusFilter').value;
+  const category = document.getElementById('categoryFilter').value;
+
+  let list = allTickets.filter(t => {
+    const matchStatus   = status   === 'all' || (t.status || 'open') === status;
+    const matchCategory = category === 'all' || t.category === category;
+    const matchSearch   = !search
+      || (t.ticketId     || '').toLowerCase().includes(search)
+      || (t.firstName    || '').toLowerCase().includes(search)
+      || (t.lastName     || '').toLowerCase().includes(search)
+      || (t.email        || '').toLowerCase().includes(search)
+      || (t.subject      || '').toLowerCase().includes(search);
+    return matchStatus && matchCategory && matchSearch;
+  });
+
+  const container = document.getElementById('ticketsList');
+  if (list.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🎉</div><p>No tickets match your filters.</p></div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(t => {
+    const status  = t.status || 'open';
+    const date    = t.createdAt?.toDate
+      ? t.createdAt.toDate().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})
+      : '—';
+    const catLabels = { bug:'🐛 Bug', account:'🔐 Account', feature:'💡 Feature',
+                        appeal:'📋 Appeal', privacy:'🔒 Privacy', other:'💬 Other' };
+    return `
+      <div class="ticket-row" onclick="openTicket('${t._docId}')" style="cursor:pointer">
+        <div class="ticket-cell ticket-id-cell">${t.ticketId || '—'}</div>
+        <div class="ticket-cell ticket-subject-cell">
+          ${escHtml(t.subject || '(no subject)')}
+          <div class="ticket-from">${escHtml((t.firstName||'')+' '+(t.lastName||''))} · ${escHtml(t.email||'')}</div>
+        </div>
+        <div class="ticket-cell col-category" style="font-size:.8rem;color:rgba(255,255,255,.5)">${catLabels[t.category]||t.category||'—'}</div>
+        <div class="ticket-cell" style="font-size:.8rem;color:rgba(255,255,255,.4)">${date}</div>
+        <div class="ticket-cell">
+          <span class="status-badge ${status}" onclick="cycleStatus(event,'${t._docId}')">
+            ● ${status === 'in-progress' ? 'In Progress' : status.charAt(0).toUpperCase()+status.slice(1)}
+          </span>
+        </div>
+        <div class="ticket-cell">
+          <div class="action-btns">
+            <button class="action-btn reply" title="Reply via email" onclick="replyEmail(event,'${escHtml(t.email||'')}','${escHtml(t.subject||'')}','${t.ticketId||''}')">✉</button>
+            <button class="action-btn delete" title="Delete" onclick="deleteTicket(event,'${t._docId}')">🗑</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+};
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* ════════════════════════
+   OPEN MODAL
+════════════════════════ */
+window.openTicket = function(docId) {
+  const t = allTickets.find(x => x._docId === docId);
+  if (!t) return;
+  currentTicketId = docId;
+
+  const catLabels = { bug:'🐛 Bug', account:'🔐 Account Issue', feature:'💡 Feature Request',
+                      appeal:'📋 Suspension Appeal', privacy:'🔒 Privacy Concern', other:'💬 Other' };
+  const date = t.createdAt?.toDate
+    ? t.createdAt.toDate().toLocaleString('en-US', {month:'long',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'})
+    : 'Unknown date';
+
+  document.getElementById('modalSubject').textContent  = t.subject || '(no subject)';
+  document.getElementById('modalMeta').textContent     = `${t.ticketId || ''} · Submitted ${date}`;
+  document.getElementById('modalFrom').textContent     = `${t.firstName||''} ${t.lastName||''} — ${t.email||''}`;
+  document.getElementById('modalCategory').textContent = catLabels[t.category] || t.category || '—';
+  document.getElementById('modalBody').textContent     = t.body || '(no description)';
+  document.getElementById('modalReplyBtn').href =
+    `mailto:${t.email}?subject=Re: [${t.ticketId}] ${encodeURIComponent(t.subject||'')}&body=Hi ${t.firstName||''},%0A%0AThank you for reaching out to Elaborate support.%0A%0A`;
+
+  document.getElementById('modalOverlay').classList.add('open');
+};
+
+window.closeModal    = function() { document.getElementById('modalOverlay').classList.remove('open'); currentTicketId = null; };
+window.handleOverlayClick = function(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); };
+
+/* ════════════════════════
+   STATUS
+════════════════════════ */
+window.setStatus = async function(newStatus) {
+  if (!currentTicketId) return;
+  await updateDoc(doc(db, 'tickets', currentTicketId), { status: newStatus });
+  const t = allTickets.find(x => x._docId === currentTicketId);
+  if (t) t.status = newStatus;
+  updateStats();
+  renderTickets();
+  showToast('Status updated to ' + (newStatus === 'in-progress' ? 'In Progress' : newStatus.charAt(0).toUpperCase()+newStatus.slice(1)));
+};
+
+window.cycleStatus = async function(e, docId) {
+  e.stopPropagation();
+  const t = allTickets.find(x => x._docId === docId);
+  if (!t) return;
+  const cycle = { 'open': 'in-progress', 'in-progress': 'resolved', 'resolved': 'open' };
+  const next  = cycle[t.status || 'open'];
+  await updateDoc(doc(db, 'tickets', docId), { status: next });
+  t.status = next;
+  updateStats();
+  renderTickets();
+  showToast('Status → ' + (next === 'in-progress' ? 'In Progress' : next.charAt(0).toUpperCase()+next.slice(1)));
+};
+
+/* ════════════════════════
+   DELETE
+════════════════════════ */
+window.deleteTicket = async function(e, docId) {
+  e.stopPropagation();
+  if (!confirm('Delete this ticket? This cannot be undone.')) return;
+  await deleteDoc(doc(db, 'tickets', docId));
+  allTickets = allTickets.filter(x => x._docId !== docId);
+  updateStats();
+  renderTickets();
+  showToast('Ticket deleted.');
+};
+
+window.deleteCurrentTicket = async function() {
+  if (!currentTicketId) return;
+  if (!confirm('Delete this ticket? This cannot be undone.')) return;
+  await deleteDoc(doc(db, 'tickets', currentTicketId));
+  allTickets = allTickets.filter(x => x._docId !== currentTicketId);
+  updateStats();
+  renderTickets();
+  closeModal();
+  showToast('Ticket deleted.');
+};
+
+/* ════════════════════════
+   REPLY
+════════════════════════ */
+window.replyEmail = function(e, email, subject, ticketId) {
+  e.stopPropagation();
+  window.open(`mailto:${email}?subject=Re: [${ticketId}] ${encodeURIComponent(subject)}&body=Hi,%0A%0AThank you for reaching out to Elaborate support.%0A%0A`);
+};
+
+/* ════════════════════════
+   TOAST
+════════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
