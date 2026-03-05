@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Classroom — Elaborate</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{--cream:#F5F0E8;--navy:#0D1B2A;--coral:#FF5733;--gold:#F4C542;--sage:#7DBE8E;--lavender:#A78BFA;--card-bg:#FFFFFF;--text:#1A1A2E;--muted:#6B7280;--radius:16px;--shadow:0 4px 24px rgba(13,27,42,.10);--tr:.2s cubic-bezier(.4,0,.2,1)}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:68px;background:rgba(245,240,232,.92);backdrop-filter:blur(14px);border-bottom:1.5px solid rgba(13,27,42,.07)}
+  .logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem;color:var(--navy);letter-spacing:-.02em;text-decoration:none;transition:color var(--tr)}.logo span{color:var(--coral)}.logo:hover{color:var(--coral)}
+  .nav-btn{font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;padding:9px 20px;border-radius:50px;border:none;cursor:pointer;transition:all var(--tr);text-decoration:none;display:inline-flex;align-items:center}
+  .nav-btn.ghost{background:transparent;color:var(--navy)}.nav-btn.ghost:hover{background:rgba(13,27,42,.06)}
+  .nav-btn.primary{background:var(--navy);color:var(--cream)}.nav-btn.primary:hover{background:var(--coral);transform:translateY(-1px)}
+  .guard{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px}
+  .guard h2{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);margin-bottom:12px}
+  .guard p{color:var(--muted);margin-bottom:24px;line-height:1.7}
+  .page{max-width:1100px;margin:0 auto;padding:88px 40px 80px;display:none}
+  .page.active{display:block}
+  .page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:32px;flex-wrap:wrap}
+  .page-heading h1{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);letter-spacing:-.02em}
+  .page-heading h1 em{font-style:italic;font-weight:300;color:var(--coral)}
+  .page-heading p{font-size:.88rem;color:var(--muted);margin-top:4px}
+  .code-card{background:var(--navy);color:#fff;border-radius:20px;padding:28px 32px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .code-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px}
+  .code-value{font-family:'Fraunces',serif;font-size:2.8rem;font-weight:900;letter-spacing:.18em;color:var(--gold);line-height:1}
+  .code-hint{font-size:.82rem;color:rgba(255,255,255,.4);margin-top:8px;line-height:1.5}
+  .copy-btn{padding:10px 22px;border-radius:50px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all var(--tr)}
+  .copy-btn:hover{background:rgba(255,255,255,.1)}
+  .regen-btn{padding:10px 22px;border-radius:50px;border:none;background:rgba(255,87,51,.2);color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all var(--tr)}
+  .regen-btn:hover{background:rgba(255,87,51,.35)}
+  .tabs{display:flex;gap:6px;margin-bottom:28px;border-bottom:1.5px solid rgba(13,27,42,.08);padding-bottom:0}
+  .tab-btn{font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;padding:10px 20px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all var(--tr)}
+  .tab-btn.active{color:var(--navy);border-bottom-color:var(--coral)}
+  .tab-btn:hover:not(.active){color:var(--navy)}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px}
+  .stat-card{background:var(--card-bg);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05)}
+  .stat-value{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;letter-spacing:-.02em;color:var(--navy);margin-bottom:4px}
+  .stat-label{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  .student-table{background:var(--card-bg);border-radius:20px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05);overflow:hidden}
+  .student-header{display:grid;grid-template-columns:1fr 80px 100px 40px;padding:12px 20px;background:rgba(13,27,42,.03);border-bottom:1.5px solid rgba(13,27,42,.06);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .student-row{display:grid;grid-template-columns:1fr 80px 100px 40px;padding:14px 20px;border-bottom:1.5px solid rgba(13,27,42,.04);align-items:center;transition:background var(--tr)}
+  .student-row:last-child{border-bottom:none}
+  .student-row:hover{background:rgba(13,27,42,.02)}
+  .student-cell{font-size:.88rem;color:var(--text);padding-right:12px}
+  .student-name{font-weight:600}.student-email{font-size:.75rem;color:var(--muted);margin-top:2px}
+  .remove-student-btn{width:28px;height:28px;border-radius:8px;border:none;background:rgba(255,87,51,.08);color:var(--coral);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+  .remove-student-btn:hover{background:var(--coral);color:#fff}
+  .empty-row{text-align:center;padding:48px;color:var(--muted);font-size:.9rem}
+  .app-mgmt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+  .app-mgmt-card{background:var(--card-bg);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05);display:flex;flex-direction:column;gap:10px}
+  .app-mgmt-top{display:flex;align-items:center;gap:12px}
+  .app-mgmt-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+  .app-mgmt-name{font-weight:700;font-size:.9rem;color:var(--navy)}
+  .app-mgmt-url{font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .app-mgmt-controls{display:flex;gap:8px;flex-wrap:wrap}
+  .toggle-pill{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:50px;border:1.5px solid;cursor:pointer;transition:all var(--tr);font-family:'DM Sans',sans-serif}
+  .toggle-pill.locked-off{background:rgba(167,139,250,.1);color:#6D4FBB;border-color:rgba(167,139,250,.3)}
+  .toggle-pill.locked-on{background:#A78BFA;color:#fff;border-color:#A78BFA}
+  .remove-app-btn{font-size:.72rem;font-weight:700;padding:5px 12px;border-radius:50px;border:1.5px solid rgba(255,87,51,.2);background:rgba(255,87,51,.06);color:var(--coral);cursor:pointer;transition:all var(--tr);font-family:'DM Sans',sans-serif}
+  .remove-app-btn:hover{background:var(--coral);color:#fff;border-color:var(--coral)}
+  .add-app-form{background:var(--card-bg);border-radius:20px;padding:28px 32px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05);margin-bottom:28px}
+  .add-app-form h3{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;color:var(--navy);margin-bottom:6px}
+  .add-app-form p{font-size:.85rem;color:var(--muted);margin-bottom:18px}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-bottom:16px}
+  .fg{display:flex;flex-direction:column;gap:6px}
+  .fg label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .fg input{padding:11px 14px;border-radius:12px;border:1.5px solid rgba(13,27,42,.12);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);background:var(--cream);outline:none;transition:border-color var(--tr)}
+  .fg input:focus{border-color:var(--coral)}
+  .add-btn{padding:11px 24px;border-radius:50px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:all var(--tr);white-space:nowrap;align-self:flex-end}
+  .add-btn:hover{background:var(--coral);transform:translateY(-1px)}
+  .emoji-row{display:flex;gap:6px;flex-wrap:wrap}
+  .emoji-opt{width:34px;height:34px;border-radius:8px;border:1.5px solid rgba(13,27,42,.1);background:transparent;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+  .emoji-opt.selected,.emoji-opt:hover{background:var(--navy);border-color:var(--navy)}
+  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 24px;border-radius:50px;font-size:.88rem;font-weight:600;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .mini-spinner{width:18px;height:18px;border:2px solid rgba(13,27,42,.1);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media(max-width:768px){nav{padding:0 16px}.page{padding:88px 16px 60px}.code-card{flex-direction:column}.student-header,.student-row{grid-template-columns:1fr 60px 40px}.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">Elaborate<span>.</span></a>
+  <div style="display:flex;gap:8px">
+    <a class="nav-btn ghost" href="index.html">← My Hub</a>
+    <a class="nav-btn primary" href="support.html">Support</a>
+  </div>
+</nav>
+
+<div class="guard" id="guardLogin" style="display:none">
+  <div><div style="font-size:2.5rem;margin-bottom:16px">🔒</div>
+  <h2>Sign in first</h2><p>You need an Elaborate account to access your classroom.</p>
+  <a class="nav-btn primary" href="index.html" style="margin:0 auto">Go to Elaborate →</a></div>
+</div>
+
+<div class="guard" id="guardTeacher" style="display:none">
+  <div><div style="font-size:2.5rem;margin-bottom:16px">🎒</div>
+  <h2>Teachers only</h2><p>This page is for teachers. If you're a student, ask your teacher for the classroom join code.</p>
+  <a class="nav-btn primary" href="index.html" style="margin:0 auto">Back to Hub →</a></div>
+</div>
+
+<div class="page" id="mainPage">
+
+  <div class="page-heading">
+    <div>
+      <h1 id="classroomTitle">My <em>Classroom</em></h1>
+      <p id="classroomSubtitle" style="font-size:.88rem;color:var(--muted);margin-top:4px">Loading…</p>
+    </div>
+    <button class="nav-btn ghost" onclick="renameClassroom()">✏ Rename</button>
+  </div>
+
+  <div class="code-card">
+    <div>
+      <div class="code-label">Student Join Code</div>
+      <div class="code-value" id="joinCodeDisplay">——</div>
+      <div class="code-hint">Share this with your students — they enter it in Elaborate → Join Classroom.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+      <button class="regen-btn" onclick="regenCode()">↻ New Code</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('students',this)">👥 Students</button>
+    <button class="tab-btn" onclick="switchTab('apps',this)">📱 App Management</button>
+    <button class="tab-btn" onclick="switchTab('stats',this)">📊 Stats</button>
+  </div>
+
+  <!-- STUDENTS -->
+  <div class="tab-panel active" id="tab-students">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-value" id="statStudents">—</div><div class="stat-label">Students</div></div>
+      <div class="stat-card"><div class="stat-value" id="statAvgApps">—</div><div class="stat-label">Avg Apps / Student</div></div>
+      <div class="stat-card"><div class="stat-value" id="statPinnedCount">—</div><div class="stat-label">Pinned Apps</div></div>
+    </div>
+    <div class="student-table">
+      <div class="student-header"><div>Student</div><div>Apps</div><div>Joined</div><div></div></div>
+      <div id="studentRows"><div class="empty-row"><span class="mini-spinner"></span> Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- APP MANAGEMENT -->
+  <div class="tab-panel" id="tab-apps">
+    <div class="add-app-form">
+      <h3>Push an App to All Students</h3>
+      <p>Apps you add here appear in every student's hub. Lock an app to prevent students from removing it.</p>
+      <div class="form-grid">
+        <div class="fg"><label>App Name</label><input type="text" id="newAppName" placeholder="e.g. Khan Academy" /></div>
+        <div class="fg"><label>URL</label><input type="text" id="newAppUrl" placeholder="https://example.com" /></div>
+        <button class="add-btn" onclick="addPinnedApp()">Add App ✦</button>
+      </div>
+      <div>
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Pick an Icon</div>
+        <div class="emoji-row" id="teacherEmojiPicker"></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900;color:var(--navy)">Pinned Apps <span id="pinnedCount" style="font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;color:var(--muted)"></span></h3>
+    </div>
+    <div id="pinnedAppGrid" class="app-mgmt-grid"></div>
+    <div id="noPinnedMsg" style="display:none;text-align:center;padding:40px;color:var(--muted);font-size:.9rem">No apps pinned yet. Add one above to push it to all students.</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="tab-panel" id="tab-stats">
+    <div class="stats-row" style="margin-bottom:28px">
+      <div class="stat-card"><div class="stat-value" id="statTotalApps">—</div><div class="stat-label">Total App Installs</div></div>
+      <div class="stat-card"><div class="stat-value" id="statTopApp" style="font-size:1.1rem;padding-top:4px">—</div><div class="stat-label">Most Popular App</div></div>
+    </div>
+    <div style="background:var(--card-bg);border-radius:20px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05);overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr 80px;padding:12px 20px;border-bottom:1.5px solid rgba(13,27,42,.06);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">
+        <div>App</div><div style="text-align:right">Students</div>
+      </div>
+      <div id="appLeaderboard"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+const firebaseConfig={apiKey:"AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs",authDomain:"elaborate-edc16.firebaseapp.com",projectId:"elaborate-edc16",storageBucket:"elaborate-edc16.firebasestorage.app",messagingSenderId:"923385978777",appId:"1:923385978777:web:7d0fdb0472e14e8500bd08"};
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import{getAuth,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import{getFirestore,doc,getDoc,setDoc,updateDoc,collection,query,where,getDocs,serverTimestamp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseApp=initializeApp(firebaseConfig);
+const auth=getAuth(firebaseApp);
+const db=getFirestore(firebaseApp);
+
+const EMOJIS=['📚','🔬','🎨','🧮','🌍','💡','🎵','📝','🏆','🔭','💻','✏️','🗺️','🧪','📊','🎯'];
+const COLORS=[{val:'rgba(255,87,51,.12)',dot:'#FF5733'},{val:'rgba(244,197,66,.18)',dot:'#F4C542'},{val:'rgba(125,190,142,.18)',dot:'#7DBE8E'},{val:'rgba(167,139,250,.18)',dot:'#A78BFA'},{val:'rgba(56,189,248,.15)',dot:'#38BDF8'},{val:'rgba(13,27,42,.08)',dot:'#0D1B2A'}];
+
+let currentUser=null,teacherProfile=null,classroom=null,classroomId=null,students=[],selectedEmoji='📚';
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){show('guardLogin');return;}
+  currentUser=user;
+  const snap=await getDoc(doc(db,'users',user.uid));
+  if(!snap.exists()){show('guardLogin');return;}
+  teacherProfile=snap.data();
+  if((teacherProfile.role||'student')!=='teacher'){show('guardTeacher');return;}
+
+  // Create classroom if teacher somehow doesn't have one
+  if(!teacherProfile.classroomId){
+    const code=genCode();
+    const ref=doc(collection(db,'classrooms'));
+    await setDoc(ref,{name:`${teacherProfile.firstName||''} ${teacherProfile.lastName||''}'s Class`,teacherUid:user.uid,teacherName:`${teacherProfile.firstName||''} ${teacherProfile.lastName||''}`,joinCode:code,pinnedApps:[],lockedAppIds:[],createdAt:serverTimestamp()});
+    teacherProfile.classroomId=ref.id;
+    await updateDoc(doc(db,'users',user.uid),{classroomId:ref.id});
+  }
+  classroomId=teacherProfile.classroomId;
+  const clsSnap=await getDoc(doc(db,'classrooms',classroomId));
+  if(!clsSnap.exists()){show('guardTeacher');return;}
+  classroom=clsSnap.data();
+
+  await loadStudents();
+  renderHeader();
+  buildEmojiPicker();
+  renderStudents();
+  renderPinnedApps();
+  renderStats();
+  show('mainPage');
+});
+
+function show(id){
+  document.querySelectorAll('.guard,.page').forEach(el=>{el.style.display='none';el.classList.remove('active');});
+  const el=document.getElementById(id);
+  if(el.classList.contains('page')){el.classList.add('active');}
+  else{el.style.display='flex';}
+}
+
+function genCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];return s;}
+
+function renderHeader(){
+  document.getElementById('classroomTitle').innerHTML=`<em>${esc(classroom.name||'My Classroom')}</em>`;
+  document.getElementById('classroomSubtitle').textContent=`${students.length} student${students.length===1?'':'s'} enrolled`;
+  document.getElementById('joinCodeDisplay').textContent=classroom.joinCode||'——';
+}
+
+window.copyCode=function(){navigator.clipboard.writeText(classroom.joinCode||'').then(()=>toast('✓ Code copied to clipboard!'));};
+window.regenCode=async function(){
+  if(!confirm('Generate a new join code? The old one will stop working immediately.'))return;
+  const code=genCode();
+  await updateDoc(doc(db,'classrooms',classroomId),{joinCode:code});
+  classroom.joinCode=code;
+  document.getElementById('joinCodeDisplay').textContent=code;
+  toast('✓ New code generated!');
+};
+window.renameClassroom=function(){
+  const name=prompt('New classroom name:',classroom.name||'');
+  if(!name?.trim())return;
+  updateDoc(doc(db,'classrooms',classroomId),{name:name.trim()});
+  classroom.name=name.trim();
+  renderHeader();
+  toast('✓ Renamed!');
+};
+
+window.switchTab=function(tab,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+};
+
+async function loadStudents(){
+  const q=query(collection(db,'users'),where('classroomId','==',classroomId));
+  const snap=await getDocs(q);
+  students=snap.docs.map(d=>({uid:d.id,profile:d.data()})).filter(s=>s.uid!==currentUser.uid);
+}
+
+function renderStudents(){
+  document.getElementById('statStudents').textContent=students.length;
+  const counts=students.map(s=>(s.profile.apps||[]).length);
+  document.getElementById('statAvgApps').textContent=students.length?Math.round(counts.reduce((a,b)=>a+b,0)/students.length):'—';
+  document.getElementById('statPinnedCount').textContent=(classroom.pinnedApps||[]).length;
+  const container=document.getElementById('studentRows');
+  if(students.length===0){container.innerHTML='<div class="empty-row">No students have joined yet. Share your join code above!</div>';return;}
+  container.innerHTML=students.map(s=>{
+    const p=s.profile;
+    const name=`${p.firstName||''} ${p.lastName||''}`.trim()||(p.email||s.uid);
+    const apps=(p.apps||[]).length;
+    const joined=p.createdAt?.toDate?p.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
+    return `<div class="student-row">
+      <div class="student-cell"><div class="student-name">${esc(name)}</div><div class="student-email">${esc(p.email||'')}</div></div>
+      <div class="student-cell" style="font-weight:700;color:var(--navy)">${apps}</div>
+      <div class="student-cell" style="font-size:.8rem;color:var(--muted)">${joined}</div>
+      <div class="student-cell"><button class="remove-student-btn" onclick="removeStudent('${s.uid}')" title="Remove from classroom">✕</button></div>
+    </div>`;
+  }).join('');
+}
+
+window.removeStudent=async function(uid){
+  if(!confirm('Remove this student from your classroom? They will keep their apps but lose access to your pinned/locked apps.'))return;
+  await updateDoc(doc(db,'users',uid),{classroomId:null});
+  students=students.filter(s=>s.uid!==uid);
+  renderStudents();renderStats();toast('Student removed.');
+};
+
+function buildEmojiPicker(){
+  const wrap=document.getElementById('teacherEmojiPicker');wrap.innerHTML='';
+  EMOJIS.forEach(em=>{
+    const btn=document.createElement('button');
+    btn.className='emoji-opt'+(em===selectedEmoji?' selected':'');
+    btn.textContent=em;
+    btn.onclick=()=>{selectedEmoji=em;wrap.querySelectorAll('.emoji-opt').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');};
+    wrap.appendChild(btn);
+  });
+}
+
+window.addPinnedApp=async function(){
+  const name=document.getElementById('newAppName').value.trim();
+  let url=document.getElementById('newAppUrl').value.trim();
+  if(!name||!url){toast('Please enter a name and URL.');return;}
+  if(!/^https?:\/\//i.test(url))url='https://'+url;
+  const color=COLORS[Math.floor(Math.random()*COLORS.length)];
+  const id=Date.now();
+  const newApp={id,name,url,icon:selectedEmoji,color,cat:'learning',custom:false};
+  const pinnedApps=[...(classroom.pinnedApps||[]),newApp];
+  await updateDoc(doc(db,'classrooms',classroomId),{pinnedApps});
+  classroom.pinnedApps=pinnedApps;
+  document.getElementById('newAppName').value='';
+  document.getElementById('newAppUrl').value='';
+  renderPinnedApps();
+  renderStudents();
+  await pushAppsToStudents();
+  toast('✓ App pushed to all students!');
+};
+
+async function pushAppsToStudents(){
+  const pinned=classroom.pinnedApps||[];
+  const locked=new Set(classroom.lockedAppIds||[]);
+  for(const s of students){
+    const p=s.profile;
+    const existingUrls=new Set((p.apps||[]).map(a=>a.url));
+    let apps=[...(p.apps||[])];
+    for(const a of pinned){
+      if(!existingUrls.has(a.url)){apps.push({...a,locked:locked.has(a.id)});}
+    }
+    // Refresh lock status on all apps
+    apps=apps.map(a=>({...a,locked:locked.has(a.id)}));
+    await updateDoc(doc(db,'users',s.uid),{apps});
+    s.profile.apps=apps;
+  }
+}
+
+function renderPinnedApps(){
+  const pinned=classroom.pinnedApps||[];
+  const locked=new Set(classroom.lockedAppIds||[]);
+  document.getElementById('pinnedCount').textContent=`(${pinned.length})`;
+  document.getElementById('noPinnedMsg').style.display=pinned.length?'none':'block';
+  document.getElementById('pinnedAppGrid').innerHTML=pinned.map(a=>{
+    const isLocked=locked.has(a.id);
+    return `<div class="app-mgmt-card">
+      <div class="app-mgmt-top">
+        <div class="app-mgmt-icon" style="background:${a.color?.val||'rgba(13,27,42,.08)'}">${a.icon||'📱'}</div>
+        <div style="min-width:0"><div class="app-mgmt-name">${esc(a.name)}</div><div class="app-mgmt-url">${esc(a.url)}</div></div>
+      </div>
+      <div class="app-mgmt-controls">
+        <button class="toggle-pill ${isLocked?'locked-on':'locked-off'}" onclick="toggleLock(${a.id})">${isLocked?'🔒 Locked':'🔓 Unlocked'}</button>
+        <button class="remove-app-btn" onclick="removePinnedApp(${a.id})">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.toggleLock=async function(appId){
+  const locked=new Set(classroom.lockedAppIds||[]);
+  if(locked.has(appId))locked.delete(appId);else locked.add(appId);
+  const lockedAppIds=[...locked];
+  await updateDoc(doc(db,'classrooms',classroomId),{lockedAppIds});
+  classroom.lockedAppIds=lockedAppIds;
+  renderPinnedApps();
+  await pushAppsToStudents();
+  toast(locked.has(appId)?'🔒 App locked — students cannot remove it':'🔓 App unlocked');
+};
+
+window.removePinnedApp=async function(appId){
+  if(!confirm("Remove this app from all students' hubs?"))return;
+  const pinnedApps=(classroom.pinnedApps||[]).filter(a=>a.id!==appId);
+  const lockedAppIds=(classroom.lockedAppIds||[]).filter(id=>id!==appId);
+  await updateDoc(doc(db,'classrooms',classroomId),{pinnedApps,lockedAppIds});
+  classroom.pinnedApps=pinnedApps;classroom.lockedAppIds=lockedAppIds;
+  for(const s of students){
+    const apps=(s.profile.apps||[]).filter(a=>a.id!==appId);
+    await updateDoc(doc(db,'users',s.uid),{apps});s.profile.apps=apps;
+  }
+  renderPinnedApps();renderStudents();renderStats();toast('App removed from all students.');
+};
+
+function renderStats(){
+  const appMap={};let total=0;
+  for(const s of students){for(const a of(s.profile.apps||[])){total++;appMap[a.name]=(appMap[a.name]||0)+1;}}
+  document.getElementById('statTotalApps').textContent=total;
+  const sorted=Object.entries(appMap).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('statTopApp').textContent=sorted[0]?.[0]||'—';
+  const board=document.getElementById('appLeaderboard');
+  if(!sorted.length){board.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:.9rem">No data yet — stats will appear once students have joined.</div>';return;}
+  const max=sorted[0][1];
+  board.innerHTML=sorted.slice(0,20).map(([name,count])=>`
+    <div style="display:grid;grid-template-columns:1fr 80px;padding:12px 20px;border-bottom:1.5px solid rgba(13,27,42,.04);align-items:center">
+      <div>
+        <div style="font-weight:600;font-size:.88rem;color:var(--navy);margin-bottom:5px">${esc(name)}</div>
+        <div style="height:5px;border-radius:4px;background:rgba(13,27,42,.06)"><div style="height:100%;border-radius:4px;background:var(--coral);width:${Math.round(count/max*100)}%;transition:width .6s ease"></div></div>
+      </div>
+      <div style="text-align:right;font-weight:700;font-size:.9rem;color:var(--navy)">${count}</div>
+    </div>`).join('');
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toast(msg='✓ Saved!'){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+</script>
+</body>
+</html>
