@@ -195,6 +195,7 @@
   .app-cat{font-size:.72rem;color:var(--muted);margin-top:4px}
   .remove-btn{position:absolute;top:8px;right:8px;width:22px;height:22px;background:rgba(255,87,51,.9);color:#fff;border:none;border-radius:50%;font-size:.75rem;cursor:pointer;opacity:0;transition:opacity var(--tr);display:flex;align-items:center;justify-content:center}
   .app-card:hover .remove-btn{opacity:1}
+  .app-card:hover .coll-btn{opacity:1!important}
   .add-card{background:transparent;border:2px dashed rgba(13,27,42,.2);border-radius:var(--radius);padding:28px 16px 20px;text-align:center;cursor:pointer;transition:all var(--tr);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:140px;color:var(--muted);font-size:.85rem;font-weight:600}
   .add-card:hover{border-color:var(--coral);background:rgba(255,87,51,.04);color:var(--coral);transform:translateY(-3px)}
   .add-card .plus{width:40px;height:40px;border-radius:50%;background:rgba(13,27,42,.06);display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:background var(--tr)}
@@ -1540,11 +1541,17 @@ function renderApps() {
       const pinnedUrls = new Set((cls.pinnedApps||[]).map(p=>p.url));
       return pinnedUrls.has(a.url);
     }
+    if (sidebarView && sidebarView.startsWith('coll:')) {
+      const cid = sidebarView.slice(5);
+      const col = getCollections().find(c => c.id === cid);
+      if (!col) return false;
+      return col.appIds.includes(String(a.id));
+    }
     const matchTab    = currentTab==='all'||a.cat===currentTab||(currentTab==='custom'&&a.custom);
     const matchSearch = a.name.toLowerCase().includes(searchQuery);
     return matchTab && matchSearch;
   });
-  if (sidebarView && !sidebarView.startsWith('class:') && sidebarView !== 'favorites') {
+  if (sidebarView && !sidebarView.startsWith('class:') && sidebarView !== 'favorites' && !sidebarView.startsWith('coll:')) {
     list = list.filter(a => a.name.toLowerCase().includes(searchQuery));
   }
 
@@ -1555,13 +1562,18 @@ function renderApps() {
     card.style.animationDelay = `${i*0.05}s`;
     const catLabel = prefs.showCat !== false ? `<div class="app-cat">${app.custom?'My App':app.cat.charAt(0).toUpperCase()+app.cat.slice(1)}</div>` : '';
     const isFav = favIds.has(String(app.id));
+    // Find collection tags for this app
+    const appCols = getCollections().filter(c => c.appIds.includes(String(app.id)));
+    const collTags = appCols.length ? `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:3px;margin-top:4px">${appCols.map(c=>`<span class="collection-tag" style="background:${c.color}18;color:${c.color}">${escHtml(c.name)}</span>`).join('')}</div>` : '';
     card.innerHTML = `
       ${app.locked ? '' : `<button class="remove-btn" onclick="removeApp(event,'${app.id}')">✕</button>`}
       <button class="fav-btn ${isFav?'active':''}" onclick="toggleFav(event,'${app.id}')" title="${isFav?'Unfavorite':'Favorite'}">★</button>
+      <button style="position:absolute;bottom:8px;right:8px;width:20px;height:20px;background:rgba(13,27,42,.07);color:var(--muted);border:none;border-radius:6px;font-size:.6rem;cursor:pointer;opacity:0;transition:opacity .18s;display:flex;align-items:center;justify-content:center" class="coll-btn" onclick="showAddToCollection(event,'${app.id}')" title="Add to collection">📁</button>
       <div class="app-icon" style="background:${app.color.val}">${app.icon}</div>
       <div class="app-name">${app.name}${app.locked ? ' <span style="font-size:.65rem;color:var(--muted)">🔒</span>' : ''}</div>
-      ${catLabel}
+      ${catLabel}${collTags}
     `;
+    card.querySelector('.coll-btn') && (card.style.overflow='visible');
     card.addEventListener('click', () => {
       if (prefs.newTab !== false) window.open(app.url, '_blank');
       else window.location.href = app.url;
@@ -1925,6 +1937,11 @@ window.setSidebarView = function(view, btn) {
     const cid = view.slice(6);
     label = loadedClassrooms[cid]?.name || 'Classroom Apps';
   }
+  if (view.startsWith('coll:')) {
+    const cid = view.slice(5);
+    const col = getCollections().find(c => c.id === cid);
+    label = col ? '📁 ' + col.name : 'Collection';
+  }
   document.getElementById('grid-label').textContent = label || 'All Apps';
   // Load announcement for this classroom
   if (view.startsWith('class:')) {
@@ -1953,6 +1970,8 @@ async function buildSidebar() {
   const sbJoin  = document.getElementById('sbJoinBtn');
   const sbNew   = document.getElementById('sbNewClassBtn');
   sbList.innerHTML = '';
+
+  renderSidebarCollections();
 
   if (role === 'teacher') {
     sbClass.style.display = 'block';
