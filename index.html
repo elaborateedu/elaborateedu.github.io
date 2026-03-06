@@ -1054,7 +1054,7 @@
       <h2 style="font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:12px;letter-spacing:-.02em">Join your class</h2>
       <p style="color:var(--muted);line-height:1.75;font-size:.95rem;margin-bottom:24px">If your teacher uses Elaborate, ask them for a 6-character join code.</p>
       <div style="background:rgba(125,190,142,.1);border:1.5px solid rgba(125,190,142,.3);border-radius:12px;padding:14px 18px;margin-bottom:28px;font-size:.88rem;color:var(--navy);line-height:1.6;text-align:left">
-        Go to your <strong>avatar → Settings → Classroom</strong> and enter the code. Your teacher's apps will appear in your hub automatically.
+        Go to your <strong>avatar → Settings → Classroom</strong> and enter the code. Your teacher apps will appear in your hub automatically.
       </div>
       <button class="modal-submit" onclick="closeOnboarding()" style="width:100%">Start using Elaborate ✦</button>
     </div>
@@ -2128,7 +2128,7 @@ window.doJoinClassroom = async function() {
     const cid = classDoc.id;
     // Migrate single → array
     const existing = getClassroomIds();
-    if (existing.includes(cid)) { errEl.textContent = "You're already in this classroom."; errEl.classList.add('show'); return; }
+    if (existing.includes(cid)) { errEl.textContent = "You are already in this classroom."; errEl.classList.add('show'); return; }
     userProfile.classroomIds = [...existing, cid];
     userProfile.classroomId  = cid; // keep for back-compat
     userProfile.role = 'student';
@@ -2252,7 +2252,7 @@ window.checkVerification = async function() {
       document.getElementById('timerWidget').style.display = 'block';
       loadNotes(); loadTimerSessions();
     } else {
-      msgEl.textContent = "Email not verified yet — check your spam folder if you don't see it.";
+      msgEl.textContent = "Email not verified yet — check your spam folder if you do not see it.";
     }
   } catch(e) { msgEl.textContent = 'Error checking. Please try again.'; }
 };
@@ -2594,9 +2594,9 @@ const CHANGELOG = [
     dotColor: '#7DBE8E',
     features: [
       { icon:'🏫', name:'Multiple Classrooms', tag:'new', desc:'Students can join multiple classrooms and toggle between them from the sidebar. Teachers can create and manage multiple classes.' },
-      { icon:'⭐', name:'App Favorites', tag:'new', desc:'Star any app to pin it to your personal Favorites view. Badge shows how many you've saved.' },
+      { icon:'⭐', name:'App Favorites', tag:'new', desc:'Star any app to pin it to your personal Favorites view. Badge shows how many you have saved.' },
       { icon:'◀', name:'Classroom Sidebar', tag:'new', desc:'A collapsible left-hand panel shows your classrooms and views. Clicking a classroom filters apps to that class.' },
-      { icon:'📢', name:'Announcements', tag:'improved', desc:'Teacher announcements are now tied per-classroom. Dismissing one doesn't hide another. Teacher name shown on the banner.' },
+      { icon:'📢', name:'Announcements', tag:'improved', desc:'Teacher announcements are now tied per-classroom. Dismissing one does not hide another. Teacher name shown on the banner.' },
       { icon:'💬', name:'App Requests', tag:'new', desc:'Students can request apps from their teacher. Teacher sees pending requests with a badge count and can approve or decline.' },
     ]
   },
@@ -2610,7 +2610,7 @@ const CHANGELOG = [
     features: [
       { icon:'🔒', name:'Account Suspension', tag:'new', desc:'Admins can suspend any user with a custom reason. Suspended users see the reason on the disabled screen and are signed out automatically.' },
       { icon:'👤', name:'User Management Panel', tag:'new', desc:'Admin dashboard now has a Users tab to look up, suspend, and unsuspend accounts. Includes a live list of all currently suspended users.' },
-      { icon:'🎫', name:'Quick Suspend from Ticket', tag:'new', desc:'When reviewing a support ticket, admins can click Suspend User to jump straight to the user's profile pre-filled.' },
+      { icon:'🎫', name:'Quick Suspend from Ticket', tag:'new', desc:'When reviewing a support ticket, admins can click Suspend User to jump straight to the user profile pre-filled.' },
     ]
   },
   {
@@ -2637,7 +2637,7 @@ const CHANGELOG = [
     dotColor: 'var(--gold)',
     features: [
       { icon:'🍎', name:'Teacher Accounts', tag:'new', desc:'Role toggle on signup. Teachers get a classroom auto-created with a 6-character join code.' },
-      { icon:'🔑', name:'Join Classroom', tag:'new', desc:'Students enter a join code to connect to a teacher's classroom. Pinned and locked apps sync automatically.' },
+      { icon:'🔑', name:'Join Classroom', tag:'new', desc:'Students enter a join code to connect to a teacher classroom. Pinned and locked apps sync automatically.' },
       { icon:'📱', name:'App Management', tag:'new', desc:'Teachers can push apps to all students, toggle locking, and remove apps from the classroom.' },
       { icon:'🔒', name:'Locked Apps', tag:'new', desc:'Apps marked as locked by a teacher show a 🔒 icon and cannot be removed by students.' },
     ]
