@@ -265,20 +265,38 @@ onAuthStateChanged(auth,async user=>{
     classroom=clsSnap.data();
   }
 
-  await loadStudents();
+  // Show the page immediately so layout is visible even if data takes time
+  show('mainPage');
   renderHeader();
   buildEmojiPicker();
-  renderStudents();
   renderPinnedApps();
-  renderStats();
-  show('mainPage');
+
+  try {
+    await loadStudents();
+    renderStudents();
+    renderStats();
+    renderHeader(); // re-render with student count
+  } catch(e) {
+    console.error('loadStudents error:', e);
+    document.getElementById('studentRows').innerHTML =
+      `<div class="empty-row" style="color:var(--coral)">
+        ⚠ Could not load students. If this is your first time, you may need a Firestore index.<br>
+        <span style="font-size:.8rem;color:var(--muted)">Check the browser console for a link to create it.</span>
+      </div>`;
+  }
 });
 
 function show(id){
-  document.querySelectorAll('.guard,.page').forEach(el=>{el.style.display='none';el.classList.remove('active');});
+  // Hide all guards with inline style; remove active from pages
+  document.querySelectorAll('.guard').forEach(el=>el.style.display='none');
+  document.querySelectorAll('.page').forEach(el=>{el.classList.remove('active');el.style.display='';});
   const el=document.getElementById(id);
-  if(el.classList.contains('page')){el.classList.add('active');}
-  else{el.style.display='flex';}
+  if(el.classList.contains('page')){
+    el.style.display=''; // clear any inline override
+    el.classList.add('active');
+  } else {
+    el.style.display='flex';
+  }
 }
 
 function genCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];return s;}
