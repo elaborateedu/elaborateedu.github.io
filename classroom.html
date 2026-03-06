@@ -140,6 +140,7 @@
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('students',this)">👥 Students</button>
     <button class="tab-btn" onclick="switchTab('apps',this)">📱 App Management</button>
+    <button class="tab-btn" onclick="switchTab('requests',this)">💬 App Requests <span id="requestsBadge" style="display:none;background:var(--coral);color:#fff;font-size:.65rem;padding:2px 6px;border-radius:50px;margin-left:4px">0</span></button>
     <button class="tab-btn" onclick="switchTab('stats',this)">📊 Stats</button>
   </div>
 
@@ -178,6 +179,16 @@
     <div id="noPinnedMsg" style="display:none;text-align:center;padding:40px;color:var(--muted);font-size:.9rem">No apps pinned yet. Add one above to push it to all students.</div>
   </div>
 
+  <!-- APP REQUESTS -->
+  <div class="tab-panel" id="tab-requests">
+    <div id="requestsLoading" style="text-align:center;padding:48px;color:var(--muted);font-size:.9rem"><span class="mini-spinner"></span> Loading requests…</div>
+    <div id="requestsList" style="display:flex;flex-direction:column;gap:12px"></div>
+    <div id="requestsEmpty" style="display:none;text-align:center;padding:60px 24px;color:var(--muted)">
+      <div style="font-size:2rem;margin-bottom:12px">💬</div>
+      <p style="font-size:.9rem">No app requests yet. Students can request apps from their hub.</p>
+    </div>
+  </div>
+
   <!-- STATS -->
   <div class="tab-panel" id="tab-stats">
     <div class="stats-row" style="margin-bottom:28px">
@@ -200,7 +211,7 @@
 const firebaseConfig={apiKey:"AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs",authDomain:"elaborate-edc16.firebaseapp.com",projectId:"elaborate-edc16",storageBucket:"elaborate-edc16.firebasestorage.app",messagingSenderId:"923385978777",appId:"1:923385978777:web:7d0fdb0472e14e8500bd08"};
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import{getAuth,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import{getFirestore,doc,getDoc,setDoc,updateDoc,collection,query,where,getDocs,serverTimestamp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import{getFirestore,doc,getDoc,setDoc,updateDoc,deleteDoc,collection,query,where,getDocs,addDoc,onSnapshot,orderBy,serverTimestamp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseApp=initializeApp(firebaseConfig);
 const auth=getAuth(firebaseApp);
@@ -340,6 +351,71 @@ window.switchTab=function(tab,btn){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='requests')loadRequests();
+};
+
+let requestsLoaded=false;
+async function loadRequests(){
+  if(requestsLoaded)return;
+  requestsLoaded=true;
+  document.getElementById('requestsLoading').style.display='block';
+  document.getElementById('requestsList').innerHTML='';
+  document.getElementById('requestsEmpty').style.display='none';
+  try{
+    const q=query(collection(db,'classrooms',classroomId,'appRequests'),orderBy('createdAt','desc'));
+    onSnapshot(q,snap=>{
+      const reqs=snap.docs.map(d=>({id:d.id,...d.data()}));
+      const pending=reqs.filter(r=>r.status==='pending');
+      const badge=document.getElementById('requestsBadge');
+      if(badge){badge.textContent=pending.length;badge.style.display=pending.length?'inline':'none';}
+      document.getElementById('requestsLoading').style.display='none';
+      if(reqs.length===0){document.getElementById('requestsEmpty').style.display='block';return;}
+      document.getElementById('requestsList').innerHTML=reqs.map(r=>{
+        const isPending=r.status==='pending';
+        const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
+        return `<div style="background:var(--card-bg);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow);border:1.5px solid ${isPending?'rgba(167,139,250,.3)':'rgba(13,27,42,.06)'};display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+              <span style="font-weight:700;font-size:.95rem;color:var(--navy)">${esc(r.appName)}</span>
+              <span style="font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:50px;background:${isPending?'rgba(167,139,250,.12)':'rgba(125,190,142,.12)'};color:${isPending?'#6D4FBB':'#2E7D47'}">${r.status}</span>
+            </div>
+            ${r.appUrl?`<div style="font-size:.78rem;color:var(--muted);margin-bottom:4px">🔗 ${esc(r.appUrl)}</div>`:''}
+            ${r.reason?`<div style="font-size:.85rem;color:var(--text);margin-bottom:6px;line-height:1.55">"${esc(r.reason)}"</div>`:''}
+            <div style="font-size:.75rem;color:var(--muted)">From <strong>${esc(r.studentName||'Student')}</strong> · ${date}</div>
+          </div>
+          ${isPending?`<div style="display:flex;gap:8px;flex-shrink:0">
+            <button onclick="approveRequest('${r.id}','${esc(r.appName)}','${esc(r.appUrl||'')}')" style="padding:8px 16px;border-radius:50px;border:none;background:var(--sage);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer;transition:all .2s">✓ Add App</button>
+            <button onclick="declineRequest('${r.id}')" style="padding:8px 16px;border-radius:50px;border:1.5px solid rgba(255,87,51,.25);background:transparent;color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer;transition:all .2s">✕ Decline</button>
+          </div>`:''}
+        </div>`;
+      }).join('');
+    });
+  }catch(e){
+    console.error(e);
+    document.getElementById('requestsLoading').innerHTML='<span style="color:var(--coral)">⚠ Could not load requests. Check console.</span>';
+  }
+}
+
+window.approveRequest=async function(reqId,appName,appUrl){
+  let url=appUrl||prompt(`Enter the URL for "${appName}":`,`https://`);
+  if(!url)return;
+  if(!/^https?:\/\//i.test(url))url='https://'+url;
+  const ICONS=['📚','🔬','🎨','🧮','🌍','💡','🎵','📝','🏆','🔭','💻','✏️','📊','🎯'];
+  const color=COLORS[Math.floor(Math.random()*COLORS.length)];
+  const icon=ICONS[Math.floor(Math.random()*ICONS.length)];
+  const newApp={id:Date.now(),name:appName,url,icon,color,cat:'learning',custom:false};
+  const pinnedApps=[...(classroom.pinnedApps||[]),newApp];
+  await updateDoc(doc(db,'classrooms',classroomId),{pinnedApps});
+  classroom.pinnedApps=pinnedApps;
+  await pushAppsToStudents();
+  await updateDoc(doc(db,'classrooms',classroomId,'appRequests',reqId),{status:'approved'});
+  renderPinnedApps();
+  toast(`✓ "${appName}" added to all students' hubs!`);
+};
+
+window.declineRequest=async function(reqId){
+  await updateDoc(doc(db,'classrooms',classroomId,'appRequests',reqId),{status:'declined'});
+  toast('Request declined.');
 };
 
 async function loadStudents(){
