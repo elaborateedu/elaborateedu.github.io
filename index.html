@@ -496,19 +496,29 @@
   <div class="hub-header">
     <div class="hub-greeting" id="hubGreeting">Welcome back, <span>Scholar</span>!</div>
     <div class="hub-sub" id="hubSub">It's great to see you again!</div>
-    <div id="announcementBanner" style="display:none;background:rgba(244,197,66,.15);border:1.5px solid rgba(244,197,66,.4);border-radius:12px;padding:12px 18px;margin-top:14px;font-size:.88rem;color:var(--navy);line-height:1.6;max-width:700px">
-      <strong>📢 From your teacher:</strong> <span id="announcementText"></span>
+    <div id="announcementBanner" style="display:none;background:linear-gradient(135deg,rgba(244,197,66,.18),rgba(244,197,66,.08));border:2px solid rgba(244,197,66,.5);border-radius:16px;padding:16px 20px;margin-top:16px;max-width:760px;position:relative">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="font-size:1.5rem;flex-shrink:0;margin-top:2px">📢</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(184,146,10,.9);margin-bottom:5px" id="announcementMeta">From your teacher</div>
+          <div style="font-size:.95rem;color:var(--navy);line-height:1.65;font-weight:500" id="announcementText"></div>
+        </div>
+        <button onclick="dismissAnnouncement()" style="background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:0;flex-shrink:0;line-height:1;opacity:.6;transition:opacity .2s" title="Dismiss">✕</button>
+      </div>
     </div>
     <div class="hub-search-wrap">
       <svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input class="hub-search" type="text" placeholder="Search apps…" oninput="filterApps(this.value)" />
     </div>
   </div>
-  <div class="hub-tabs">
-    <button class="tab-btn active" onclick="setTab(this,'all')">All Apps</button>
-    <button class="tab-btn" onclick="setTab(this,'learning')">Learning</button>
-    <button class="tab-btn" onclick="setTab(this,'tools')">Tools</button>
-    <button class="tab-btn" onclick="setTab(this,'custom')">My Apps</button>
+  <div class="hub-tabs" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div style="display:flex;gap:4px">
+      <button class="tab-btn active" onclick="setTab(this,'all')">All Apps</button>
+      <button class="tab-btn" onclick="setTab(this,'learning')">Learning</button>
+      <button class="tab-btn" onclick="setTab(this,'tools')">Tools</button>
+      <button class="tab-btn" onclick="setTab(this,'custom')">My Apps</button>
+    </div>
+    <button id="requestAppBtn" onclick="showRequestModal()" style="display:none;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:7px 14px;border-radius:50px;border:1.5px solid rgba(167,139,250,.4);background:rgba(167,139,250,.1);color:#6D4FBB;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.background='rgba(167,139,250,.2)'" onmouseout="this.style.background='rgba(167,139,250,.1)'">💬 Request an App</button>
   </div>
   <div class="hub-body">
     <p class="section-title" id="grid-label">All Apps</p>
@@ -706,38 +716,89 @@
 </div>
 
 <!-- ONBOARDING MODAL -->
-<div class="modal-overlay" id="onboardingModal">
-  <div class="modal" style="max-width:480px;text-align:center">
-    <div id="onboardStep1">
-      <div style="font-size:3rem;margin-bottom:16px">🎉</div>
-      <h2>Welcome to Elaborate!</h2>
-      <p class="modal-sub" style="line-height:1.7;margin-bottom:24px">Your personal learning hub is ready. Let's do a quick tour so you get the most out of it.</p>
-      <button class="modal-submit" onclick="onboardNext(2)">Let's go →</button>
+<!-- ONBOARDING OVERLAY -->
+<div id="onboardingModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(13,27,42,.7);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:24px">
+  <div style="background:var(--card-bg);border-radius:28px;max-width:520px;width:100%;box-shadow:0 32px 80px rgba(13,27,42,.3);overflow:hidden;position:relative">
+
+    <!-- Progress bar -->
+    <div style="height:4px;background:rgba(13,27,42,.08)"><div id="onboardProgress" style="height:100%;background:var(--coral);transition:width .4s ease;width:25%"></div></div>
+
+    <!-- Skip -->
+    <button onclick="closeOnboarding()" style="position:absolute;top:16px;right:20px;background:none;border:none;cursor:pointer;font-size:.82rem;font-weight:600;color:var(--muted);padding:6px 10px;border-radius:8px;transition:all .2s" onmouseover="this.style.background='rgba(13,27,42,.06)'" onmouseout="this.style.background='none'">Skip</button>
+
+    <!-- Steps -->
+    <div id="onboardStep1" style="padding:48px 44px 40px;text-align:center">
+      <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--coral),#ff8c6b);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 24px;box-shadow:0 8px 24px rgba(255,87,51,.3)">🎉</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:12px;letter-spacing:-.02em">Welcome to Elaborate!</h2>
+      <p style="color:var(--muted);line-height:1.75;font-size:.95rem;margin-bottom:32px">Your personal learning hub is ready. Let's take 30 seconds to show you around.</p>
+      <button class="modal-submit" onclick="onboardNext(2)" style="width:100%">Let's go →</button>
     </div>
-    <div id="onboardStep2" style="display:none">
-      <div style="font-size:3rem;margin-bottom:16px">📱</div>
-      <h2>Your App Hub</h2>
-      <p class="modal-sub" style="line-height:1.7;margin-bottom:24px">All your school apps live here. Click any app to open it. Use the <strong>+ Add App</strong> card to pin any website you use for school.</p>
-      <button class="modal-submit" onclick="onboardNext(3)">Next →</button>
+
+    <div id="onboardStep2" style="display:none;padding:48px 44px 40px;text-align:center">
+      <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--navy),#2a4a6b);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 24px;box-shadow:0 8px 24px rgba(13,27,42,.25)">📱</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:12px;letter-spacing:-.02em">Your App Hub</h2>
+      <p style="color:var(--muted);line-height:1.75;font-size:.95rem;margin-bottom:24px">All your school apps in one place. Click any card to open it instantly.</p>
+      <div style="background:rgba(13,27,42,.04);border-radius:14px;padding:16px;margin-bottom:28px;text-align:left">
+        <div style="font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">Quick tip</div>
+        <div style="font-size:.88rem;color:var(--navy);line-height:1.6">Hit the <strong style="color:var(--coral)">＋ Add App</strong> card to pin any website — Google Docs, your school portal, anything.</div>
+      </div>
+      <button class="modal-submit" onclick="onboardNext(3)" style="width:100%">Next →</button>
     </div>
-    <div id="onboardStep3" style="display:none">
-      <div style="font-size:3rem;margin-bottom:16px">🎨</div>
-      <h2>Make it yours</h2>
-      <p class="modal-sub" style="line-height:1.7;margin-bottom:24px">Head to <strong>Settings</strong> to pick a theme, change your name, or adjust preferences. Four themes to choose from!</p>
-      <button class="modal-submit" onclick="onboardNext(4)">Next →</button>
+
+    <div id="onboardStep3" style="display:none;padding:48px 44px 40px;text-align:center">
+      <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--gold),#f7b731);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 24px;box-shadow:0 8px 24px rgba(244,197,66,.35)">🎨</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:12px;letter-spacing:-.02em">Make it yours</h2>
+      <p style="color:var(--muted);line-height:1.75;font-size:.95rem;margin-bottom:24px">Pick a theme, update your name, and tweak your preferences in Settings.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px">
+        <div style="background:linear-gradient(135deg,#F5F0E8 50%,#0D1B2A 50%);border-radius:12px;height:48px;border:2px solid rgba(13,27,42,.1)"></div>
+        <div style="background:linear-gradient(135deg,#111827 50%,#FF5733 50%);border-radius:12px;height:48px;border:2px solid rgba(13,27,42,.1)"></div>
+        <div style="background:linear-gradient(135deg,#0F172A 50%,#38BDF8 50%);border-radius:12px;height:48px;border:2px solid rgba(13,27,42,.1)"></div>
+        <div style="background:linear-gradient(135deg,#F0F4F0 50%,#1A3C2E 50%);border-radius:12px;height:48px;border:2px solid rgba(13,27,42,.1)"></div>
+      </div>
+      <button class="modal-submit" onclick="onboardNext(4)" style="width:100%">Next →</button>
     </div>
-    <div id="onboardStep4" style="display:none">
-      <div style="font-size:3rem;margin-bottom:16px">🏫</div>
-      <h2>Join your class</h2>
-      <p class="modal-sub" style="line-height:1.7;margin-bottom:24px">If your teacher uses Elaborate, ask them for a <strong>join code</strong>. Go to Settings → Classroom → Join a Classroom to connect.</p>
-      <button class="modal-submit" onclick="closeOnboarding()">Start using Elaborate ✦</button>
+
+    <div id="onboardStep4" style="display:none;padding:48px 44px 40px;text-align:center">
+      <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--sage),#52a869);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 24px;box-shadow:0 8px 24px rgba(125,190,142,.3)">🏫</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:12px;letter-spacing:-.02em">Join your class</h2>
+      <p style="color:var(--muted);line-height:1.75;font-size:.95rem;margin-bottom:24px">If your teacher uses Elaborate, ask them for a 6-character join code.</p>
+      <div style="background:rgba(125,190,142,.1);border:1.5px solid rgba(125,190,142,.3);border-radius:12px;padding:14px 18px;margin-bottom:28px;font-size:.88rem;color:var(--navy);line-height:1.6;text-align:left">
+        Go to your <strong>avatar → Settings → Classroom</strong> and enter the code. Your teacher's apps will appear in your hub automatically.
+      </div>
+      <button class="modal-submit" onclick="closeOnboarding()" style="width:100%">Start using Elaborate ✦</button>
     </div>
-    <div style="display:flex;justify-content:center;gap:8px;margin-top:20px" id="onboardDots">
-      <span id="dot1" style="width:8px;height:8px;border-radius:50%;background:var(--navy);transition:all .2s"></span>
-      <span id="dot2" style="width:8px;height:8px;border-radius:50%;background:rgba(13,27,42,.2);transition:all .2s"></span>
-      <span id="dot3" style="width:8px;height:8px;border-radius:50%;background:rgba(13,27,42,.2);transition:all .2s"></span>
-      <span id="dot4" style="width:8px;height:8px;border-radius:50%;background:rgba(13,27,42,.2);transition:all .2s"></span>
+
+    <!-- Dots -->
+    <div style="display:flex;justify-content:center;gap:8px;padding-bottom:28px">
+      <span id="dot1" style="width:8px;height:8px;border-radius:50%;background:var(--navy);transition:all .3s"></span>
+      <span id="dot2" style="width:8px;height:8px;border-radius:50%;background:rgba(13,27,42,.18);transition:all .3s"></span>
+      <span id="dot3" style="width:8px;height:8px;border-radius:50%;background:rgba(13,27,42,.18);transition:all .3s"></span>
+      <span id="dot4" style="width:8px;height:8px;border-radius:50%;background:rgba(13,27,42,.18);transition:all .3s"></span>
     </div>
+  </div>
+</div>
+
+<!-- APP REQUEST MODAL -->
+<div class="modal-overlay" id="requestAppModal" onclick="if(event.target===this)closeRequestModal()">
+  <div class="modal" style="max-width:440px">
+    <button class="modal-close" onclick="closeRequestModal()">✕</button>
+    <h2>Request an App</h2>
+    <p class="modal-sub" style="line-height:1.6">Ask your teacher to add an app to the classroom. They'll be notified and can approve it.</p>
+    <div class="auth-error" id="requestError"></div>
+    <div id="requestSuccess" style="display:none;background:rgba(125,190,142,.12);border:1.5px solid rgba(125,190,142,.35);color:#2E7D47;border-radius:10px;padding:12px 16px;font-size:.88rem;margin-bottom:16px;line-height:1.5"></div>
+    <div class="form-group">
+      <label>App Name</label>
+      <input type="text" id="requestAppName" placeholder="e.g. Desmos Graphing Calculator" />
+    </div>
+    <div class="form-group">
+      <label>Website URL <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <input type="text" id="requestAppUrl" placeholder="https://desmos.com" />
+    </div>
+    <div class="form-group">
+      <label>Why do you need it? <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <textarea id="requestAppReason" placeholder="e.g. We use this in math class for graphing…" rows="3" style="resize:vertical;min-height:80px;width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid rgba(13,27,42,.12);font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s"></textarea>
+    </div>
+    <button class="modal-submit" onclick="submitAppRequest()">Send Request →</button>
   </div>
 </div>
 
@@ -1047,6 +1108,8 @@ onAuthStateChanged(auth, async (user) => {
     if (classroomItem) classroomItem.style.display = role === 'teacher' ? 'block' : 'none';
     if (joinItem)      joinItem.style.display      = (role === 'student' && !userProfile.classroomId) ? 'block' : 'none';
     if (leaveItem)     leaveItem.style.display     = (role === 'student' && !!userProfile.classroomId) ? 'block' : 'none';
+    const requestBtn = document.getElementById('requestAppBtn');
+    if (requestBtn)  requestBtn.style.display    = (role === 'student' && !!userProfile.classroomId) ? 'inline-flex' : 'none';
     // Mobile menu
     const mobileLoggedIn  = document.getElementById('mobileLoggedIn');
     const mobileLoggedOut = document.getElementById('mobileLoggedOut');
@@ -1382,24 +1445,74 @@ document.addEventListener('click', e => {
    ONBOARDING
 ════════════════════════════════════ */
 function showOnboarding() {
-  document.getElementById('onboardingModal').classList.add('open');
+  const m = document.getElementById('onboardingModal');
+  m.style.display = 'flex';
   onboardNext(1);
 }
 window.onboardNext = function(step) {
   [1,2,3,4].forEach(i => {
     document.getElementById('onboardStep'+i).style.display = i===step ? 'block' : 'none';
     const dot = document.getElementById('dot'+i);
-    if (dot) dot.style.background = i===step ? 'var(--navy)' : 'rgba(13,27,42,.2)';
+    if (dot) dot.style.background = i===step ? 'var(--navy)' : 'rgba(13,27,42,.18)';
   });
+  const prog = document.getElementById('onboardProgress');
+  if (prog) prog.style.width = (step/4*100)+'%';
 };
 window.closeOnboarding = function() {
-  document.getElementById('onboardingModal').classList.remove('open');
+  document.getElementById('onboardingModal').style.display = 'none';
   if (userProfile) { userProfile.onboarded = true; saveProfile(); }
+  showScreen('hub');
 };
 
 /* ════════════════════════════════════
    LEAVE CLASSROOM
 ════════════════════════════════════ */
+/* ════════════════════════════════════
+   APP REQUESTS
+════════════════════════════════════ */
+window.showRequestModal = function() {
+  document.getElementById('requestAppName').value  = '';
+  document.getElementById('requestAppUrl').value   = '';
+  document.getElementById('requestAppReason').value= '';
+  document.getElementById('requestError').classList.remove('show');
+  document.getElementById('requestSuccess').style.display = 'none';
+  document.getElementById('requestAppModal').classList.add('open');
+};
+window.closeRequestModal = function() {
+  document.getElementById('requestAppModal').classList.remove('open');
+};
+window.submitAppRequest = async function() {
+  const name   = document.getElementById('requestAppName').value.trim();
+  const url    = document.getElementById('requestAppUrl').value.trim();
+  const reason = document.getElementById('requestAppReason').value.trim();
+  const errEl  = document.getElementById('requestError');
+  const sucEl  = document.getElementById('requestSuccess');
+  errEl.classList.remove('show');
+  sucEl.style.display = 'none';
+  if (!name) { errEl.textContent = 'Please enter an app name.'; errEl.classList.add('show'); return; }
+  if (!userProfile?.classroomId) { errEl.textContent = 'You need to be in a classroom to request apps.'; errEl.classList.add('show'); return; }
+  try {
+    await addDoc(collection(db, 'classrooms', userProfile.classroomId, 'appRequests'), {
+      appName:   name,
+      appUrl:    url || '',
+      reason:    reason || '',
+      studentName: `${userProfile.firstName||''} ${userProfile.lastName||''}`.trim(),
+      studentUid:  currentUser.uid,
+      status:    'pending',
+      createdAt: serverTimestamp()
+    });
+    sucEl.textContent = '✓ Request sent! Your teacher will review it.';
+    sucEl.style.display = 'block';
+    document.getElementById('requestAppName').value  = '';
+    document.getElementById('requestAppUrl').value   = '';
+    document.getElementById('requestAppReason').value= '';
+  } catch(e) {
+    console.error(e);
+    errEl.textContent = 'Failed to send request. Please try again.';
+    errEl.classList.add('show');
+  }
+};
+
 window.doLeaveClassroom = async function() {
   if (!confirm('Leave your classroom? You will keep your apps but teacher-locked apps will be unlocked.')) return;
   userProfile.classroomId = null;
@@ -1427,15 +1540,26 @@ async function loadAnnouncement() {
   try {
     const snap = await getDoc(doc(db, 'classrooms', userProfile.classroomId));
     if (!snap.exists()) return;
-    const msg = snap.data().announcement;
+    const cls  = snap.data();
+    const msg  = cls.announcement;
     const banner = document.getElementById('announcementBanner');
     const text   = document.getElementById('announcementText');
-    if (msg && banner && text) {
+    const meta   = document.getElementById('announcementMeta');
+    // Don't show if user already dismissed this exact message
+    const dismissed = sessionStorage.getItem('dismissedAnnouncement');
+    if (msg && msg !== dismissed && banner && text) {
       text.textContent = msg;
+      if (meta) meta.textContent = `📢 From ${cls.teacherName || 'your teacher'}`;
       banner.style.display = 'block';
     }
   } catch(e) { console.error('announcement error', e); }
 }
+
+window.dismissAnnouncement = function() {
+  const text = document.getElementById('announcementText')?.textContent;
+  if (text) sessionStorage.setItem('dismissedAnnouncement', text);
+  document.getElementById('announcementBanner').style.display = 'none';
+};
 
 /* ════════════════════════════════════
    CLASSROOM
