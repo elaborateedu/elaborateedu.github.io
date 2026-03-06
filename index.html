@@ -950,7 +950,7 @@ window.doSignup = async function() {
   if (pass.length < 6)               return authErr(err, 'Password must be at least 6 characters.');
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
-    userProfile = { firstName: first, lastName: last, role: selectedRole, apps: DEFAULT_APPS(), nextId: 9, settings: { theme:'default', newTab:true, showCat:true, compact:false } };
+    userProfile = { firstName: first, lastName: last, email: email, role: selectedRole, apps: DEFAULT_APPS(), nextId: 9, settings: { theme:'default', newTab:true, showCat:true, compact:false } };
     // If teacher — auto-create a classroom
     if (selectedRole === 'teacher') {
       const code = genClassCode();
@@ -1088,9 +1088,20 @@ onAuthStateChanged(auth, async (user) => {
       const exists = await loadProfile(user.uid);
       if (!exists) {
         const nameParts = (user.displayName || '').split(' ');
-        userProfile = { firstName: nameParts[0]||'Student', lastName: nameParts.slice(1).join(' ')||'', apps: DEFAULT_APPS(), nextId: 9, settings: { theme:'default', newTab:true, showCat:true, compact:false } };
+        userProfile = { firstName: nameParts[0]||'Student', lastName: nameParts.slice(1).join(' ')||'', email: user.email||'', role:'student', apps: DEFAULT_APPS(), nextId: 9, settings: { theme:'default', newTab:true, showCat:true, compact:false } };
         await saveProfile();
       }
+    }
+    // Always keep email in sync (in case it changed)
+    if (userProfile && !userProfile.email && user.email) {
+      userProfile.email = user.email;
+      await saveProfile();
+    }
+    // Check for admin-set suspension reason
+    if (userProfile?.suspensionReason) {
+      await signOut(auth);
+      window.location.href = 'disabled.html';
+      return;
     }
     // Ensure settings object exists for older accounts
     if (!userProfile.settings) {
