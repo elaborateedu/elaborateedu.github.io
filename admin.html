@@ -173,8 +173,15 @@
     </div>
   </div>
 
+  <!-- TABS -->
+  <div style="display:flex;gap:0;border-bottom:1.5px solid rgba(255,255,255,.06);padding:0 32px;background:#1E293B">
+    <button id="tabTicketsBtn" onclick="switchAdminTab('tickets')" style="font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;padding:14px 22px;border:none;background:transparent;color:rgba(255,255,255,.9);cursor:pointer;border-bottom:2.5px solid var(--coral);margin-bottom:-1.5px;transition:all .2s">🎫 Tickets</button>
+    <button id="tabUsersBtn"   onclick="switchAdminTab('users')"   style="font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;padding:14px 22px;border:none;background:transparent;color:rgba(255,255,255,.4);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all .2s">👤 Users</button>
+  </div>
+
   <div class="dash-main">
 
+<div id="tabTickets">
     <!-- Stats -->
     <div class="stats-row">
       <div class="stat-card">
@@ -280,6 +287,7 @@
     </div>
     <div class="modal-actions">
       <button class="modal-btn danger" onclick="deleteCurrentTicket()">🗑 Delete Ticket</button>
+      <button class="modal-btn danger" onclick="suspendFromTicket()" id="modalSuspendBtn">🔒 Suspend User</button>
       <button class="modal-btn ghost" onclick="closeModal()">Close</button>
     </div>
   </div>
@@ -305,8 +313,8 @@ import { initializeApp }                          from 'https://www.gstatic.com/
 import { getAuth, signInWithEmailAndPassword,
          signOut, onAuthStateChanged }            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, getDocs,
-         doc, updateDoc, deleteDoc, addDoc,
-         onSnapshot, orderBy, query,
+         doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc,
+         onSnapshot, orderBy, query, where,
          serverTimestamp }                        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -487,6 +495,9 @@ window.openTicket = function(docId) {
   document.getElementById('modalBody').textContent     = t.body || '(no description)';
 
   document.getElementById('modalOverlay').classList.add('open');
+  // Store email for quick suspend
+  document.getElementById('modalSuspendBtn').dataset.email = t.email || '';
+  document.getElementById('modalSuspendBtn').dataset.name  = `${t.firstName||''} ${t.lastName||''}`;
 
   // Unsubscribe any previous listener
   if (unsubMessages) { unsubMessages(); unsubMessages = null; }
@@ -598,6 +609,142 @@ window.sendAdminMessage = async function() {
 window.replyEmail = function(e, email, subject, ticketId) {
   e.stopPropagation();
   window.open(`mailto:${email}?subject=Re: [${ticketId}] ${encodeURIComponent(subject)}&body=Hi,%0A%0AThank you for reaching out to Elaborate support.%0A%0A`);
+};
+
+/* ════════════════════════
+   ADMIN TABS
+════════════════════════ */
+window.switchAdminTab = function(tab) {
+  document.getElementById('tabTickets').style.display = tab === 'tickets' ? 'block' : 'none';
+  document.getElementById('tabUsers').style.display   = tab === 'users'   ? 'block' : 'none';
+  document.getElementById('tabTicketsBtn').style.color        = tab === 'tickets' ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.4)';
+  document.getElementById('tabTicketsBtn').style.borderBottomColor = tab === 'tickets' ? 'var(--coral)' : 'transparent';
+  document.getElementById('tabUsersBtn').style.color          = tab === 'users'   ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.4)';
+  document.getElementById('tabUsersBtn').style.borderBottomColor   = tab === 'users'   ? 'var(--coral)' : 'transparent';
+  if (tab === 'users') loadSuspendedList();
+};
+
+/* ════════════════════════
+   USER LOOKUP & SUSPEND
+════════════════════════ */
+let currentLookupUid = null;
+
+window.lookupUser = async function() {
+  const email = document.getElementById('suspendEmail').value.trim().toLowerCase();
+  const errEl = document.getElementById('userLookupError');
+  const resEl = document.getElementById('userLookupResult');
+  errEl.style.display = 'none';
+  resEl.style.display = 'none';
+  currentLookupUid = null;
+  if (!email) { errEl.textContent = 'Please enter an email address.'; errEl.style.display = 'block'; return; }
+  try {
+    // Query users collection by email field
+    const q    = query(collection(db, 'users'), where('email', '==', email));
+    const snap = await getDocs(q);
+    // Also try matching by stored email in profile
+    if (snap.empty) {
+      errEl.textContent = 'No user found with that email. Make sure they have logged in at least once.';
+      errEl.style.display = 'block'; return;
+    }
+    const userDoc = snap.docs[0];
+    const profile = userDoc.data();
+    currentLookupUid = userDoc.id;
+    const name     = `${profile.firstName||''} ${profile.lastName||''}`.trim() || 'Unknown';
+    const initial  = name[0]?.toUpperCase() || '?';
+    const isSusp   = !!profile.suspensionReason;
+    document.getElementById('userLookupAvatar').textContent = initial;
+    document.getElementById('userLookupName').textContent   = name;
+    document.getElementById('userLookupEmail').textContent  = email;
+    document.getElementById('suspendReason').value          = profile.suspensionReason || '';
+    const statusEl = document.getElementById('userLookupStatus');
+    statusEl.textContent   = isSusp ? 'Suspended' : 'Active';
+    statusEl.style.background  = isSusp ? 'rgba(255,87,51,.15)' : 'rgba(125,190,142,.15)';
+    statusEl.style.color       = isSusp ? 'var(--coral)' : '#7DBE8E';
+    document.getElementById('suspendBtn').style.display   = isSusp ? 'none' : 'inline-flex';
+    document.getElementById('unsuspendBtn').style.display = isSusp ? 'inline-flex' : 'none';
+    resEl.style.display = 'block';
+  } catch(e) {
+    console.error(e);
+    errEl.textContent = 'Lookup failed. Check console for details.';
+    errEl.style.display = 'block';
+  }
+};
+
+window.suspendUser = async function() {
+  if (!currentLookupUid) return;
+  const reason = document.getElementById('suspendReason').value.trim();
+  if (!reason) { showToast('Please enter a suspension reason.'); return; }
+  await updateDoc(doc(db, 'users', currentLookupUid), { suspensionReason: reason });
+  document.getElementById('userLookupStatus').textContent    = 'Suspended';
+  document.getElementById('userLookupStatus').style.background = 'rgba(255,87,51,.15)';
+  document.getElementById('userLookupStatus').style.color       = 'var(--coral)';
+  document.getElementById('suspendBtn').style.display    = 'none';
+  document.getElementById('unsuspendBtn').style.display  = 'inline-flex';
+  loadSuspendedList();
+  showToast('🔒 User suspended. They will see this message on next login.');
+};
+
+window.unsuspendUser = async function() {
+  if (!currentLookupUid) return;
+  await updateDoc(doc(db, 'users', currentLookupUid), { suspensionReason: '' });
+  document.getElementById('userLookupStatus').textContent    = 'Active';
+  document.getElementById('userLookupStatus').style.background = 'rgba(125,190,142,.15)';
+  document.getElementById('userLookupStatus').style.color       = '#7DBE8E';
+  document.getElementById('suspendBtn').style.display    = 'inline-flex';
+  document.getElementById('unsuspendBtn').style.display  = 'none';
+  document.getElementById('suspendReason').value = '';
+  loadSuspendedList();
+  showToast('✓ User unsuspended.');
+};
+
+window.suspendFromTicket = function() {
+  const btn   = document.getElementById('modalSuspendBtn');
+  const email = btn.dataset.email || '';
+  const name  = btn.dataset.name  || '';
+  if (!email) { showToast('No email found for this ticket.'); return; }
+  closeModal();
+  switchAdminTab('users');
+  document.getElementById('tabUsersBtn').click();
+  document.getElementById('suspendEmail').value = email;
+  document.getElementById('suspendReason').value = `Your account has been suspended following a review of your support ticket. Please contact support to appeal.`;
+  setTimeout(() => lookupUser(), 300);
+};
+
+let suspendedLoaded = false;
+async function loadSuspendedList() {
+  suspendedLoaded = false; // always refresh
+  const listEl = document.getElementById('suspendedList');
+  listEl.innerHTML = '<div style="text-align:center;padding:24px;color:rgba(255,255,255,.25);font-size:.88rem">Loading…</div>';
+  try {
+    const q    = query(collection(db, 'users'), where('suspensionReason', '!=', ''));
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      listEl.innerHTML = '<div style="text-align:center;padding:24px;color:rgba(255,255,255,.25);font-size:.88rem">No suspended accounts.</div>';
+      return;
+    }
+    listEl.innerHTML = snap.docs.map(d => {
+      const p    = d.data();
+      const name = `${p.firstName||''} ${p.lastName||''}`.trim() || 'Unknown';
+      const init = name[0]?.toUpperCase() || '?';
+      return `<div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.9rem;color:#fff;flex-shrink:0">${escHtml(init)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;color:#F9FAFB;font-size:.88rem">${escHtml(name)}</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.35);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(p.suspensionReason||'')}</div>
+        </div>
+        <button onclick="quickUnsuspend('${d.id}',this)" style="padding:6px 14px;border-radius:50px;border:1.5px solid rgba(125,190,142,.25);background:transparent;color:#7DBE8E;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;white-space:nowrap;transition:all .2s">Unsuspend</button>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    console.error(e);
+    listEl.innerHTML = '<div style="color:var(--coral);font-size:.84rem;padding:8px">Failed to load. Check console.</div>';
+  }
+}
+
+window.quickUnsuspend = async function(uid, btn) {
+  await updateDoc(doc(db, 'users', uid), { suspensionReason: '' });
+  btn.closest('div[style]').remove();
+  showToast('✓ User unsuspended.');
 };
 
 /* ════════════════════════
