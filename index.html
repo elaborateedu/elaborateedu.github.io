@@ -2166,6 +2166,9 @@ async function applyDistrictBranding() {
     }
   }
   if (!did || typeof did !== 'string' || did.trim() === '') return;
+  try {
+    const snap = await getDoc(doc(db, 'districts', did));
+    if (!snap.exists()) return;
     const b = snap.data().branding || {};
     if (b.primaryColor) {
       document.documentElement.style.setProperty('--coral', b.primaryColor);
@@ -2178,10 +2181,8 @@ async function applyDistrictBranding() {
       const logoImg = document.getElementById('navLogoImg');
       if (logoImg) { logoImg.src = b.logoUrl; logoImg.style.display = 'inline-block'; }
     }
-    // Store district name for sidebar
-    window._districtName = snap.data().name || '';
+    window._districtName         = snap.data().name         || '';
     window._districtAnnouncement = snap.data().announcement || '';
-    // Show district announcement if not dismissed
     const dMsg = snap.data().announcement;
     if (dMsg && dMsg !== sessionStorage.getItem('dismissedDistrictAnnouncement')) {
       const banner = document.getElementById('districtAnnouncementBanner');
