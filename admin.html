@@ -169,7 +169,11 @@
   <div class="topbar">
     <div class="topbar-logo">Elaborate<span>.</span> <small>Admin</small></div>
     <div class="topbar-right">
-      <span class="admin-email" id="adminEmailDisplay"></span>
+      <button id="adminProfileBtn" onclick="openProfileModal()" style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.08);border-radius:50px;padding:6px 16px 6px 6px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+        <div id="topbarAvatar" style="width:32px;height:32px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.9rem;color:#fff;overflow:hidden;flex-shrink:0"></div>
+        <span id="topbarName" style="font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.85)"></span>
+        <span style="font-size:.65rem;color:rgba(255,255,255,.3)">✎</span>
+      </button>
       <button class="signout-btn" onclick="doSignOut()">Sign Out</button>
     </div>
   </div>
@@ -365,6 +369,49 @@
   </div>
 </div><!-- /tabDistricts -->
 
+<!-- ══ PROFILE MODAL ══ -->
+<div id="profileModalOverlay" onclick="if(event.target===this)closeProfileModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center">
+  <div style="background:#1E293B;border-radius:24px;padding:36px 40px;width:100%;max-width:440px;border:1.5px solid rgba(255,255,255,.08);box-shadow:0 24px 80px rgba(0,0,0,.5)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
+      <h3 style="font-family:'Fraunces',serif;font-size:1.25rem;font-weight:900;color:#F9FAFB">Your Profile</h3>
+      <button onclick="closeProfileModal()" style="background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.5);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">✕</button>
+    </div>
+
+    <!-- Avatar preview -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+      <div id="profileAvatarPreview" style="width:64px;height:64px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;color:#fff;overflow:hidden;flex-shrink:0"></div>
+      <div>
+        <div id="profileNamePreview" style="font-weight:700;color:#F9FAFB;font-size:1rem"></div>
+        <div id="profileEmailPreview" style="font-size:.78rem;color:rgba(255,255,255,.35);margin-top:2px"></div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px">Display Name</div>
+      <input type="text" id="profileDisplayName" placeholder="e.g. Alex from Support"
+        oninput="updateProfilePreview()"
+        style="width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.08);background:#111827;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s"
+        onfocus="this.style.borderColor='var(--coral)'" onblur="this.style.borderColor='rgba(255,255,255,.08)'" />
+    </div>
+
+    <div style="margin-bottom:24px">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px">Avatar Image URL <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(255,255,255,.2)">(optional)</span></div>
+      <input type="url" id="profileAvatarUrl" placeholder="https://example.com/avatar.png"
+        oninput="updateProfilePreview()"
+        style="width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.08);background:#111827;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s"
+        onfocus="this.style.borderColor='var(--coral)'" onblur="this.style.borderColor='rgba(255,255,255,.08)'" />
+      <div style="font-size:.72rem;color:rgba(255,255,255,.2);margin-top:6px">Paste a direct image link. Leave blank to use your initials.</div>
+    </div>
+
+    <div id="profileSaveErr" style="display:none;background:rgba(255,87,51,.1);border:1px solid rgba(255,87,51,.3);color:var(--coral);border-radius:10px;padding:10px 14px;font-size:.84rem;margin-bottom:16px"></div>
+
+    <div style="display:flex;gap:10px">
+      <button onclick="saveAdminProfile()" style="flex:1;padding:12px;border-radius:50px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='#e84d2e'" onmouseout="this.style.background='var(--coral)'">Save Profile</button>
+      <button onclick="closeProfileModal()" style="padding:12px 20px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.6);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ TICKET DETAIL MODAL ══ -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
   <div class="modal">
@@ -398,17 +445,13 @@
     <!-- CHAT THREAD -->
     <div class="modal-field">
       <div class="modal-field-label">Conversation</div>
-      <div id="adminChatMessages" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:12px;background:#111827;border-radius:12px;margin-top:4px">
-        <div style="text-align:center;color:rgba(255,255,255,.3);font-size:.82rem;padding:12px">Loading conversation…</div>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:10px;align-items:flex-end">
-        <textarea id="adminChatInput" placeholder="Type a reply… (Shift+Enter for new line)"
-          rows="3"
-          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAdminMessage()}"
+      <div id="adminChatMessages" style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;background:#111827;border-radius:12px;margin-top:4px;padding:8px 0"></div>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:flex-end;background:#1a2538;border:1.5px solid rgba(255,255,255,.08);border-radius:12px;padding:8px">
+        <textarea id="adminChatInput" placeholder="Message… (Enter to send, Shift+Enter for new line)"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAdminMessage();}"
           oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,160)+'px'"
-          style="flex:1;padding:10px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.1);background:#111827;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;resize:none;line-height:1.5;min-height:72px;max-height:160px;transition:border-color .2s"
-          onfocus="this.style.borderColor='rgba(255,87,51,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'"></textarea>
-        <button onclick="sendAdminMessage()" style="padding:10px 18px;border-radius:10px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0">Send ➤</button>
+          style="flex:1;padding:6px 4px;border:none;background:transparent;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;resize:none;line-height:1.55;min-height:36px;max-height:160px"></textarea>
+        <button onclick="sendAdminMessage()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;margin-bottom:2px" onmouseover="this.style.background='#e84d2e'" onmouseout="this.style.background='var(--coral)'">Send</button>
       </div>
     </div>
     <div class="modal-actions">
@@ -432,8 +475,17 @@ const firebaseConfig = {
   appId:             "1:923385978777:web:7d0fdb0472e14e8500bd08"
 };
 
-/* ── AUTHORISED ADMIN EMAIL ── */
-const ADMIN_EMAIL = "jonnyschoen29@gmail.com";
+/* ── AUTHORISED ADMIN EMAILS ── */
+const ADMIN_EMAILS = ["jonnyschoen29@gmail.com"]; // fallback — real list is in Firestore admins collection
+
+let currentAdmin = null; // { uid, email, displayName, avatarUrl, color }
+
+// Assign a consistent color per admin for Discord-style name coloring
+const ADMIN_COLORS = ['#FF5733','#F4C542','#7DBE8E','#A78BFA','#38BDF8','#F472B6','#FB923C'];
+function adminColor(uid) {
+  let h = 0; for (const c of (uid||'')) h = (Math.imul(31,h)+c.charCodeAt(0))|0;
+  return ADMIN_COLORS[Math.abs(h) % ADMIN_COLORS.length];
+}
 
 import { initializeApp }                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword,
@@ -454,23 +506,55 @@ let unsubMessages   = null; // live listener for chat messages
 /* ════════════════════════
    AUTH
 ════════════════════════ */
-onAuthStateChanged(auth, user => {
-  if (user && user.email === ADMIN_EMAIL) {
-    document.getElementById('loginScreen').style.display    = 'none';
-    document.getElementById('dashboard').classList.add('active');
-    document.getElementById('adminEmailDisplay').textContent = user.email;
-    loadTickets();
-  } else if (user) {
-    // Signed in as wrong account — sign them out silently and show clear error
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    currentAdmin = null;
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('dashboard').classList.remove('active');
+    return;
+  }
+  // Check Firestore admins collection OR fallback email list
+  let adminDoc = null;
+  try {
+    const snap = await getDoc(doc(db, 'admins', user.uid));
+    if (snap.exists()) adminDoc = snap.data();
+  } catch(e) { console.warn('admins collection check failed', e); }
+
+  const isAdmin = adminDoc !== null || ADMIN_EMAILS.includes(user.email);
+  if (!isAdmin) {
     signOut(auth).then(() => {
-      showLoginError(`Access denied: ${user.email} is not authorised. Please sign in with the admin account.`);
+      showLoginError(`Access denied: ${user.email} is not authorised.`);
       document.getElementById('loginScreen').style.display = 'flex';
       document.getElementById('dashboard').classList.remove('active');
     });
-  } else {
-    document.getElementById('loginScreen').style.display    = 'flex';
-    document.getElementById('dashboard').classList.remove('active');
+    return;
   }
+
+  // Build currentAdmin profile
+  currentAdmin = {
+    uid:         user.uid,
+    email:       user.email,
+    displayName: adminDoc?.displayName || user.email.split('@')[0],
+    avatarUrl:   adminDoc?.avatarUrl   || '',
+    color:       adminColor(user.uid),
+  };
+
+  // If no admin doc yet, create one
+  if (!adminDoc) {
+    try {
+      await setDoc(doc(db, 'admins', user.uid), {
+        email:       user.email,
+        displayName: currentAdmin.displayName,
+        avatarUrl:   '',
+        createdAt:   serverTimestamp()
+      });
+    } catch(e) { console.warn('could not create admin doc', e); }
+  }
+
+  renderTopbar();
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').classList.add('active');
+  loadTickets();
 });
 
 window.doAdminLogin = async function() {
@@ -502,6 +586,72 @@ window.doAdminLogin = async function() {
 
 window.doSignOut = async function() {
   await signOut(auth);
+};
+
+function renderTopbar() {
+  if (!currentAdmin) return;
+  const nameEl   = document.getElementById('topbarName');
+  const avatarEl = document.getElementById('topbarAvatar');
+  if (nameEl) nameEl.textContent = currentAdmin.displayName;
+  if (avatarEl) {
+    if (currentAdmin.avatarUrl) {
+      avatarEl.innerHTML = `<img src="${escHtml(currentAdmin.avatarUrl)}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.textContent='${currentAdmin.displayName[0]?.toUpperCase()||'?'}'"/>`;
+    } else {
+      avatarEl.style.background = currentAdmin.color;
+      avatarEl.textContent = currentAdmin.displayName[0]?.toUpperCase() || '?';
+    }
+  }
+}
+
+window.openProfileModal = function() {
+  if (!currentAdmin) return;
+  document.getElementById('profileDisplayName').value = currentAdmin.displayName || '';
+  document.getElementById('profileAvatarUrl').value   = currentAdmin.avatarUrl   || '';
+  document.getElementById('profileEmailPreview').textContent = currentAdmin.email || '';
+  document.getElementById('profileSaveErr').style.display = 'none';
+  updateProfilePreview();
+  const overlay = document.getElementById('profileModalOverlay');
+  overlay.style.display = 'flex';
+};
+
+window.closeProfileModal = function() {
+  document.getElementById('profileModalOverlay').style.display = 'none';
+};
+
+window.updateProfilePreview = function() {
+  const name   = document.getElementById('profileDisplayName').value.trim() || currentAdmin?.displayName || '?';
+  const url    = document.getElementById('profileAvatarUrl').value.trim();
+  const nameEl = document.getElementById('profileNamePreview');
+  const avEl   = document.getElementById('profileAvatarPreview');
+  if (nameEl) { nameEl.textContent = name; nameEl.style.color = currentAdmin?.color || 'var(--coral)'; }
+  if (avEl) {
+    if (url) {
+      avEl.innerHTML = `<img src="${escHtml(url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.parentElement.textContent='${name[0]?.toUpperCase()||'?'}'"/>`;
+    } else {
+      avEl.style.background = currentAdmin?.color || 'var(--coral)';
+      avEl.textContent = name[0]?.toUpperCase() || '?';
+    }
+  }
+};
+
+window.saveAdminProfile = async function() {
+  const name   = document.getElementById('profileDisplayName').value.trim();
+  const url    = document.getElementById('profileAvatarUrl').value.trim();
+  const errEl  = document.getElementById('profileSaveErr');
+  errEl.style.display = 'none';
+  if (!name) { errEl.textContent = 'Display name cannot be empty.'; errEl.style.display = 'block'; return; }
+  try {
+    await updateDoc(doc(db, 'admins', currentAdmin.uid), { displayName: name, avatarUrl: url });
+    currentAdmin.displayName = name;
+    currentAdmin.avatarUrl   = url;
+    renderTopbar();
+    closeProfileModal();
+    showToast('✓ Profile saved!');
+  } catch(e) {
+    console.error(e);
+    errEl.textContent = 'Failed to save. Check console.';
+    errEl.style.display = 'block';
+  }
 };
 
 function showLoginError(msg) {
@@ -640,28 +790,83 @@ window.openTicket = function(docId) {
     collection(db, 'tickets', docId, 'messages'),
     orderBy('createdAt', 'asc')
   );
-  unsubMessages = onSnapshot(msgsQ, snap => {
+  unsubMessages = onSnapshot(msgsQ, async snap => {
     const msgs = snap.docs.map(d => d.data());
     const container = document.getElementById('adminChatMessages');
     if (!container) return;
     if (msgs.length === 0) {
-      container.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,.3);font-size:.82rem;padding:16px">No messages yet — reply below to start the conversation.</div>';
+      container.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,.25);font-size:.82rem;padding:24px">No messages yet — reply below to start the conversation.</div>';
       return;
     }
-    container.innerHTML = msgs.map(m => {
-      const isAdmin  = m.role === 'admin';
-      const time     = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
-      const sender   = isAdmin ? '🛠 Support' : (m.senderName || 'User');
-      const align    = isAdmin ? 'flex-end' : 'flex-start';
-      const bubble   = isAdmin
-        ? 'background:rgba(255,87,51,.2);color:#F9FAFB;border:1px solid rgba(255,87,51,.3)'
-        : 'background:rgba(255,255,255,.08);color:#F9FAFB;border:1px solid rgba(255,255,255,.1)';
-      return `<div style="display:flex;flex-direction:column;max-width:85%;align-self:${align};align-items:${align}">
-        <div style="font-size:.68rem;font-weight:700;color:rgba(255,255,255,.4);margin-bottom:4px">${escHtml(sender)}</div>
-        <div style="padding:10px 14px;border-radius:14px;font-size:.88rem;line-height:1.6;${bubble}">${escHtml(m.text||'')}</div>
-        <div style="font-size:.65rem;color:rgba(255,255,255,.25);margin-top:3px">${time}</div>
+
+    // Fetch admin profiles for avatar/name rendering
+    const adminProfiles = {};
+    try {
+      const adminSnap = await getDocs(collection(db, 'admins'));
+      adminSnap.docs.forEach(d => { adminProfiles[d.id] = d.data(); });
+    } catch(e) {}
+
+    // Group consecutive messages from the same sender (Discord-style)
+    const groups = [];
+    msgs.forEach(m => {
+      const last = groups[groups.length - 1];
+      if (last && last.role === m.role && last.senderId === (m.senderId || m.role)) {
+        last.messages.push(m);
+      } else {
+        groups.push({ role: m.role, senderId: m.senderId || m.role, senderName: m.senderName, messages: [m] });
+      }
+    });
+
+    container.innerHTML = groups.map(g => {
+      const isAdmin = g.role === 'admin';
+      const firstMsg = g.messages[0];
+      const time = firstMsg.createdAt?.toDate
+        ? firstMsg.createdAt.toDate().toLocaleString([],{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})
+        : '';
+
+      // Resolve name and avatar
+      let displayName, avatarUrl, nameColor;
+      if (isAdmin) {
+        const profile = adminProfiles[g.senderId] || {};
+        displayName = profile.displayName || g.senderName || 'Support';
+        avatarUrl   = profile.avatarUrl   || '';
+        nameColor   = adminColor(g.senderId);
+      } else {
+        displayName = g.senderName || 'User';
+        avatarUrl   = '';
+        nameColor   = '#94A3B8';
+      }
+
+      const initial = displayName[0]?.toUpperCase() || '?';
+      const avatarHtml = avatarUrl
+        ? `<img src="${escHtml(avatarUrl)}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div style="display:none;width:38px;height:38px;border-radius:50%;background:${nameColor};align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.95rem;color:#fff;flex-shrink:0">${initial}</div>`
+        : `<div style="width:38px;height:38px;border-radius:50%;background:${isAdmin ? nameColor : '#334155'};display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.95rem;color:#fff;flex-shrink:0">${initial}</div>`;
+
+      const msgLines = g.messages.map(m => {
+        const mTime = m.createdAt?.toDate
+          ? m.createdAt.toDate().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
+          : '';
+        // Preserve newlines and escape HTML
+        const safeText = escHtml(m.text || '').replace(/\n/g, '<br>');
+        return `<div style="position:relative;padding:1px 0;line-height:1.55;font-size:.9rem;color:#D1D5DB" class="chat-msg-line">
+          <span class="msg-timestamp" style="display:none;font-size:.65rem;color:rgba(255,255,255,.25);position:absolute;left:-44px;top:3px;white-space:nowrap">${mTime}</span>
+          ${safeText}
+        </div>`;
+      }).join('');
+
+      return `<div style="display:flex;gap:14px;padding:10px 16px;transition:background .1s" class="chat-group" onmouseover="this.style.background='rgba(255,255,255,.03)'" onmouseout="this.style.background='transparent'">
+        <div style="flex-shrink:0;padding-top:2px">${avatarHtml}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-weight:700;font-size:.9rem;color:${nameColor}">${escHtml(displayName)}</span>
+            ${isAdmin ? '<span style="font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,87,51,.2);color:var(--coral);padding:1px 6px;border-radius:4px">STAFF</span>' : ''}
+            <span style="font-size:.72rem;color:rgba(255,255,255,.25)">${time}</span>
+          </div>
+          <div style="position:relative">${msgLines}</div>
+        </div>
       </div>`;
     }).join('');
+
     container.scrollTop = container.scrollHeight;
   });
 };
@@ -728,14 +933,18 @@ window.deleteCurrentTicket = async function() {
 ════════════════════════ */
 window.sendAdminMessage = async function() {
   const input = document.getElementById('adminChatInput');
-  const text  = (input.value || '').trim();
-  if (!text || !currentTicketId) return;
+  const text  = input.value;
+  // Allow newlines but reject truly empty messages
+  if (!text.trim() || !currentTicketId) return;
   input.value = '';
   input.style.height = 'auto';
   try {
     await addDoc(collection(db, 'tickets', currentTicketId, 'messages'), {
-      text, role: 'admin', senderName: 'Elaborate Support',
-      createdAt: serverTimestamp()
+      text,
+      role:        'admin',
+      senderId:    currentAdmin?.uid    || 'admin',
+      senderName:  currentAdmin?.displayName || 'Support',
+      createdAt:   serverTimestamp()
     });
   } catch(e) { console.error(e); }
 };
