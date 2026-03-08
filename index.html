@@ -1408,6 +1408,19 @@ onAuthStateChanged(auth, async (user) => {
       window.location.href = 'disabled.html';
       return;
     }
+    // Auto-assign district if this user's email is in a district's pendingTeachers list
+    if (!userProfile.districtId && userProfile.email) {
+      try {
+        const pendingQ = query(collection(db,'districts'), where('pendingTeachers','array-contains', userProfile.email));
+        const pendingSnap = await getDocs(pendingQ);
+        if (!pendingSnap.empty) {
+          const distId  = pendingSnap.docs[0].id;
+          userProfile.districtId = distId;
+          await saveProfile();
+          console.log('Auto-assigned to district:', distId);
+        }
+      } catch(e) { console.error('pending teacher check error', e); }
+    }
     // Ensure settings object exists for older accounts
     if (!userProfile.settings) {
       userProfile.settings = { theme:'default', newTab:true, showCat:true, compact:false };
