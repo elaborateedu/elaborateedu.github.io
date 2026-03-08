@@ -270,7 +270,7 @@ window.openTicket=function(tJson){
   pendingImages=[];
   if(unsubMessages){unsubMessages();unsubMessages=null;}
   const msgsQ=query(collection(db,'tickets',t._docId,'messages'),orderBy('createdAt','asc'));
-  unsubMessages=onSnapshot(msgsQ,snap=>{renderMessages(snap.docs.map(d=>d.data()));});
+  unsubMessages=onSnapshot(msgsQ,snap=>{renderMessages(snap.docs.map(d=>d.data()).filter(m=>!m.internal));});
 };
 
 async function renderMessages(messages){
