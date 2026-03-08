@@ -141,10 +141,6 @@
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  // ← Replace 'YOUR_PUBLIC_KEY' with your EmailJS public key
-  emailjs.init({ publicKey: '213D25Odwq-Zi_tbG' });
-</script>
 </head>
 <body>
 
@@ -848,18 +844,15 @@ window.createDistrict = async function() {
 
     // Send email to district admin via EmailJS
     try {
-      await emailjs.send(
-        'elaborate',    // ← replace with your EmailJS Service ID
-        'template_lrc1zar',   // ← replace with your EmailJS Template ID
-        {
-          to_email:      adminEmail,
-          to_name:       adminName,
-          district_name: name,
-          join_code:     code,
-          dashboard_url: window.location.origin + '/district.html',
-          plan_name:     plan === 'trial' ? 'Free Trial' : plan === 'monthly' ? 'Monthly ($29/mo)' : 'Annual ($249/yr)',
-        }
-      );
+      emailjs.init({ publicKey: '213D25Odwq-Zi_tbG' });
+      await emailjs.send('elaborate', 'template_lrc1zar', {
+        to_email:      adminEmail,
+        to_name:       adminName,
+        district_name: name,
+        join_code:     code,
+        dashboard_url: window.location.origin + '/district.html',
+        plan_name:     plan === 'trial' ? 'Free Trial' : plan === 'monthly' ? 'Monthly ($29/mo)' : 'Annual ($249/yr)',
+      });
     } catch(emailErr) {
       console.warn('EmailJS send failed:', emailErr);
       // Don't block success — district was created, just flag the email issue
