@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="/favicon.png">
 <title>Admin — Elaborate</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
@@ -254,14 +255,15 @@
 <div id="tabUsers" style="display:none">
   <div class="dash-main">
 
-    <!-- Suspend a user -->
+    <!-- ── User Lookup ── -->
     <div style="background:#1E293B;border-radius:20px;padding:28px 32px;border:1.5px solid rgba(255,255,255,.06);margin-bottom:24px">
-      <h3 style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;color:#F9FAFB;margin-bottom:6px">Suspend a User</h3>
-      <p style="font-size:.84rem;color:rgba(255,255,255,.4);margin-bottom:20px;line-height:1.5">Look up a user by email, add a suspension reason, and disable their account. They will see your message when they try to log in.</p>
+      <h3 style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;color:#F9FAFB;margin-bottom:6px">User Lookup</h3>
+      <p style="font-size:.84rem;color:rgba(255,255,255,.4);margin-bottom:20px;line-height:1.5">Look up any user by email to view their profile and take moderation actions.</p>
       <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;margin-bottom:16px">
         <div>
           <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px">User Email</div>
           <input type="email" id="suspendEmail" placeholder="student@school.edu"
+            onkeydown="if(event.key==='Enter')lookupUser()"
             style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,.08);background:#111827;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s"
             onfocus="this.style.borderColor='var(--coral)'" onblur="this.style.borderColor='rgba(255,255,255,.08)'" />
         </div>
@@ -270,31 +272,85 @@
 
       <div id="userLookupResult" style="display:none">
         <div style="background:#111827;border-radius:14px;padding:20px 22px;border:1.5px solid rgba(255,255,255,.06);margin-bottom:16px">
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
-            <div id="userLookupAvatar" style="width:40px;height:40px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:1rem;color:#fff;flex-shrink:0"></div>
-            <div>
-              <div id="userLookupName"  style="font-weight:700;color:#F9FAFB;font-size:.95rem"></div>
+
+          <!-- Profile row -->
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap">
+            <div id="userLookupAvatar" style="width:44px;height:44px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:#fff;flex-shrink:0"></div>
+            <div style="flex:1;min-width:0">
+              <div id="userLookupName" style="font-weight:700;color:#F9FAFB;font-size:.95rem"></div>
               <div id="userLookupEmail" style="font-size:.78rem;color:rgba(255,255,255,.4);margin-top:2px"></div>
+              <div id="userLookupMeta" style="font-size:.75rem;color:rgba(255,255,255,.3);margin-top:3px"></div>
             </div>
-            <div id="userLookupStatus" style="margin-left:auto;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:50px"></div>
+            <div id="userLookupStatus" style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:50px;flex-shrink:0"></div>
           </div>
-          <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px">Suspension Reason</div>
-          <textarea id="suspendReason" rows="3" placeholder="e.g. Your account has been suspended for violating our terms of service. Please contact support to appeal."
-            style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,.08);background:#0F172A;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;resize:vertical;min-height:80px;transition:border-color .2s;line-height:1.5"
-            onfocus="this.style.borderColor='var(--coral)'" onblur="this.style.borderColor='rgba(255,255,255,.08)'"></textarea>
-          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-            <button id="suspendBtn"   onclick="suspendUser()"   style="padding:10px 22px;border-radius:50px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s">🔒 Suspend Account</button>
-            <button id="unsuspendBtn" onclick="unsuspendUser()" style="display:none;padding:10px 22px;border-radius:50px;border:1.5px solid rgba(125,190,142,.3);background:rgba(125,190,142,.1);color:#7DBE8E;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s">✓ Unsuspend Account</button>
+
+          <!-- Role changer -->
+          <div style="margin-bottom:16px;padding:14px 16px;background:rgba(255,255,255,.04);border-radius:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);flex-shrink:0">Role</div>
+            <select id="userRoleSelect" style="font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;padding:7px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.1);background:#1E293B;color:#F9FAFB;cursor:pointer;outline:none;flex:1;min-width:140px">
+              <option value="student">Student</option>
+              <option value="teacher">Teacher</option>
+              <option value="district_admin">District Admin</option>
+            </select>
+            <button onclick="saveUserRole()" style="padding:8px 18px;border-radius:50px;border:none;background:rgba(167,139,250,.15);color:#A78BFA;border:1.5px solid rgba(167,139,250,.25);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap">Save Role</button>
           </div>
+
+          <!-- Warning message sender -->
+          <div style="margin-bottom:16px">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px">Send Warning Message</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+              <button onclick="fillWarning('Your account has received a warning for behavior that violates our community guidelines. Further violations may result in suspension.')" style="font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'">⚠ Community Guidelines</button>
+              <button onclick="fillWarning('A reminder that sharing personal information or contact details is not permitted on Elaborate. Please review our privacy policy.')" style="font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'">🔒 Privacy Reminder</button>
+              <button onclick="fillWarning('This is a final warning before account suspension. Please ensure your activity on Elaborate follows our terms of service.')" style="font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'">🚨 Final Warning</button>
+            </div>
+            <textarea id="warningMessage" rows="2" placeholder="Type a warning to show this user on their next login…"
+              style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.08);background:#0F172A;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;resize:vertical;min-height:60px;transition:border-color .2s;line-height:1.5"
+              onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='rgba(255,255,255,.08)'"></textarea>
+            <button onclick="sendWarning()" style="margin-top:8px;padding:8px 18px;border-radius:50px;border:1.5px solid rgba(244,197,66,.25);background:rgba(244,197,66,.08);color:var(--gold);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s">⚠ Send Warning</button>
+          </div>
+
+          <!-- Suspension -->
+          <div>
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px">Suspension Reason</div>
+            <textarea id="suspendReason" rows="2" placeholder="e.g. Violation of terms of service. Contact support to appeal."
+              style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.08);background:#0F172A;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;resize:vertical;min-height:64px;transition:border-color .2s;line-height:1.5"
+              onfocus="this.style.borderColor='var(--coral)'" onblur="this.style.borderColor='rgba(255,255,255,.08)'"></textarea>
+            <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+              <button id="suspendBtn"   onclick="suspendUser()"   style="padding:10px 22px;border-radius:50px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s">🔒 Suspend Account</button>
+              <button id="unsuspendBtn" onclick="unsuspendUser()" style="display:none;padding:10px 22px;border-radius:50px;border:1.5px solid rgba(125,190,142,.3);background:rgba(125,190,142,.1);color:#7DBE8E;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s">✓ Unsuspend Account</button>
+              <button onclick="deleteUserAccount()" style="padding:10px 22px;border-radius:50px;border:1.5px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(255,87,51,.12)'" onmouseout="this.style.background='transparent'">🗑 Delete Account</button>
+            </div>
+          </div>
+
         </div>
       </div>
       <div id="userLookupError" style="display:none;color:var(--coral);font-size:.84rem;padding:8px 0"></div>
     </div>
 
-    <!-- Suspended accounts list -->
+    <!-- ── All Users list ── -->
+    <div style="background:#1E293B;border-radius:20px;padding:28px 32px;border:1.5px solid rgba(255,255,255,.06);margin-bottom:24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+        <div>
+          <h3 style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900;color:#F9FAFB;margin-bottom:2px">All Users</h3>
+          <p style="font-size:.82rem;color:rgba(255,255,255,.35)">Every registered account.</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="userSearchInput" placeholder="Search name or email…" oninput="renderAllUsers()" style="padding:8px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.08);background:#111827;color:#F9FAFB;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;width:200px" onfocus="this.style.borderColor='var(--coral)'" onblur="this.style.borderColor='rgba(255,255,255,.08)'" />
+          <select id="userRoleFilter" onchange="renderAllUsers()" style="font-family:'DM Sans',sans-serif;font-size:.82rem;padding:8px 12px;border-radius:10px;border:1.5px solid rgba(255,255,255,.08);background:#111827;color:#F9FAFB;outline:none;cursor:pointer">
+            <option value="all">All Roles</option>
+            <option value="student">Students</option>
+            <option value="teacher">Teachers</option>
+            <option value="district_admin">District Admins</option>
+          </select>
+        </div>
+      </div>
+      <div id="allUsersList"><div style="text-align:center;padding:32px;color:rgba(255,255,255,.25);font-size:.88rem">Loading…</div></div>
+    </div>
+
+    <!-- ── Suspended accounts ── -->
     <div style="background:#1E293B;border-radius:20px;padding:28px 32px;border:1.5px solid rgba(255,255,255,.06)">
       <h3 style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900;color:#F9FAFB;margin-bottom:4px">Suspended Accounts</h3>
-      <p style="font-size:.82rem;color:rgba(255,255,255,.35);margin-bottom:20px">Users with an active suspension in Firestore.</p>
+      <p style="font-size:.82rem;color:rgba(255,255,255,.35);margin-bottom:20px">Users with an active suspension.</p>
       <div id="suspendedList"><div style="text-align:center;padding:32px;color:rgba(255,255,255,.25);font-size:.88rem">Loading…</div></div>
     </div>
 
@@ -519,7 +575,7 @@ import { getAuth, signInWithEmailAndPassword,
          signOut, onAuthStateChanged }            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, getDocs,
          doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc,
-         onSnapshot, orderBy, query, where,
+         onSnapshot, orderBy, query, where, deleteDoc,
          serverTimestamp }                        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -1020,11 +1076,12 @@ window.sendAdminMessage = async function() {
   try {
     await addDoc(collection(db, 'tickets', currentTicketId, 'messages'), {
       text,
-      role:       'admin',
-      internal:   false,
-      senderId:   currentAdmin?.uid       || 'admin',
-      senderName: currentAdmin?.displayName || 'Support',
-      createdAt:  serverTimestamp()
+      role:        'admin',
+      internal:    false,
+      senderId:    currentAdmin?.uid        || 'admin',
+      senderName:  currentAdmin?.displayName || 'Support',
+      senderAvatar: currentAdmin?.avatarUrl  || '',
+      createdAt:   serverTimestamp()
     });
   } catch(e) { console.error(e); }
 };
@@ -1038,11 +1095,12 @@ window.sendInternalNote = async function() {
   try {
     await addDoc(collection(db, 'tickets', currentTicketId, 'messages'), {
       text,
-      role:       'admin',
-      internal:   true,
-      senderId:   currentAdmin?.uid       || 'admin',
-      senderName: currentAdmin?.displayName || 'Support',
-      createdAt:  serverTimestamp()
+      role:        'admin',
+      internal:    true,
+      senderId:    currentAdmin?.uid        || 'admin',
+      senderName:  currentAdmin?.displayName || 'Support',
+      senderAvatar: currentAdmin?.avatarUrl  || '',
+      createdAt:   serverTimestamp()
     });
     showToast('Internal note saved.');
   } catch(e) { console.error(e); }
@@ -1120,7 +1178,7 @@ window.switchAdminTab = function(tab) {
     btn.style.color            = active ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.4)';
     btn.style.borderBottomColor = active ? 'var(--coral)' : 'transparent';
   });
-  if (tab === 'users')     loadSuspendedList();
+  if (tab === 'users')     { loadSuspendedList(); loadAllUsers(); }
   if (tab === 'districts') loadDistrictsList();
 };
 
@@ -1353,15 +1411,28 @@ window.lookupUser = async function() {
     const name     = `${profile.firstName||''} ${profile.lastName||''}`.trim() || 'Unknown';
     const initial  = name[0]?.toUpperCase() || '?';
     const isSusp   = !!profile.suspensionReason;
-    document.getElementById('userLookupAvatar').textContent = initial;
+    const role     = profile.role || 'student';
+    const roleLabels = { student:'Student', teacher:'Teacher', district_admin:'District Admin' };
+    // Avatar
+    const avatarEl = document.getElementById('userLookupAvatar');
+    if (profile.photoURL) {
+      avatarEl.innerHTML = `<img src="${profile.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.parentElement.textContent='${initial}'" />`;
+    } else {
+      avatarEl.textContent = initial;
+    }
     document.getElementById('userLookupName').textContent   = name;
     document.getElementById('userLookupEmail').textContent  = email;
+    document.getElementById('userLookupMeta').textContent   = `${roleLabels[role]||role} · UID: ${userDoc.id.slice(0,12)}…`;
     document.getElementById('suspendReason').value          = profile.suspensionReason || '';
+    document.getElementById('warningMessage').value         = profile.warningMessage   || '';
+    // Role selector
+    const roleSelect = document.getElementById('userRoleSelect');
+    if (roleSelect) roleSelect.value = role;
     const statusEl = document.getElementById('userLookupStatus');
-    statusEl.textContent   = isSusp ? 'Suspended' : 'Active';
+    statusEl.textContent       = isSusp ? 'Suspended' : 'Active';
     statusEl.style.background  = isSusp ? 'rgba(255,87,51,.15)' : 'rgba(125,190,142,.15)';
     statusEl.style.color       = isSusp ? 'var(--coral)' : '#7DBE8E';
-    document.getElementById('suspendBtn').style.display   = isSusp ? 'none' : 'inline-flex';
+    document.getElementById('suspendBtn').style.display   = isSusp ? 'none'        : 'inline-flex';
     document.getElementById('unsuspendBtn').style.display = isSusp ? 'inline-flex' : 'none';
     resEl.style.display = 'block';
   } catch(e) {
@@ -1446,6 +1517,136 @@ window.quickUnsuspend = async function(uid, btn) {
   await updateDoc(doc(db, 'users', uid), { suspensionReason: '' });
   btn.closest('div[style]').remove();
   showToast('✓ User unsuspended.');
+};
+
+/* ════════════════════════
+   MODERATION — ROLE / WARNING / DELETE / ALL USERS
+════════════════════════ */
+
+// ── Role editor ──
+window.saveUserRole = async function() {
+  if (!currentLookupUid) return;
+  const role = document.getElementById('userRoleSelect').value;
+  try {
+    await updateDoc(doc(db, 'users', currentLookupUid), { role });
+    document.getElementById('userLookupMeta').textContent =
+      ({ student:'Student', teacher:'Teacher', district_admin:'District Admin' }[role] || role)
+      + ' · UID: ' + currentLookupUid.slice(0,12) + '…';
+    showToast('✓ Role updated to ' + role + '.');
+    loadAllUsers(); // refresh list
+  } catch(e) { console.error(e); showToast('Failed to update role.'); }
+};
+
+// ── Warning message ──
+window.fillWarning = function(text) {
+  document.getElementById('warningMessage').value = text;
+};
+
+window.sendWarning = async function() {
+  if (!currentLookupUid) return;
+  const msg = document.getElementById('warningMessage').value.trim();
+  if (!msg) { showToast('Please type a warning message first.'); return; }
+  try {
+    await updateDoc(doc(db, 'users', currentLookupUid), { warningMessage: msg });
+    showToast('⚠ Warning sent. User will see it on next login.');
+  } catch(e) { console.error(e); showToast('Failed to send warning.'); }
+};
+
+window.clearWarning = async function(uid) {
+  try {
+    await updateDoc(doc(db, 'users', uid), { warningMessage: '' });
+    if (uid === currentLookupUid) document.getElementById('warningMessage').value = '';
+    showToast('Warning cleared.');
+    loadAllUsers();
+  } catch(e) { showToast('Failed to clear warning.'); }
+};
+
+// ── Delete account data (Firestore doc — auth account remains) ──
+window.deleteUserAccount = async function() {
+  if (!currentLookupUid) return;
+  const name = document.getElementById('userLookupName').textContent || 'this user';
+  if (!confirm(`Delete all Elaborate data for ${name}?\n\nThis removes their Firestore profile and apps. Their login account is unaffected.`)) return;
+  try {
+    await deleteDoc(doc(db, 'users', currentLookupUid));
+    document.getElementById('userLookupResult').style.display = 'none';
+    currentLookupUid = null;
+    showToast('🗑 User data deleted.');
+    loadAllUsers();
+    loadSuspendedList();
+  } catch(e) { console.error(e); showToast('Delete failed — check Firestore rules.'); }
+};
+
+// ── All Users list ──
+let allUsersCache = [];
+
+async function loadAllUsers() {
+  const listEl = document.getElementById('allUsersList');
+  if (!listEl) return;
+  listEl.innerHTML = '<div style="text-align:center;padding:24px;color:rgba(255,255,255,.25);font-size:.88rem">Loading…</div>';
+  try {
+    const snap = await getDocs(collection(db, 'users'));
+    allUsersCache = snap.docs.map(d => ({ _uid: d.id, ...d.data() }));
+    renderAllUsers();
+  } catch(e) {
+    console.error(e);
+    listEl.innerHTML = '<div style="color:var(--coral);font-size:.84rem;padding:8px">Failed to load users.</div>';
+  }
+}
+
+window.renderAllUsers = function() {
+  const listEl  = document.getElementById('allUsersList');
+  if (!listEl) return;
+  const search  = (document.getElementById('userSearchInput')?.value || '').toLowerCase();
+  const filter  = document.getElementById('userRoleFilter')?.value || 'all';
+  const roleLabels = { student:'👤 Student', teacher:'🍎 Teacher', district_admin:'🏛 District Admin' };
+  const roleColors = { student:'rgba(255,255,255,.06)', teacher:'rgba(125,190,142,.12)', district_admin:'rgba(167,139,250,.12)' };
+  const roleTxtClr = { student:'rgba(255,255,255,.4)', teacher:'#7DBE8E', district_admin:'#A78BFA' };
+
+  let list = allUsersCache.filter(u => {
+    const name  = `${u.firstName||''} ${u.lastName||''}`.toLowerCase();
+    const email = (u.email || '').toLowerCase();
+    const matchSearch = !search || name.includes(search) || email.includes(search);
+    const matchRole   = filter === 'all' || (u.role || 'student') === filter;
+    return matchSearch && matchRole;
+  });
+
+  if (!list.length) {
+    listEl.innerHTML = '<div style="text-align:center;padding:24px;color:rgba(255,255,255,.25);font-size:.88rem">No users match.</div>';
+    return;
+  }
+
+  listEl.innerHTML = list.map(u => {
+    const name    = `${u.firstName||''} ${u.lastName||''}`.trim() || 'Unknown';
+    const initial = name[0]?.toUpperCase() || '?';
+    const role    = u.role || 'student';
+    const isSusp  = !!u.suspensionReason;
+    const hasWarn = !!u.warningMessage;
+    const avatarHtml = u.photoURL
+      ? `<img src="${escHtml(u.photoURL)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'" />`
+      : `<div style="width:36px;height:36px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.9rem;color:#fff;flex-shrink:0">${escHtml(initial)}</div>`;
+    return `<div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:rgba(255,255,255,.025);margin-bottom:6px;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='rgba(255,255,255,.025)'">
+      ${avatarHtml}
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;color:#F9FAFB;font-size:.88rem;display:flex;align-items:center;gap:7px">
+          ${escHtml(name)}
+          ${isSusp ? '<span style="font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:50px;background:rgba(255,87,51,.15);color:var(--coral)">Suspended</span>' : ''}
+          ${hasWarn ? '<span style="font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:50px;background:rgba(244,197,66,.12);color:var(--gold)">⚠ Warning</span>' : ''}
+        </div>
+        <div style="font-size:.74rem;color:rgba(255,255,255,.35);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(u.email||'—')}</div>
+      </div>
+      <span style="font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:50px;background:${roleColors[role]};color:${roleTxtClr[role]};flex-shrink:0;white-space:nowrap">${roleLabels[role]||role}</span>
+      <button onclick="prefillLookup('${escHtml(u.email||'')}')" title="Open in lookup" style="padding:6px 12px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.75rem;cursor:pointer;transition:all .2s;flex-shrink:0" onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'">Manage →</button>
+    </div>`;
+  }).join('');
+};
+
+window.prefillLookup = function(email) {
+  document.getElementById('suspendEmail').value = email;
+  document.getElementById('userLookupResult').style.display = 'none';
+  document.getElementById('userLookupError').style.display  = 'none';
+  lookupUser();
+  // Scroll to top of users tab
+  document.getElementById('tabUsers').scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 /* ════════════════════════
