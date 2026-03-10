@@ -697,6 +697,16 @@
         <button onclick="dismissDistrictAnnouncement()" style="background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:0;flex-shrink:0;line-height:1;opacity:.6;transition:opacity .2s" title="Dismiss">✕</button>
       </div>
     </div>
+    <div id="sitewideAnnouncementBanner" style="display:none;border-radius:16px;padding:14px 18px;margin-top:16px;max-width:760px;position:relative">
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <div id="sitewideAnnouncementIcon" style="font-size:1.3rem;flex-shrink:0;margin-top:1px">📣</div>
+        <div style="flex:1;min-width:0">
+          <div id="sitewideAnnouncementMeta" style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;opacity:.7"></div>
+          <div id="sitewideAnnouncementText" style="font-size:.92rem;line-height:1.6;font-weight:500"></div>
+        </div>
+        <button onclick="dismissSitewideAnnouncement()" style="background:none;border:none;cursor:pointer;font-size:1rem;padding:0;flex-shrink:0;line-height:1;opacity:.5;transition:opacity .2s" title="Dismiss">✕</button>
+      </div>
+    </div>
     <div id="announcementBanner" style="display:none;background:linear-gradient(135deg,rgba(244,197,66,.18),rgba(244,197,66,.08));border:2px solid rgba(244,197,66,.5);border-radius:16px;padding:16px 20px;margin-top:16px;max-width:760px;position:relative">
       <div style="display:flex;align-items:flex-start;gap:14px">
         <div style="font-size:1.5rem;flex-shrink:0;margin-top:2px">📢</div>
@@ -1477,6 +1487,7 @@ onAuthStateChanged(auth, async (user) => {
     await applyClassroomApps();
     await buildSidebar();
     renderApps();
+    loadSitewideAnnouncement();
     // Show floating widgets
     document.getElementById('notesWidget').style.display = 'block';
     document.getElementById('timerWidget').style.display = 'block';
@@ -2113,6 +2124,46 @@ window.dismissAnnouncement = function() {
   const text = document.getElementById('announcementText')?.textContent;
   if (text) sessionStorage.setItem('dismissedAnnouncement', text);
   document.getElementById('announcementBanner').style.display = 'none';
+};
+
+async function loadSitewideAnnouncement() {
+  try {
+    const snap = await getDoc(doc(db, 'siteConfig', 'announcements'));
+    if (!snap.exists()) return;
+    const current = snap.data().current;
+    if (!current?.text) return;
+    // Check if user dismissed this exact announcement this session
+    const dismissedKey = 'dismissedSitewide_' + btoa(current.text).slice(0,20);
+    if (sessionStorage.getItem(dismissedKey)) return;
+    // Check audience — all, students, or teachers
+    const role = userProfile?.role || 'student';
+    const audience = current.audience || 'all';
+    if (audience !== 'all' && audience !== role) return;
+    // Style by type
+    const typeStyles = {
+      info:        { bg:'rgba(96,165,250,.12)',  border:'rgba(96,165,250,.4)',  color:'#60A5FA', icon:'ℹ️',  label:'Info' },
+      warning:     { bg:'rgba(251,191,36,.13)',  border:'rgba(251,191,36,.45)', color:'#FBBF24', icon:'⚠️',  label:'Notice' },
+      success:     { bg:'rgba(52,211,153,.12)',  border:'rgba(52,211,153,.4)',  color:'#34D399', icon:'✅',  label:'Update' },
+      maintenance: { bg:'rgba(167,139,250,.12)', border:'rgba(167,139,250,.4)', color:'#A78BFA', icon:'🔧', label:'Maintenance' },
+    };
+    const s = typeStyles[current.type] || typeStyles.info;
+    const banner = document.getElementById('sitewideAnnouncementBanner');
+    banner.style.background = s.bg;
+    banner.style.border     = `2px solid ${s.border}`;
+    document.getElementById('sitewideAnnouncementIcon').textContent = s.icon;
+    document.getElementById('sitewideAnnouncementMeta').textContent = s.label;
+    document.getElementById('sitewideAnnouncementMeta').style.color = s.color;
+    document.getElementById('sitewideAnnouncementText').textContent = current.text;
+    document.getElementById('sitewideAnnouncementText').style.color = 'var(--navy)';
+    banner.style.display = 'block';
+    banner.dataset.dismissKey = dismissedKey;
+  } catch(e) { console.error('sitewide announcement error', e); }
+}
+
+window.dismissSitewideAnnouncement = function() {
+  const banner = document.getElementById('sitewideAnnouncementBanner');
+  if (banner.dataset.dismissKey) sessionStorage.setItem(banner.dataset.dismissKey, '1');
+  banner.style.display = 'none';
 };
 
 /* ════════════════════════════════════
