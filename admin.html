@@ -156,16 +156,15 @@
   /* ── Stats row ── */
   .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:32px}
   .stat-card{
-    background:var(--surface);border-radius:16px;padding:22px 24px;
-    border:1.5px solid var(--border2);position:relative;overflow:hidden;
-    box-shadow:0 2px 12px rgba(13,27,42,.06);
+    background:var(--surface);border-radius:12px;padding:20px 22px;
+    border:1px solid var(--border);position:relative;overflow:hidden;
   }
   .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-  .stat-card:nth-child(1)::before{background:var(--txt)}
+  .stat-card:nth-child(1)::before{background:#94A3B8}
   .stat-card:nth-child(2)::before{background:var(--coral)}
   .stat-card:nth-child(3)::before{background:var(--gold)}
   .stat-card:nth-child(4)::before{background:var(--sage)}
-  .stat-value{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;letter-spacing:-.04em;margin-bottom:4px;line-height:1}
+  .stat-value{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-.04em;margin-bottom:4px;line-height:1}
   .stat-label{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 
   /* ── Controls ── */
@@ -365,7 +364,7 @@
     <!-- Stats -->
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-value" id="statTotal" style="color:#F9FAFB">—</div>
+        <div class="stat-value" id="statTotal" style="color:#E2E8F0">—</div>
         <div class="stat-label">Total Tickets</div>
       </div>
       <div class="stat-card">
@@ -1633,8 +1632,8 @@ window.openTicket = function(docId) {
       const initial = displayName[0]?.toUpperCase() || '?';
       const avatarBg = isNote ? 'rgba(244,197,66,.25)' : (isAdmin ? nameColor : '#334155');
       const avatarHtml = avatarUrl && !isNote
-        ? `<img src="${escHtml(avatarUrl)}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div style="display:none;width:38px;height:38px;border-radius:50%;background:${nameColor};align-items:center;justify-content:center;font-family:"Fraunces",serif;font-weight:900;font-size:.95rem;color:#fff;flex-shrink:0">${initial}</div>`
-        : `<div style="width:38px;height:38px;border-radius:50%;background:${avatarBg};display:flex;align-items:center;justify-content:center;font-family:"Fraunces",serif;font-weight:900;font-size:${isNote?'1rem':'.95rem'};color:${isNote?'#F4C542':'#fff'};flex-shrink:0">${isNote?'🔒':initial}</div>`;
+        ? `<img src="${escHtml(avatarUrl)}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div style="display:none;width:38px;height:38px;border-radius:50%;background:${nameColor};align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.95rem;color:#fff;flex-shrink:0">${initial}</div>`
+        : `<div style="width:38px;height:38px;border-radius:50%;background:${avatarBg};display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:${isNote?'1rem':'.95rem'};color:${isNote?'#F4C542':'#fff'};flex-shrink:0">${isNote?'🔒':initial}</div>`;
 
       const msgLines = g.messages.map(m => {
         const safeText = escHtml(m.text || '').replace(/\n/g, '<br>');
@@ -1797,7 +1796,7 @@ function renderCannedResponses() {
   // Use index to avoid quote-escaping issues inside onclick attributes
   wrap.innerHTML = CANNED_RESPONSES.map((r, i) =>
     `<button onclick="insertCanned(${i})"
-      style="font-family:"DM Sans",sans-serif;font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.55);cursor:pointer;transition:all .15s;white-space:nowrap"
+      style="font-family:DM Sans,sans-serif;font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.55);cursor:pointer;transition:all .15s;white-space:nowrap"
       onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'"
       onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.55)'"
     >${r.label}</button>`
@@ -2004,13 +2003,13 @@ async function loadDistrictsList() {
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
           <span style="font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:50px;background:${statusColors[stat]};color:${statusTxtClr[stat]}">${statusText[stat]}</span>
           <select onchange="updateDistrictPlan('${d.id}',this.value)" onclick="event.stopPropagation()"
-            style="font-family:"DM Sans",sans-serif;font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,.1);background:#1E293B;color:#F9FAFB;cursor:pointer;outline:none">
+            style="font-family:DM Sans,sans-serif;font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,.1);background:#1E293B;color:#F9FAFB;cursor:pointer;outline:none">
             <option value="trial"    ${stat==='trial'    ?'selected':''}>Trial</option>
             <option value="active"   ${stat==='active'   ?'selected':''}>Active (Paid)</option>
             <option value="inactive" ${stat==='inactive' ?'selected':''}>Inactive</option>
           </select>
         </div>
-        <button onclick="deleteDistrict('${d.id}','${escHtml(dist.name||'')}')" style="padding:7px 14px;border-radius:50px;border:1.5px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:"DM Sans",sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.background='rgba(255,87,51,.15)'" onmouseout="this.style.background='transparent'">Delete</button>
+        <button onclick="deleteDistrict('${d.id}','${escHtml(dist.name||'')}')" style="padding:7px 14px;border-radius:50px;border:1.5px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.background='rgba(255,87,51,.15)'" onmouseout="this.style.background='transparent'">Delete</button>
       </div>`;
     }).join('');
   } catch(e) {
@@ -2163,12 +2162,12 @@ async function loadSuspendedList() {
       const name = `${p.firstName||''} ${p.lastName||''}`.trim() || 'Unknown';
       const init = name[0]?.toUpperCase() || '?';
       return `<div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)">
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:"Fraunces",serif;font-weight:900;font-size:.9rem;color:#fff;flex-shrink:0">${escHtml(init)}</div>
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.9rem;color:#fff;flex-shrink:0">${escHtml(init)}</div>
         <div style="flex:1;min-width:0">
           <div style="font-weight:600;color:#F9FAFB;font-size:.88rem">${escHtml(name)}</div>
           <div style="font-size:.75rem;color:rgba(255,255,255,.35);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(p.suspensionReason||'')}</div>
         </div>
-        <button onclick="quickUnsuspend('${d.id}',this)" style="padding:6px 14px;border-radius:50px;border:1.5px solid rgba(125,190,142,.25);background:transparent;color:#7DBE8E;font-family:"DM Sans",sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;white-space:nowrap;transition:all .2s">Unsuspend</button>
+        <button onclick="quickUnsuspend('${d.id}',this)" style="padding:6px 14px;border-radius:50px;border:1.5px solid rgba(125,190,142,.25);background:transparent;color:#7DBE8E;font-family:DM Sans,sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;white-space:nowrap;transition:all .2s">Unsuspend</button>
       </div>`;
     }).join('');
   } catch(e) {
@@ -2287,7 +2286,7 @@ window.renderAllUsers = function() {
     const hasWarn = !!u.warningMessage;
     const avatarHtml = u.photoURL
       ? `<img src="${escHtml(u.photoURL)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'" />`
-      : `<div style="width:36px;height:36px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:"Fraunces",serif;font-weight:900;font-size:.9rem;color:#fff;flex-shrink:0">${escHtml(initial)}</div>`;
+      : `<div style="width:36px;height:36px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.9rem;color:#fff;flex-shrink:0">${escHtml(initial)}</div>`;
     return `<div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:rgba(255,255,255,.025);margin-bottom:6px;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='rgba(255,255,255,.025)'">
       ${avatarHtml}
       <div style="flex:1;min-width:0">
@@ -2299,7 +2298,7 @@ window.renderAllUsers = function() {
         <div style="font-size:.74rem;color:rgba(255,255,255,.35);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(u.email||'—')}</div>
       </div>
       <span style="font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:50px;background:${roleColors[role]};color:${roleTxtClr[role]};flex-shrink:0;white-space:nowrap">${roleLabels[role]||role}</span>
-      <button onclick="prefillLookup('${escHtml(u.email||'')}')" title="Open in lookup" style="padding:6px 12px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);font-family:"DM Sans",sans-serif;font-weight:600;font-size:.75rem;cursor:pointer;transition:all .2s;flex-shrink:0" onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'">Manage →</button>
+      <button onclick="prefillLookup('${escHtml(u.email||'')}')" title="Open in lookup" style="padding:6px 12px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.5);font-family:DM Sans,sans-serif;font-weight:600;font-size:.75rem;cursor:pointer;transition:all .2s;flex-shrink:0" onmouseover="this.style.borderColor='var(--coral)';this.style.color='var(--coral)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'">Manage →</button>
     </div>`;
   }).join('');
 };
@@ -2328,7 +2327,7 @@ async function loadAnnouncements() {
     if (prevEl) {
       if (current?.text) {
         const typeLabel = {info:'ℹ️ Info', warning:'⚠️ Warning', success:'✅ Success', maintenance:'🔧 Maintenance'}[current.type] || 'ℹ️';
-        prevEl.innerHTML = `<span style="font-family:"DM Mono",monospace;font-size:.68rem;padding:2px 8px;border-radius:4px;background:rgba(52,211,153,.1);color:#34D399;margin-right:8px">${typeLabel}</span><span style="color:var(--txt)">${escHtml(current.text)}</span><span style="margin-left:10px;font-family:"DM Mono",monospace;font-size:.65rem;color:var(--faint)">→ ${current.audience||'all'}</span>`;
+        prevEl.innerHTML = `<span style="font-family:DM Mono,monospace;font-size:.68rem;padding:2px 8px;border-radius:4px;background:rgba(52,211,153,.1);color:#34D399;margin-right:8px">${typeLabel}</span><span style="color:var(--txt)">${escHtml(current.text)}</span><span style="margin-left:10px;font-family:DM Mono,monospace;font-size:.65rem;color:var(--faint)">→ ${current.audience||'all'}</span>`;
       } else {
         prevEl.textContent = 'No active announcement.';
       }
@@ -2341,9 +2340,9 @@ async function loadAnnouncements() {
       histEl.innerHTML = history.slice().reverse().slice(0,10).map(h => {
         const date = h.createdAt?.toDate ? h.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
         return `<div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">
-          <div style="font-family:"DM Mono",monospace;font-size:.65rem;color:var(--muted);white-space:nowrap;padding-top:2px">${date}</div>
+          <div style="font-family:DM Mono,monospace;font-size:.65rem;color:var(--muted);white-space:nowrap;padding-top:2px">${date}</div>
           <div style="flex:1;font-size:.85rem;color:var(--txt);line-height:1.5">${escHtml(h.text||'')}</div>
-          <div style="font-family:"DM Mono",monospace;font-size:.62rem;color:var(--faint);white-space:nowrap">${h.audience||'all'}</div>
+          <div style="font-family:DM Mono,monospace;font-size:.62rem;color:var(--faint);white-space:nowrap">${h.audience||'all'}</div>
         </div>`;
       }).join('');
     }
@@ -2409,7 +2408,7 @@ async function loadAnalytics() {
     document.getElementById('ticketsByCategory').innerHTML = Object.entries(catCounts)
       .sort((a,b) => b[1]-a[1])
       .map(([c,n]) => `<div style="margin-bottom:10px">
-        <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:4px"><span style="color:var(--txt)">${catLabels[c]||c}</span><span style="font-family:"DM Mono",monospace;color:var(--muted)">${n}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:4px"><span style="color:var(--txt)">${catLabels[c]||c}</span><span style="font-family:DM Mono,monospace;color:var(--muted)">${n}</span></div>
         <div style="height:6px;border-radius:3px;background:var(--border);overflow:hidden"><div style="height:100%;width:${Math.round(n/maxCat*100)}%;background:#F472B6;border-radius:3px;transition:width .5s"></div></div>
       </div>`).join('') || '<div style="color:var(--muted);font-size:.84rem">No tickets yet.</div>';
 
@@ -2420,7 +2419,7 @@ async function loadAnalytics() {
     const maxStat = Math.max(...Object.values(statCounts), 1);
     document.getElementById('ticketsByStatus').innerHTML = Object.entries(statCounts)
       .map(([s,n]) => `<div style="margin-bottom:10px">
-        <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:4px"><span style="color:var(--txt);text-transform:capitalize">${s==='in-progress'?'In Progress':s}</span><span style="font-family:"DM Mono",monospace;color:var(--muted)">${n}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:4px"><span style="color:var(--txt);text-transform:capitalize">${s==='in-progress'?'In Progress':s}</span><span style="font-family:DM Mono,monospace;color:var(--muted)">${n}</span></div>
         <div style="height:6px;border-radius:3px;background:var(--border);overflow:hidden"><div style="height:100%;width:${Math.round(n/maxStat*100)}%;background:${statColors[s]||'var(--muted)'};border-radius:3px;transition:width .5s"></div></div>
       </div>`).join('') || '<div style="color:var(--muted);font-size:.84rem">No tickets yet.</div>';
 
@@ -2433,10 +2432,10 @@ async function loadAnalytics() {
           const date = u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
           const role = u.role||'student';
           return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
-            <div style="width:30px;height:30px;border-radius:8px;background:rgba(255,87,51,.15);display:flex;align-items:center;justify-content:center;font-family:"Fraunces",serif;font-weight:900;font-size:.8rem;color:var(--coral);flex-shrink:0">${escHtml(name[0]?.toUpperCase()||'?')}</div>
+            <div style="width:30px;height:30px;border-radius:8px;background:rgba(255,87,51,.15);display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.8rem;color:var(--coral);flex-shrink:0">${escHtml(name[0]?.toUpperCase()||'?')}</div>
             <div style="flex:1;min-width:0"><div style="font-size:.85rem;font-weight:600;color:var(--txt)">${escHtml(name)}</div><div style="font-size:.74rem;color:var(--muted)">${escHtml(u.email||'')}</div></div>
-            <span style="font-family:"DM Mono",monospace;font-size:.65rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.05);color:${roleColors[role]||'var(--muted)'}">${role}</span>
-            <span style="font-family:"DM Mono",monospace;font-size:.65rem;color:var(--faint);white-space:nowrap">${date}</span>
+            <span style="font-family:DM Mono,monospace;font-size:.65rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.05);color:${roleColors[role]||'var(--muted)'}">${role}</span>
+            <span style="font-family:DM Mono,monospace;font-size:.65rem;color:var(--faint);white-space:nowrap">${date}</span>
           </div>`;
         }).join('')
       : '<div style="color:var(--muted);font-size:.84rem">No signup data available (createdAt not stored on older accounts).</div>';
@@ -2460,17 +2459,17 @@ async function loadStaffList() {
       const init = name[0]?.toUpperCase() || '?';
       const isOwner = p.email === 'jonnyschoen29@gmail.com';
       return `<div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)">
-        <div style="width:38px;height:38px;border-radius:10px;background:#FB923C;display:flex;align-items:center;justify-content:center;font-family:"Fraunces",serif;font-weight:900;font-size:.9rem;color:var(--navy);flex-shrink:0;overflow:hidden">
+        <div style="width:38px;height:38px;border-radius:10px;background:#FB923C;display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.9rem;color:var(--navy);flex-shrink:0;overflow:hidden">
           ${p.avatarUrl ? `<img src="${escHtml(p.avatarUrl)}" style="width:100%;height:100%;object-fit:cover" />` : escHtml(init)}
         </div>
         <div style="flex:1;min-width:0">
           <div style="font-weight:600;color:var(--txt);font-size:.9rem;display:flex;align-items:center;gap:8px">
             ${escHtml(name)}
-            ${isOwner ? '<span style="font-family:"DM Mono",monospace;font-size:.6rem;padding:2px 7px;border-radius:4px;background:rgba(255,87,51,.15);color:var(--coral)">OWNER</span>' : ''}
+            ${isOwner ? '<span style="font-family:DM Mono,monospace;font-size:.6rem;padding:2px 7px;border-radius:4px;background:rgba(255,87,51,.15);color:var(--coral)">OWNER</span>' : ''}
           </div>
           <div style="font-size:.74rem;color:var(--muted);margin-top:2px">${escHtml(p.email||'—')} · UID: ${escHtml(d.id.slice(0,12))}…</div>
         </div>
-        ${isOwner ? '' : `<button onclick="removeStaff('${d.id}','${escHtml(name)}')" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:"DM Sans",sans-serif;font-weight:600;font-size:.76rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(255,87,51,.12)'" onmouseout="this.style.background='transparent'">Remove</button>`}
+        ${isOwner ? '' : `<button onclick="removeStaff('${d.id}','${escHtml(name)}')" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-weight:600;font-size:.76rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(255,87,51,.12)'" onmouseout="this.style.background='transparent'">Remove</button>`}
       </div>`;
     }).join('');
   } catch(e) { console.error(e); listEl.innerHTML = '<div style="color:var(--coral);font-size:.84rem">Failed to load staff.</div>'; }
@@ -2530,7 +2529,7 @@ async function loadSettings() {
           <div style="font-size:.78rem;color:var(--muted)">${escHtml(f.desc)}</div>
         </div>
         <label style="display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0">
-          <span style="font-family:"DM Mono",monospace;font-size:.72rem;color:${val ? f.color : 'var(--muted)'};" id="flag-label-${f.key}">${val ? 'ENABLED' : 'DISABLED'}</span>
+          <span style="font-family:DM Mono,monospace;font-size:.72rem;color:${val ? f.color : 'var(--muted)'};" id="flag-label-${f.key}">${val ? 'ENABLED' : 'DISABLED'}</span>
           <div onclick="toggleFlag('${f.key}',this)" data-on="${val}" style="width:44px;height:24px;border-radius:50px;background:${val ? f.color : 'var(--border2)'};position:relative;cursor:pointer;transition:background .2s;flex-shrink:0">
             <div style="position:absolute;top:3px;left:${val?'22px':'3px'};width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>
           </div>
@@ -2631,11 +2630,11 @@ window.renderAuditLog = function() {
     const color = actionColors[cat] || 'var(--muted)';
     const detail = Object.entries(e.detail||{}).map(([k,v])=>`<span style="color:var(--muted)">${escHtml(k)}:</span> ${escHtml(String(v))}`).join(' · ');
     return `<div style="display:grid;grid-template-columns:140px 1fr 140px;gap:12px;padding:13px 18px;border-bottom:1px solid var(--border);align-items:start">
-      <div><span style="font-family:"DM Mono",monospace;font-size:.65rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.05);color:${color}">${escHtml(e.action||'—')}</span></div>
+      <div><span style="font-family:DM Mono,monospace;font-size:.65rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.05);color:${color}">${escHtml(e.action||'—')}</span></div>
       <div style="font-size:.82rem;color:rgba(240,238,248,.7);line-height:1.5">${detail || '<span style="color:var(--faint)">no detail</span>'}</div>
       <div style="text-align:right">
         <div style="font-size:.78rem;color:var(--txt);font-weight:600">${escHtml(e.adminName||'?')}</div>
-        <div style="font-family:"DM Mono",monospace;font-size:.62rem;color:var(--faint);margin-top:2px">${date}</div>
+        <div style="font-family:DM Mono,monospace;font-size:.62rem;color:var(--faint);margin-top:2px">${date}</div>
       </div>
     </div>`;
   }).join('');
@@ -2675,12 +2674,12 @@ window.renderLibraryApps = function() {
       <div style="font-size:1.3rem;text-align:center">${escHtml(a.icon||'🔗')}</div>
       <div>
         <div style="font-weight:600;color:var(--txt);font-size:.88rem">${escHtml(a.name||'Unnamed')}</div>
-        <div style="font-family:"DM Mono",monospace;font-size:.68rem;color:var(--muted);margin-top:2px">${escHtml(a.url||'')}</div>
+        <div style="font-family:DM Mono,monospace;font-size:.68rem;color:var(--muted);margin-top:2px">${escHtml(a.url||'')}</div>
         ${a.desc ? `<div style="font-size:.76rem;color:var(--faint);margin-top:2px">${escHtml(a.desc)}</div>` : ''}
       </div>
-      <div><span style="font-family:"DM Mono",monospace;font-size:.65rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.05);color:${catColors[a.category]||'var(--muted)'}">${escHtml(a.category||'other')}</span></div>
-      <div style="font-family:"DM Mono",monospace;font-size:.68rem;color:var(--faint)">${date}</div>
-      <div style="text-align:right"><button onclick="deleteLibraryApp('${a.id}')" style="padding:5px 12px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:"DM Sans",sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,87,51,.1)'" onmouseout="this.style.background='transparent'">Remove</button></div>
+      <div><span style="font-family:DM Mono,monospace;font-size:.65rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.05);color:${catColors[a.category]||'var(--muted)'}">${escHtml(a.category||'other')}</span></div>
+      <div style="font-family:DM Mono,monospace;font-size:.68rem;color:var(--faint)">${date}</div>
+      <div style="text-align:right"><button onclick="deleteLibraryApp('${a.id}')" style="padding:5px 12px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,87,51,.1)'" onmouseout="this.style.background='transparent'">Remove</button></div>
     </div>`;
   }).join('');
 };
@@ -2741,15 +2740,15 @@ function renderChangelogEntries() {
     const date = e.createdAt?.toDate ? e.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : (e.date||'—');
     return `<div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--border)">
       <div style="flex-shrink:0;text-align:right;min-width:90px">
-        <div style="font-family:"DM Mono",monospace;font-size:.72rem;font-weight:500;color:#FBBF24">${escHtml(e.version||'v?')}</div>
-        <div style="font-family:"DM Mono",monospace;font-size:.62rem;color:var(--faint);margin-top:2px">${date}</div>
+        <div style="font-family:DM Mono,monospace;font-size:.72rem;font-weight:500;color:#FBBF24">${escHtml(e.version||'v?')}</div>
+        <div style="font-family:DM Mono,monospace;font-size:.62rem;color:var(--faint);margin-top:2px">${date}</div>
       </div>
       <div style="flex:1">
         <div style="font-weight:700;color:var(--txt);font-size:.9rem;margin-bottom:8px">${escHtml(e.name||'Untitled')}</div>
         ${features}
       </div>
       <div>
-        <button onclick="deleteChangelogEntry('${e.id}')" style="padding:5px 12px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:"DM Sans",sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,87,51,.1)'" onmouseout="this.style.background='transparent'">Delete</button>
+        <button onclick="deleteChangelogEntry('${e.id}')" style="padding:5px 12px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,87,51,.1)'" onmouseout="this.style.background='transparent'">Delete</button>
       </div>
     </div>`;
   }).join('');
@@ -2860,9 +2859,9 @@ async function loadBlastHistory() {
             <div style="font-size:.75rem;color:var(--muted);margin-top:3px">Segment: ${escHtml(e.segment||'all')} · Sent by ${escHtml(e.sentBy||'Admin')}</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
-            <div style="font-family:"DM Mono",monospace;font-size:.7rem;color:#34D399">✓ ${e.sent||0} sent</div>
-            ${e.failed ? `<div style="font-family:"DM Mono",monospace;font-size:.7rem;color:var(--coral)">✗ ${e.failed} failed</div>` : ''}
-            <div style="font-family:"DM Mono",monospace;font-size:.62rem;color:var(--faint);margin-top:2px">${date}</div>
+            <div style="font-family:DM Mono,monospace;font-size:.7rem;color:#34D399">✓ ${e.sent||0} sent</div>
+            ${e.failed ? `<div style="font-family:DM Mono,monospace;font-size:.7rem;color:var(--coral)">✗ ${e.failed} failed</div>` : ''}
+            <div style="font-family:DM Mono,monospace;font-size:.62rem;color:var(--faint);margin-top:2px">${date}</div>
           </div>
         </div>
       </div>`;
@@ -2895,8 +2894,8 @@ async function loadHighlights() {
           <div style="font-weight:600;color:var(--txt);font-size:.9rem">${escHtml(h.classroomName||'Classroom')}</div>
           <div style="font-size:.78rem;color:var(--muted);margin-top:2px">${escHtml(h.teacherName||'Unknown teacher')}${h.message ? ' · <em>'+escHtml(h.message)+'</em>' : ''}</div>
         </div>
-        <div style="font-family:"DM Mono",monospace;font-size:.65rem;color:var(--faint);white-space:nowrap">${date}</div>
-        <button onclick="unpinHighlight('${d.id}')" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:"DM Sans",sans-serif;font-weight:600;font-size:.76rem;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,87,51,.1)'" onmouseout="this.style.background='transparent'">Unpin</button>
+        <div style="font-family:DM Mono,monospace;font-size:.65rem;color:var(--faint);white-space:nowrap">${date}</div>
+        <button onclick="unpinHighlight('${d.id}')" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-weight:600;font-size:.76rem;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,87,51,.1)'" onmouseout="this.style.background='transparent'">Unpin</button>
       </div>`;
     }).join('');
   } catch(e) { console.error(e); }
@@ -2973,12 +2972,12 @@ async function loadStaffNotes() {
       const date = n.createdAt?.toDate ? n.createdAt.toDate().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : 'just now';
       const isMine = n.authorUid === currentAdmin?.uid;
       return `<div style="display:flex;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border)">
-        <div style="width:34px;height:34px;border-radius:8px;background:rgba(110,231,183,.12);display:flex;align-items:center;justify-content:center;font-family:"Fraunces",serif;font-weight:900;font-size:.85rem;color:#6EE7B7;flex-shrink:0">${escHtml((n.authorName||'?')[0].toUpperCase())}</div>
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(110,231,183,.12);display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.85rem;color:#6EE7B7;flex-shrink:0">${escHtml((n.authorName||'?')[0].toUpperCase())}</div>
         <div style="flex:1;min-width:0">
           <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:5px;flex-wrap:wrap">
             <span style="font-weight:700;color:var(--txt);font-size:.88rem">${escHtml(n.authorName||'Staff')}</span>
-            <span style="font-family:"DM Mono",monospace;font-size:.62rem;color:var(--faint)">${date}</span>
-            ${n.pinned ? '<span style="font-family:"DM Mono",monospace;font-size:.6rem;padding:1px 6px;border-radius:3px;background:rgba(252,211,77,.12);color:#FCD34D">📌 pinned</span>' : ''}
+            <span style="font-family:DM Mono,monospace;font-size:.62rem;color:var(--faint)">${date}</span>
+            ${n.pinned ? '<span style="font-family:DM Mono,monospace;font-size:.6rem;padding:1px 6px;border-radius:3px;background:rgba(252,211,77,.12);color:#FCD34D">📌 pinned</span>' : ''}
           </div>
           <div style="font-size:.88rem;color:rgba(240,238,248,.8);line-height:1.6;white-space:pre-wrap">${escHtml(n.text||'')}</div>
         </div>
