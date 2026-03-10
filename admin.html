@@ -2476,7 +2476,7 @@ async function loadStaffList() {
         ${isOwner ? '' : `<button onclick="removeStaff('${d.id}','${escHtml(name)}')" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-weight:600;font-size:.76rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(255,87,51,.12)'" onmouseout="this.style.background='transparent'">Remove</button>`}
       </div>`;
     }).join('');
-  } catch(e) { console.error(e); listEl.innerHTML = '<div style="color:var(--coral);font-size:.84rem">Failed to load staff.</div>'; }
+  } catch(e) { console.error(e); listEl.innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`; }
 }
 
 window.lookupAndAddStaff = async function() {
@@ -2612,7 +2612,7 @@ async function loadAuditLog() {
     auditCache = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => { const ta = a.createdAt?.seconds||0; const tb = b.createdAt?.seconds||0; return tb-ta; });
     renderAuditLog();
   } catch(e) {
-    listEl.innerHTML = '<div style="padding:24px;text-align:center;color:var(--coral);font-size:.84rem">Failed to load audit log. Make sure the auditLog collection exists in Firestore.</div>';
+    listEl.innerHTML = `<div style="padding:24px;text-align:center;color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
   }
 }
 
@@ -2655,7 +2655,7 @@ async function loadAppLibrary() {
     renderLibraryApps();
   } catch(e) {
     const el = document.getElementById('appLibraryList');
-    if (el) el.innerHTML = '<div style="padding:24px;text-align:center;color:var(--coral);font-size:.84rem">Failed to load. Make sure appLibrary collection exists.</div>';
+    if (el) el.innerHTML = `<div style="padding:24px;text-align:center;color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
   }
 }
 
@@ -2731,7 +2731,7 @@ async function loadChangelog() {
     changelogCache = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt||'') > (a.createdAt||'') ? 1 : -1);
     renderChangelogEntries();
   } catch(e) {
-    el.innerHTML = '<div style="color:var(--coral);font-size:.84rem">Failed to load. Ensure changelog collection exists.</div>';
+    el.innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
   }
 }
 
@@ -2900,7 +2900,10 @@ async function loadHighlights() {
         <button onclick="unpinHighlight('${h.id}')" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-weight:600;font-size:.76rem;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,87,51,.1)'" onmouseout="this.style.background='transparent'">Unpin</button>
       </div>`;
     }).join('');
-  } catch(e) { console.error(e); }
+  } catch(e) {
+    const listEl = document.getElementById('highlightsList');
+    if (listEl) listEl.innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
+  }
 }
 
 window.searchClassroomsForHighlight = function() {
@@ -2966,6 +2969,7 @@ async function loadStaffNotes() {
   const feedEl = document.getElementById('staffNotesFeed');
   if (!feedEl) return;
   if (staffNotesUnsub) staffNotesUnsub(); // detach old listener
+  try {
   staffNotesUnsub = onSnapshot(collection(db, 'staffNotes'), snap => {
     const notes = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
     if (!notes.length) { feedEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--muted);font-size:.85rem">No notes yet. Be the first to post.</div>'; return; }
@@ -2988,7 +2992,8 @@ async function loadStaffNotes() {
         </div>
       </div>`;
     }).join('');
-  });
+  }, err => { feedEl.innerHTML = `<div style="padding:24px;text-align:center;color:var(--coral);font-size:.84rem">Error: ${err.message}</div>`; });
+  } catch(e) { feedEl.innerHTML = `<div style="padding:24px;text-align:center;color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`; }
 }
 
 window.postStaffNote = async function() {
