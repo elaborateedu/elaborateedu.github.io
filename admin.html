@@ -1981,9 +1981,8 @@ async function loadDistrictsList() {
       el.innerHTML = '<div style="text-align:center;padding:32px;color:rgba(255,255,255,.25);font-size:.88rem">No districts yet. Create one above.</div>';
       return;
     }
-    const sorted = snap.docs.map(d => ({id:d.id,...d.data()})).sort((a,b)=>(b.sentAt?.seconds||0)-(a.sentAt?.seconds||0));
-    el.innerHTML = sorted.map(e => {
-      const dist = d.data();
+    const sorted = snap.docs.map(d => ({id:d.id,...d.data()})).sort((a,b) => (a.name||'').localeCompare(b.name||''));
+    el.innerHTML = sorted.map(dist => {
       const sub  = dist.subscription || {};
       const statusColors = { active:'rgba(125,190,142,.15)', trial:'rgba(244,197,66,.15)', inactive:'rgba(255,255,255,.07)' };
       const statusText   = { active:'Active', trial:'Trial', inactive:'Inactive' };
@@ -2003,14 +2002,14 @@ async function loadDistrictsList() {
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
           <span style="font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:50px;background:${statusColors[stat]};color:${statusTxtClr[stat]}">${statusText[stat]}</span>
-          <select onchange="updateDistrictPlan('${d.id}',this.value)" onclick="event.stopPropagation()"
+          <select onchange="updateDistrictPlan('${dist.id}',this.value)" onclick="event.stopPropagation()"
             style="font-family:DM Sans,sans-serif;font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,.1);background:#1E293B;color:#F9FAFB;cursor:pointer;outline:none">
             <option value="trial"    ${stat==='trial'    ?'selected':''}>Trial</option>
             <option value="active"   ${stat==='active'   ?'selected':''}>Active (Paid)</option>
             <option value="inactive" ${stat==='inactive' ?'selected':''}>Inactive</option>
           </select>
         </div>
-        <button onclick="deleteDistrict('${d.id}','${escHtml(dist.name||'')}')" style="padding:7px 14px;border-radius:50px;border:1.5px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.background='rgba(255,87,51,.15)'" onmouseout="this.style.background='transparent'">Delete</button>
+        <button onclick="deleteDistrict('${dist.id}','${escHtml(dist.name||'')}')" style="padding:7px 14px;border-radius:50px;border:1.5px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.background='rgba(255,87,51,.15)'" onmouseout="this.style.background='transparent'">Delete</button>
       </div>`;
     }).join('');
   } catch(e) {
