@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="/favicon.png">
 <title>Support Elaborate — Donate</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
@@ -154,7 +155,7 @@
   </div>
 
   <button class="donate-btn" id="donateBtn" onclick="handleDonate()">
-    <span>❤️</span> Donate <span id="donateBtnAmount">$3</span>
+    <span>❤️</span> Donate <span id="donateBtnAmount">$3</span> &nbsp;— Coming Soon
   </button>
   <div style="margin-top:12px;font-size:.78rem;color:var(--muted)">You'll be redirected to a secure payment link.</div>
 
@@ -228,7 +229,7 @@
     <div style="font-size:.88rem;color:var(--muted);margin-bottom:20px;line-height:1.6">We will reply as fast as we can.</div>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <a href="support.html" class="donate-btn" style="text-decoration:none;padding:12px 28px;font-size:.9rem">Submit a Ticket</a>
-      <a href="mailto:jonnyschoen29@gmail.com" class="donate-btn" style="text-decoration:none;padding:12px 28px;font-size:.9rem;background:transparent;color:var(--navy);border:2px solid var(--navy)" onmouseover="this.style.background='var(--navy)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--navy)'">Send an Email</a>
+      <a href="/cdn-cgi/l/email-protection#6c06030202151f0f040309025e552c0b010d0500420f0301" class="donate-btn" style="text-decoration:none;padding:12px 28px;font-size:.9rem;background:transparent;color:var(--navy);border:2px solid var(--navy)" onmouseover="this.style.background='var(--navy)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--navy)'">Send an Email</a>
     </div>
   </div>
 
@@ -244,7 +245,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 let selectedAmount = '3';
 
 window.selectTip = function(btn, amount) {
@@ -262,25 +263,12 @@ window.selectCustom = function(val) {
 };
 
 window.handleDonate = function() {
-  const amount = parseFloat(selectedAmount);
-  if (!amount || amount < 1) { showToast('Please select or enter an amount.'); return; }
-  // Replace this URL with your actual Stripe payment link or Ko-fi link
-  // e.g. https://buy.stripe.com/yourlink or https://ko-fi.com/yourpage
-  const paymentUrl = `https://ko-fi.com/elaborateedu`;
-  window.open(paymentUrl, '_blank');
+  showToast('💛 Donations coming soon! Thank you for your support.');
 };
 
 window.contactPlan = function(plan) {
-  const sub  = encodeURIComponent(`Elaborate District Subscription — ${plan === 'annual' ? 'Annual ($249/yr)' : 'Monthly ($29/mo)'}`);
-  const body = encodeURIComponent(`Hi,\n\nI am interested in the ${plan} district plan for Elaborate.\n\nDistrict / School name: \nApprox. number of teachers: \n\nPlease let me know the next steps.\n\nThanks`);
-  window.open(`mailto:jonnyschoen29@gmail.com?subject=${sub}&body=${body}`);
+  showToast('🏫 District plans coming soon! We'll reach out when ready.');
 };
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-</script>
-</body>
-</html>
+  const t = document.g
