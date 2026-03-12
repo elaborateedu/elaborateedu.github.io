@@ -250,12 +250,8 @@
     width:calc(100% + 10px);
     height:calc(100% + 10px);
     pointer-events:none;
-    border-radius:54px;
-    opacity:0;
-    transition:opacity .4s cubic-bezier(.4,0,.2,1);
     z-index:0;
   }
-  #searchRingCanvas.active{opacity:1}
   .hub-search{
     width:100%;padding:13px 20px 13px 46px;
     border-radius:50px;
@@ -1868,190 +1864,217 @@ function firebaseErrMsg(code) {
 function authErr(el, msg) { el.textContent = msg; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 4000); }
 
 /* ════════════════════════════════════
-   SEARCH RING — canvas drawn
+   SEARCH RING — Apple Intelligence style
+   Technique: offscreen canvas clipped to pill stroke,
+   rotating luminous arc that fades into a dim tail.
 ════════════════════════════════════ */
 (function() {
-  let raf = null;
-  let angle = 0;
-  let active = false;
-  let fadeOpacity = 0;
-  let targetOpacity = 0;
+  let raf       = null;
+  let phase     = 0;       // 0‒1, drives rotation
+  let fadeVal   = 0;       // current rendered opacity
+  let targetFade= 0;       // 0 or 1
+  let state     = null;
 
-  const COLORS = [
-    '#FF5733', '#FF8C42', '#F4C542', '#7DBE8E',
-    '#38BDF8', '#A78BFA', '#F472B6', '#FF5733'
+  // Apple uses a tight arc (~140°) of bright color that sweeps.
+  // The rest of the ring is a very dim, near-black base track.
+  // Colors cycle slowly as the arc sweeps — not all at once.
+  const ARC_SPAN  = 0.38;   // fraction of perimeter that is bright (~137°)
+  const TAIL_SPAN = 0.18;   // fraction that is a fading tail behind the head
+  const ROT_SPEED = 0.004;  // phase increment per frame (full lap ≈ 250 frames ≈ 4s)
+
+  // The color at the head of the arc shifts over time
+  const HEAD_COLORS = [
+    [255, 87,  51],   // coral
+    [244,197,  66],   // gold
+    [125,190, 142],   // sage
+    [167,139, 250],   // lavender
+    [ 56,189, 248],   // sky
+    [244,114, 182],   // pink
+    [255, 87,  51],   // back to coral
   ];
+
+  function lerpColor(a, b, t) {
+    return [
+      Math.round(a[0] + (b[0]-a[0])*t),
+      Math.round(a[1] + (b[1]-a[1])*t),
+      Math.round(a[2] + (b[2]-a[2])*t),
+    ];
+  }
+
+  function headColor(phase) {
+    // cycle through HEAD_COLORS based on phase
+    const n  = HEAD_COLORS.length - 1;
+    const ci = (phase * n * 0.7) % n;  // slower color cycle than rotation
+    const i0 = Math.floor(ci) % n;
+    const i1 = (i0 + 1) % n;
+    return lerpColor(HEAD_COLORS[i0], HEAD_COLORS[i1], ci - Math.floor(ci));
+  }
 
   function initCanvas() {
     const canvas = document.getElementById('searchRingCanvas');
-    if (!canvas) return;
-    const wrap   = canvas.parentElement;
-    const W      = wrap.offsetWidth  + 10;
-    const H      = wrap.offsetHeight + 10;
-    const dpr    = window.devicePixelRatio || 1;
-    canvas.width  = W * dpr;
-    canvas.height = H * dpr;
+    if (!canvas) return null;
+    const wrap  = canvas.parentElement;
+    const W     = wrap.offsetWidth  + 10;
+    const H     = wrap.offsetHeight + 10;
+    const dpr   = window.devicePixelRatio || 1;
+    canvas.width        = W * dpr;
+    canvas.height       = H * dpr;
     canvas.style.width  = W + 'px';
     canvas.style.height = H + 'px';
     return { canvas, ctx: canvas.getContext('2d'), W, H, dpr };
   }
 
-  function roundRect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
+  /* Returns a point on the rounded-rect perimeter at t∈[0,1] */
+  function perimPoint(W, H, pad, r, t) {
+    const x0 = pad, y0 = pad, x1 = W-pad, y1 = H-pad;
+    const sw = x1-x0-2*r, sh = y1-y0-2*r, al = r*Math.PI/2;
+    const segs = [
+      {line:true, len:sw, sx:x0+r,  sy:y0,   dx:1,  dy:0 },
+      {line:false,len:al, cx:x1-r,  cy:y0+r, a0:-Math.PI/2,  da:Math.PI/2},
+      {line:true, len:sh, sx:x1,    sy:y0+r, dx:0,  dy:1 },
+      {line:false,len:al, cx:x1-r,  cy:y1-r, a0:0,           da:Math.PI/2},
+      {line:true, len:sw, sx:x1-r,  sy:y1,   dx:-1, dy:0 },
+      {line:false,len:al, cx:x0+r,  cy:y1-r, a0:Math.PI/2,   da:Math.PI/2},
+      {line:true, len:sh, sx:x0,    sy:y1-r, dx:0,  dy:-1},
+      {line:false,len:al, cx:x0+r,  cy:y0+r, a0:Math.PI,     da:Math.PI/2},
+    ];
+    const total = segs.reduce((s,g)=>s+g.len,0);
+    let d = ((t % 1) + 1) % 1 * total;
+    for (const seg of segs) {
+      if (d <= seg.len) {
+        if (seg.line) return {x: seg.sx + seg.dx*d, y: seg.sy + seg.dy*d};
+        const a = seg.a0 + seg.da*(d/seg.len);
+        return {x: seg.cx + r*Math.cos(a), y: seg.cy + r*Math.sin(a)};
+      }
+      d -= seg.len;
+    }
+    return {x:x0+r, y:y0};
   }
 
-  function drawRing(ctx, W, H, dpr, alpha) {
-    ctx.clearRect(0, 0, W * dpr, H * dpr);
+  function draw(ctx, W, H, dpr, fade, phase) {
+    ctx.clearRect(0, 0, W*dpr, H*dpr);
+    if (fade < 0.005) return;
     ctx.save();
     ctx.scale(dpr, dpr);
 
     const pad   = 5;
-    const thick = 2.5;
-    const glow  = 14;
-    const r     = (H - pad * 2) / 2; // border radius of the pill
+    const r     = (H - pad*2) / 2;
+    const STEPS = 200;  // segments — enough for smooth pill curve
+    const BASE_W= 2.5;  // stroke width of the ring line
+    const hc    = headColor(phase);
 
-    // Build conic-style sweep gradient by sampling colors along arc
-    // We'll use multiple gradient strokes to fake a conic on a rounded rect
-    const len   = 2 * (W - 2*pad) + 2 * (H - 2*pad) - 4 * (r * (1 - Math.PI/4) * 2); // approx perimeter
-    const steps = 60;
-
-    ctx.globalAlpha = alpha;
-
-    // Draw glow (wide, blurry)
-    for (let s = 0; s < steps; s++) {
-      const t      = (s / steps + angle / (Math.PI * 2)) % 1;
-      const ci     = t * (COLORS.length - 1);
-      const ci0    = Math.floor(ci);
-      const ci1    = Math.min(ci0 + 1, COLORS.length - 1);
-      const mix    = ci - ci0;
-      const c0     = hexToRgb(COLORS[ci0]);
-      const c1     = hexToRgb(COLORS[ci1]);
-      const rc     = Math.round(c0[0] + (c1[0]-c0[0])*mix);
-      const gc2    = Math.round(c0[1] + (c1[1]-c0[1])*mix);
-      const bc     = Math.round(c0[2] + (c1[2]-c0[2])*mix);
-      const angle2 = t * Math.PI * 2;
-      const cx     = pad + r + (W - 2*pad - 2*r) * 0.5 + (W/2 - pad - r) * Math.cos(angle2 - Math.PI/2) * 0;
-      // Just draw glow as arc segments around the rect perimeter
-      const pt     = perimPoint(W, H, pad, r, t);
-      const grad   = ctx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, glow);
-      grad.addColorStop(0, `rgba(${rc},${gc2},${bc},.55)`);
-      grad.addColorStop(1, `rgba(${rc},${gc2},${bc},0)`);
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(pt.x, pt.y, glow, 0, Math.PI*2);
-      ctx.fill();
+    // ── Layer 1: dim base track (the full ring, very faint) ──
+    ctx.globalAlpha = fade * 0.12;
+    ctx.strokeStyle = `rgb(255,255,255)`;
+    ctx.lineWidth   = BASE_W;
+    ctx.lineCap     = 'round';
+    ctx.lineJoin    = 'round';
+    ctx.beginPath();
+    for (let i = 0; i <= STEPS; i++) {
+      const t  = i / STEPS;
+      const pt = perimPoint(W, H, pad, r, t);
+      i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
     }
+    ctx.closePath();
+    ctx.stroke();
 
-    // Draw crisp ring
-    ctx.globalCompositeOperation = 'source-over';
-    const ringSteps = 120;
-    for (let s = 0; s < ringSteps - 1; s++) {
-      const t0     = (s / ringSteps + angle/(Math.PI*2)) % 1;
-      const t1     = ((s+1) / ringSteps + angle/(Math.PI*2)) % 1;
-      const p0     = perimPoint(W, H, pad, r, t0);
-      const p1     = perimPoint(W, H, pad, r, t1);
-      const ci     = t0 * (COLORS.length - 1);
-      const ci0    = Math.floor(ci);
-      const ci1    = Math.min(ci0+1, COLORS.length-1);
-      const mix    = ci - ci0;
-      const c0     = hexToRgb(COLORS[ci0]);
-      const c1     = hexToRgb(COLORS[ci1]);
-      const rc     = Math.round(c0[0]+(c1[0]-c0[0])*mix);
-      const gc2    = Math.round(c0[1]+(c1[1]-c0[1])*mix);
-      const bc     = Math.round(c0[2]+(c1[2]-c0[2])*mix);
-      ctx.strokeStyle = `rgb(${rc},${gc2},${bc})`;
-      ctx.lineWidth   = thick;
+    // ── Layer 2: the glowing arc + tail ──
+    // We render STEPS segments; each gets an opacity based on
+    // its distance behind the "head" position.
+    const headT = phase % 1;
+
+    for (let i = 0; i < STEPS; i++) {
+      const t0 = i / STEPS;
+      const t1 = (i+1) / STEPS;
+
+      // Distance behind the head (wrapping), normalized 0-1
+      let behind = (headT - t0 + 1) % 1;
+
+      let segAlpha, [sr, sg, sb] = [255,255,255];
+
+      if (behind <= ARC_SPAN) {
+        // In the bright arc: strongest at head, fades toward tail
+        const pos = behind / ARC_SPAN; // 0 = head, 1 = tail of arc
+        segAlpha  = Math.pow(1 - pos, 1.4); // sharp falloff
+        // Color: head color at pos=0, white at pos=0.5, fades to dim
+        const ct  = Math.min(pos * 2, 1);
+        [sr,sg,sb]= lerpColor(hc, [255,255,255], ct * 0.4);
+      } else if (behind <= ARC_SPAN + TAIL_SPAN) {
+        // Faint ghost tail
+        const pos = (behind - ARC_SPAN) / TAIL_SPAN;
+        segAlpha  = (1 - pos) * 0.18;
+        [sr,sg,sb]= [255,255,255];
+      } else {
+        continue; // skip dark segments — base track handles them
+      }
+
+      if (segAlpha < 0.005) continue;
+
+      const p0 = perimPoint(W, H, pad, r, t0);
+      const p1 = perimPoint(W, H, pad, r, t1);
+
+      // Outer glow pass (wide, blurry-ish via multiple strokes)
+      ctx.globalAlpha = fade * segAlpha * 0.35;
+      ctx.strokeStyle = `rgb(${sr},${sg},${sb})`;
+      ctx.lineWidth   = BASE_W + 8;
       ctx.lineCap     = 'round';
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.stroke();
+
+      // Mid glow
+      ctx.globalAlpha = fade * segAlpha * 0.55;
+      ctx.lineWidth   = BASE_W + 3;
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.stroke();
+
+      // Core crisp line
+      ctx.globalAlpha = fade * segAlpha;
+      ctx.strokeStyle = `rgb(${sr},${sg},${sb})`;
+      ctx.lineWidth   = BASE_W;
       ctx.beginPath();
       ctx.moveTo(p0.x, p0.y);
       ctx.lineTo(p1.x, p1.y);
       ctx.stroke();
     }
 
+    // ── Layer 3: bright head dot ──
+    const hp = perimPoint(W, H, pad, r, headT);
+    const headGrad = ctx.createRadialGradient(hp.x, hp.y, 0, hp.x, hp.y, 10);
+    headGrad.addColorStop(0, `rgba(${hc[0]},${hc[1]},${hc[2]},${fade})`);
+    headGrad.addColorStop(0.3, `rgba(255,255,255,${fade * 0.9})`);
+    headGrad.addColorStop(1, `rgba(${hc[0]},${hc[1]},${hc[2]},0)`);
+    ctx.globalAlpha = 1;
+    ctx.fillStyle   = headGrad;
+    ctx.beginPath();
+    ctx.arc(hp.x, hp.y, 10, 0, Math.PI*2);
+    ctx.fill();
+
+    // Tiny sharp bright core at head
+    ctx.globalAlpha = fade;
+    ctx.fillStyle   = `rgb(255,255,255)`;
+    ctx.beginPath();
+    ctx.arc(hp.x, hp.y, 2, 0, Math.PI*2);
+    ctx.fill();
+
     ctx.restore();
   }
 
-  // Get a point on the rounded-rect perimeter at normalized t [0,1]
-  function perimPoint(W, H, pad, r, t) {
-    const x0 = pad, y0 = pad, x1 = W - pad, y1 = H - pad;
-    const straight_w = x1 - x0 - 2*r;
-    const straight_h = y1 - y0 - 2*r;
-    const arc_len    = r * Math.PI / 2;
-    const segs = [
-      { type:'line', len: straight_w },  // top
-      { type:'arc',  len: arc_len, cx: x1-r, cy: y0+r, a0: -Math.PI/2, da: Math.PI/2 }, // top-right
-      { type:'line', len: straight_h },  // right
-      { type:'arc',  len: arc_len, cx: x1-r, cy: y1-r, a0: 0, da: Math.PI/2 },          // bottom-right
-      { type:'line', len: straight_w },  // bottom
-      { type:'arc',  len: arc_len, cx: x0+r, cy: y1-r, a0: Math.PI/2, da: Math.PI/2 },  // bottom-left
-      { type:'line', len: straight_h },  // left
-      { type:'arc',  len: arc_len, cx: x0+r, cy: y0+r, a0: Math.PI, da: Math.PI/2 },    // top-left
-    ];
-    const totalLen = segs.reduce((s, g) => s + g.len, 0);
-    let dist = t * totalLen;
-    // Start positions for each segment
-    const starts = [
-      { x: x0+r, y: y0 },      // top start
-      null,                      // arc top-right
-      { x: x1, y: y0+r },      // right start
-      null,                      // arc bottom-right
-      { x: x1-r, y: y1 },      // bottom start (goes left)
-      null,                      // arc bottom-left
-      { x: x0, y: y1-r },      // left start (goes up)
-      null,                      // arc top-left
-    ];
-    const dirs = [
-      {dx:1,dy:0}, null, {dx:0,dy:1}, null,
-      {dx:-1,dy:0}, null, {dx:0,dy:-1}, null
-    ];
-    for (let i = 0; i < segs.length; i++) {
-      const seg = segs[i];
-      if (dist <= seg.len) {
-        if (seg.type === 'line') {
-          const d = dirs[i];
-          const s = starts[i];
-          return { x: s.x + d.dx * dist, y: s.y + d.dy * dist };
-        } else {
-          const a = seg.a0 + seg.da * (dist / seg.len);
-          return { x: seg.cx + r * Math.cos(a), y: seg.cy + r * Math.sin(a) };
-        }
-      }
-      dist -= seg.len;
-    }
-    return { x: x0+r, y: y0 };
-  }
-
-  function hexToRgb(hex) {
-    const r = parseInt(hex.slice(1,3),16);
-    const g = parseInt(hex.slice(3,5),16);
-    const b = parseInt(hex.slice(5,7),16);
-    return [r,g,b];
-  }
-
-  let state = null;
   function loop() {
     if (!state) state = initCanvas();
     if (!state) { raf = requestAnimationFrame(loop); return; }
-    // Lerp opacity
-    const speed = 0.06;
-    if (Math.abs(fadeOpacity - targetOpacity) < 0.005) {
-      fadeOpacity = targetOpacity;
-    } else {
-      fadeOpacity += (targetOpacity - fadeOpacity) * speed;
-    }
-    if (fadeOpacity > 0.001) {
-      angle = (angle + 0.018) % (Math.PI * 2); // rotation speed
-      drawRing(state.ctx, state.W, state.H, state.dpr, fadeOpacity);
+
+    // Smooth fade in/out
+    const FADE_SPD = 0.055;
+    if (Math.abs(fadeVal - targetFade) < 0.003) fadeVal = targetFade;
+    else fadeVal += (targetFade - fadeVal) * FADE_SPD;
+
+    if (fadeVal > 0.003 || targetFade > 0) {
+      phase = (phase + ROT_SPEED) % 1;
+      draw(state.ctx, state.W, state.H, state.dpr, fadeVal, phase);
     } else {
       state.ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
     }
@@ -2059,13 +2082,11 @@ function authErr(el, msg) { el.textContent = msg; el.classList.add('show'); setT
   }
 
   window.activateSearchRing = function(on) {
-    targetOpacity = on ? 1 : 0;
+    targetFade = on ? 1 : 0;
+    if (on) state = initCanvas();  // resize-safe reinit
     if (!raf) loop();
-    // Reinit canvas size if needed (e.g. window resize)
-    if (on) state = initCanvas();
   };
 
-  // Reinit on resize
   window.addEventListener('resize', () => { state = null; });
 })();
 
