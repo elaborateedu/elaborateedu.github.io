@@ -639,7 +639,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="logo" onclick="goHome()"><img id="navLogoImg" style="display:none;height:26px;vertical-align:middle;margin-right:8px;border-radius:4px" alt=""/><span id="navLogoText">Elaborate</span><span>.</span></div>
+  <div class="logo" id="navLogo" onclick="eggLogoClick();goHome()"><img id="navLogoImg" style="display:none;height:26px;vertical-align:middle;margin-right:8px;border-radius:4px" alt=""/><span id="navLogoText">Elaborate</span><span id="navLogoDot">.</span></div>
   <div class="nav-links">
     <a class="nav-btn ghost" href="about.html">About</a>
     <a class="nav-btn ghost" href="districts.html">Districts</a>
@@ -944,7 +944,7 @@
   </section>
 
   <footer>
-    <strong>Elaborate.</strong> &nbsp;Project Elaborate. Use of AI included as this is an experiment. All rights reserved &nbsp;&middot;&nbsp; &copy; 2025
+    <strong>Elaborate.</strong> &nbsp;Project Elaborate. Use of AI included as this is an experiment. All rights reserved &nbsp;&middot;&nbsp; &copy; 2025 <span id="footerStar" title="" onclick="eggFooterStar()" style="cursor:pointer;opacity:.2;transition:opacity .3s;user-select:none" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='.2'">✦</span>
     <div style="margin-top:12px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap">
       <a href="about.html" style="color:var(--muted);text-decoration:none;font-weight:600">About</a>
       <a href="jobs.html" style="color:var(--muted);text-decoration:none;font-weight:600">Jobs</a>
@@ -4020,5 +4020,375 @@ window.dismissWarning = async function() {
   "></div>
 </div>
 
+
+<!-- ═══════════════════════════════════════════
+     EASTER EGGS
+═══════════════════════════════════════════ -->
+
+<!-- Falling homework overlay -->
+<div id="eggHomework" style="display:none;position:fixed;inset:0;pointer-events:none;z-index:8000;overflow:hidden"></div>
+
+<!-- Sleep overlay -->
+<div id="eggSleep" style="
+  display:none;position:fixed;inset:0;z-index:8500;
+  background:rgba(10,15,20,.88);
+  align-items:center;justify-content:center;flex-direction:column;gap:16px;
+  backdrop-filter:blur(4px);cursor:pointer;
+" onclick="eggSleepDismiss()">
+  <div id="eggSleepZs" style="position:relative;font-family:'Fraunces',serif;font-size:4rem;letter-spacing:.1em;color:rgba(255,255,255,.12);text-align:center;filter:blur(.5px)"></div>
+  <div style="font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:-.02em">you fell asleep</div>
+  <div style="font-size:.8rem;color:rgba(255,255,255,.18);font-family:'DM Mono',monospace;letter-spacing:.08em">press any key to wake up</div>
+</div>
+
+<!-- Logo gem flash -->
+<div id="eggGemFlash" style="
+  display:none;position:fixed;inset:0;z-index:7500;
+  background:radial-gradient(circle at 50% 0%, rgba(167,139,250,.35) 0%, transparent 60%);
+  pointer-events:none;animation:gemFlash .6s ease both;
+"></div>
+<style>
+@keyframes gemFlash{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+@keyframes hwFall{
+  0%{transform:translateY(-60px) rotate(var(--hw-rot)) scale(.9);opacity:0}
+  8%{opacity:1}
+  100%{transform:translateY(110vh) rotate(calc(var(--hw-rot) + 180deg)) scale(1);opacity:.7}
+}
+@keyframes zFloat{
+  0%{opacity:0;transform:translateY(0) scale(.8)}
+  15%{opacity:.6}
+  100%{opacity:0;transform:translateY(-120px) scale(1.4)}
+}
+@keyframes logoPop{
+  0%{transform:scale(1) rotate(0)}
+  30%{transform:scale(1.18) rotate(-3deg)}
+  60%{transform:scale(1.12) rotate(2deg)}
+  100%{transform:scale(1) rotate(0)}
+}
+@keyframes shootingStar{
+  0%{transform:translate(0,0) scaleX(1);opacity:1}
+  100%{transform:translate(420px,180px) scaleX(3);opacity:0}
+}
+@keyframes starTrail{
+  0%{opacity:.9;transform:translate(0,0)}
+  100%{opacity:0;transform:translate(380px,160px)}
+}
+</style>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   EASTER EGGS
+═══════════════════════════════════════════════════════════ */
+(function() {
+
+  // ─────────────────────────────────────────────
+  // EGG 1: Konami Code → desk nap shake + message
+  // ─────────────────────────────────────────────
+  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let konamiIdx = 0;
+  document.addEventListener('keydown', e => {
+    if (e.key === KONAMI[konamiIdx]) {
+      konamiIdx++;
+      if (konamiIdx === KONAMI.length) {
+        konamiIdx = 0;
+        triggerKonami();
+      }
+    } else {
+      konamiIdx = e.key === KONAMI[0] ? 1 : 0;
+    }
+  });
+
+  function triggerKonami() {
+    showToast('📖 nice try — back to studying');
+    const hub = document.getElementById('hub');
+    if (!hub) return;
+    hub.style.transition = 'transform .08s ease';
+    const shakes = [[4,-3],[- 5,2],[3,-4],[-4,3],[2,-2],[0,0]];
+    shakes.forEach((s, i) => {
+      setTimeout(() => {
+        hub.style.transform = i === shakes.length-1
+          ? '' : `translate(${s[0]}px,${s[1]}px) rotate(${s[0]*0.15}deg)`;
+      }, i * 80);
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // EGG 2: Click logo 5× fast → gem explosion + midnight theme
+  // ─────────────────────────────────────────────
+  let logoClicks = 0, logoTimer = null;
+  let midnightUnlocked = false;
+
+  window.eggLogoClick = function() {
+    logoClicks++;
+    clearTimeout(logoTimer);
+    logoTimer = setTimeout(() => { logoClicks = 0; }, 900);
+
+    if (logoClicks >= 5) {
+      logoClicks = 0;
+      if (!midnightUnlocked) {
+        midnightUnlocked = true;
+        triggerGemUnlock();
+      } else {
+        // Already unlocked — toggle midnight theme
+        toggleMidnightTheme();
+      }
+    }
+  };
+
+  function triggerGemUnlock() {
+    // Flash
+    const flash = document.getElementById('eggGemFlash');
+    flash.style.display = 'block';
+    setTimeout(() => flash.style.display = 'none', 700);
+
+    // Animate logo
+    const logo = document.getElementById('navLogo');
+    if (logo) { logo.style.animation = 'logoPop .5s cubic-bezier(.34,1.56,.64,1) both'; setTimeout(()=>logo.style.animation='',600); }
+
+    // Change dot to gem temporarily
+    const dot = document.getElementById('navLogoDot');
+    if (dot) {
+      dot.textContent = '✦';
+      dot.style.color = '#A78BFA';
+      dot.style.textShadow = '0 0 12px rgba(167,139,250,.9)';
+      setTimeout(() => { dot.textContent = '.'; dot.style.color = ''; dot.style.textShadow = ''; }, 3000);
+    }
+
+    // Burst particles across nav
+    spawnNavParticles();
+
+    showToast('🌙 Midnight mode unlocked — click the logo again to toggle');
+    setTimeout(() => toggleMidnightTheme(), 800);
+  }
+
+  function toggleMidnightTheme() {
+    const body = document.body;
+    if (body.classList.contains('theme-midnight')) {
+      body.classList.remove('theme-midnight');
+      showToast('☀ back to normal');
+    } else {
+      body.classList.add('theme-midnight');
+      showToast('🌙 midnight mode');
+    }
+  }
+
+  function spawnNavParticles() {
+    const logo = document.getElementById('navLogo');
+    if (!logo) return;
+    const rect  = logo.getBoundingClientRect();
+    const cx    = rect.left + rect.width/2;
+    const cy    = rect.top  + rect.height/2;
+    const cols  = ['#A78BFA','#38BDF8','#F4C542','#FF5733','#fff'];
+    for (let i = 0; i < 22; i++) {
+      const el = document.createElement('div');
+      const a  = Math.random() * Math.PI * 2;
+      const d  = 40 + Math.random() * 80;
+      const s  = 3 + Math.random() * 5;
+      el.style.cssText = `
+        position:fixed;z-index:9999;pointer-events:none;
+        width:${s}px;height:${s}px;border-radius:50%;
+        background:${cols[i%cols.length]};
+        left:${cx}px;top:${cy}px;
+        transition:transform .6s cubic-bezier(.2,.8,.3,1),opacity .6s ease;
+      `;
+      document.body.appendChild(el);
+      void el.offsetWidth;
+      el.style.transform = `translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`;
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 700);
+    }
+  }
+
+  // Midnight theme CSS injection
+  const midnightStyle = document.createElement('style');
+  midnightStyle.textContent = `
+    body.theme-midnight {
+      --cream:#05080d; --navy:#c8b8ff; --coral:#ff6f91;
+      --gold:#ffd97d; --card-bg:#0d1117;
+      --text:#e8dfff; --muted:#6e6a8a;
+      --shadow:0 4px 24px rgba(0,0,0,.7);
+    }
+    body.theme-midnight nav { background:rgba(5,8,13,.95); border-bottom-color:rgba(200,184,255,.08); }
+    body.theme-midnight .hub-header { background:linear-gradient(135deg,#020408,#0d1020); }
+    body.theme-midnight .hub-header::after { background:radial-gradient(circle,rgba(167,139,250,.18) 0%,transparent 70%); }
+    body.theme-midnight .hub-header-clip,
+    body.theme-midnight .hub-tabs,
+    body.theme-midnight .hub-body { background:#05080d; }
+    body.theme-midnight .tab-btn.active { background:#0d1117; color:#c8b8ff; }
+    body.theme-midnight .app-card { background:#0d1117; border-color:rgba(200,184,255,.07); }
+    body.theme-midnight .add-card { border-color:rgba(200,184,255,.1); }
+    body.theme-midnight .hub-greeting span { color:#ffd97d; }
+    body.theme-midnight * { --tr:.25s cubic-bezier(.4,0,.2,1); }
+  `;
+  document.head.appendChild(midnightStyle);
+
+  // ─────────────────────────────────────────────
+  // EGG 3: Type "homework" anywhere → papers rain
+  // ─────────────────────────────────────────────
+  let typeBuffer = '';
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    typeBuffer = (typeBuffer + e.key).slice(-8).toLowerCase();
+    if (typeBuffer === 'homework') {
+      typeBuffer = '';
+      triggerHomeworkRain();
+    }
+  });
+
+  function triggerHomeworkRain() {
+    const container = document.getElementById('eggHomework');
+    if (!container || container.dataset.active === '1') return;
+    container.style.display = 'block';
+    container.dataset.active = '1';
+    showToast('📄 homework incoming!!');
+
+    const msgs = ['Algebra Ch.7','Essay Due','Read pg.230','Study Guide','Quiz Tomorrow','Lab Report','Vocab List','History Ch.12'];
+    for (let i = 0; i < 28; i++) {
+      const el = document.createElement('div');
+      const rot = (Math.random()-0.5)*50;
+      el.style.cssText = `
+        position:absolute;
+        left:${Math.random()*100}%;
+        top:-80px;
+        width:52px;height:64px;
+        background:#fff;
+        border-radius:3px;
+        font-size:5.5px;
+        font-family:'DM Mono',monospace;
+        color:#334;
+        padding:6px 4px;
+        display:flex;flex-direction:column;gap:2px;
+        --hw-rot:${rot}deg;
+        animation:hwFall ${1.8+Math.random()*1.4}s cubic-bezier(.3,.6,.5,1) ${Math.random()*.8}s both;
+        box-shadow:0 4px 12px rgba(0,0,0,.25);
+        pointer-events:none;
+      `;
+      // lined paper look
+      const lines = Array.from({length:8},(_,j)=>`<div style="height:1px;background:${j===0?'rgba(255,87,51,.4)':'rgba(100,149,237,.2)'};margin-bottom:5px"></div>`).join('');
+      el.innerHTML = `<div style="font-size:6px;font-weight:700;margin-bottom:3px;color:#223">${msgs[i%msgs.length]}</div>${lines}`;
+      container.appendChild(el);
+    }
+    setTimeout(() => {
+      container.style.display = 'none';
+      container.innerHTML = '';
+      container.dataset.active = '0';
+    }, 3200);
+  }
+
+  // ─────────────────────────────────────────────
+  // EGG 4: 60s idle on hub → fall asleep
+  // ─────────────────────────────────────────────
+  let idleTimer = null;
+  const IDLE_MS = 60000;
+
+  function resetIdle() {
+    clearTimeout(idleTimer);
+    const hub = document.getElementById('hub');
+    if (hub && hub.classList.contains('active')) {
+      idleTimer = setTimeout(triggerSleep, IDLE_MS);
+    }
+  }
+
+  ['mousemove','keydown','touchstart','scroll','click'].forEach(ev => {
+    document.addEventListener(ev, resetIdle, { passive:true });
+  });
+
+  // Start idle timer when hub becomes active
+  const origShowScreen = window.showScreen;
+  window.showScreen = function(id) {
+    origShowScreen(id);
+    clearTimeout(idleTimer);
+    if (id === 'hub') idleTimer = setTimeout(triggerSleep, IDLE_MS);
+  };
+
+  let zInterval = null;
+  function triggerSleep() {
+    const overlay = document.getElementById('eggSleep');
+    const hub = document.getElementById('hub');
+    if (!overlay || !hub || !hub.classList.contains('active')) return;
+    overlay.style.display = 'flex';
+    overlay.style.animation = 'screenFade .8s ease both';
+
+    // Spawn floating z's
+    const zContainer = document.getElementById('eggSleepZs');
+    zContainer.innerHTML = 'z z z';
+    let zCount = 0;
+    zInterval = setInterval(() => {
+      const z = document.createElement('span');
+      z.style.cssText = `
+        position:fixed;
+        left:${30+Math.random()*40}%;
+        top:${40+Math.random()*20}%;
+        font-family:'Fraunces',serif;
+        font-size:${1.5+Math.random()*2.5}rem;
+        color:rgba(255,255,255,${0.08+Math.random()*.12});
+        animation:zFloat ${2+Math.random()}s ease forwards;
+        pointer-events:none;z-index:8600;
+      `;
+      z.textContent = 'z';
+      document.body.appendChild(z);
+      setTimeout(() => z.remove(), 3000);
+      zCount++;
+      if (zCount > 30) clearInterval(zInterval);
+    }, 600);
+  }
+
+  window.eggSleepDismiss = function() {
+    clearInterval(zInterval);
+    const overlay = document.getElementById('eggSleep');
+    overlay.style.opacity = '0';
+    setTimeout(() => { overlay.style.display='none'; overlay.style.opacity=''; }, 400);
+    resetIdle();
+  };
+  document.addEventListener('keydown', e => {
+    const overlay = document.getElementById('eggSleep');
+    if (overlay && overlay.style.display !== 'none') {
+      window.eggSleepDismiss();
+    }
+  });
+
+  // ─────────────────────────────────────────────
+  // EGG 5: Click secret ✦ in footer → shooting star
+  // ─────────────────────────────────────────────
+  window.eggFooterStar = function() {
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => spawnShootingStar(), i * 380);
+    }
+    showToast('🌠 make a wish');
+  };
+
+  function spawnShootingStar() {
+    const el = document.createElement('div');
+    const startX = Math.random() * 40;
+    const startY = Math.random() * 30;
+    el.style.cssText = `
+      position:fixed;z-index:7800;pointer-events:none;
+      left:${startX}%;top:${startY}%;
+      width:120px;height:2px;
+      background:linear-gradient(90deg,transparent,#fff,rgba(255,255,255,.4));
+      border-radius:2px;
+      transform-origin:left center;
+      animation:shootingStar 1s cubic-bezier(.4,0,.2,1) both;
+      box-shadow:0 0 8px 2px rgba(255,255,255,.5);
+    `;
+    document.body.appendChild(el);
+    // Trail
+    for (let j = 0; j < 6; j++) {
+      const t = document.createElement('div');
+      t.style.cssText = `
+        position:fixed;z-index:7799;pointer-events:none;
+        left:${startX + j*0.8}%;top:${startY + j*0.4}%;
+        width:${80-j*10}px;height:1px;
+        background:rgba(255,255,255,${.25-j*.04});
+        border-radius:1px;
+        animation:starTrail ${.8+j*.06}s ease forwards;
+      `;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 900+j*60);
+    }
+    setTimeout(() => el.remove(), 1100);
+  }
+
+})(); // end easter eggs
+</script>
 </body>
 </html>
