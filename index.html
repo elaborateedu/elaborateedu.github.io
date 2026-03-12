@@ -4,6 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0D1B2A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Elaborate">
 <title>Elaborate — Your Learning Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
@@ -650,6 +655,10 @@
       What's New
       <span class="cl-nav-badge" id="clNavBadge"></span>
     </button>
+    <a class="nav-btn ghost" href="app.html" style="display:flex;align-items:center;gap:5px;text-decoration:none">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M12 16l-4-4h2.5V4h3v8H16l-4 4z"/><path d="M20 18H4v2h16v-2z"/></svg>
+      Get the App
+    </a>
     <button class="nav-btn ghost"   id="navLoginBtn"  onclick="showAuth('login')">Log In</button>
     <button class="nav-btn primary" id="navSignupBtn" onclick="showAuth('signup')">Sign Up Free</button>
     <div class="nav-avatar hidden" id="navAvatar">
@@ -4395,6 +4404,13 @@ window.dismissWarning = async function() {
   }
 
 })(); // end easter eggs
+
+// ── Register PWA service worker ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
