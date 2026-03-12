@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0D1B2A">
@@ -54,7 +54,7 @@
   body.theme-forest .hub-header { background:linear-gradient(135deg,#0E2318,#1A3C2E); }
 
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;transition:background .3s,color .3s}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 
   /* NAV */
   nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:68px;background:rgba(245,240,232,.88);backdrop-filter:blur(14px);border-bottom:1.5px solid rgba(13,27,42,.07);transition:background .3s}
@@ -152,7 +152,7 @@
   .auth-sub{font-size:.9rem;color:var(--muted);margin-bottom:32px}
   .form-group{margin-bottom:18px}
   .form-group label{display:block;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-  .form-group input{width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid rgba(13,27,42,.12);font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text);background:var(--cream);outline:none;transition:border-color var(--tr)}
+  .form-group input{width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid rgba(13,27,42,.12);font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--text);background:var(--cream);outline:none;transition:border-color var(--tr)}
   .form-group input:focus{border-color:var(--coral)}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .auth-submit{width:100%;margin-top:8px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;padding:14px;border-radius:50px;border:none;background:var(--navy);color:var(--cream);cursor:pointer;transition:all var(--tr)}
@@ -261,7 +261,7 @@
     width:100%;padding:13px 20px 13px 46px;
     border-radius:50px;
     border:1.5px solid rgba(255,255,255,.1);
-    font-family:'DM Sans',sans-serif;font-size:.92rem;
+    font-family:'DM Sans',sans-serif;font-size:1rem;
     background:rgba(255,255,255,.08);
     backdrop-filter:blur(8px);
     color:#fff;outline:none;
@@ -552,21 +552,143 @@
     to{opacity:1;transform:translateY(0)}
   }
 
+  /* ════════════════════════════════════
+     MOBILE — 768px and below
+  ════════════════════════════════════ */
   @media(max-width:768px){
-    nav{padding:0 20px}
-    .hub-header,.hub-tabs,.hub-body,.settings-header,.settings-body{padding-left:20px;padding-right:20px}
-    .app-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
-    .features{padding:60px 20px}
-    .modal,.auth-card{padding:32px 24px;margin:16px}
-    .form-row{grid-template-columns:1fr}
-    .settings-row{flex-direction:column;align-items:flex-start}
+    /* Nav */
+    nav{padding:0 16px}
     .nav-links .nav-btn.ghost:not(#navLoginBtn):not(#navSignupBtn){display:none}
     .hamburger{display:flex!important}
     .mobile-menu.open{display:flex}
+
+    /* Hub header — tighter, but still immersive */
+    .hub-header{padding:36px 20px 52px}
+    .hub-greeting{font-size:clamp(1.6rem,7.5vw,2.4rem)}
+    .hub-sub{font-size:.85rem}
+    .hub-search-wrap{margin-top:20px;max-width:100%}
+    .hub-search{padding:14px 18px 14px 42px;font-size:.9rem}
+    .search-icon{left:13px}
+
+    /* Tabs — scrollable single row, no wrap */
+    .hub-tabs{
+      padding:12px 16px 0;
+      flex-wrap:nowrap;gap:8px;
+      overflow-x:auto;-webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+    }
+    .hub-tabs::-webkit-scrollbar{display:none}
+    .tab-pills{flex-wrap:nowrap;gap:6px}
+    .tab-btn{font-size:.78rem;padding:7px 14px;white-space:nowrap}
+    #requestAppBtn{white-space:nowrap;flex-shrink:0}
+
+    /* Hub body */
+    .hub-header,.hub-tabs,.hub-body,
+    .settings-header,.settings-body{padding-left:16px;padding-right:16px}
+
+    /* App grid — 2 columns on phone, bigger touch targets */
+    .app-grid{
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+    }
+    .app-card{border-radius:16px}
+    .app-card-body{padding:16px 10px 14px}
+    .app-icon{width:52px;height:52px;font-size:1.5rem;border-radius:14px}
+    .app-name{font-size:.8rem}
+    /* Always show remove + fav buttons on mobile (no hover) */
+    .app-card .remove-btn{opacity:0}
+    .app-card .fav-btn{opacity:0}
+    /* Show them on long-press via .touch-active class set in JS */
+    .app-card.touch-active .remove-btn{opacity:1}
+    .app-card.touch-active .fav-btn{opacity:1}
+    .app-card.touch-active .coll-btn{opacity:1!important}
+    .add-card{min-height:110px;gap:8px;font-size:.8rem}
+    .add-card .plus{width:36px;height:36px;font-size:1.2rem}
+
+    /* Modals — full-width, bottom sheet feel */
+    .modal{
+      padding:28px 20px 32px;
+      margin:12px;
+      border-radius:24px;
+      max-height:88vh;
+      overflow-y:auto;
+    }
+    .auth-card{padding:28px 20px;margin:16px;border-radius:24px}
+    .form-row{grid-template-columns:1fr}
+    .settings-row{flex-direction:column;align-items:flex-start}
+
+    /* Features section */
+    .features{padding:48px 20px}
+    .features-grid{grid-template-columns:1fr 1fr!important}
+
+    /* Notes panel — full-width from bottom */
+    .notes-panel{
+      position:fixed;
+      bottom:0;left:0;right:0;
+      width:100%;
+      border-radius:24px 24px 0 0;
+      transform-origin:bottom center;
+      transform:translateY(100%);
+      max-height:75vh;
+      display:flex;flex-direction:column;
+    }
+    .notes-panel.open{transform:translateY(0)}
+    .notes-list{flex:1;max-height:none}
+
+    /* Timer panel — full-width from bottom */
+    .timer-panel{
+      position:fixed;
+      bottom:0;left:0;right:0;
+      width:100%;
+      border-radius:24px 24px 0 0;
+      transform-origin:bottom center;
+      transform:translateY(100%);
+    }
+    .timer-panel.open{transform:translateY(0)}
+
+    /* FABs — move up from bottom safe area, smaller gap */
+    .notes-widget{bottom:20px;right:16px}
+    .timer-widget{bottom:20px;right:80px}
+    .notes-fab,.timer-fab{width:48px;height:48px}
+
+    /* Onboarding modal */
+    .onboarding-modal{
+      margin:12px;
+      border-radius:28px;
+      max-height:90vh;
+      overflow-y:auto;
+    }
+
+    /* Announcement banners */
+    #districtAnnouncementBanner,
+    #sitewideAnnouncementBanner,
+    #announcementBanner{margin-top:12px}
+  }
+
+  /* ── Very small phones (< 380px) ── */
+  @media(max-width:380px){
+    .app-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+    .hub-greeting{font-size:1.5rem}
+    .hub-header{padding:28px 14px 44px}
+    .tab-btn{font-size:.74rem;padding:6px 11px}
+  }
+
+  /* ── Landscape phone ── */
+  @media(max-width:768px) and (orientation:landscape){
+    .hub-header{padding:20px 20px 40px}
+    .hub-greeting{font-size:1.6rem}
+    .app-grid{grid-template-columns:repeat(3,1fr)}
+    .notes-panel,.timer-panel{
+      position:fixed;
+      bottom:0;right:0;left:auto;
+      width:320px;
+      border-radius:20px 20px 0 0;
+      max-height:90vh;
+    }
   }
 
   /* ── NOTES WIDGET ── */
-  .notes-widget{position:fixed;bottom:28px;right:28px;z-index:150}
+  .notes-widget{position:fixed;bottom:max(28px,calc(env(safe-area-inset-bottom,0px) + 12px));right:28px;z-index:150}
   .notes-fab{width:52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;border:none;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 24px rgba(13,27,42,.3);transition:all .25s;display:flex;align-items:center;justify-content:center;position:relative}
   .notes-fab:hover{background:var(--coral);transform:scale(1.08)}
   .notes-fab .notes-dot{position:absolute;top:0;right:0;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid var(--cream);display:none}
@@ -592,7 +714,7 @@
   .notes-send-btn:hover{background:var(--coral)}
 
   /* ── POMODORO TIMER ── */
-  .timer-widget{position:fixed;bottom:28px;right:92px;z-index:150}
+  .timer-widget{position:fixed;bottom:max(28px,calc(env(safe-area-inset-bottom,0px) + 12px));right:92px;z-index:150}
   .timer-fab{width:52px;height:52px;border-radius:50%;background:var(--card-bg);color:var(--navy);border:1.5px solid rgba(13,27,42,.12);font-size:1.1rem;cursor:pointer;box-shadow:0 4px 20px rgba(13,27,42,.12);transition:all .25s;display:flex;align-items:center;justify-content:center;position:relative}
   .timer-fab:hover{border-color:var(--coral);color:var(--coral);transform:scale(1.08)}
   .timer-fab.running{border-color:var(--coral);background:rgba(255,87,51,.08)}
@@ -1155,6 +1277,9 @@
       <span class="notes-dot" id="notesDot"></span>
     </button>
   </div>
+
+  <!-- Panel Backdrop (mobile tap-outside-to-close) -->
+  <div id="panelBackdrop" onclick="closePanelBackdrop()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:140;animation:screenFade .2s ease both"></div>
 
   <!-- TIMER WIDGET -->
   <div class="timer-widget" id="timerWidget" style="display:none">
@@ -3518,6 +3643,9 @@ window.toggleNotes = function() {
   if (notesOpen) {
     document.getElementById('notesInput').focus();
     document.getElementById('notesDot').style.display = 'none';
+    showPanelBackdrop();
+  } else {
+    hidePanelBackdrop();
   }
 };
 
@@ -3600,6 +3728,7 @@ let timerPanelOpen= false;
 window.toggleTimerPanel = function() {
   timerPanelOpen = !timerPanelOpen;
   document.getElementById('timerPanel').classList.toggle('open', timerPanelOpen);
+  if (timerPanelOpen) showPanelBackdrop(); else hidePanelBackdrop();
 };
 
 window.toggleTimer = function() {
@@ -4402,6 +4531,90 @@ window.dismissWarning = async function() {
     }
     setTimeout(() => el.remove(), 1100);
   }
+
+
+/* ════════════════════════════════════
+   MOBILE UX HELPERS
+════════════════════════════════════ */
+
+// Panel backdrop (notes / timer bottom sheet)
+function showPanelBackdrop() {
+  if (window.innerWidth > 768) return;
+  const bd = document.getElementById('panelBackdrop');
+  if (bd) { bd.style.display = 'block'; }
+}
+function hidePanelBackdrop() {
+  const bd = document.getElementById('panelBackdrop');
+  if (bd) { bd.style.display = 'none'; }
+}
+window.closePanelBackdrop = function() {
+  // Close whichever panel is open
+  if (typeof notesOpen !== 'undefined' && notesOpen) window.toggleNotes();
+  else if (typeof timerPanelOpen !== 'undefined' && timerPanelOpen) window.toggleTimerPanel();
+  hidePanelBackdrop();
+};
+
+// Long-press on app cards to reveal remove/fav buttons on touch devices
+(function() {
+  let pressTimer = null;
+  let pressedCard = null;
+
+  function clearAllActive() {
+    document.querySelectorAll('.app-card.touch-active').forEach(c => c.classList.remove('touch-active'));
+  }
+
+  document.addEventListener('touchstart', e => {
+    const card = e.target.closest('.app-card');
+    if (!card) { clearAllActive(); return; }
+    pressedCard = card;
+    pressTimer = setTimeout(() => {
+      clearAllActive();
+      card.classList.add('touch-active');
+      // Subtle haptic if available
+      if (navigator.vibrate) navigator.vibrate(30);
+    }, 500);
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    clearTimeout(pressTimer);
+    pressTimer = null;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', () => {
+    clearTimeout(pressTimer);
+    pressTimer = null;
+  }, { passive: true });
+
+  // Tap anywhere else clears active state
+  document.addEventListener('touchstart', e => {
+    if (!e.target.closest('.app-card')) clearAllActive();
+  }, { passive: true });
+})();
+
+// Swipe down on bottom-sheet panels to dismiss
+(function() {
+  let startY = 0, panel = null;
+  document.addEventListener('touchstart', e => {
+    const p = e.target.closest('.notes-panel, .timer-panel');
+    if (!p) return;
+    panel = p;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (!panel) return;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (dy > 60) { // swiped down > 60px
+      if (panel.closest('.notes-widget')) { if (typeof notesOpen !== 'undefined' && notesOpen) window.toggleNotes(); }
+      else if (panel.closest('.timer-widget')) { if (typeof timerPanelOpen !== 'undefined' && timerPanelOpen) window.toggleTimerPanel(); }
+    }
+    panel = null;
+  }, { passive: true });
+})();
+
+// Prevent iOS rubber-band scroll inside panels
+document.querySelectorAll('.notes-list').forEach(el => {
+  el.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
+});
 
 })(); // end easter eggs
 
