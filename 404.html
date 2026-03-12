@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>404 — Elaborate</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --cream:#F5F0E8; --navy:#0D1B2A; --coral:#FF5733; --gold:#F4C542;
+  --sage:#7DBE8E; --lavender:#A78BFA; --sky:#38BDF8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--navy);
+  color:#fff;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+}
+
+/* ── BACKGROUND NOISE ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+  background-size:180px;pointer-events:none;z-index:0;
+}
+
+/* ── FLOATING NUMBERS ── */
+.float-num{
+  position:fixed;font-family:'Fraunces',serif;font-weight:900;
+  color:rgba(255,255,255,.03);pointer-events:none;z-index:0;
+  animation:floatUp linear infinite;
+}
+@keyframes floatUp{
+  from{transform:translateY(110vh) rotate(-8deg)}
+  to{transform:translateY(-20vh) rotate(8deg)}
+}
+
+/* ── MAIN CONTENT ── */
+.page{position:relative;z-index:1;width:100%;max-width:860px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:0}
+
+/* The big 404 */
+.hero-num{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(5rem,18vw,11rem);
+  line-height:.85;letter-spacing:-.05em;
+  background:linear-gradient(135deg,var(--coral) 0%,var(--gold) 40%,var(--lavender) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:heroIn .7s cubic-bezier(.22,1,.36,1) both;
+  position:relative;
+}
+.hero-num::after{
+  content:'404';
+  position:absolute;inset:0;
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:inherit;letter-spacing:inherit;line-height:inherit;
+  -webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.5px rgba(255,255,255,.06);
+  transform:translate(3px,4px);
+  z-index:-1;
+}
+@keyframes heroIn{
+  from{opacity:0;transform:scale(.7) translateY(30px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+
+.headline{
+  font-family:'Fraunces',serif;font-size:clamp(1.3rem,3vw,2rem);
+  font-weight:700;margin-top:12px;text-align:center;
+  color:#fff;letter-spacing:-.02em;
+  animation:fadeUp .6s cubic-bezier(.22,1,.36,1) .15s both;
+}
+.headline em{color:var(--coral);font-style:italic;font-weight:300}
+
+.sub{
+  font-size:.9rem;color:rgba(255,255,255,.45);margin-top:8px;
+  text-align:center;max-width:420px;line-height:1.7;
+  animation:fadeUp .6s cubic-bezier(.22,1,.36,1) .22s both;
+}
+
+/* ── GAME CONTAINER ── */
+.game-wrap{
+  margin-top:20px;
+  animation:fadeUp .6s cubic-bezier(.22,1,.36,1) .3s both;
+  position:relative;
+}
+.game-label{
+  font-family:'DM Mono',monospace;font-size:.62rem;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);text-align:center;
+  margin-bottom:8px;
+}
+#gameCanvas{
+  display:block;border-radius:16px;
+  background:#0a1520;
+  border:1.5px solid rgba(255,255,255,.08);
+  box-shadow:0 16px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04);
+  cursor:pointer;
+}
+.game-hint{
+  font-size:.72rem;color:rgba(255,255,255,.22);
+  text-align:center;margin-top:8px;
+  font-family:'DM Mono',monospace;letter-spacing:.06em;
+}
+
+/* ── BUTTONS ── */
+.btn-row{
+  display:flex;gap:10px;margin-top:18px;
+  animation:fadeUp .5s cubic-bezier(.22,1,.36,1) .4s both;
+}
+.btn{
+  font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;
+  padding:11px 24px;border-radius:50px;border:none;cursor:pointer;
+  transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+}
+.btn-primary{background:var(--coral);color:#fff}
+.btn-primary:hover{background:#e8401e;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,87,51,.4)}
+.btn-ghost{background:rgba(255,255,255,.07);color:rgba(255,255,255,.7);border:1.5px solid rgba(255,255,255,.1)}
+.btn-ghost:hover{background:rgba(255,255,255,.13);color:#fff;transform:translateY(-2px)}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── HIGH SCORE ── */
+.hs-badge{
+  position:absolute;top:-10px;right:-10px;
+  background:linear-gradient(135deg,var(--gold),#e8a800);
+  color:var(--navy);font-family:'DM Mono',monospace;
+  font-size:.6rem;font-weight:700;letter-spacing:.06em;
+  padding:4px 10px;border-radius:50px;text-transform:uppercase;
+  box-shadow:0 4px 12px rgba(244,197,66,.5);
+  animation:badgePop .4s cubic-bezier(.34,1.56,.64,1) both;
+  display:none;
+}
+@keyframes badgePop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+</style>
+</head>
+<body>
+
+<!-- Floating 404 numbers in background -->
+<script>
+for(let i=0;i<8;i++){
+  const el=document.createElement('div');
+  el.className='float-num';
+  el.textContent='404';
+  el.style.cssText=`left:${Math.random()*100}%;font-size:${6+Math.random()*12}rem;animation-duration:${14+Math.random()*18}s;animation-delay:-${Math.random()*20}s`;
+  document.body.appendChild(el);
+}
+</script>
+
+<div class="page">
+  <div class="hero-num">404</div>
+
+  <h1 class="headline">You wandered off the <em>syllabus</em></h1>
+  <p class="sub">This page doesn't exist. Or it did exist, but a teacher confiscated it. Either way — it's gone.</p>
+
+  <div class="game-wrap">
+    <div class="game-label">While you're here — kill some time</div>
+    <canvas id="gameCanvas" width="620" height="160"></canvas>
+    <div id="hsBadge" class="hs-badge">🏆 new best!</div>
+    <div class="game-hint" id="gameHint">SPACE / TAP to jump · duck with ↓</div>
+  </div>
+
+  <div class="btn-row">
+    <a href="/" class="btn btn-primary">← Back to Home</a>
+    <a href="/index.html#hub" class="btn btn-ghost">Open My Hub</a>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   HOMEWORK DODGER — a 404 game
+   Run left to right, jump over flying homework papers,
+   duck under chalk-thrown erasers, collect gold stars.
+
+   Controls: Space/Tap = jump, ↓/swipe down = duck
+   Score: +1/frame survived, +10/obstacle cleared, +25/star
+═══════════════════════════════════════════════════════ */
+
+const canvas  = document.getElementById('gameCanvas');
+const ctx     = canvas.getContext('2d');
+
+// ── Responsive canvas ──
+function resizeCanvas() {
+  const maxW = Math.min(window.innerWidth - 32, 620);
+  canvas.style.width  = maxW + 'px';
+  canvas.style.height = Math.round(maxW * 160/620) + 'px';
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// ── Palette ──
+const C = {
+  bg:    '#0a1520',
+  ground:'#1a2d42',
+  gline: 'rgba(255,255,255,.06)',
+  coral: '#FF5733',
+  gold:  '#F4C542',
+  sage:  '#7DBE8E',
+  lav:   '#A78BFA',
+  sky:   '#38BDF8',
+  white: '#ffffff',
+  dim:   'rgba(255,255,255,.15)',
+};
+
+const W = 620, H = 160;
+const GROUND = H - 28;
+const SCALE  = () => parseFloat(canvas.style.width) / W;
+
+// ── State ──
+const STATE = { IDLE:0, RUNNING:1, DEAD:2 };
+let state      = STATE.IDLE;
+let score      = 0;
+let hiScore    = +localStorage.getItem('elabor404hs') || 0;
+let frameCount = 0;
+let speed      = 4.2;
+let raf        = null;
+
+// ── Player ──
+const player = {
+  x:72, y:GROUND, w:22, h:28,
+  vy:0, onGround:true, ducking:false,
+  duckTimer:0,
+  // animation
+  legPhase:0,
+};
+
+// ── Obstacles & stars ──
+let obstacles = [];
+let stars     = [];
+let particles = [];
+let clouds    = [{x:500,y:22,w:60},{x:280,y:14,w:80},{x:100,y:30,w:50}];
+
+// ── Spawn timers ──
+let nextObs   = 90;
+let nextStar  = 140;
+
+// ── Input ──
+let jumpPressed  = false;
+let duckPressed  = false;
+
+function onJump() {
+  if (state === STATE.IDLE || state === STATE.DEAD) { startGame(); return; }
+  if (player.onGround && !player.ducking) {
+    player.vy = -9.4;
+    player.onGround = false;
+    spawnJumpPuff();
+  }
+}
+function onDuck(on) { duckPressed = on; }
+
+// Keyboard
+window.addEventListener('keydown', e => {
+  if (e.code==='Space'||e.code==='ArrowUp')  { e.preventDefault(); onJump(); }
+  if (e.code==='ArrowDown') { e.preventDefault(); onDuck(true); }
+});
+window.addEventListener('keyup', e => {
+  if (e.code==='ArrowDown') onDuck(false);
+});
+// Touch
+let touchStartY = 0;
+canvas.addEventListener('touchstart', e => {
+  touchStartY = e.touches[0].clientY;
+  onJump();
+}, {passive:false});
+canvas.addEventListener('touchmove', e => {
+  if (e.touches[0].clientY - touchStartY > 20) onDuck(true);
+  else onDuck(false);
+}, {passive:true});
+canvas.addEventListener('touchend', () => onDuck(false));
+canvas.addEventListener('click', () => onJump());
+
+function startGame() {
+  state      = STATE.RUNNING;
+  score      = 0;
+  speed      = 4.2;
+  frameCount = 0;
+  obstacles  = [];
+  stars      = [];
+  particles  = [];
+  player.y   = GROUND;
+  player.vy  = 0;
+  player.onGround = true;
+  player.ducking  = false;
+  nextObs    = 80;
+  nextStar   = 160;
+  document.getElementById('gameHint').textContent = 'SPACE / TAP to jump  ·  ↓ to duck';
+}
+
+// ── Spawn helpers ──
+function spawnObstacle() {
+  const type = Math.random();
+  if (type < 0.55) {
+    // Homework stack (jump over)
+    const h = 18 + Math.floor(Math.random()*3)*8;
+    obstacles.push({ type:'paper', x:W+20, y:GROUND-h+4, w:20, h, color:C.white });
+  } else if (type < 0.85) {
+    // Eraser (mid-air, duck under)
+    obstacles.push({ type:'eraser', x:W+20, y:GROUND-46, w:28, h:14, color:'#e8c97e', vrot:0.06, rot:0 });
+  } else {
+    // Double stack
+    obstacles.push({ type:'paper', x:W+20,    y:GROUND-22+4, w:18, h:22, color:C.white });
+    obstacles.push({ type:'paper', x:W+20+30, y:GROUND-30+4, w:18, h:30, color:'rgba(255,255,255,.8)' });
+  }
+}
+
+function spawnStar() {
+  stars.push({ x:W+20, y:GROUND-55-Math.random()*25, r:6, collected:false, phase:Math.random()*Math.PI*2 });
+}
+
+function spawnJumpPuff() {
+  for (let i=0;i<6;i++) {
+    particles.push({
+      x:player.x+player.w/2, y:GROUND+2,
+      vx:(Math.random()-.5)*2.5, vy:-(Math.random()*2+.5),
+      r:3+Math.random()*3, alpha:0.6, decay:0.07,
+      color:'rgba(255,255,255,.5)'
+    });
+  }
+}
+
+function spawnStarPop(x,y) {
+  const cols = [C.gold,'#fff',C.coral,C.lav];
+  for (let i=0;i<10;i++) {
+    const a = (i/10)*Math.PI*2;
+    particles.push({
+      x, y,
+      vx:Math.cos(a)*3.5, vy:Math.sin(a)*3.5-2,
+      r:2+Math.random()*3, alpha:1, decay:0.04,
+      color:cols[i%cols.length]
+    });
+  }
+}
+
+function spawnDeathPuff() {
+  for (let i=0;i<18;i++) {
+    particles.push({
+      x:player.x+player.w/2, y:player.y+player.h/2,
+      vx:(Math.random()-.5)*6, vy:-(Math.random()*5+1),
+      r:2+Math.random()*4, alpha:1, decay:0.03,
+      color:[C.coral,C.gold,'#fff'][i%3]
+    });
+  }
+}
+
+// ── Collision ──
+function rectsOverlap(a,b,pad=4) {
+  return a.x+pad < b.x+b.w-pad &&
+         a.x+a.w-pad > b.x+pad &&
+         a.y+pad < b.y+b.h-pad &&
+         a.y+a.h-pad > b.y+pad;
+}
+
+// ── Draw helpers ──
+function drawGround() {
+  // Ground strip
+  ctx.fillStyle = C.ground;
+  ctx.beginPath();
+  ctx.roundRect ? ctx.roundRect(0, GROUND+4, W, H-(GROUND+4), [0,0,14,14])
+                : ctx.rect(0, GROUND+4, W, H-(GROUND+4));
+  ctx.fill();
+  // Dashed line
+  ctx.strokeStyle = C.gline;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([12,8]);
+  ctx.beginPath();
+  ctx.moveTo(0,GROUND+8); ctx.lineTo(W,GROUND+8);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawCloud(cloud) {
+  ctx.fillStyle = 'rgba(255,255,255,.04)';
+  ctx.beginPath();
+  ctx.ellipse(cloud.x,        cloud.y,    cloud.w*.4, 10, 0, 0, Math.PI*2);
+  ctx.ellipse(cloud.x+cloud.w*.25, cloud.y-6, cloud.w*.3, 9, 0, 0, Math.PI*2);
+  ctx.ellipse(cloud.x+cloud.w*.5,  cloud.y,   cloud.w*.35,9, 0, 0, Math.PI*2);
+  ctx.fill();
+}
+
+function drawPlayer() {
+  const px = player.x;
+  const dh = player.ducking ? 0.65 : 1;
+  const py = player.y + player.h*(1-dh);
+  const ph = player.h * dh;
+  const pw = player.ducking ? player.w*1.3 : player.w;
+
+  ctx.save();
+  // Body
+  ctx.fillStyle = C.coral;
+  ctx.beginPath();
+  if(ctx.roundRect) ctx.roundRect(px, py, pw, ph*0.65, 6);
+  else ctx.rect(px, py, pw, ph*0.65);
+  ctx.fill();
+
+  // Backpack
+  ctx.fillStyle = C.lav;
+  ctx.beginPath();
+  if(ctx.roundRect) ctx.roundRect(px+pw*0.65, py+4, 7, ph*0.5, 3);
+  else ctx.rect(px+pw*0.65, py+4, 7, ph*0.5);
+  ctx.fill();
+
+  if (!player.ducking) {
+    // Head
+    ctx.fillStyle = '#f5c5a3';
+    ctx.beginPath();
+    ctx.arc(px+pw/2, py-8, 8, 0, Math.PI*2);
+    ctx.fill();
+    // Eyes
+    ctx.fillStyle = '#1a1a2e';
+    ctx.beginPath();
+    ctx.arc(px+pw/2+4, py-9, 1.5, 0, Math.PI*2);
+    ctx.fill();
+
+    // Legs — animate when running
+    if (player.onGround) {
+      const lp = player.legPhase;
+      const l1y = Math.sin(lp)*5;
+      const l2y = Math.sin(lp+Math.PI)*5;
+      ctx.strokeStyle = C.navy||'#0D1B2A';
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      // leg 1
+      ctx.beginPath();
+      ctx.moveTo(px+pw*.3, py+ph*.62);
+      ctx.lineTo(px+pw*.2, py+ph*.62+10+l1y);
+      ctx.stroke();
+      // leg 2
+      ctx.beginPath();
+      ctx.moveTo(px+pw*.7, py+ph*.62);
+      ctx.lineTo(px+pw*.6, py+ph*.62+10+l2y);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+function drawObstacle(ob) {
+  ctx.save();
+  if (ob.type === 'paper') {
+    // Lined paper stack
+    ctx.fillStyle = ob.color;
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(ob.x, ob.y, ob.w, ob.h, 3);
+    else ctx.rect(ob.x, ob.y, ob.w, ob.h);
+    ctx.fill();
+    // Lines on paper
+    ctx.strokeStyle = 'rgba(100,149,237,.4)';
+    ctx.lineWidth = 1;
+    for(let ly=ob.y+5; ly<ob.y+ob.h-3; ly+=5){
+      ctx.beginPath(); ctx.moveTo(ob.x+3,ly); ctx.lineTo(ob.x+ob.w-3,ly); ctx.stroke();
+    }
+    // Red margin line
+    ctx.strokeStyle = 'rgba(255,87,51,.5)';
+    ctx.beginPath(); ctx.moveTo(ob.x+5,ob.y+2); ctx.lineTo(ob.x+5,ob.y+ob.h-2); ctx.stroke();
+  } else {
+    // Eraser — rotates as it flies
+    ctx.translate(ob.x+ob.w/2, ob.y+ob.h/2);
+    ctx.rotate(ob.rot);
+    ctx.fillStyle = ob.color;
+    if(ctx.roundRect) ctx.roundRect(-ob.w/2,-ob.h/2,ob.w,ob.h,3);
+    else ctx.rect(-ob.w/2,-ob.h/2,ob.w,ob.h);
+    ctx.fill();
+    // Chalk dust
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.fillRect(-ob.w/2,-ob.h/2, ob.w, 4);
+  }
+  ctx.restore();
+}
+
+function drawStar(star) {
+  if (star.collected) return;
+  const pulse = 1 + Math.sin(star.phase)*0.12;
+  ctx.save();
+  ctx.translate(star.x, star.y);
+  ctx.scale(pulse, pulse);
+  // Gold star shape
+  ctx.fillStyle = C.gold;
+  ctx.shadowColor = C.gold;
+  ctx.shadowBlur = 8;
+  const spikes=5, outerR=star.r, innerR=star.r*0.42;
+  ctx.beginPath();
+  for(let i=0;i<spikes*2;i++){
+    const r   = i%2===0?outerR:innerR;
+    const ang = (i*Math.PI/spikes)-Math.PI/2;
+    i===0?ctx.moveTo(Math.cos(ang)*r,Math.sin(ang)*r):ctx.lineTo(Math.cos(ang)*r,Math.sin(ang)*r);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.restore();
+}
+
+function drawParticles() {
+  particles.forEach(p => {
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  ctx.globalAlpha=1;
+}
+
+function drawHUD() {
+  // Score
+  ctx.fillStyle = 'rgba(255,255,255,.5)';
+  ctx.font = '500 11px "DM Mono", monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText(`${String(Math.floor(score)).padStart(5,'0')}`, W-12, 18);
+  // Hi score
+  if (hiScore>0){
+    ctx.fillStyle='rgba(244,197,66,.4)';
+    ctx.fillText(`HI ${String(Math.floor(hiScore)).padStart(5,'0')}`, W-12, 32);
+  }
+  ctx.textAlign='left';
+}
+
+function drawIdle() {
+  ctx.clearRect(0,0,W,H);
+  drawClouds();
+  drawGround();
+  drawPlayer();
+  drawHUD();
+
+  ctx.fillStyle='rgba(255,255,255,.55)';
+  ctx.font='600 13px "DM Sans",sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText('PRESS SPACE OR TAP TO START', W/2, H/2-10);
+  ctx.font='400 10px "DM Mono",monospace';
+  ctx.fillStyle='rgba(255,255,255,.25)';
+  ctx.fillText('dodge homework · collect ★ gold stars', W/2, H/2+6);
+  ctx.textAlign='left';
+}
+
+function drawDead() {
+  ctx.fillStyle='rgba(255,87,51,.18)';
+  ctx.fillRect(0,0,W,H);
+
+  ctx.fillStyle='rgba(255,255,255,.9)';
+  ctx.font='700 15px "Fraunces",serif';
+  ctx.textAlign='center';
+  ctx.fillText('busted by homework', W/2, H/2-8);
+  ctx.font='500 10px "DM Mono",monospace';
+  ctx.fillStyle='rgba(255,255,255,.45)';
+  ctx.fillText(`SCORE ${Math.floor(score)}  ·  SPACE / TAP TO RETRY`, W/2, H/2+10);
+  ctx.textAlign='left';
+  drawHUD();
+}
+
+function drawClouds(){
+  clouds.forEach(c => drawCloud(c));
+}
+
+// ── Game loop ──
+function tick() {
+  frameCount++;
+  ctx.clearRect(0,0,W,H);
+
+  // Speed ramp
+  speed = 4.2 + frameCount * 0.0014;
+  score += speed * 0.1;
+
+  // Move clouds
+  clouds.forEach(c => {
+    c.x -= 0.4;
+    if (c.x + c.w < 0) c.x = W + 60;
+  });
+
+  // Physics
+  if (!player.onGround) {
+    player.vy += 0.52; // gravity
+    player.y  += player.vy;
+    if (player.y >= GROUND) {
+      player.y = GROUND; player.vy = 0; player.onGround = true;
+    }
+  }
+
+  // Ducking
+  player.ducking = duckPressed && player.onGround;
+
+  // Leg animation
+  if (player.onGround) player.legPhase += 0.22;
+
+  // Spawn
+  nextObs--;
+  if (nextObs <= 0) {
+    spawnObstacle();
+    nextObs = 65 + Math.floor(Math.random()*60) - Math.min(frameCount*0.04, 25);
+  }
+  nextStar--;
+  if (nextStar <= 0) {
+    if (Math.random() > 0.35) spawnStar();
+    nextStar = 120 + Math.floor(Math.random()*80);
+  }
+
+  // Move obstacles
+  obstacles.forEach(ob => {
+    ob.x -= speed;
+    if (ob.type==='eraser') ob.rot += ob.vrot;
+  });
+  obstacles = obstacles.filter(ob => ob.x + ob.w > -10);
+
+  // Move stars
+  stars.forEach(s => {
+    s.x -= speed * 0.9;
+    s.phase += 0.06;
+  });
+  stars = stars.filter(s => s.x + s.r*2 > -10 && !s.collected);
+
+  // Collision — obstacles
+  const pb = { x:player.x, y:player.y, w:player.ducking?player.w*1.3:player.w, h:player.ducking?player.h*0.65:player.h };
+  for (const ob of obstacles) {
+    if (rectsOverlap(pb, ob, 5)) {
+      spawnDeathPuff();
+      state = STATE.DEAD;
+      if (score > hiScore) {
+        hiScore = Math.floor(score);
+        localStorage.setItem('elabor404hs', hiScore);
+        const badge = document.getElementById('hsBadge');
+        badge.style.display='block';
+        setTimeout(()=>badge.style.animation='badgePop .4s cubic-bezier(.34,1.56,.64,1) both',10);
+        setTimeout(()=>{ badge.style.display='none'; },3000);
+      }
+      break;
+    }
+  }
+
+  // Collision — stars
+  stars.forEach(s => {
+    if (!s.collected && rectsOverlap(pb, {x:s.x-s.r,y:s.y-s.r,w:s.r*2,h:s.r*2}, 2)) {
+      s.collected = true;
+      score += 25;
+      spawnStarPop(s.x, s.y);
+    }
+  });
+
+  // Particles
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.alpha -= p.decay;
+  });
+  particles = particles.filter(p => p.alpha > 0.01);
+
+  // Draw
+  drawClouds();
+  drawGround();
+  stars.forEach(drawStar);
+  obstacles.forEach(drawObstacle);
+  drawParticles();
+  drawPlayer();
+  drawHUD();
+
+  if (state === STATE.DEAD) { drawDead(); return; }
+  raf = requestAnimationFrame(tick);
+}
+
+// ── Bootstrap ──
+function mainLoop() {
+  if (state === STATE.IDLE) {
+    drawIdle();
+    requestAnimationFrame(mainLoop);
+  } else if (state === STATE.RUNNING) {
+    tick();
+  } else {
+    // dead — draw once then wait for input
+    requestAnimationFrame(() => {
+      if (state === STATE.DEAD) mainLoop();
+    });
+  }
+}
+mainLoop();
+</script>
+</body>
+</html>
