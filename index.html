@@ -1337,7 +1337,7 @@
   </div>
   <div class="hub-body">
     <!-- DISCOVER BANNER — shown until user has explored library -->
-    <div id="discoverBanner" style="display:none;background:linear-gradient(135deg,rgba(167,139,250,.13) 0%,rgba(56,189,248,.09) 100%);border:1.5px solid rgba(167,139,250,.25);border-radius:18px;padding:18px 20px;margin-bottom:22px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:all .2s" onclick="openDiscoverBanner()" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+    <div id="discoverBanner" style="display:none;background:linear-gradient(135deg,rgba(167,139,250,.13) 0%,rgba(56,189,248,.09) 100%);border:1.5px solid rgba(167,139,250,.25);border-radius:18px;padding:18px 20px;margin-bottom:22px;align-items:center;gap:16px;cursor:pointer;transition:all .2s" onclick="openDiscoverBanner()" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
       <div style="width:44px;height:44px;border-radius:14px;background:rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">✦</div>
       <div style="flex:1;min-width:0">
         <div style="font-family:Fraunces,serif;font-size:1rem;font-weight:800;color:var(--navy);letter-spacing:-.01em">Discover new apps</div>
@@ -2721,6 +2721,8 @@ window.setTab = function(btn, tab) {
     if (libView)   libView.style.display   = 'block';
     if (gridLabel) gridLabel.textContent   = 'App Library';
     if (reqBtn)    reqBtn.style.display    = 'none';
+    const banner = document.getElementById('discoverBanner');
+    if (banner)    banner.style.display    = 'none';
     renderLibrary();
     return;
   }
@@ -2729,6 +2731,7 @@ window.setTab = function(btn, tab) {
   if (mainGrid)  mainGrid.style.display  = '';
   if (libView)   libView.style.display   = 'none';
   if (reqBtn)    reqBtn.style.display    = '';
+  maybeShowDiscoverBanner();
   gridLabel.textContent =
     tab==='all'?'All Apps':tab==='learning'?'Learning':tab==='tools'?'Tools':'My Apps';
 
