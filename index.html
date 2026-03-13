@@ -359,6 +359,11 @@
   .app-card:hover .remove-btn{opacity:1}
   .app-card:hover .coll-btn{opacity:1!important}
 
+  /* Library card */
+  .lib-card{cursor:default!important}
+  .lib-card:hover{transform:translateY(-4px) scale(1.005)!important}
+  .lib-card:active{transform:translateY(-1px) scale(.99)!important}
+
   /* Add card */
   .add-card{
     background:transparent;
@@ -394,9 +399,7 @@
   .modal-sub{font-size:.88rem;color:var(--muted);margin-bottom:30px}
   .modal-close{position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(13,27,42,.07);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background var(--tr)}
   .modal-close:hover{background:rgba(255,87,51,.15);color:var(--coral)}
-  .emoji-picker{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-  .emoji-opt{width:40px;height:40px;border-radius:10px;border:1.5px solid rgba(13,27,42,.1);background:var(--cream);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
-  .emoji-opt:hover,.emoji-opt.selected{border-color:var(--coral);background:rgba(255,87,51,.08);transform:scale(1.1)}
+
   .color-picker{display:flex;gap:10px;margin-top:8px}
   .color-opt{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:transform var(--tr)}
   .color-opt:hover{transform:scale(1.2)} .color-opt.selected{border-color:var(--navy);transform:scale(1.15)}
@@ -555,136 +558,216 @@
   /* ════════════════════════════════════
      MOBILE — 768px and below
   ════════════════════════════════════ */
+  /* ══════════════════════════════════════════════
+     MOBILE — 768px and below
+  ══════════════════════════════════════════════ */
   @media(max-width:768px){
-    /* Nav */
-    nav{padding:0 16px}
+
+    /* ── Nav ── */
+    nav{padding:0 16px;height:60px}
+    .logo{font-size:1.35rem}
     .nav-links .nav-btn.ghost:not(#navLoginBtn):not(#navSignupBtn){display:none}
+    .nav-links #navLoginBtn, .nav-links #navSignupBtn{
+      padding:8px 16px;font-size:.82rem
+    }
+    .nav-avatar .avatar-name{display:none} /* hide name, keep avatar circle */
     .hamburger{display:flex!important}
     .mobile-menu.open{display:flex}
 
-    /* Hub header — tighter, but still immersive */
-    .hub-header{padding:36px 20px 52px}
-    .hub-greeting{font-size:clamp(1.6rem,7.5vw,2.4rem)}
-    .hub-sub{font-size:.85rem}
-    .hub-search-wrap{margin-top:20px;max-width:100%}
-    .hub-search{padding:14px 18px 14px 42px;font-size:.9rem}
-    .search-icon{left:13px}
+    /* ── Hub header ── */
+    .hub-header{padding:32px 18px 50px}
+    .hub-greeting{
+      font-size:clamp(1.55rem,7vw,2.2rem);
+      line-height:1.1;
+    }
+    .hub-sub{font-size:.82rem;margin-top:7px}
 
-    /* Tabs — scrollable single row, no wrap */
+    /* Search — full-width, taller touch target */
+    .hub-search-wrap{margin-top:18px;max-width:100%}
+    .hub-search{
+      padding:13px 18px 13px 42px;
+      font-size:1rem; /* critical — prevents iOS zoom */
+    }
+    .search-icon{left:13px;width:15px;height:15px}
+
+    /* ── Tabs — single scrollable row ── */
     .hub-tabs{
-      padding:12px 16px 0;
-      flex-wrap:nowrap;gap:8px;
+      padding:10px 14px 0;
+      flex-wrap:nowrap;
       overflow-x:auto;-webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
+      scrollbar-width:none;gap:0;
+      justify-content:flex-start;
+      /* Fade edges to hint scrollability */
+      -webkit-mask:linear-gradient(to right,transparent 0,#000 12px,#000 calc(100% - 40px),transparent 100%);
+      mask:linear-gradient(to right,transparent 0,#000 12px,#000 calc(100% - 40px),transparent 100%);
     }
     .hub-tabs::-webkit-scrollbar{display:none}
-    .tab-pills{flex-wrap:nowrap;gap:6px}
-    .tab-btn{font-size:.78rem;padding:7px 14px;white-space:nowrap}
-    #requestAppBtn{white-space:nowrap;flex-shrink:0}
+    .tab-pills{flex-wrap:nowrap;gap:4px;padding-left:4px}
+    .tab-btn{
+      font-size:.76rem;padding:7px 13px;
+      white-space:nowrap;flex-shrink:0;
+    }
+    #requestAppBtn{
+      white-space:nowrap;flex-shrink:0;
+      margin-left:auto;font-size:.74rem;
+    }
 
-    /* Hub body */
-    .hub-header,.hub-tabs,.hub-body,
+    /* ── Hub body ── */
+    .hub-body{padding:20px 14px 100px}
     .settings-header,.settings-body{padding-left:16px;padding-right:16px}
+    .section-title{font-size:.65rem;margin-bottom:12px}
 
-    /* App grid — 2 columns on phone, bigger touch targets */
+    /* ── App grid — 2 equal columns ── */
     .app-grid{
       grid-template-columns:repeat(2,1fr);
-      gap:10px;
+      gap:10px;margin-bottom:0;
     }
-    .app-card{border-radius:16px}
-    .app-card-body{padding:16px 10px 14px}
-    .app-icon{width:52px;height:52px;font-size:1.5rem;border-radius:14px}
-    .app-name{font-size:.8rem}
-    /* Always show remove + fav buttons on mobile (no hover) */
-    .app-card .remove-btn{opacity:0}
-    .app-card .fav-btn{opacity:0}
-    /* Show them on long-press via .touch-active class set in JS */
-    .app-card.touch-active .remove-btn{opacity:1}
+    .app-card{border-radius:14px;box-shadow:0 1px 6px rgba(13,27,42,.07)}
+    .app-card-accent{height:3px}
+    .app-card:hover .app-card-accent{height:3px} /* disable on touch */
+    .app-card-body{padding:14px 8px 12px}
+    .app-icon{width:48px;height:48px;font-size:1.4rem;border-radius:13px;margin-bottom:9px}
+    .app-name{font-size:.78rem;line-height:1.25}
+    .app-cat{font-size:.6rem;margin-top:3px}
+
+    /* Long-press reveals actions */
+    .app-card .remove-btn,.app-card .fav-btn{opacity:0;transition:opacity .15s}
+    .app-card.touch-active .remove-btn,
     .app-card.touch-active .fav-btn{opacity:1}
     .app-card.touch-active .coll-btn{opacity:1!important}
-    .add-card{min-height:110px;gap:8px;font-size:.8rem}
-    .add-card .plus{width:36px;height:36px;font-size:1.2rem}
 
-    /* Modals — full-width, bottom sheet feel */
+    /* Add card */
+    .add-card{min-height:100px;gap:6px;font-size:.76rem;border-radius:14px}
+    .add-card .plus{width:32px;height:32px;font-size:1.1rem}
+
+    /* ── Modals ── */
+    .modal-overlay{align-items:flex-end;padding:0}
     .modal{
-      padding:28px 20px 32px;
-      margin:12px;
-      border-radius:24px;
-      max-height:88vh;
-      overflow-y:auto;
+      padding:28px 20px calc(28px + env(safe-area-inset-bottom,0px));
+      margin:0;width:100%;
+      border-radius:24px 24px 0 0;
+      max-height:88vh;overflow-y:auto;
     }
-    .auth-card{padding:28px 20px;margin:16px;border-radius:24px}
+    .auth-card{
+      padding:28px 20px calc(24px + env(safe-area-inset-bottom,0px));
+      margin:16px;border-radius:24px;
+    }
     .form-row{grid-template-columns:1fr}
-    .settings-row{flex-direction:column;align-items:flex-start}
+    .settings-row{flex-direction:column;align-items:flex-start;gap:10px}
+    .modal h2{font-size:1.3rem}
 
-    /* Features section */
-    .features{padding:48px 20px}
+    /* ── Settings ── */
+    .settings-header{padding-top:28px;padding-bottom:20px}
+
+    /* ── Auth screen ── */
+    #auth{padding:16px}
+
+    /* ── Features landing section ── */
+    .features{padding:44px 18px}
     .features-grid{grid-template-columns:1fr 1fr!important}
+    .feature-card{padding:20px 16px}
+    .feature-icon{width:44px;height:44px;font-size:1.3rem;margin-bottom:14px}
+    .feature-card h3{font-size:1rem}
 
-    /* Notes panel — full-width from bottom */
+    /* ── Notes panel → bottom sheet ── */
     .notes-panel{
-      position:fixed;
-      bottom:0;left:0;right:0;
-      width:100%;
-      border-radius:24px 24px 0 0;
-      transform-origin:bottom center;
-      transform:translateY(100%);
-      max-height:75vh;
-      display:flex;flex-direction:column;
+      position:fixed !important;
+      bottom:0 !important;left:0 !important;right:0 !important;
+      width:100% !important;
+      border-radius:20px 20px 0 0 !important;
+      transform-origin:bottom center !important;
+      transform:translateY(100%) !important;
+      max-height:78vh;
+      display:flex !important;flex-direction:column;
+      opacity:1 !important;
     }
-    .notes-panel.open{transform:translateY(0)}
+    .notes-panel.open{transform:translateY(0) !important}
+    .notes-panel::before{
+      content:'';display:block;width:36px;height:4px;
+      background:rgba(13,27,42,.15);border-radius:2px;
+      margin:10px auto 0;flex-shrink:0;
+    }
     .notes-list{flex:1;max-height:none}
+    .notes-input-row{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 
-    /* Timer panel — full-width from bottom */
+    /* ── Timer panel → bottom sheet ── */
     .timer-panel{
-      position:fixed;
-      bottom:0;left:0;right:0;
-      width:100%;
-      border-radius:24px 24px 0 0;
-      transform-origin:bottom center;
-      transform:translateY(100%);
+      position:fixed !important;
+      bottom:0 !important;left:0 !important;right:0 !important;
+      width:100% !important;
+      border-radius:20px 20px 0 0 !important;
+      transform-origin:bottom center !important;
+      transform:translateY(100%) !important;
+      opacity:1 !important;
     }
-    .timer-panel.open{transform:translateY(0)}
+    .timer-panel.open{transform:translateY(0) !important}
+    .timer-panel::before{
+      content:'';display:block;width:36px;height:4px;
+      background:rgba(255,255,255,.15);border-radius:2px;
+      margin:10px auto 0;flex-shrink:0;
+    }
+    .timer-modes{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
 
-    /* FABs — move up from bottom safe area, smaller gap */
-    .notes-widget{bottom:20px;right:16px}
-    .timer-widget{bottom:20px;right:80px}
-    .notes-fab,.timer-fab{width:48px;height:48px}
+    /* ── FABs ── */
+    .notes-widget{
+      bottom:calc(20px + env(safe-area-inset-bottom,0px)) !important;
+      right:16px !important;
+    }
+    .timer-widget{
+      bottom:calc(20px + env(safe-area-inset-bottom,0px)) !important;
+      right:76px !important;
+    }
+    .notes-fab,.timer-fab{width:46px;height:46px;font-size:1.1rem}
 
-    /* Onboarding modal */
+    /* ── Onboarding ── */
     .onboarding-modal{
-      margin:12px;
-      border-radius:28px;
-      max-height:90vh;
-      overflow-y:auto;
+      margin:12px;border-radius:24px;
+      max-height:90vh;overflow-y:auto;
     }
 
-    /* Announcement banners */
+    /* ── Announcement banners ── */
     #districtAnnouncementBanner,
     #sitewideAnnouncementBanner,
-    #announcementBanner{margin-top:12px}
+    #announcementBanner{
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius:12px;
+    }
+
+    /* ── Changelog drawer ── */
+    .cl-drawer{border-radius:24px 24px 0 0 !important;max-height:88vh}
+
+    /* ── Sidebar overlay ── */
+    .hub-sidebar{top:60px;height:calc(100vh - 60px)}
   }
 
-  /* ── Very small phones (< 380px) ── */
-  @media(max-width:380px){
-    .app-grid{grid-template-columns:repeat(2,1fr);gap:8px}
-    .hub-greeting{font-size:1.5rem}
-    .hub-header{padding:28px 14px 44px}
-    .tab-btn{font-size:.74rem;padding:6px 11px}
+  /* ── Very small phones < 390px ── */
+  @media(max-width:390px){
+    .hub-header{padding:24px 14px 44px}
+    .hub-greeting{font-size:1.45rem}
+    .app-grid{gap:8px}
+    .app-card-body{padding:12px 6px 10px}
+    .app-icon{width:44px;height:44px}
+    .app-name{font-size:.73rem}
+    .tab-btn{font-size:.72rem;padding:6px 10px}
+    .hub-body{padding:16px 12px 90px}
   }
 
   /* ── Landscape phone ── */
   @media(max-width:768px) and (orientation:landscape){
-    .hub-header{padding:20px 20px 40px}
-    .hub-greeting{font-size:1.6rem}
-    .app-grid{grid-template-columns:repeat(3,1fr)}
+    .hub-header{padding:16px 18px 38px}
+    .hub-greeting{font-size:1.5rem}
+    .app-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+    .hub-body{padding:16px 14px 80px}
     .notes-panel,.timer-panel{
-      position:fixed;
-      bottom:0;right:0;left:auto;
-      width:320px;
-      border-radius:20px 20px 0 0;
-      max-height:90vh;
+      position:fixed !important;
+      bottom:0 !important;left:auto !important;right:0 !important;
+      width:300px !important;
+      border-radius:16px 0 0 0 !important;
+      max-height:95vh;
+      transform:translateX(100%) !important;
     }
+    .notes-panel.open,.timer-panel.open{transform:translateX(0) !important}
   }
 
   /* ── NOTES WIDGET ── */
@@ -1244,12 +1327,27 @@
       <button class="tab-btn" onclick="setTab(this,'learning')">Learning</button>
       <button class="tab-btn" onclick="setTab(this,'tools')">Tools</button>
       <button class="tab-btn" onclick="setTab(this,'custom')">My Apps</button>
+      <button class="tab-btn" onclick="setTab(this,'library')" style="color:var(--lavender)" id="libraryTab">✦ Discover</button>
     </div>
     <button id="requestAppBtn" onclick="showRequestModal()" style="display:none;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:7px 14px;border-radius:50px;border:1.5px solid rgba(167,139,250,.3);background:rgba(167,139,250,.08);color:#6D4FBB;cursor:pointer;transition:all .2s;white-space:nowrap" onmouseover="this.style.background='rgba(167,139,250,.18)'" onmouseout="this.style.background='rgba(167,139,250,.08)'">💬 Request an App</button>
   </div>
   <div class="hub-body">
     <p class="section-title" id="grid-label">All Apps</p>
     <div class="app-grid" id="app-grid"></div>
+
+    <!-- APP LIBRARY -->
+    <div id="app-library-view" style="display:none">
+      <div id="lib-search-wrap" style="margin-bottom:20px;position:relative">
+        <svg style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input id="libSearchInput" type="text" placeholder="Search the library…"
+          style="width:100%;padding:11px 16px 11px 40px;border-radius:50px;border:1.5px solid rgba(13,27,42,.1);font-family:DM Sans,sans-serif;font-size:1rem;background:var(--card-bg);color:var(--text);outline:none;transition:border-color .2s"
+          oninput="filterLibrary(this.value)"
+          onfocus="this.style.borderColor='var(--navy)'"
+          onblur="this.style.borderColor='rgba(13,27,42,.1)'" />
+      </div>
+      <div id="lib-cats" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px"></div>
+      <div class="app-grid" id="lib-grid"></div>
+    </div>
   </div>
   </div><!-- /hub-main -->
   </div><!-- /hub-layout -->
@@ -1524,7 +1622,6 @@
     <p class="modal-sub">Pin any website directly to your hub.</p>
     <div class="form-group"><label>App Name</label><input type="text" id="appName" placeholder="e.g. Khan Academy" /></div>
     <div class="form-group"><label>Website URL</label><input type="text" id="appUrl" placeholder="https://example.com" /></div>
-    <div class="form-group"><label>Pick an Icon</label><div class="emoji-picker" id="emojiPicker"></div></div>
     <div class="form-group"><label>Card Color</label><div class="color-picker" id="colorPicker"></div></div>
     <button class="modal-submit" onclick="submitApp()">Add to Hub ✦</button>
   </div>
@@ -1777,7 +1874,6 @@ const gProvider = new GoogleAuthProvider();
 /* ════════════════════════════════════
    CONSTANTS
 ════════════════════════════════════ */
-const EMOJIS = ['📚','🔬','🎨','🧮','🌍','💡','🎵','📝','🏆','🔭','💻','✏️','🗺️','🧪','📊','🎯'];
 const COLORS = [
   { name:'coral',    val:'rgba(255,87,51,.12)',   dot:'#FF5733' },
   { name:'gold',     val:'rgba(244,197,66,.18)',  dot:'#F4C542' },
@@ -1802,7 +1898,6 @@ const DEFAULT_APPS = () => ([
 ════════════════════════════════════ */
 let currentUser   = null;
 let userProfile   = null; // { firstName, lastName, apps[], nextId, settings:{} }
-let selectedEmoji = '📚';
 let selectedColor = COLORS[0];
 let currentTab    = 'all';
 let searchQuery   = '';
@@ -2590,9 +2685,29 @@ document.addEventListener('click', e => { if (!document.getElementById('avatarCi
 window.setTab = function(btn, tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active'); currentTab = tab;
-  document.getElementById('grid-label').textContent =
+
+  const isLibrary = tab === 'library';
+  const libView   = document.getElementById('app-library-view');
+  const mainGrid  = document.getElementById('app-grid');
+  const gridLabel = document.getElementById('grid-label');
+  const reqBtn    = document.getElementById('requestAppBtn');
+
+  if (isLibrary) {
+    if (mainGrid)  mainGrid.style.display  = 'none';
+    if (libView)   libView.style.display   = 'block';
+    if (gridLabel) gridLabel.textContent   = 'App Library';
+    if (reqBtn)    reqBtn.style.display    = 'none';
+    renderLibrary();
+    return;
+  }
+
+  // Normal tab
+  if (mainGrid)  mainGrid.style.display  = '';
+  if (libView)   libView.style.display   = 'none';
+  if (reqBtn)    reqBtn.style.display    = '';
+  gridLabel.textContent =
     tab==='all'?'All Apps':tab==='learning'?'Learning':tab==='tools'?'Tools':'My Apps';
-  // Animate existing cards out, then re-render
+
   const grid = document.getElementById('app-grid');
   [...grid.children].forEach((c,i) => {
     c.style.transition = `opacity .12s ${i*0.02}s, transform .12s ${i*0.02}s`;
@@ -2607,6 +2722,168 @@ window.filterApps = function(val) {
   [...grid.children].forEach(c => { c.style.transition='opacity .1s,transform .1s'; c.style.opacity='0'; c.style.transform='scale(.95)'; });
   clearTimeout(window._filterTimer);
   window._filterTimer = setTimeout(() => renderApps(), 110);
+};
+
+/* ════════════════════════════════════
+   APP LIBRARY — curated catalogue
+════════════════════════════════════ */
+const LIBRARY_APPS = [
+  // ── Learning ──
+  { name:'Khan Academy',       url:'https://khanacademy.org',         cat:'learning', desc:'Free lessons in math, science, and more',  color:'#7DBE8E' },
+  { name:'Google Classroom',   url:'https://classroom.google.com',    cat:'learning', desc:'Your school's assignment hub',              color:'#38BDF8' },
+  { name:'Quizlet',            url:'https://quizlet.com',             cat:'learning', desc:'Flashcards and study sets for anything',    color:'#A78BFA' },
+  { name:'Duolingo',           url:'https://duolingo.com',            cat:'learning', desc:'Learn a new language, one lesson at a time',color:'#7DBE8E' },
+  { name:'Scratch',            url:'https://scratch.mit.edu',         cat:'learning', desc:'Build games and animations with blocks',    color:'#FF8C42' },
+  { name:'Newsela',            url:'https://newsela.com',             cat:'learning', desc:'Real news articles adapted to your level', color:'#38BDF8' },
+  { name:'CK-12',              url:'https://ck12.org',                cat:'learning', desc:'Free textbooks and practice for every grade',color:'#F4C542'},
+  { name:'Kahoot',             url:'https://kahoot.com',              cat:'learning', desc:'Live quiz games for class',                 color:'#A78BFA' },
+  { name:'Gimkit',             url:'https://gimkit.com',              cat:'learning', desc:'Quiz game your whole class can play',       color:'#FF5733' },
+  { name:'Blooket',            url:'https://blooket.com',             cat:'learning', desc:'Game-based review sessions',               color:'#7DBE8E' },
+  { name:'Brainly',            url:'https://brainly.com',             cat:'learning', desc:'Homework help from the community',          color:'#38BDF8' },
+  { name:'Coursera',           url:'https://coursera.org',            cat:'learning', desc:'University courses, free to audit',         color:'#A78BFA' },
+  { name:'edX',                url:'https://edx.org',                 cat:'learning', desc:'Courses from MIT, Harvard, and more',       color:'#FF5733' },
+  { name:'Codecademy',         url:'https://codecademy.com',          cat:'learning', desc:'Learn to code interactively',               color:'#38BDF8' },
+  { name:'Brilliant',          url:'https://brilliant.org',           cat:'learning', desc:'Problem-solving in math and CS',            color:'#F4C542' },
+  { name:'Quizizz',            url:'https://quizizz.com',             cat:'learning', desc:'Self-paced quiz practice',                  color:'#A78BFA' },
+  { name:'IXL',                url:'https://ixl.com',                 cat:'learning', desc:'Adaptive practice for every grade level',   color:'#38BDF8' },
+  { name:'ABCmouse',           url:'https://abcmouse.com',            cat:'learning', desc:'Early learning for PreK–2nd grade',         color:'#7DBE8E' },
+  // ── Tools ──
+  { name:'Google Docs',        url:'https://docs.google.com',         cat:'tools',    desc:'Write and collaborate in real time',        color:'#38BDF8' },
+  { name:'Google Slides',      url:'https://slides.google.com',       cat:'tools',    desc:'Build presentations with your team',        color:'#F4C542' },
+  { name:'Google Sheets',      url:'https://sheets.google.com',       cat:'tools',    desc:'Spreadsheets, charts, and data',            color:'#7DBE8E' },
+  { name:'Google Drive',       url:'https://drive.google.com',        cat:'tools',    desc:'Store and share all your files',            color:'#FF8C42' },
+  { name:'Canva',              url:'https://canva.com',               cat:'tools',    desc:'Design posters, slides, and more',          color:'#A78BFA' },
+  { name:'Desmos',             url:'https://desmos.com',              cat:'tools',    desc:'Graphing calculator and math tools',        color:'#FF5733' },
+  { name:'GeoGebra',           url:'https://geogebra.org',            cat:'tools',    desc:'Interactive math and science simulations',  color:'#7DBE8E' },
+  { name:'Wolfram Alpha',      url:'https://wolframalpha.com',        cat:'tools',    desc:'Computational answers to any question',     color:'#FF5733' },
+  { name:'Grammarly',          url:'https://grammarly.com',           cat:'tools',    desc:'Writing assistant and grammar checker',     color:'#38BDF8' },
+  { name:'Notion',             url:'https://notion.so',               cat:'tools',    desc:'Notes, tasks, and wikis in one place',     color:'#1a1a2e'  },
+  { name:'Padlet',             url:'https://padlet.com',              cat:'tools',    desc:'Collaborative digital bulletin boards',     color:'#F4C542' },
+  { name:'Flip',               url:'https://flip.com',                cat:'tools',    desc:'Video discussion boards for class',         color:'#FF5733' },
+  { name:'Loom',               url:'https://loom.com',                cat:'tools',    desc:'Quick screen and video recording',          color:'#A78BFA' },
+  { name:'Figma',              url:'https://figma.com',               cat:'tools',    desc:'Design and prototype anything',             color:'#F4C542' },
+  { name:'Replit',             url:'https://replit.com',              cat:'tools',    desc:'Code and run programs in your browser',    color:'#FF8C42' },
+  { name:'Excalidraw',         url:'https://excalidraw.com',          cat:'tools',    desc:'Collaborative whiteboard sketching',        color:'#A78BFA' },
+  { name:'Typing.com',         url:'https://typing.com',              cat:'tools',    desc:'Learn to type faster',                     color:'#38BDF8' },
+  { name:'Hemingway Editor',   url:'https://hemingwayapp.com',        cat:'tools',    desc:'Make your writing bold and clear',          color:'#F4C542' },
+  { name:'Pear Deck',          url:'https://peardeck.com',            cat:'tools',    desc:'Interactive slide presentations',           color:'#7DBE8E' },
+  // ── Science ──
+  { name:'PhET Simulations',   url:'https://phet.colorado.edu',       cat:'science',  desc:'Free science and math simulations',         color:'#38BDF8' },
+  { name:'NASA',               url:'https://nasa.gov',                cat:'science',  desc:'Space news, missions, and images',          color:'#1a2d42' },
+  { name:'Periodic Table',     url:'https://ptable.com',              cat:'science',  desc:'Interactive periodic table',               color:'#7DBE8E' },
+  // ── Reading ──
+  { name:'Epic',               url:'https://getepic.com',             cat:'reading',  desc:'Books and audiobooks for kids',             color:'#38BDF8' },
+  { name:'Project Gutenberg',  url:'https://gutenberg.org',           cat:'reading',  desc:'Free classic books and literature',         color:'#A78BFA' },
+  { name:'CommonLit',          url:'https://commonlit.org',           cat:'reading',  desc:'Reading and writing for grades 3–12',       color:'#FF5733' },
+  { name:'NewsELA',            url:'https://newsela.com',             cat:'reading',  desc:'Current events at the right reading level', color:'#38BDF8' },
+];
+
+const LIB_CATS = [
+  { key:'all',     label:'All' },
+  { key:'learning',label:'Learning' },
+  { key:'tools',   label:'Tools' },
+  { key:'science', label:'Science' },
+  { key:'reading', label:'Reading' },
+];
+
+let libCat    = 'all';
+let libSearch = '';
+
+function renderLibrary() {
+  const grid = document.getElementById('lib-grid');
+  const catBar = document.getElementById('lib-cats');
+  if (!grid || !catBar) return;
+
+  // Category pills
+  catBar.innerHTML = LIB_CATS.map(c => `
+    <button onclick="setLibCat('${c.key}')"
+      style="font-family:DM Sans,sans-serif;font-size:.76rem;font-weight:600;
+        padding:6px 14px;border-radius:50px;border:1.5px solid ${libCat===c.key?'var(--navy)':'rgba(13,27,42,.12)'};
+        background:${libCat===c.key?'var(--navy)':'transparent'};
+        color:${libCat===c.key?'#fff':'var(--muted)'};
+        cursor:pointer;transition:all .18s;white-space:nowrap">
+      ${c.label}
+    </button>`).join('');
+
+  const userUrls = new Set((userProfile?.apps||[]).map(a => {
+    try { return new URL(a.url.startsWith('http')?a.url:'https://'+a.url).hostname.replace('www.',''); }
+    catch { return a.url; }
+  }));
+
+  const filtered = LIBRARY_APPS.filter(a => {
+    const matchCat = libCat === 'all' || a.cat === libCat;
+    const matchQ   = !libSearch || a.name.toLowerCase().includes(libSearch) || a.desc.toLowerCase().includes(libSearch);
+    return matchCat && matchQ;
+  });
+
+  grid.innerHTML = '';
+  filtered.forEach((app, i) => {
+    const hostname = (() => { try { return new URL('https://'+app.url.replace(/^https?:\/\//,'')).hostname.replace('www.',''); } catch { return ''; } })();
+    const alreadyAdded = userUrls.has(hostname);
+    const card = document.createElement('div');
+    card.className = 'app-card lib-card';
+    card.style.cssText = `animation-delay:${i*0.03}s;cursor:default`;
+    card.innerHTML = `
+      <div class="app-card-accent" style="background:${app.color}"></div>
+      <div class="app-card-body" style="padding:14px 10px 12px;gap:4px">
+        <div class="app-icon" style="background:${app.color}18;box-shadow:0 4px 14px ${app.color}22">
+          <img src="https://www.google.com/s2/favicons?domain=${hostname}&sz=64"
+            style="width:36px;height:36px;border-radius:8px;object-fit:contain"
+            onerror="this.style.display='none';this.nextSibling.style.display='flex'"
+            alt="${app.name}" /><span style="display:none;font-size:1.7rem">🔗</span>
+        </div>
+        <div class="app-name">${app.name}</div>
+        <div style="font-size:.65rem;color:var(--muted);line-height:1.4;margin-top:3px;text-align:center;padding:0 4px">${app.desc}</div>
+        <button onclick="libAddApp(event,'${encodeURIComponent(JSON.stringify(app))}')"
+          style="margin-top:8px;width:100%;padding:7px 0;border-radius:10px;border:none;
+            font-family:DM Sans,sans-serif;font-size:.73rem;font-weight:700;cursor:${alreadyAdded?'default':'pointer'};
+            background:${alreadyAdded?'rgba(125,190,142,.12)':'var(--navy)'};
+            color:${alreadyAdded?'var(--sage)':'#fff'};
+            transition:all .18s;-webkit-tap-highlight-color:transparent"
+          ${alreadyAdded?'disabled':''}>
+          ${alreadyAdded ? '✓ Added' : '+ Add to Hub'}
+        </button>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px 24px;color:var(--muted)">
+      <div style="font-size:2rem;margin-bottom:10px">🔍</div>
+      <p style="font-size:.88rem">No apps match "<strong>${libSearch}</strong>"</p>
+    </div>`;
+  }
+}
+
+window.setLibCat = function(cat) {
+  libCat = cat;
+  renderLibrary();
+};
+window.filterLibrary = function(val) {
+  libSearch = val.toLowerCase();
+  renderLibrary();
+};
+window.libAddApp = async function(e, encoded) {
+  e.stopPropagation();
+  const app = JSON.parse(decodeURIComponent(encoded));
+  if (!userProfile) return;
+  // Check not already added
+  const hostname = (() => { try { return new URL('https://'+app.url.replace(/^https?:\/\//,'')).hostname.replace('www.',''); } catch { return ''; } })();
+  const already = userProfile.apps.some(a => {
+    try { return new URL(a.url.startsWith('http')?a.url:'https://'+a.url).hostname.replace('www.','') === hostname; } catch { return false; }
+  });
+  if (already) return;
+  userProfile.apps.push({
+    id: userProfile.nextId++,
+    name: app.name,
+    url: app.url,
+    color: COLORS.find(c=>c.val===app.color) || COLORS[0],
+    cat: ['learning','tools'].includes(app.cat) ? app.cat : 'tools',
+    custom: false,
+  });
+  await saveProfile();
+  showToast('✓ ' + app.name + ' added to your hub!');
+  renderLibrary(); // refresh to show "Added" state
 };
 
 function renderApps() {
@@ -2711,7 +2988,7 @@ window.removeApp = async function(e, id) {
    ADD APP MODAL
 ════════════════════════════════════ */
 function openModal() {
-  buildEmojiPicker(); buildColorPicker();
+  buildColorPicker();
   document.getElementById('appName').value = '';
   document.getElementById('appUrl').value  = '';
   document.getElementById('modalOverlay').classList.add('open');
@@ -2719,17 +2996,7 @@ function openModal() {
 window.closeModal = function() { document.getElementById('modalOverlay').classList.remove('open'); };
 window.handleOverlayClick = function(e) { if (e.target===document.getElementById('modalOverlay')) closeModal(); };
 
-function buildEmojiPicker() {
-  const wrap = document.getElementById('emojiPicker');
-  wrap.innerHTML = ''; selectedEmoji = EMOJIS[0];
-  EMOJIS.forEach(em => {
-    const btn = document.createElement('button');
-    btn.className = 'emoji-opt'+(em===selectedEmoji?' selected':'');
-    btn.textContent = em;
-    btn.onclick = () => { selectedEmoji=em; wrap.querySelectorAll('.emoji-opt').forEach(b=>b.classList.remove('selected')); btn.classList.add('selected'); };
-    wrap.appendChild(btn);
-  });
-}
+
 function buildColorPicker() {
   const wrap = document.getElementById('colorPicker');
   wrap.innerHTML = ''; selectedColor = COLORS[0];
@@ -2747,7 +3014,7 @@ window.submitApp = async function() {
   if (!name) { shake('appName'); return; }
   if (!url)  { shake('appUrl');  return; }
   if (!/^https?:\/\//i.test(url)) url = 'https://'+url;
-  userProfile.apps.push({ id: userProfile.nextId++, name, url, icon: selectedEmoji, color: selectedColor, cat:'tools', custom:true });
+  userProfile.apps.push({ id: userProfile.nextId++, name, url, color: selectedColor, cat:'tools', custom:true });
   await saveProfile(); closeModal();
   currentTab = 'all';
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===0));
