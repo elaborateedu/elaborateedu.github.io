@@ -2984,41 +2984,106 @@ async function loadStaffList() {
     const snap = await getDocs(collection(db, 'admins'));
     if (snap.empty) { listEl.innerHTML = '<div style="color:var(--muted);font-size:.85rem">No staff members found.</div>'; return; }
     const members = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-      .sort((a,b) => (STAFF_RANKS[a.rank||'jr_admin']?.order||3) - (STAFF_RANKS[b.rank||'jr_admin']?.order||3));
-    listEl.innerHTML = members.map(p => {
+      .sort((a,b) => (STAFF_RANKS[a.rank||'jr_admin']?.order||99) - (STAFF_RANKS[b.rank||'jr_admin']?.order||99));
+    listEl.innerHTML = '';
+    members.forEach(p => {
       const name    = p.displayName || p.email || 'Unknown';
-      const init    = name[0]?.toUpperCase() || '?';
       const isOwner = p.email === 'jonnyschoen29@gmail.com';
+      const isSelf  = p.id === currentAdmin?.uid;
       const rank    = isOwner ? 'owner' : (p.rank || 'jr_admin');
       const rInfo   = STAFF_RANKS[rank] || STAFF_RANKS.jr_admin;
-      // Build promote/demote dropdown
-      const isSelf  = p.id === currentAdmin?.uid;
       const rankIdx = RANK_ORDER.indexOf(rank);
-      const canPromote = !isOwner && !isSelf && rankIdx < RANK_ORDER.length - 1;
+      const canPromote = !isOwner && !isSelf && rankIdx >= 0 && rankIdx < RANK_ORDER.length - 1;
       const canDemote  = !isOwner && !isSelf && rankIdx > 0;
-      return `<div style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);margin-bottom:10px">
-        <div style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;overflow:hidden;background:${rInfo.bg}">
-          ${p.avatarUrl ? `<img src="${escHtml(p.avatarUrl)}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" />` : rInfo.icon}
-        </div>
-        <div style="flex:1;min-width:0">
-          <div style="font-weight:700;color:var(--txt);font-size:.9rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            ${escHtml(name)}
-            <span style="font-family:DM Mono,monospace;font-size:.58rem;padding:2px 8px;border-radius:4px;background:${rInfo.bg};color:${rInfo.color};letter-spacing:.06em;text-transform:uppercase">${rInfo.label}</span>
-            ${p.id === currentAdmin?.uid ? '<span style="font-family:DM Mono,monospace;font-size:.58rem;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.07);color:var(--muted)">you</span>' : ''}
-          </div>
-          <div style="font-size:.74rem;color:var(--muted);margin-top:3px">${escHtml(p.email||'—')}</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
-          ${!isOwner ? `
-            <div style="display:flex;gap:6px">
-              ${canPromote ? `<button onclick="changeStaffRank('${p.id}','${RANK_ORDER[rankIdx+1]}','${escHtml(name)}')" title="Promote to ${STAFF_RANKS[RANK_ORDER[rankIdx+1]]?.label}" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(125,190,142,.3);background:rgba(125,190,142,.08);color:#7DBE8E;font-size:.75rem;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(125,190,142,.18)'" onmouseout="this.style.background='rgba(125,190,142,.08)'">▲ Promote</button>` : ''}
-              ${canDemote  ? `<button onclick="changeStaffRank('${p.id}','${RANK_ORDER[rankIdx-1]}','${escHtml(name)}')" title="Demote to ${STAFF_RANKS[RANK_ORDER[rankIdx-1]]?.label}" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(244,197,66,.25);background:rgba(244,197,66,.06);color:var(--gold);font-size:.75rem;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(244,197,66,.18)'" onmouseout="this.style.background='rgba(244,197,66,.06)'">▼ Demote</button>` : ''}
-            </div>
-            ${!isSelf ? `<button onclick="removeStaff('${p.id}','${escHtml(name)}')" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-weight:600;font-size:.75rem;cursor:pointer;transition:all .15s" onmouseover="this.style.background='rgba(255,87,51,.12)'" onmouseout="this.style.background='transparent'">Remove</button>` : ''}
-          ` : '<span style="font-family:DM Mono,monospace;font-size:.6rem;color:var(--faint)">Cannot modify</span>'}
-        </div>
-      </div>`;
-    }).join('');
+
+      const card = document.createElement('div');
+      card.style.cssText = 'display:flex;align-items:center;gap:14px;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);margin-bottom:10px';
+
+      // Avatar
+      const avDiv = document.createElement('div');
+      avDiv.style.cssText = `width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;overflow:hidden;background:${rInfo.bg}`;
+      if (p.avatarUrl) {
+        const img = document.createElement('img');
+        img.src = p.avatarUrl; img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:10px';
+        img.onerror = function() { this.parentElement.textContent = rInfo.icon; };
+        avDiv.appendChild(img);
+      } else { avDiv.textContent = rInfo.icon; }
+
+      // Info
+      const infoDiv = document.createElement('div');
+      infoDiv.style.cssText = 'flex:1;min-width:0';
+      const nameRow = document.createElement('div');
+      nameRow.style.cssText = 'font-weight:700;color:var(--txt);font-size:.9rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap';
+      nameRow.textContent = name;
+      const rankPill = document.createElement('span');
+      rankPill.style.cssText = `font-family:DM Mono,monospace;font-size:.58rem;padding:2px 8px;border-radius:4px;background:${rInfo.bg};color:${rInfo.color};letter-spacing:.06em;text-transform:uppercase`;
+      rankPill.textContent = rInfo.label;
+      nameRow.appendChild(rankPill);
+      if (isSelf) {
+        const youPill = document.createElement('span');
+        youPill.style.cssText = 'font-family:DM Mono,monospace;font-size:.58rem;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.07);color:var(--muted)';
+        youPill.textContent = 'you';
+        nameRow.appendChild(youPill);
+      }
+      const emailDiv = document.createElement('div');
+      emailDiv.style.cssText = 'font-size:.74rem;color:var(--muted);margin-top:3px';
+      emailDiv.textContent = p.email || '—';
+      infoDiv.appendChild(nameRow);
+      infoDiv.appendChild(emailDiv);
+
+      // Actions
+      const actDiv = document.createElement('div');
+      actDiv.style.cssText = 'display:flex;gap:8px;align-items:center;flex-shrink:0';
+
+      if (isOwner) {
+        const ownerSpan = document.createElement('span');
+        ownerSpan.style.cssText = 'font-family:DM Mono,monospace;font-size:.6rem;color:var(--faint)';
+        ownerSpan.textContent = 'Cannot modify';
+        actDiv.appendChild(ownerSpan);
+      } else {
+        const btnGroup = document.createElement('div');
+        btnGroup.style.cssText = 'display:flex;gap:6px';
+
+        if (canPromote) {
+          const promBtn = document.createElement('button');
+          promBtn.textContent = '▲ Promote';
+          promBtn.title = 'Promote to ' + (STAFF_RANKS[RANK_ORDER[rankIdx+1]]?.label||'');
+          promBtn.style.cssText = 'padding:5px 10px;border-radius:6px;border:1px solid rgba(125,190,142,.3);background:rgba(125,190,142,.08);color:#7DBE8E;font-size:.75rem;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s';
+          promBtn.onmouseenter = function(){ this.style.background='rgba(125,190,142,.18)'; };
+          promBtn.onmouseleave = function(){ this.style.background='rgba(125,190,142,.08)'; };
+          const newRank = RANK_ORDER[rankIdx+1];
+          promBtn.onclick = () => window.changeStaffRank(p.id, newRank, name);
+          btnGroup.appendChild(promBtn);
+        }
+        if (canDemote) {
+          const demBtn = document.createElement('button');
+          demBtn.textContent = '▼ Demote';
+          demBtn.title = 'Demote to ' + (STAFF_RANKS[RANK_ORDER[rankIdx-1]]?.label||'');
+          demBtn.style.cssText = 'padding:5px 10px;border-radius:6px;border:1px solid rgba(244,197,66,.25);background:rgba(244,197,66,.06);color:var(--gold);font-size:.75rem;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s';
+          demBtn.onmouseenter = function(){ this.style.background='rgba(244,197,66,.18)'; };
+          demBtn.onmouseleave = function(){ this.style.background='rgba(244,197,66,.06)'; };
+          const newRank = RANK_ORDER[rankIdx-1];
+          demBtn.onclick = () => window.changeStaffRank(p.id, newRank, name);
+          btnGroup.appendChild(demBtn);
+        }
+        actDiv.appendChild(btnGroup);
+
+        if (!isSelf) {
+          const remBtn = document.createElement('button');
+          remBtn.textContent = 'Remove';
+          remBtn.style.cssText = 'padding:5px 10px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-weight:600;font-size:.75rem;cursor:pointer;transition:all .15s';
+          remBtn.onmouseenter = function(){ this.style.background='rgba(255,87,51,.12)'; };
+          remBtn.onmouseleave = function(){ this.style.background='transparent'; };
+          remBtn.onclick = () => window.removeStaff(p.id, name);
+          actDiv.appendChild(remBtn);
+        }
+      }
+
+      card.appendChild(avDiv);
+      card.appendChild(infoDiv);
+      card.appendChild(actDiv);
+      listEl.appendChild(card);
+    });
   } catch(e) { console.error(e); listEl.innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`; }
 }
 
