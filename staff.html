@@ -442,11 +442,12 @@ onAuthStateChanged(auth, async user => {
     return;
   }
   const ad = adminSnap.data();
+  const isOwnerEmail = user.email === 'jonnyschoen29@gmail.com';
   me = {
     uid: user.uid,
     displayName: ad.displayName || user.displayName || user.email,
     email: user.email,
-    rank: ad.rank || 'jr_admin',
+    rank: isOwnerEmail ? 'owner' : (ad.rank || 'jr_admin'),
     color: uidColor(user.uid),
   };
   initUI();
