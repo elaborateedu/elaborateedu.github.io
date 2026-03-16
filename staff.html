@@ -442,13 +442,17 @@ onAuthStateChanged(auth, async user => {
     return;
   }
   const ad = adminSnap.data();
-  const isOwnerEmail = user.email === 'jonnyschoen29@gmail.com';
+  // Owner check: email from Auth OR email stored in the admins doc, case-insensitive
+  const OWNER_EMAIL = 'jonnyschoen29@gmail.com';
+  const authEmail = (user.email || '').toLowerCase();
+  const docEmail  = (ad.email  || '').toLowerCase();
+  const isOwner   = authEmail === OWNER_EMAIL || docEmail === OWNER_EMAIL;
   me = {
-    uid: user.uid,
+    uid:         user.uid,
     displayName: ad.displayName || user.displayName || user.email,
-    email: user.email,
-    rank: isOwnerEmail ? 'owner' : (ad.rank || 'jr_admin'),
-    color: uidColor(user.uid),
+    email:       user.email,
+    rank:        isOwner ? 'owner' : (ad.rank || 'sr_admin'),
+    color:       uidColor(user.uid),
   };
   initUI();
   await loadChannels();
