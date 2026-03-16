@@ -348,6 +348,10 @@
       </button>
 
       <div class="sidebar-section">Config</div>
+      <button id="tabStatusBtn" class="sidebar-item status-tab" onclick="switchAdminTab('status')">
+        <div class="sidebar-icon">🟢</div>
+        <span class="sidebar-item-label">Status Page</span>
+      </button>
       <button id="tabSettingsBtn" class="sidebar-item settings-tab" onclick="switchAdminTab('settings')">
         <div class="sidebar-icon">⚙️</div>
         <span class="sidebar-item-label">Settings</span>
@@ -800,6 +804,69 @@
     </div>
   </div>
 </div><!-- /tabStaff -->
+
+<!-- ══ STATUS TAB ══ -->
+<div id="tabStatus" style="display:none">
+  <div class="dash-main">
+    <div class="page-header" style="border-bottom-color:rgba(255,255,255,.1)">
+      <div class="page-header-eyebrow" style="color:var(--sage)">Platform / Status</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <h1 class="page-title">Status Page</h1>
+        <a href="/status.html" target="_blank" style="padding:8px 18px;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:600;text-decoration:none;transition:all .15s" onmouseover="this.style.color='var(--txt)'" onmouseout="this.style.color='var(--muted)'">View Public Page →</a>
+      </div>
+      <p class="page-sub">Control what status.html shows for each service component.</p>
+    </div>
+    <div style="padding:28px 32px">
+
+      <!-- Component status controls -->
+      <div style="margin-bottom:28px">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:14px">Component Statuses</div>
+        <div id="statusComponentControls" style="display:flex;flex-direction:column;gap:10px">
+          <div style="color:var(--muted);font-size:.84rem">Loading…</div>
+        </div>
+        <button onclick="saveAllStatuses()" style="margin-top:16px;padding:10px 24px;border-radius:50px;border:none;background:var(--coral);color:#fff;font-family:DM Sans,sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:background .18s" onmouseover="this.style.background='#e84520'" onmouseout="this.style.background='var(--coral)'">Save All Statuses</button>
+      </div>
+
+      <!-- Post incident -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:24px">
+        <div style="font-weight:700;font-size:.92rem;color:var(--txt);margin-bottom:16px">Post an Incident or Maintenance</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">Title</div>
+            <input id="incidentTitle" type="text" placeholder="e.g. Database latency issues" maxlength="80"
+              style="width:100%;padding:9px 13px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none"
+              onfocus="this.style.borderColor='rgba(255,87,51,.4)'" onblur="this.style.borderColor='var(--border)'"/>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">Status</div>
+            <select id="incidentStatus" style="width:100%;padding:9px 13px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none">
+              <option value="investigating">🔴 Investigating</option>
+              <option value="monitoring">🟡 Monitoring</option>
+              <option value="resolved">🟢 Resolved</option>
+              <option value="maintenance">🔧 Maintenance</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">Message</div>
+          <textarea id="incidentMsg" placeholder="Describe what is happening and what you are doing about it…" rows="3" maxlength="500"
+            style="width:100%;padding:9px 13px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none;resize:none"
+            onfocus="this.style.borderColor='rgba(255,87,51,.4)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+        <button onclick="postIncident()" style="padding:9px 22px;border-radius:50px;border:none;background:var(--coral);color:#fff;font-family:DM Sans,sans-serif;font-weight:700;font-size:.82rem;cursor:pointer">Post Incident</button>
+      </div>
+
+      <!-- Recent incidents list -->
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:12px">Recent Incidents</div>
+        <div id="statusIncidentsList" style="display:flex;flex-direction:column;gap:8px">
+          <div style="color:var(--muted);font-size:.84rem">Loading…</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- ══ SETTINGS TAB ══ -->
 <div id="tabSettings" style="display:none">
@@ -2057,7 +2124,7 @@ window.replyEmail = function(e, email, subject, ticketId) {
    ADMIN TABS
 ════════════════════════ */
 window.switchAdminTab = function(tab) {
-  const ALL_TABS = ['tickets','users','districts','announcements','analytics','staff','applications','settings','appLibrary','changelog','emailBlast','auditLog','highlights','staffNotes','training'];
+  const ALL_TABS = ['tickets','users','districts','announcements','analytics','staff','applications','settings','appLibrary','changelog','emailBlast','auditLog','highlights','staffNotes','training','status'];
   ALL_TABS.forEach(t => {
     const el = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
     if (el) el.style.display = t === tab ? 'block' : 'none';
@@ -2078,6 +2145,7 @@ window.switchAdminTab = function(tab) {
   if (tab === 'staffNotes')    loadStaffNotes();
   if (tab === 'training')      loadTrainingTab();
   if (tab === 'applications')  loadApplications();
+  if (tab === 'status')        loadStatusTab();
 };
 
 /* ════════════════════════
@@ -3138,6 +3206,136 @@ const PLATFORM_FLAGS = [
   { key: 'allowCustomApps',    label: 'Allow Custom Apps',     desc: 'Let users add their own custom apps. Disable to restrict.',    default: true,  color: 'var(--sky)' },
   { key: 'allowGoogleSignin',  label: 'Google Sign-In',        desc: 'Allow sign-in with Google. Disable to force email/password.',  default: true,  color: '#F472B6' },
 ];
+
+/* ════════════════════════
+   STATUS TAB
+════════════════════════ */
+const STATUS_COMPONENTS = [
+  {id:'hub',       name:'Student Hub',     icon:'🏠'},
+  {id:'auth',      name:'Authentication',  icon:'🔐'},
+  {id:'classroom', name:'Classroom',       icon:'🏫'},
+  {id:'admin',     name:'Admin Portal',    icon:'⚙️'},
+  {id:'firestore', name:'Database',        icon:'🗄'},
+  {id:'esc',       name:'Staff Connect',   icon:'💬'},
+];
+const STATUS_OPTS = [
+  {val:'operational', label:'✅ Operational',           color:'var(--sage)'},
+  {val:'degraded',    label:'⚠️ Degraded Performance',  color:'var(--gold)'},
+  {val:'outage',      label:'🔴 Major Outage',           color:'var(--coral)'},
+  {val:'maintenance', label:'🔧 Maintenance',            color:'var(--lav)'},
+];
+
+async function loadStatusTab() {
+  // Load component statuses
+  try {
+    const snap = await getDoc(doc(db,'siteConfig','status'));
+    const data = snap.exists() ? snap.data() : {};
+    const el = document.getElementById('statusComponentControls');
+    if (!el) return;
+    el.innerHTML = STATUS_COMPONENTS.map(c => {
+      const cur = data[c.id]?.status || 'operational';
+      const curNote = data[c.id]?.note || '';
+      return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="font-size:1.1rem;flex-shrink:0">${c.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:.86rem;color:var(--txt);margin-bottom:2px">${c.name}</div>
+          <input type="text" id="note_${c.id}" value="${escHtml(curNote)}" placeholder="Optional note shown on status page"
+            style="width:100%;padding:5px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-family:DM Sans,sans-serif;font-size:.76rem;outline:none;max-width:320px"/>
+        </div>
+        <select id="status_${c.id}" style="padding:7px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.82rem;outline:none;flex-shrink:0">
+          ${STATUS_OPTS.map(o=>`<option value="${o.val}" ${cur===o.val?'selected':''}>${o.label}</option>`).join('')}
+        </select>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('statusComponentControls').innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
+  }
+
+  // Load incidents
+  try {
+    const iSnap = await getDocs(query(collection(db,'siteConfig','status','incidents'), orderBy('createdAt','desc'), limit(10)));
+    const incidents = iSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const el = document.getElementById('statusIncidentsList');
+    if (!el) return;
+    if (!incidents.length) {
+      el.innerHTML = '<div style="color:var(--muted);font-size:.82rem">No incidents posted.</div>';
+      return;
+    }
+    el.innerHTML = incidents.map(inc => {
+      const statusColors = {investigating:'var(--coral)',monitoring:'var(--gold)',resolved:'var(--sage)',maintenance:'var(--lav)'};
+      const col = statusColors[inc.status]||'var(--muted)';
+      const time = inc.createdAt?.toDate ? inc.createdAt.toDate().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+      const lastUpdate = (inc.updates||[]).slice(-1)[0];
+      return `<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${col};border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:.84rem;color:var(--txt)">${escHtml(inc.title||'Untitled')}</div>
+          ${lastUpdate?`<div style="font-size:.76rem;color:var(--muted);margin-top:2px">${escHtml(lastUpdate.message||'')}</div>`:''}
+          <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);margin-top:3px">${time}</div>
+        </div>
+        <span style="font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 8px;border-radius:4px;background:${col}22;color:${col};text-transform:uppercase;letter-spacing:.07em;flex-shrink:0">${inc.status||'?'}</span>
+        <button onclick="resolveIncident('${inc.id}')" style="padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:DM Sans,sans-serif;font-size:.74rem;cursor:pointer;flex-shrink:0" onmouseover="this.style.color='var(--txt)'" onmouseout="this.style.color='var(--muted)'">${inc.status==='resolved'?'Delete':'Resolve'}</button>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('statusIncidentsList').innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
+  }
+}
+
+window.saveAllStatuses = async function() {
+  const updates = { updatedAt: serverTimestamp() };
+  STATUS_COMPONENTS.forEach(c => {
+    const sel = document.getElementById('status_'+c.id);
+    const noteEl = document.getElementById('note_'+c.id);
+    if (sel) updates[c.id] = { status: sel.value, note: noteEl?.value?.trim()||'' };
+  });
+  try {
+    await setDoc(doc(db,'siteConfig','status'), updates, {merge:true});
+    showToast('✅ Statuses saved — visible on status.html immediately.');
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
+};
+
+window.postIncident = async function() {
+  const title  = document.getElementById('incidentTitle').value.trim();
+  const status = document.getElementById('incidentStatus').value;
+  const msg    = document.getElementById('incidentMsg').value.trim();
+  if (!title || !msg) { showToast('Title and message are required.'); return; }
+  try {
+    await addDoc(collection(db,'siteConfig','status','incidents'), {
+      title, status, createdAt: serverTimestamp(),
+      postedBy: currentAdmin?.displayName || 'Admin',
+      updates: [{ status, message: msg, at: serverTimestamp() }],
+    });
+    document.getElementById('incidentTitle').value = '';
+    document.getElementById('incidentMsg').value   = '';
+    showToast('📢 Incident posted!');
+    loadStatusTab();
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
+};
+
+window.resolveIncident = async function(incId) {
+  try {
+    const ref = doc(db,'siteConfig','status','incidents',incId);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return;
+    const inc = snap.data();
+    if (inc.status === 'resolved') {
+      if (!confirm('Delete this resolved incident?')) return;
+      await deleteDoc(ref);
+      showToast('Incident deleted.');
+    } else {
+      await updateDoc(ref, {
+        status: 'resolved',
+        updates: [...(inc.updates||[]), {status:'resolved', message:'This incident has been resolved.', at: serverTimestamp()}],
+      });
+      showToast('✅ Incident marked as resolved.');
+    }
+    loadStatusTab();
+  } catch(e) { showToast('Error: ' + e.message); }
+};
 
 async function loadSettings() {
   const listEl = document.getElementById('settingsFlagsList');
