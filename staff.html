@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
-<title>Staff · Elaborate</title>
+<title>Elaborate Staff Connect</title>
 <link rel="icon" type="image/png" href="/favicon.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,300&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -275,13 +275,102 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);heig
 /* Scrollbar */
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+
+/* ══ STATUS INDICATOR ══ */
+.status-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--s1);flex-shrink:0}
+.status-dot.active{background:#22c55e}
+.status-dot.busy{background:var(--coral)}
+.status-dot.away{background:var(--gold)}
+.status-dot.offline{background:#555}
+.status-badge{font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:50px;border:1px solid;cursor:pointer;transition:all .15s;white-space:nowrap}
+.status-menu{position:absolute;bottom:52px;left:12px;background:var(--s3);border:1px solid var(--border2);border-radius:12px;padding:6px;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,.4);z-index:50;display:none}
+.status-menu.open{display:block}
+.status-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:.83rem;color:var(--muted);transition:all .15s}
+.status-opt:hover{background:rgba(255,255,255,.06);color:var(--txt)}
+.status-custom-wrap{padding:6px 8px;border-top:1px solid var(--border);margin-top:4px}
+.status-custom-input{width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--s4);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none}
+.status-custom-input:focus{border-color:rgba(255,87,51,.4)}
+
+/* ══ SEARCH ══ */
+.search-bar-wrap{padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
+.search-bar{width:100%;padding:7px 12px 7px 32px;border-radius:8px;border:1px solid var(--border);background:var(--s2);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;transition:border-color .15s;position:relative}
+.search-bar:focus{border-color:rgba(255,255,255,.18)}
+.search-bar-wrap{position:relative}
+.search-icon-abs{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:.8rem;pointer-events:none}
+.search-results{background:var(--s2);border:1px solid var(--border2);border-radius:12px;padding:6px 0;max-height:320px;overflow-y:auto;position:absolute;top:52px;left:20px;right:20px;z-index:40;box-shadow:0 8px 32px rgba(0,0,0,.4);display:none}
+.search-results.open{display:block}
+.search-result-item{padding:10px 16px;cursor:pointer;transition:background .12s}
+.search-result-item:hover{background:rgba(255,255,255,.05)}
+.search-result-author{font-size:.78rem;font-weight:700;margin-bottom:2px}
+.search-result-text{font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.search-result-time{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--faint);margin-top:2px}
+.search-highlight{background:rgba(244,197,66,.25);color:var(--gold);border-radius:2px;padding:0 2px}
+
+/* ══ DMs ══ */
+.dm-section{padding:0}
+.dm-item{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 14px;cursor:pointer;border-radius:6px;margin:1px 6px;transition:all .15s;font-size:.86rem;color:var(--muted)}
+.dm-item:hover{background:rgba(255,255,255,.05);color:rgba(240,238,248,.75)}
+.dm-item.active{background:rgba(255,87,51,.12);color:var(--txt)}
+.dm-av{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.6rem;flex-shrink:0;position:relative}
+.dm-status{position:absolute;bottom:-1px;right:-1px;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--s1)}
+.dm-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dm-badge{font-family:'DM Mono',monospace;font-size:.6rem;font-weight:700;background:var(--coral);color:#fff;padding:1px 5px;border-radius:50px;min-width:16px;text-align:center;flex-shrink:0}
+
+/* ══ TYPING INDICATOR ══ */
+.typing-wrap{padding:2px 20px 8px;min-height:24px;font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:7px;flex-shrink:0}
+.typing-dots{display:inline-flex;gap:3px;align-items:center}
+.typing-dot{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:tdot 1.2s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,80%,100%{transform:scale(.7);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* ══ JUMP TO BOTTOM ══ */
+.jump-btn{position:absolute;bottom:160px;right:28px;background:var(--s3);border:1px solid var(--border2);border-radius:50px;padding:6px 14px;font-size:.78rem;font-weight:600;color:var(--txt);cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.3);transition:all .18s;display:none;align-items:center;gap:6px;z-index:20}
+.jump-btn.show{display:flex}
+.jump-btn:hover{background:var(--s4);transform:translateY(-2px)}
+
+/* ══ LINK PREVIEW ══ */
+.link-preview{background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--coral);border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;max-width:420px;cursor:pointer;transition:border-color .15s}
+.link-preview:hover{border-color:var(--border2);border-left-color:var(--coral)}
+.lp-site{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);margin-bottom:4px;text-transform:uppercase;letter-spacing:.07em}
+.lp-title{font-size:.85rem;font-weight:700;color:var(--txt);margin-bottom:3px;line-height:1.35}
+.lp-desc{font-size:.78rem;color:var(--muted);line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+/* ══ KEYBOARD SHORTCUT HINT ══ */
+.kbd{display:inline-block;font-family:'DM Mono',monospace;font-size:.6rem;padding:1px 5px;border-radius:4px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:var(--faint)}
+
+/* ══ CHANNEL TOPIC EDIT ══ */
+.ch-desc-edit{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;padding:2px 4px;min-width:160px;max-width:300px}
+.ch-desc-edit:focus{border-bottom-color:var(--coral);color:var(--txt)}
+
+/* ══ MENTION DROPDOWN ══ */
+.mention-dropdown{position:absolute;bottom:100%;left:0;right:0;background:var(--s3);border:1px solid var(--border2);border-radius:10px 10px 0 0;padding:4px 0;max-height:180px;overflow-y:auto;z-index:30;display:none;box-shadow:0 -8px 24px rgba(0,0,0,.3)}
+.mention-dropdown.open{display:block}
+.mention-opt{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;transition:background .12s}
+.mention-opt:hover,.mention-opt.selected{background:rgba(255,255,255,.06)}
+.mention-av{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.6rem;flex-shrink:0}
+.mention-name{font-size:.84rem;font-weight:600;color:var(--txt)}
+.mention-rank{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);margin-left:4px}
+
+/* ══ CHANNEL HEADER ACTIONS ══ */
+.ch-members-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s}
+.ch-members-btn:hover{background:rgba(255,255,255,.06);color:var(--txt)}
+
+/* ══ UNREAD DIVIDER ══ */
+.unread-divider{display:flex;align-items:center;gap:12px;margin:16px 0;flex-shrink:0}
+.unread-divider::before,.unread-divider::after{content:'';flex:1;height:1px;background:rgba(255,87,51,.4)}
+.unread-divider span{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--coral);white-space:nowrap;letter-spacing:.06em;padding:2px 8px;border-radius:50px;background:rgba(255,87,51,.1);border:1px solid rgba(255,87,51,.25)}
+
+/* ══ ESC BRANDING ══ */
+.esc-logo{font-family:'Fraunces',serif;font-weight:900;font-size:.88rem;letter-spacing:-.01em;color:var(--txt)}
+.esc-logo em{font-style:italic;font-weight:300;color:var(--coral)}
 </style>
 </head>
 <body>
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-logo">elaborate<span>.</span></div>
+  <div class="topbar-logo">elaborate <span style="color:var(--coral)">staff</span><span style="color:rgba(240,238,248,.3)">.</span></div>
   <div class="topbar-divider"></div>
   <div id="topbarChannel" class="topbar-channel" style="display:none">
     <span style="font-family:'DM Mono',monospace;color:var(--coral)">#</span>
@@ -300,9 +389,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);heig
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-workspace">
-        <div class="ws-icon">E</div>
-        <span>Staff</span>
+        <div class="ws-icon" style="font-size:.6rem;font-family:'DM Mono',monospace;font-weight:700;letter-spacing:-.02em">ESC</div>
+        <span class="esc-logo">elaborate <em>staff</em></span>
       </div>
+    </div>
+    <div class="search-bar-wrap">
+      <span class="search-icon-abs">🔍</span>
+      <input class="search-bar" id="searchBar" type="text" placeholder="Search messages…"
+        oninput="handleSearch(this.value)"
+        onkeydown="if(event.key==='Escape'){this.value='';handleSearch('')}"/>
     </div>
     <div class="sidebar-scroll" id="sidebarScroll">
       <div class="sidebar-section">
@@ -313,13 +408,35 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);heig
 
       <div class="sidebar-section" style="margin-top:8px">Online</div>
       <div id="onlineList" style="padding:0 6px"></div>
+
+      <div class="sidebar-section" style="margin-top:8px">
+        Direct Messages
+        <button class="sidebar-section-add" onclick="openDMPicker()" title="New DM">＋</button>
+      </div>
+      <div id="dmList" style="padding:0 6px"></div>
+    </div>
+    <!-- Status menu -->
+    <div class="status-menu" id="statusMenu">
+      <div class="status-opt" onclick="setStatus('active')"><span class="status-dot active"></span> Active</div>
+      <div class="status-opt" onclick="setStatus('busy')"><span class="status-dot busy"></span> Busy</div>
+      <div class="status-opt" onclick="setStatus('away')"><span class="status-dot away"></span> Away</div>
+      <div class="status-custom-wrap">
+        <input class="status-custom-input" id="statusMsgInput" placeholder="Set a status message…" maxlength="60"
+          onkeydown="if(event.key==='Enter'){saveStatusMsg();document.getElementById('statusMenu').classList.remove('open')}"/>
+      </div>
     </div>
     <div class="sidebar-footer">
-      <div class="sf-av" id="sfAv"></div>
+      <div class="sf-av" id="sfAv" style="position:relative">
+        <div class="status-dot active" id="myStatusDot" style="position:absolute;bottom:-1px;right:-1px;border:2px solid var(--s1)"></div>
+      </div>
       <div class="sf-name">
         <div class="sf-display" id="sfDisplay">—</div>
-        <div class="sf-rank" id="sfRank">—</div>
+        <div class="sf-rank" id="sfRank" style="display:flex;align-items:center;gap:5px">
+          <span id="sfRankLabel">—</span>
+          <span id="sfStatusMsg" style="color:var(--faint);font-style:italic;font-size:.56rem"></span>
+        </div>
       </div>
+      <button class="sf-btn" onclick="toggleStatusMenu()" title="Set status">◉</button>
       <a href="/admin.html" class="sf-btn" title="Admin Portal">⚙</a>
     </div>
   </aside>
@@ -492,14 +609,19 @@ function renderOnline(list) {
   el.innerHTML = list.map(p => {
     const ri = STAFF_RANKS[p.rank]||STAFF_RANKS.jr_admin;
     const isMe = p.uid === me?.uid;
-    return `<div style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;margin-bottom:1px">
+    const status = p.status || 'active';
+    const statusColors = {active:'#22c55e', busy:'#FF5733', away:'#F4C542', offline:'#555'};
+    const statusDotColor = statusColors[status]||'#22c55e';
+    return `<div onclick="${isMe?'':'openDM(\''+p.uid+'\',\''+esc(p.displayName||'')+'\')'}"
+      style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;margin-bottom:1px;cursor:${isMe?'default':'pointer'};transition:background .12s"
+      onmouseover="if(!${isMe})this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'">
       <div style="position:relative;flex-shrink:0">
-        <div style="width:26px;height:26px;border-radius:7px;background:${p.color};display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.65rem;color:#fff">${(p.displayName||'?')[0].toUpperCase()}</div>
-        <div style="position:absolute;bottom:-1px;right:-1px;width:7px;height:7px;border-radius:50%;background:#22c55e;border:1.5px solid var(--s1)"></div>
+        <div style="width:26px;height:26px;border-radius:7px;background:${p.color||uidColor(p.uid||'')};display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.65rem;color:#fff">${(p.displayName||'?')[0].toUpperCase()}</div>
+        <div style="position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;background:${statusDotColor};border:1.5px solid var(--s1)"></div>
       </div>
-      <div style="min-width:0">
+      <div style="min-width:0;flex:1">
         <div style="font-size:.8rem;font-weight:${isMe?700:500};color:${isMe?'var(--txt)':'rgba(240,238,248,.7)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.displayName||'?')}${isMe?' <span style="color:var(--faint);font-size:.7rem">(you)</span>':''}</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--faint)">${ri.label}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--faint)">${ri.label}${p.statusMsg?' · '+esc(p.statusMsg):''}</div>
       </div>
     </div>`;
   }).join('');
@@ -516,16 +638,19 @@ function initUI() {
   // Sidebar footer
   const sfAv = document.getElementById('sfAv');
   sfAv.textContent = (me.displayName[0]||'?').toUpperCase();
-  sfAv.style.cssText = `background:${me.color};color:#fff;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.78rem;flex-shrink:0`;
+  sfAv.style.cssText = `background:${me.color};color:#fff;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.78rem;flex-shrink:0;position:relative`;
   document.getElementById('sfDisplay').textContent = me.displayName;
   const ri = STAFF_RANKS[me.rank]||STAFF_RANKS.jr_admin;
-  document.getElementById('sfRank').textContent = ri.label;
+  const sfRankEl = document.getElementById('sfRankLabel');
+  if (sfRankEl) sfRankEl.textContent = ri.label;
+  else document.getElementById('sfRank').textContent = ri.label;
 
   // Only Sr Admin+ can create channels
   const canCreate = ['owner','sr_admin','admin'].includes(me.rank);
   document.getElementById('addChannelBtn').style.display = canCreate ? 'flex' : 'none';
 
   watchPresence();
+  renderDMList();
 }
 
 /* ══ CHANNELS ══ */
@@ -577,18 +702,33 @@ async function openChannel(chId) {
   document.getElementById('topbarChName').textContent = ch.name;
 
   // Render main area
-  const canPost = !ch.locked || ['owner','sr_admin'].includes(me.rank);
+  const canPost = !ch.locked || ['owner','sr_admin','admin'].includes(me.rank);
+  const canEditDesc = ['owner','sr_admin','admin'].includes(me.rank);
   document.getElementById('mainArea').innerHTML = `
     <div class="ch-header">
       <span class="ch-header-hash">#</span>
       <span class="ch-header-name">${esc(ch.name)}</span>
-      ${ch.desc?`<div class="ch-header-sep"></div><span class="ch-header-desc">${esc(ch.desc)}</span>`:''}
-      <div class="ch-header-actions" style="margin-left:auto">
+      ${ch.desc?`<div class="ch-header-sep"></div><span class="ch-header-desc" id="chDescSpan"${canEditDesc?' onclick="editChannelDesc()" title="Click to edit" style="cursor:pointer"':''}>${esc(ch.desc)}</span>`:''}
+      <div class="ch-header-actions" style="margin-left:auto;display:flex;align-items:center;gap:6px">
         ${(ch.pinned&&ch.pinned.length)?`<button class="ch-action-btn" onclick="togglePinned()" id="pinnedBtn">📌 ${ch.pinned.length} pinned</button>`:''}
+        <button class="ch-action-btn" onclick="toggleSearchPanel()">🔍 Search</button>
       </div>
     </div>
+    <div id="searchPanel" style="display:none;padding:10px 20px 4px;flex-shrink:0;border-bottom:1px solid var(--border)">
+      <div style="position:relative">
+        <input id="chSearchInput" type="text" placeholder="Search in #${esc(ch.name)}…"
+          style="width:100%;padding:9px 14px 9px 36px;border-radius:9px;border:1.5px solid var(--border);background:var(--s2);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none"
+          oninput="searchChannel(this.value)"
+          onkeydown="if(event.key==='Escape')toggleSearchPanel()"/>
+        <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:.82rem;pointer-events:none">🔍</span>
+      </div>
+      <div id="chSearchResults" style="margin-top:6px;max-height:200px;overflow-y:auto;border-radius:8px;border:1px solid var(--border);background:var(--s2);display:none"></div>
+    </div>
     <div class="msgs-wrap" id="msgsWrap"></div>
-    <div class="compose-wrap" ${canPost?'':'style="display:none"'}>
+    <div class="typing-wrap" id="typingWrap"></div>
+    <button class="jump-btn" id="jumpBtn" onclick="scrollToBottom()">↓ Jump to latest</button>
+    <div class="compose-wrap" ${canPost?'':'style="display:none"'} style="position:relative">
+      <div class="mention-dropdown" id="mentionDropdown"></div>
       <div class="compose-box">
         <div class="compose-reply-bar" id="replyBar">
           <span style="font-size:.75rem;color:var(--faint)">Replying to</span>
@@ -596,22 +736,18 @@ async function openChannel(chId) {
           <button class="compose-reply-close" onclick="clearReply()">✕</button>
         </div>
         <textarea class="compose-input" id="composeInput"
-          placeholder="Message #${esc(ch.name)}"
-          oninput="autosize(this);handleMentionInput(this)"
+          placeholder="Message #${esc(ch.name)}  —  @ to mention"
+          oninput="autosize(this);handleMentionInput(this);handleTyping()"
           onkeydown="handleComposeKey(event)"></textarea>
         <div class="compose-toolbar">
           <button class="ct-btn" onclick="toggleEmojiCompose()" title="Emoji">😊</button>
-          <button class="compose-send" onclick="sendMessage()" id="sendBtn">
-            Send <span style="font-size:.8rem;opacity:.6">↵</span>
-          </button>
+          <span style="font-size:.68rem;color:var(--faint);margin-left:6px"><span class="kbd">↵</span> send &nbsp;<span class="kbd">⇧↵</span> newline</span>
+          <button class="compose-send" onclick="sendMessage()" id="sendBtn">Send <span style="font-size:.8rem;opacity:.6">↵</span></button>
         </div>
       </div>
     </div>
-    ${!canPost?`<div style="padding:14px 20px;text-align:center;font-size:.8rem;color:var(--faint);border-top:1px solid var(--border)">🔒 Only Sr. Admins and above can post in #${esc(ch.name)}</div>`:''}
-    <!-- Pinned panel -->
+    ${!canPost?`<div style="padding:14px 20px;text-align:center;font-size:.8rem;color:var(--faint);border-top:1px solid var(--border)">🔒 Only Admins and above can post in #${esc(ch.name)}</div>`:''}
     <div class="pinned-panel" id="pinnedPanel" style="position:relative"></div>
-    <!-- Emoji tray anchor -->
-    <div id="emojiAnchor" style="position:relative"></div>
   `;
 
   // Messages listener
@@ -621,6 +757,22 @@ async function openChannel(chId) {
     const msgs = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderMessages(msgs, ch);
   });
+
+  // Scroll → jump button
+  setTimeout(() => {
+    const wrap = document.getElementById('msgsWrap');
+    if (wrap) {
+      wrap.addEventListener('scroll', () => {
+        const btn = document.getElementById('jumpBtn');
+        if (!btn) return;
+        const atBottom = wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 120;
+        btn.classList.toggle('show', !atBottom);
+      });
+    }
+  }, 300);
+
+  // Typing listener for this channel
+  watchTyping(chId);
 }
 window.openChannel = openChannel;
 
@@ -1062,6 +1214,433 @@ function toast(msg, dur=3000) {
   setTimeout(()=>t.remove(), dur);
 }
 window.toast = toast;
+
+/* ══ SCROLL TO BOTTOM ══ */
+window.scrollToBottom = function() {
+  const wrap = document.getElementById('msgsWrap');
+  if (wrap) { wrap.scrollTop = wrap.scrollHeight; }
+  const btn = document.getElementById('jumpBtn');
+  if (btn) btn.classList.remove('show');
+};
+
+/* ══ SEARCH ══ */
+window.toggleSearchPanel = function() {
+  const panel = document.getElementById('searchPanel');
+  if (!panel) return;
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  if (open) { document.getElementById('chSearchInput')?.focus(); }
+  else {
+    document.getElementById('chSearchResults').style.display = 'none';
+    document.getElementById('chSearchInput').value = '';
+  }
+};
+
+window.searchChannel = async function(val) {
+  const el = document.getElementById('chSearchResults');
+  if (!el || !activeChId) return;
+  if (!val.trim()) { el.style.display = 'none'; return; }
+  const q = query(collection(db,'staffChannels',activeChId,'messages'), orderBy('createdAt','asc'), limit(200));
+  const snap = await getDocs(q);
+  const lower = val.toLowerCase();
+  const results = snap.docs
+    .map(d=>({id:d.id,...d.data()}))
+    .filter(m => !m.deleted && (m.text||'').toLowerCase().includes(lower));
+  if (!results.length) {
+    el.style.display = 'block';
+    el.innerHTML = '<div style="padding:12px 16px;font-size:.82rem;color:var(--muted)">No results.</div>';
+    return;
+  }
+  const highlight = txt => esc(txt).replace(new RegExp(esc(val).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'), m=>`<mark class="search-highlight">${m}</mark>`);
+  el.style.display = 'block';
+  el.innerHTML = results.slice(0,20).map(m => {
+    const time = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+    return `<div class="search-result-item" onclick="jumpToMsg('${m.id}')">
+      <div class="search-result-author" style="color:${uidColor(m.authorUid||'')}">${esc(m.authorName||'?')}</div>
+      <div class="search-result-text">${highlight((m.text||'').slice(0,120))}</div>
+      <div class="search-result-time">${time}</div>
+    </div>`;
+  }).join('');
+};
+
+window.jumpToMsg = function(msgId) {
+  const el = document.getElementById('msg_'+msgId);
+  if (el) {
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.style.background = 'rgba(255,87,51,.1)';
+    setTimeout(()=>{ el.style.background=''; }, 1500);
+  }
+  toggleSearchPanel();
+};
+
+/* ══ TYPING INDICATOR ══ */
+let typingTimeout = null;
+let typingUnsub = null;
+
+window.handleTyping = function() {
+  if (!me || !activeChId) return;
+  setDoc(doc(db,'staffTyping',activeChId+'_'+me.uid), {
+    uid: me.uid, name: me.displayName,
+    channelId: activeChId, at: serverTimestamp(),
+  }, {merge:true});
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => {
+    deleteDoc(doc(db,'staffTyping',activeChId+'_'+me.uid)).catch(()=>{});
+  }, 3000);
+};
+
+function watchTyping(chId) {
+  if (typingUnsub) { typingUnsub(); typingUnsub = null; }
+  const q = query(collection(db,'staffTyping'), where('channelId','==',chId));
+  typingUnsub = onSnapshot(q, snap => {
+    const typers = snap.docs
+      .map(d=>d.data())
+      .filter(t => t.uid !== me?.uid && t.at?.toDate && (Date.now()-t.at.toDate().getTime()) < 5000);
+    const el = document.getElementById('typingWrap');
+    if (!el) return;
+    if (!typers.length) { el.innerHTML = ''; return; }
+    const names = typers.map(t=>t.name.split(' ')[0]).join(', ');
+    el.innerHTML = `<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div> <span>${esc(names)} ${typers.length===1?'is':'are'} typing…</span>`;
+  });
+}
+
+/* ══ STATUS ══ */
+let myStatus = 'active';
+
+window.toggleStatusMenu = function() {
+  const m = document.getElementById('statusMenu');
+  if (!m) return;
+  m.classList.toggle('open');
+  if (m.classList.contains('open')) {
+    document.getElementById('statusMsgInput').value = me?.statusMsg || '';
+    setTimeout(() => document.addEventListener('click', function h(e){
+      if (!m.contains(e.target) && e.target.title !== 'Set status') {
+        m.classList.remove('open');
+        document.removeEventListener('click',h);
+      }
+    }), 50);
+  }
+};
+
+window.setStatus = async function(status) {
+  myStatus = status;
+  const dot = document.getElementById('myStatusDot');
+  if (dot) { dot.className = 'status-dot '+status; dot.style.cssText = 'position:absolute;bottom:-1px;right:-1px;border:2px solid var(--s1)'; }
+  if (me) {
+    me.status = status;
+    await setDoc(doc(db,'staffPresence',me.uid), { status, lastSeen: serverTimestamp() }, {merge:true});
+  }
+  document.getElementById('statusMenu')?.classList.remove('open');
+  toast('Status set to '+status);
+};
+
+window.saveStatusMsg = async function() {
+  const msg = document.getElementById('statusMsgInput')?.value.trim() || '';
+  if (me) {
+    me.statusMsg = msg;
+    await setDoc(doc(db,'staffPresence',me.uid), { statusMsg: msg }, {merge:true});
+    document.getElementById('sfStatusMsg').textContent = msg ? '· '+msg : '';
+  }
+};
+
+/* ══ @MENTION DROPDOWN (real) ══ */
+let mentionQuery = null;
+let mentionSelectedIdx = -1;
+
+window.handleMentionInput = function(input) {
+  const val = input.value;
+  const cursor = input.selectionStart;
+  const before = val.slice(0, cursor);
+  const match = before.match(/@(\w*)$/);
+  const dropdown = document.getElementById('mentionDropdown');
+  if (!dropdown) return;
+  if (!match) { dropdown.classList.remove('open'); mentionQuery=null; return; }
+  mentionQuery = match[1].toLowerCase();
+  const filtered = staffMembers.filter(s =>
+    (s.displayName||s.email||'').toLowerCase().includes(mentionQuery) && s.uid !== me?.uid
+  ).slice(0,6);
+  if (!filtered.length) { dropdown.classList.remove('open'); return; }
+  mentionSelectedIdx = -1;
+  dropdown.innerHTML = filtered.map((s,i) => {
+    const ri = STAFF_RANKS[s.rank||'jr_admin']||STAFF_RANKS.jr_admin;
+    return `<div class="mention-opt" data-name="${esc(s.displayName||s.email||'')}" data-idx="${i}">
+      <div class="mention-av" style="background:${uidColor(s.uid)};color:#fff">${(s.displayName||'?')[0].toUpperCase()}</div>
+      <span class="mention-name">${esc(s.displayName||s.email||'?')}</span>
+      <span class="mention-rank">${ri.label}</span>
+    </div>`;
+  }).join('');
+  dropdown.querySelectorAll('.mention-opt').forEach(opt => {
+    opt.addEventListener('click', () => insertMention(opt.dataset.name));
+  });
+  dropdown.classList.add('open');
+};
+
+function insertMention(name) {
+  const input = document.getElementById('composeInput');
+  if (!input) return;
+  const val = input.value;
+  const cursor = input.selectionStart;
+  const before = val.slice(0, cursor);
+  const after  = val.slice(cursor);
+  const newBefore = before.replace(/@(\w*)$/, '@'+name+' ');
+  input.value = newBefore + after;
+  input.focus();
+  const pos = newBefore.length;
+  input.setSelectionRange(pos, pos);
+  document.getElementById('mentionDropdown')?.classList.remove('open');
+  mentionQuery = null;
+}
+
+// Handle arrow keys in compose for mention dropdown
+const origComposeKey = window.handleComposeKey;
+window.handleComposeKey = function(e) {
+  const dropdown = document.getElementById('mentionDropdown');
+  if (dropdown?.classList.contains('open')) {
+    const opts = dropdown.querySelectorAll('.mention-opt');
+    if (e.key === 'ArrowDown') { e.preventDefault(); mentionSelectedIdx=Math.min(mentionSelectedIdx+1,opts.length-1); opts.forEach((o,i)=>o.classList.toggle('selected',i===mentionSelectedIdx)); return; }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); mentionSelectedIdx=Math.max(mentionSelectedIdx-1,0); opts.forEach((o,i)=>o.classList.toggle('selected',i===mentionSelectedIdx)); return; }
+    if (e.key === 'Enter' && mentionSelectedIdx >= 0) { e.preventDefault(); insertMention(opts[mentionSelectedIdx]?.dataset.name||''); return; }
+    if (e.key === 'Escape') { dropdown.classList.remove('open'); return; }
+  }
+  if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+};
+
+/* ══ DIRECT MESSAGES ══ */
+let activeDmUid = null;
+let dmUnsub = null;
+
+window.openDMPicker = function() {
+  // Show a quick picker of online staff
+  const online = Object.values(staffMembers).filter(s => s.uid !== me?.uid);
+  if (!online.length) { toast('No other staff members found.'); return; }
+  const existing = document.getElementById('dmPickerModal');
+  if (existing) { existing.remove(); return; }
+  const modal = document.createElement('div');
+  modal.id = 'dmPickerModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center';
+  modal.innerHTML = `<div style="background:var(--s2);border:1px solid var(--border2);border-radius:14px;padding:22px;width:320px;max-height:400px;overflow-y:auto">
+    <div style="font-family:Fraunces,serif;font-weight:900;font-size:1.05rem;color:var(--txt);margin-bottom:14px">Open a Direct Message</div>
+    ${online.map(s => `<div onclick="openDM('${s.uid}','${esc(s.displayName||s.email||'')}');document.getElementById('dmPickerModal').remove()"
+      style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;cursor:pointer;transition:background .12s"
+      onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background='transparent'">
+      <div style="width:28px;height:28px;border-radius:8px;background:${uidColor(s.uid)};color:#fff;display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.72rem">${(s.displayName||'?')[0].toUpperCase()}</div>
+      <div>
+        <div style="font-size:.84rem;font-weight:600;color:var(--txt)">${esc(s.displayName||s.email||'?')}</div>
+        <div style="font-family:DM Mono,monospace;font-size:.6rem;color:var(--faint)">${(STAFF_RANKS[s.rank||'jr_admin']||STAFF_RANKS.jr_admin).label}</div>
+      </div>
+    </div>`).join('')}
+    <button onclick="document.getElementById('dmPickerModal').remove()" style="margin-top:10px;width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:DM Sans,sans-serif;cursor:pointer">Cancel</button>
+  </div>`;
+  modal.addEventListener('click', e => { if (e.target===modal) modal.remove(); });
+  document.body.appendChild(modal);
+};
+
+window.openDM = async function(uid, name) {
+  activeDmUid = uid;
+  activeChId = null;
+  closeThread();
+
+  // DM thread ID = sorted UIDs joined
+  const dmId = [me.uid, uid].sort().join('_');
+
+  // Deactivate channels
+  document.querySelectorAll('.ch-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.dm-item').forEach(el => el.classList.toggle('active', el.dataset.uid===uid));
+
+  document.getElementById('topbarChannel').style.display = 'flex';
+  document.getElementById('topbarChName').textContent = name;
+
+  document.getElementById('mainArea').innerHTML = `
+    <div class="ch-header">
+      <div style="width:28px;height:28px;border-radius:8px;background:${uidColor(uid)};color:#fff;display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.75rem;flex-shrink:0">${(name||'?')[0].toUpperCase()}</div>
+      <span class="ch-header-name" style="margin-left:6px">${esc(name)}</span>
+      <span style="font-family:DM Mono,monospace;font-size:.65rem;color:var(--faint);margin-left:8px">Direct Message</span>
+    </div>
+    <div class="msgs-wrap" id="msgsWrap"></div>
+    <div class="typing-wrap" id="typingWrap"></div>
+    <div class="compose-wrap" style="position:relative">
+      <div class="compose-box">
+        <textarea class="compose-input" id="composeInput"
+          placeholder="Message ${esc(name)}"
+          oninput="autosize(this);handleTypingDM('${dmId}')"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendDM('${dmId}','${esc(name)}')}"></textarea>
+        <div class="compose-toolbar">
+          <button class="ct-btn" onclick="toggleEmojiCompose()" title="Emoji">😊</button>
+          <button class="compose-send" onclick="sendDM('${dmId}','${esc(name)}')">Send ↵</button>
+        </div>
+      </div>
+    </div>`;
+
+  // Listen to DM messages
+  if (dmUnsub) dmUnsub();
+  const q = query(collection(db,'staffDMs',dmId,'messages'), orderBy('createdAt','asc'), limit(200));
+  dmUnsub = onSnapshot(q, snap => {
+    renderDMMessages(snap.docs.map(d=>({id:d.id,...d.data()})), name, uid);
+  });
+
+  // Ensure DM doc exists
+  await setDoc(doc(db,'staffDMs',dmId), {
+    participants: [me.uid, uid],
+    participantNames: {[me.uid]: me.displayName, [uid]: name},
+    lastActivity: serverTimestamp(),
+  }, {merge:true});
+
+  renderDMList();
+};
+
+function renderDMMessages(msgs, otherName, otherUid) {
+  const wrap = document.getElementById('msgsWrap');
+  if (!wrap) return;
+  const wasAtBottom = wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 60;
+  if (!msgs.length) {
+    wrap.innerHTML = `<div class="ch-empty">
+      <div class="ch-empty-icon" style="font-size:2rem">💬</div>
+      <h3>Start a conversation</h3>
+      <p>This is the beginning of your direct message history with ${esc(otherName)}.</p>
+    </div>`;
+    return;
+  }
+  let html = '', lastAuthor = null, lastTime = null;
+  msgs.forEach(m => {
+    const ts = m.createdAt?.toDate ? m.createdAt.toDate() : new Date();
+    const timeStr = ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    const isMine = m.senderUid === me?.uid;
+    const timeDiff = lastTime ? (ts-lastTime)/1000 : 999;
+    const isCont = m.senderUid === lastAuthor && timeDiff < 300;
+    const authorColor = isMine ? me.color : uidColor(otherUid);
+    const authorName = isMine ? me.displayName : otherName;
+    lastAuthor = m.senderUid; lastTime = ts;
+    html += `<div class="msg-row ${isCont?'continuation':''}">
+      ${isCont
+        ? `<div class="msg-av-wrap"><span class="msg-ts-hover">${timeStr.split(' ')[0]}</span></div>`
+        : `<div class="msg-av-wrap"><div class="msg-av" style="background:${authorColor};color:#fff">${(authorName||'?')[0].toUpperCase()}</div></div>`
+      }
+      <div class="msg-body">
+        ${!isCont?`<div class="msg-header"><span class="msg-author" style="color:${authorColor}">${esc(authorName)}</span><span class="msg-time">${timeStr}</span></div>`:''}
+        <span class="msg-text">${formatText(m.text||'')}</span>
+      </div>
+    </div>`;
+  });
+  wrap.innerHTML = html;
+  if (wasAtBottom) wrap.scrollTop = wrap.scrollHeight;
+}
+
+window.sendDM = async function(dmId, otherName) {
+  const input = document.getElementById('composeInput');
+  const text = (input?.value||'').trim();
+  if (!text || !me) return;
+  input.value = ''; input.style.height = '';
+  await addDoc(collection(db,'staffDMs',dmId,'messages'), {
+    text, senderUid: me.uid, senderName: me.displayName,
+    createdAt: serverTimestamp(),
+  });
+  await updateDoc(doc(db,'staffDMs',dmId), {lastActivity:serverTimestamp(), lastMsg:text.slice(0,60), lastSender:me.displayName});
+};
+
+window.handleTypingDM = function(dmId) {
+  // Reuse typing logic for DMs
+  if (!me) return;
+  setDoc(doc(db,'staffTyping','dm_'+dmId+'_'+me.uid), {
+    uid:me.uid, name:me.displayName, channelId:'dm_'+dmId, at:serverTimestamp()
+  },{merge:true});
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(()=>deleteDoc(doc(db,'staffTyping','dm_'+dmId+'_'+me.uid)).catch(()=>{}), 3000);
+};
+
+async function renderDMList() {
+  // Show recent DMs in sidebar
+  const el = document.getElementById('dmList');
+  if (!el || !me) return;
+  try {
+    const snap = await getDocs(query(collection(db,'staffDMs'), where('participants','array-contains',me.uid)));
+    if (snap.empty) { el.innerHTML = ''; return; }
+    const dms = snap.docs.map(d=>({id:d.id,...d.data()}))
+      .sort((a,b)=>(b.lastActivity?.seconds||0)-(a.lastActivity?.seconds||0));
+    el.innerHTML = dms.map(dm => {
+      const otherUid = (dm.participants||[]).find(p=>p!==me.uid)||'';
+      const otherName = (dm.participantNames||{})[otherUid] || 'Unknown';
+      const isActive = activeDmUid === otherUid;
+      return `<div class="dm-item ${isActive?'active':''}" data-uid="${esc(otherUid)}" onclick="openDM('${esc(otherUid)}','${esc(otherName)}')">
+        <div class="dm-av" style="background:${uidColor(otherUid)};color:#fff">${(otherName||'?')[0].toUpperCase()}</div>
+        <span class="dm-name">${esc(otherName)}</span>
+      </div>`;
+    }).join('');
+  } catch(e) {}
+}
+
+/* ══ CHANNEL DESCRIPTION EDIT ══ */
+window.editChannelDesc = function() {
+  const span = document.getElementById('chDescSpan');
+  if (!span) return;
+  const current = span.textContent;
+  const input = document.createElement('input');
+  input.className = 'ch-desc-edit';
+  input.value = current;
+  input.addEventListener('blur', async () => {
+    const newDesc = input.value.trim();
+    if (newDesc !== current && activeChId) {
+      await updateDoc(doc(db,'staffChannels',activeChId), {desc:newDesc});
+      toast('Channel description updated.');
+    }
+    input.replaceWith(span);
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key==='Enter') input.blur();
+    if (e.key==='Escape') { input.value=current; input.blur(); }
+  });
+  span.replaceWith(input);
+  input.focus(); input.select();
+};
+
+/* ══ KEYBOARD SHORTCUTS ══ */
+document.addEventListener('keydown', e => {
+  // Ctrl/Cmd+F → search
+  if ((e.ctrlKey||e.metaKey) && e.key==='f' && activeChId) {
+    e.preventDefault();
+    toggleSearchPanel();
+    return;
+  }
+  // Ctrl/Cmd+K → channel switcher (focus sidebar search)
+  if ((e.ctrlKey||e.metaKey) && e.key==='k') {
+    e.preventDefault();
+    const sb = document.getElementById('searchBar');
+    if (sb) { sb.focus(); sb.select(); }
+    return;
+  }
+  // Escape → close open panels
+  if (e.key==='Escape') {
+    document.getElementById('mentionDropdown')?.classList.remove('open');
+    if (emojiTray) { emojiTray.remove(); emojiTray=null; }
+  }
+});
+
+/* ══ SIDEBAR CHANNEL SEARCH ══ */
+window.handleSearch = function(val) {
+  const lower = val.toLowerCase().trim();
+  document.querySelectorAll('.ch-item').forEach(el => {
+    const name = el.querySelector('.ch-name')?.textContent?.toLowerCase()||'';
+    el.style.display = (!lower || name.includes(lower)) ? '' : 'none';
+  });
+};
+
+/* ══ UNREAD TRACKING ══ */
+const lastReadTimes = {};
+function markChannelRead(chId) {
+  lastReadTimes[chId] = Date.now();
+  try { localStorage.setItem('esc_read_'+chId, Date.now()); } catch(e){}
+  const badge = document.getElementById('badge_'+chId);
+  if (badge) badge.style.display = 'none';
+  const item = document.getElementById('chitem_'+chId);
+  if (item) item.classList.remove('unread');
+}
+
+// Override openChannel to mark as read
+const _origOpenChannel = window.openChannel;
+window.openChannel = function(chId) {
+  markChannelRead(chId);
+  _origOpenChannel(chId);
+};
+
 </script>
 </body>
 </html>
