@@ -647,7 +647,11 @@ onAuthStateChanged(auth, async user => {
     statusMsg: '',
   };
   initUI();
-  await bootstrapCollections();
+  try {
+    await bootstrapCollections();
+  } catch(e) {
+    return; // Error message already shown in bootstrapCollections
+  }
   loadAll();
   setPresence(true);
   loadStaffMembers();
@@ -697,31 +701,46 @@ function initUI() {
 
 /* ══ BOOTSTRAP ══ */
 async function bootstrapCollections() {
-  // Categories
-  for (const cat of DEFAULT_CATEGORIES) {
-    const ref = doc(db,'escCategories',cat.id);
-    if (!(await getDoc(ref)).exists()) await setDoc(ref, {...cat, createdAt:serverTimestamp()});
-  }
-  // Channels
-  for (const ch of DEFAULT_CHANNELS) {
-    const ref = doc(db,'escChannels',ch.id);
-    if (!(await getDoc(ref)).exists()) await setDoc(ref, {...ch, pinned:[], createdAt:serverTimestamp()});
-  }
-  // Global permissions
-  const permRef = doc(db,'escSettings','permissions');
-  if (!(await getDoc(permRef)).exists()) {
-    const defaults = {};
-    PERMISSIONS.forEach(p => {
-      defaults[p.id] = {
-        owner:true, sr_admin:true, admin:true,
-        mod: ['send_messages','pin_messages','manage_messages'].includes(p.id),
-        jr_admin: p.id==='send_messages',
-        developer: ['send_messages','pin_messages'].includes(p.id),
-        marketing: p.id==='send_messages',
-        trainee: false,
-      };
-    });
-    await setDoc(permRef, defaults);
+  try {
+    // Categories
+    for (const cat of DEFAULT_CATEGORIES) {
+      const ref = doc(db,'escCategories',cat.id);
+      if (!(await getDoc(ref)).exists()) await setDoc(ref, {...cat, createdAt:serverTimestamp()});
+    }
+    // Channels
+    for (const ch of DEFAULT_CHANNELS) {
+      const ref = doc(db,'escChannels',ch.id);
+      if (!(await getDoc(ref)).exists()) await setDoc(ref, {...ch, pinned:[], createdAt:serverTimestamp()});
+    }
+    // Global permissions
+    const permRef = doc(db,'escSettings','permissions');
+    if (!(await getDoc(permRef)).exists()) {
+      const defaults = {};
+      PERMISSIONS.forEach(p => {
+        defaults[p.id] = {
+          owner:true, sr_admin:true, admin:true,
+          mod: ['send_messages','pin_messages','manage_messages'].includes(p.id),
+          jr_admin: p.id==='send_messages',
+          developer: ['send_messages','pin_messages'].includes(p.id),
+          marketing: p.id==='send_messages',
+          trainee: false,
+        };
+      });
+      await setDoc(permRef, defaults);
+    }
+  } catch(e) {
+    console.error('Bootstrap error:', e);
+    // Show error in main area instead of infinite spinner
+    document.getElementById('main').innerHTML = `
+      <div class="auth-gate">
+        <div style="font-size:2.5rem;opacity:.4">⚠️</div>
+        <h2>Setup Error</h2>
+        <p>Could not initialize the workspace. This usually means Firestore rules haven't been deployed yet.</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.75rem;background:rgba(255,87,51,.1);padding:8px 14px;border-radius:8px;color:var(--coral);margin-top:8px">${e.message}</p>
+        <p style="margin-top:12px">Deploy the updated <strong>firestore.rules</strong> to Firebase Console, then reload this page.</p>
+        <a href="/admin.html">← Admin Portal</a>
+      </div>`;
+    throw e;
   }
 }
 
