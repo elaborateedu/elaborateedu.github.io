@@ -2,495 +2,562 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Elaborate Staff Connect</title>
 <link rel="icon" type="image/png" href="/favicon.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,300&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0D1B2A;--coral:#FF5733;--gold:#F4C542;--sage:#7DBE8E;--lav:#A78BFA;--sky:#38BDF8;--pink:#F472B6;
+  --coral:#FF5733;--gold:#F4C542;--sage:#7DBE8E;--lav:#A78BFA;--sky:#38BDF8;--pink:#F472B6;
   --bg:#07070D;--s1:#0F0F18;--s2:#141420;--s3:#1A1A28;--s4:#202030;
-  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.11);
-  --txt:#F0EEF8;--muted:rgba(240,238,248,.45);--faint:rgba(240,238,248,.2);
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --txt:#F0EEF8;--muted:rgba(240,238,248,.45);--faint:rgba(240,238,248,.18);
 }
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);height:100vh;overflow:hidden;display:flex;flex-direction:column;-webkit-tap-highlight-color:transparent}
 
-/* ══ TOP BAR ══ */
-.topbar{
-  height:52px;background:var(--s1);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;
-  position:relative;z-index:50;
-}
-.topbar-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;letter-spacing:-.02em;color:var(--txt);white-space:nowrap}
-.topbar-logo span{color:var(--coral)}
-.topbar-divider{width:1px;height:20px;background:var(--border2);flex-shrink:0}
-.topbar-channel{font-weight:700;font-size:.9rem;color:var(--txt);display:flex;align-items:center;gap:6px}
-.topbar-channel-desc{font-size:.78rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px}
-.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
-.topbar-btn{width:32px;height:32px;border-radius:8px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .15s}
-.topbar-btn:hover{background:rgba(255,255,255,.07);color:var(--txt)}
-.topbar-avatar{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.72rem;flex-shrink:0;cursor:pointer;border:1.5px solid transparent;transition:all .15s}
-.topbar-avatar:hover{border-color:var(--border2)}
-.topbar-name{font-size:.8rem;color:var(--muted);white-space:nowrap}
+/* ── TOPBAR ── */
+.topbar{height:48px;background:var(--s1);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:50}
+.topbar-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1rem;letter-spacing:-.02em;color:var(--txt)}
+.topbar-logo em{font-style:italic;font-weight:300;color:var(--coral)}
+.topbar-sep{width:1px;height:16px;background:var(--border2)}
+.topbar-ch{font-weight:700;font-size:.88rem;color:var(--txt);display:flex;align-items:center;gap:5px}
+.topbar-desc{font-size:.76rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:280px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.topbar-av{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.68rem;cursor:pointer}
+.topbar-name{font-size:.78rem;color:var(--muted)}
 
-/* ══ SHELL ══ */
-.shell{display:flex;flex:1;overflow:hidden}
+/* ── SHELL ── */
+.shell{display:flex;flex:1;overflow:hidden;min-height:0}
 
-/* ══ SIDEBAR ══ */
-.sidebar{
-  width:220px;flex-shrink:0;background:var(--s1);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;overflow:hidden;
-}
-.sidebar-header{
-  padding:16px 14px 10px;
-  font-family:'Fraunces',serif;font-weight:900;font-size:1rem;color:var(--txt);
-  letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;border-bottom:1px solid var(--border);
-}
-.sidebar-workspace{display:flex;align-items:center;gap:8px}
-.ws-icon{width:26px;height:26px;border-radius:6px;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:.75rem;font-weight:900;color:#fff;flex-shrink:0}
-.sidebar-scroll{flex:1;overflow-y:auto;padding:8px 0;scrollbar-width:none}
-.sidebar-scroll::-webkit-scrollbar{display:none}
-.sidebar-section{padding:14px 14px 4px;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;justify-content:space-between}
-.sidebar-section-add{width:18px;height:18px;border-radius:5px;border:none;background:transparent;color:var(--faint);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.sidebar-section-add:hover{background:rgba(255,255,255,.07);color:var(--txt)}
-.ch-item{
-  display:flex;align-items:center;gap:8px;padding:5px 10px 5px 14px;
-  cursor:pointer;border-radius:6px;margin:1px 6px;transition:all .15s;
-  font-size:.86rem;color:var(--muted);position:relative;
-}
+/* ── SIDEBAR ── */
+.sidebar{width:224px;flex-shrink:0;background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sb-header{padding:0 12px;height:48px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.sb-workspace{display:flex;align-items:center;gap:8px}
+.sb-ws-icon{width:24px;height:24px;border-radius:6px;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.58rem;font-weight:700;color:#fff;flex-shrink:0;letter-spacing:-.02em}
+.sb-ws-name{font-family:'Fraunces',serif;font-weight:900;font-size:.88rem;letter-spacing:-.01em}
+.sb-ws-name em{font-style:italic;font-weight:300;color:var(--coral)}
+.sb-settings-btn{width:26px;height:26px;border-radius:7px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .15s}
+.sb-settings-btn:hover{background:rgba(255,255,255,.07);color:var(--txt)}
+
+.sb-search{padding:8px 10px;flex-shrink:0}
+.sb-search input{width:100%;padding:6px 10px 6px 28px;border-radius:7px;border:1px solid var(--border);background:var(--s2);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.78rem;outline:none;transition:border-color .15s}
+.sb-search input:focus{border-color:rgba(255,255,255,.18)}
+.sb-search{position:relative}
+.sb-search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:.75rem;color:var(--faint);pointer-events:none}
+
+.sb-scroll{flex:1;overflow-y:auto;padding-bottom:8px;scrollbar-width:none}
+.sb-scroll::-webkit-scrollbar{display:none}
+
+/* Category */
+.cat-header{display:flex;align-items:center;gap:4px;padding:10px 10px 4px 10px;cursor:pointer;user-select:none;transition:color .15s}
+.cat-header:hover{color:var(--txt)}
+.cat-arrow{font-size:.65rem;color:var(--faint);transition:transform .2s;flex-shrink:0}
+.cat-header.collapsed .cat-arrow{transform:rotate(-90deg)}
+.cat-name{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cat-header:hover .cat-name{color:rgba(240,238,248,.5)}
+.cat-add{width:16px;height:16px;border-radius:4px;border:none;background:transparent;color:var(--faint);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .12s;flex-shrink:0}
+.cat-add:hover{background:rgba(255,255,255,.08);color:var(--txt)}
+.cat-channels{overflow:hidden;transition:max-height .2s ease}
+.cat-channels.collapsed{max-height:0!important}
+
+/* Channel item */
+.ch-item{display:flex;align-items:center;gap:7px;padding:4px 8px 4px 20px;cursor:pointer;border-radius:5px;margin:1px 6px;transition:all .12s;font-size:.85rem;color:var(--muted);position:relative}
 .ch-item:hover{background:rgba(255,255,255,.05);color:rgba(240,238,248,.75)}
-.ch-item.active{background:rgba(255,87,51,.12);color:var(--txt)}
+.ch-item.active{background:rgba(255,87,51,.1);color:var(--txt)}
 .ch-item.active .ch-hash{color:var(--coral)}
-.ch-hash{font-family:'DM Mono',monospace;font-size:.85rem;color:var(--faint);flex-shrink:0;transition:color .15s}
-.ch-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ch-badge{font-family:'DM Mono',monospace;font-size:.6rem;font-weight:700;background:var(--coral);color:#fff;padding:1px 5px;border-radius:50px;min-width:16px;text-align:center;flex-shrink:0}
 .ch-item.unread .ch-name{font-weight:700;color:var(--txt)}
-.sidebar-footer{
-  padding:10px 12px;border-top:1px solid var(--border);flex-shrink:0;
-  display:flex;align-items:center;gap:10px;
-}
-.sf-av{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.78rem;flex-shrink:0}
-.sf-name{flex:1;min-width:0}
-.sf-display{font-size:.82rem;font-weight:600;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sf-rank{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted)}
-.sf-btn{width:28px;height:28px;border-radius:7px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.82rem;transition:all .15s;flex-shrink:0}
+.ch-hash{font-family:'DM Mono',monospace;font-size:.82rem;color:var(--faint);flex-shrink:0;width:12px;text-align:center}
+.ch-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ch-lock{font-size:.6rem;color:var(--faint);flex-shrink:0}
+.ch-unread-dot{width:7px;height:7px;border-radius:50%;background:var(--coral);flex-shrink:0}
+.ch-item-actions{display:none;gap:3px;flex-shrink:0}
+.ch-item:hover .ch-item-actions{display:flex}
+.ch-ia-btn{width:18px;height:18px;border-radius:4px;border:none;background:transparent;color:var(--faint);cursor:pointer;font-size:.72rem;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.ch-ia-btn:hover{background:rgba(255,255,255,.1);color:var(--txt)}
+
+/* DM items */
+.dm-item{display:flex;align-items:center;gap:8px;padding:4px 8px 4px 14px;cursor:pointer;border-radius:5px;margin:1px 6px;transition:all .12s;font-size:.85rem;color:var(--muted)}
+.dm-item:hover{background:rgba(255,255,255,.05);color:rgba(240,238,248,.75)}
+.dm-item.active{background:rgba(255,87,51,.1);color:var(--txt)}
+.dm-av{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.58rem;flex-shrink:0;position:relative}
+.dm-status-dot{position:absolute;bottom:-1px;right:-1px;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--s1)}
+.dm-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Sidebar footer */
+.sb-footer{padding:8px 10px;border-top:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;gap:8px;position:relative}
+.sf-av{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.72rem;flex-shrink:0;position:relative;cursor:pointer}
+.sf-status-dot{position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;border:2px solid var(--s1)}
+.sf-info{flex:1;min-width:0}
+.sf-name{font-size:.82rem;font-weight:600;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sf-meta{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted);display:flex;align-items:center;gap:4px}
+.sf-btn{width:26px;height:26px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.82rem;transition:all .12s;flex-shrink:0;text-decoration:none}
 .sf-btn:hover{background:rgba(255,255,255,.07);color:var(--txt)}
 
-/* ══ MAIN ══ */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
-
-/* Channel header */
-.ch-header{
-  padding:0 20px;height:52px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:12px;flex-shrink:0;background:var(--s1);
-}
-.ch-header-hash{font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--coral);flex-shrink:0}
-.ch-header-name{font-weight:700;font-size:.95rem;color:var(--txt)}
-.ch-header-sep{width:1px;height:18px;background:var(--border2);flex-shrink:0}
-.ch-header-desc{font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.ch-header-actions{display:flex;gap:6px;flex-shrink:0}
-.ch-action-btn{padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap}
-.ch-action-btn:hover{background:rgba(255,255,255,.06);color:var(--txt);border-color:var(--border2)}
-
-/* Messages area */
-.msgs-wrap{flex:1;overflow-y:auto;padding:20px 20px 8px;display:flex;flex-direction:column;gap:0;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.07) transparent}
-.msgs-wrap::-webkit-scrollbar{width:6px}
-.msgs-wrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
-
-/* Date divider */
-.date-divider{display:flex;align-items:center;gap:12px;margin:20px 0 14px;flex-shrink:0}
-.date-divider::before,.date-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.date-divider span{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--faint);white-space:nowrap;letter-spacing:.06em}
-
-/* Message row */
-.msg-row{display:flex;gap:12px;padding:3px 0;border-radius:8px;transition:background .1s;position:relative}
-.msg-row:hover{background:rgba(255,255,255,.025)}
-.msg-row:hover .msg-actions{opacity:1;pointer-events:all}
-.msg-row.continuation{padding-top:1px}
-.msg-row.continuation .msg-av-wrap{width:36px;display:flex;justify-content:center}
-.msg-ts-hover{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);opacity:0;transition:opacity .1s;align-self:flex-end;padding-bottom:2px;width:36px;text-align:center;flex-shrink:0}
-.msg-row:hover .msg-ts-hover{opacity:1}
-.msg-av-wrap{flex-shrink:0;width:36px;display:flex;justify-content:center;padding-top:2px}
-.msg-av{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.8rem;flex-shrink:0;cursor:pointer}
-.msg-body{flex:1;min-width:0}
-.msg-header{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
-.msg-author{font-weight:700;font-size:.88rem;cursor:pointer}
-.msg-author:hover{text-decoration:underline}
-.msg-rank-pill{font-family:'DM Mono',monospace;font-size:.55rem;padding:1px 6px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase;vertical-align:middle}
-.msg-time{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--faint)}
-.msg-text{font-size:.88rem;color:rgba(240,238,248,.85);line-height:1.6;word-break:break-word;white-space:pre-wrap}
-.msg-text.deleted{font-style:italic;color:var(--faint);font-size:.83rem}
-.msg-edited{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);margin-left:5px}
-.mention{background:rgba(167,139,250,.15);color:var(--lav);border-radius:3px;padding:1px 3px;font-weight:600}
-
-/* Reactions */
-.msg-reactions{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
-.reaction-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:50px;border:1.5px solid var(--border);background:rgba(255,255,255,.04);cursor:pointer;font-size:.8rem;transition:all .15s;user-select:none}
-.reaction-pill:hover{border-color:var(--border2);background:rgba(255,255,255,.08)}
-.reaction-pill.mine{border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.1)}
-.reaction-count{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted)}
-.reaction-pill.mine .reaction-count{color:var(--lav)}
-
-/* Thread preview */
-.thread-preview{display:flex;align-items:center;gap:8px;margin-top:6px;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border);cursor:pointer;transition:all .15s;max-width:480px}
-.thread-preview:hover{background:rgba(255,255,255,.06);border-color:var(--border2)}
-.thread-av-stack{display:flex;gap:-4px}
-.thread-av-mini{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.55rem;flex-shrink:0;border:1.5px solid var(--s1)}
-.thread-meta{flex:1;min-width:0}
-.thread-count{font-size:.78rem;font-weight:700;color:var(--lav)}
-.thread-preview-text{font-size:.75rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* Pin indicator */
-.pin-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;background:rgba(244,197,66,.06);border-left:2px solid var(--gold);margin-bottom:14px;font-size:.78rem;color:rgba(240,238,248,.6)}
-.pin-bar strong{color:var(--gold);font-size:.72rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-right:6px}
-
-/* Reply quote */
-.reply-quote{background:rgba(255,255,255,.04);border-left:2px solid var(--muted);padding:5px 10px;border-radius:0 6px 6px 0;margin-bottom:5px;font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.reply-quote-author{font-weight:700;color:rgba(240,238,248,.6);margin-right:6px}
-
-/* Message actions (hover toolbar) */
-.msg-actions{
-  position:absolute;right:8px;top:-14px;
-  background:var(--s2);border:1px solid var(--border2);border-radius:9px;
-  padding:3px 4px;display:flex;gap:2px;
-  opacity:0;pointer-events:none;transition:opacity .1s;z-index:10;
-  box-shadow:0 4px 16px rgba(0,0,0,.3);
-}
-.ma-btn{width:28px;height:28px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .12s}
-.ma-btn:hover{background:rgba(255,255,255,.08);color:var(--txt)}
-.ma-btn.danger:hover{background:rgba(255,87,51,.15);color:var(--coral)}
-
-/* Emoji picker */
-.emoji-tray{background:var(--s2);border:1px solid var(--border2);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:4px;max-width:220px;box-shadow:0 8px 32px rgba(0,0,0,.4);position:absolute;z-index:20}
-.emoji-tray button{width:32px;height:32px;border-radius:7px;border:none;background:transparent;font-size:1rem;cursor:pointer;transition:background .12s;display:flex;align-items:center;justify-content:center}
-.emoji-tray button:hover{background:rgba(255,255,255,.1)}
-
-/* Thread panel */
-.thread-panel{
-  width:360px;flex-shrink:0;border-left:1px solid var(--border);background:var(--s1);
-  display:flex;flex-direction:column;overflow:hidden;
-  transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);
-}
-.thread-panel.open{transform:translateX(0)}
-.tp-header{padding:0 16px;height:52px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.tp-title{font-weight:700;font-size:.9rem;color:var(--txt)}
-.tp-close{width:28px;height:28px;border-radius:7px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .15s}
-.tp-close:hover{background:rgba(255,255,255,.07);color:var(--txt)}
-.tp-parent{padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:rgba(255,255,255,.02)}
-.tp-msgs{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.07) transparent}
-.tp-compose{padding:10px 12px;border-top:1px solid var(--border);flex-shrink:0}
-.tp-input{width:100%;padding:9px 13px;border-radius:10px;border:1.5px solid var(--border);background:var(--s3);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;resize:none;transition:border-color .18s;min-height:36px;max-height:96px;line-height:1.5;display:block}
-.tp-input:focus{border-color:rgba(255,87,51,.4)}
-
-/* Compose bar */
-.compose-wrap{padding:12px 20px 16px;flex-shrink:0}
-.compose-box{
-  background:var(--s2);border:1.5px solid var(--border);border-radius:12px;
-  transition:border-color .18s;overflow:hidden;
-}
-.compose-box:focus-within{border-color:rgba(255,255,255,.15)}
-.compose-reply-bar{display:none;padding:8px 14px 0;align-items:center;gap:10px}
-.compose-reply-bar.show{display:flex}
-.compose-reply-txt{flex:1;font-size:.78rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.compose-reply-txt strong{color:rgba(240,238,248,.7)}
-.compose-reply-close{border:none;background:transparent;color:var(--faint);cursor:pointer;font-size:.9rem;padding:0;transition:color .15s}
-.compose-reply-close:hover{color:var(--txt)}
-.compose-input{
-  width:100%;padding:12px 16px;border:none;background:transparent;
-  color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.9rem;
-  outline:none;resize:none;min-height:44px;max-height:160px;line-height:1.55;
-  display:block;
-}
-.compose-input::placeholder{color:var(--faint)}
-.compose-toolbar{padding:6px 10px;display:flex;align-items:center;gap:4px;border-top:1px solid var(--border)}
-.ct-btn{width:30px;height:30px;border-radius:7px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.88rem;transition:all .15s}
-.ct-btn:hover{background:rgba(255,255,255,.07);color:var(--txt)}
-.compose-send{margin-left:auto;padding:7px 16px;border-radius:8px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:6px}
-.compose-send:hover{background:#e84520;transform:translateY(-1px)}
-.compose-send:disabled{opacity:.3;cursor:not-allowed;transform:none}
-
-/* Pinned panel */
-.pinned-panel{
-  position:absolute;top:52px;right:0;width:320px;max-height:60vh;
-  background:var(--s2);border:1px solid var(--border2);border-radius:0 0 14px 14px;
-  box-shadow:0 12px 48px rgba(0,0,0,.4);z-index:30;overflow:hidden;
-  transform:translateY(-8px) scaleY(.96);opacity:0;pointer-events:none;
-  transition:all .2s cubic-bezier(.4,0,.2,1);transform-origin:top right;
-}
-.pinned-panel.open{transform:translateY(0) scaleY(1);opacity:1;pointer-events:all}
-.pinned-panel-header{padding:12px 16px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:6px}
-.pinned-list{max-height:calc(60vh - 44px);overflow-y:auto;padding:8px 0;scrollbar-width:thin}
-.pinned-item{padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
-.pinned-item:last-child{border-bottom:none}
-.pinned-item:hover{background:rgba(255,255,255,.04)}
-.pinned-author{font-size:.75rem;font-weight:700;color:rgba(240,238,248,.7);margin-bottom:3px}
-.pinned-text{font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.45}
-
-/* New channel modal */
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center}
-.modal-backdrop.open{display:flex}
-.modal-box{background:var(--s2);border:1px solid var(--border2);border-radius:16px;padding:28px;width:100%;max-width:420px;margin:16px}
-.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;color:var(--txt);margin-bottom:4px}
-.modal-sub{font-size:.82rem;color:var(--muted);margin-bottom:22px;line-height:1.55}
-.modal-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:6px}
-.modal-input{width:100%;padding:10px 14px;border-radius:9px;border:1.5px solid var(--border);background:var(--s3);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .18s;margin-bottom:14px}
-.modal-input:focus{border-color:rgba(255,87,51,.4)}
-.modal-btns{display:flex;gap:10px}
-.modal-confirm{flex:1;padding:11px;border-radius:9px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.86rem;cursor:pointer;transition:background .18s}
-.modal-confirm:hover{background:#e84520}
-.modal-cancel{padding:11px 18px;border-radius:9px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.86rem;cursor:pointer;transition:all .18s}
-.modal-cancel:hover{border-color:var(--border2);color:var(--txt)}
-
-/* Edit input */
-.edit-input{background:var(--s3);border:1.5px solid rgba(255,87,51,.4);border-radius:8px;padding:8px 12px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;resize:none;width:100%;max-height:120px;line-height:1.5;transition:border-color .18s}
-.edit-actions{display:flex;gap:6px;margin-top:6px}
-.edit-save{padding:5px 14px;border-radius:7px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer}
-.edit-cancel{padding:5px 12px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer}
-
-/* Auth gate */
-.auth-gate{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:40px}
-.auth-gate h2{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:900;color:var(--txt)}
-.auth-gate p{font-size:.88rem;color:var(--muted);max-width:380px;line-height:1.65}
-.auth-gate a{color:var(--coral);text-decoration:none;font-weight:600}
-.auth-gate a:hover{text-decoration:underline}
-
-/* Empty state */
-.ch-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);text-align:center;padding:40px}
-.ch-empty-icon{font-size:2.5rem;opacity:.35;margin-bottom:4px}
-.ch-empty h3{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:var(--txt)}
-.ch-empty p{font-size:.84rem;max-width:320px;line-height:1.6}
-
-/* Toast */
-.toast-wrap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
-.toast{background:var(--s3);border:1px solid var(--border2);border-radius:10px;padding:10px 20px;font-size:.83rem;font-weight:600;color:var(--txt);box-shadow:0 6px 28px rgba(0,0,0,.4);animation:tin .25s cubic-bezier(.22,1,.36,1) both;white-space:nowrap}
-@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-/* Spinner */
-.spin-wrap{flex:1;display:flex;align-items:center;justify-content:center}
-.spinner{width:28px;height:28px;border:2.5px solid rgba(255,255,255,.08);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Scrollbar */
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
-
-/* ══ STATUS INDICATOR ══ */
-.status-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--s1);flex-shrink:0}
+/* Status menu */
+.status-popup{position:absolute;bottom:52px;left:8px;width:200px;background:var(--s3);border:1px solid var(--border2);border-radius:10px;padding:6px;box-shadow:0 8px 32px rgba(0,0,0,.4);z-index:60;display:none}
+.status-popup.open{display:block}
+.status-opt{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:.82rem;color:var(--muted);transition:all .12s}
+.status-opt:hover{background:rgba(255,255,255,.06);color:var(--txt)}
+.status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .status-dot.active{background:#22c55e}
 .status-dot.busy{background:var(--coral)}
 .status-dot.away{background:var(--gold)}
 .status-dot.offline{background:#555}
-.status-badge{font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:50px;border:1px solid;cursor:pointer;transition:all .15s;white-space:nowrap}
-.status-menu{position:absolute;bottom:52px;left:12px;background:var(--s3);border:1px solid var(--border2);border-radius:12px;padding:6px;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,.4);z-index:50;display:none}
-.status-menu.open{display:block}
-.status-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:.83rem;color:var(--muted);transition:all .15s}
-.status-opt:hover{background:rgba(255,255,255,.06);color:var(--txt)}
-.status-custom-wrap{padding:6px 8px;border-top:1px solid var(--border);margin-top:4px}
-.status-custom-input{width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--s4);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none}
-.status-custom-input:focus{border-color:rgba(255,87,51,.4)}
+.status-sep{height:1px;background:var(--border);margin:4px 0}
+.status-msg-input{width:100%;padding:6px 9px;border-radius:6px;border:1px solid var(--border);background:var(--s4);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.78rem;outline:none;margin-top:4px}
 
-/* ══ SEARCH ══ */
-.search-bar-wrap{padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
-.search-bar{width:100%;padding:7px 12px 7px 32px;border-radius:8px;border:1px solid var(--border);background:var(--s2);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;transition:border-color .15s;position:relative}
-.search-bar:focus{border-color:rgba(255,255,255,.18)}
-.search-bar-wrap{position:relative}
-.search-icon-abs{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:.8rem;pointer-events:none}
-.search-results{background:var(--s2);border:1px solid var(--border2);border-radius:12px;padding:6px 0;max-height:320px;overflow-y:auto;position:absolute;top:52px;left:20px;right:20px;z-index:40;box-shadow:0 8px 32px rgba(0,0,0,.4);display:none}
-.search-results.open{display:block}
-.search-result-item{padding:10px 16px;cursor:pointer;transition:background .12s}
-.search-result-item:hover{background:rgba(255,255,255,.05)}
-.search-result-author{font-size:.78rem;font-weight:700;margin-bottom:2px}
-.search-result-text{font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.search-result-time{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--faint);margin-top:2px}
-.search-highlight{background:rgba(244,197,66,.25);color:var(--gold);border-radius:2px;padding:0 2px}
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);min-width:0}
+.ch-topbar{height:48px;border-bottom:1px solid var(--border);background:var(--s1);display:flex;align-items:center;padding:0 18px;gap:10px;flex-shrink:0}
+.ch-topbar-hash{font-family:'DM Mono',monospace;font-size:1rem;color:var(--coral)}
+.ch-topbar-name{font-weight:700;font-size:.92rem}
+.ch-topbar-sep{width:1px;height:16px;background:var(--border2)}
+.ch-topbar-desc{font-size:.78rem;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.ch-topbar-desc:hover{color:var(--txt)}
+.ch-topbar-actions{display:flex;gap:5px;flex-shrink:0}
+.top-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.73rem;font-weight:600;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.top-btn:hover{background:rgba(255,255,255,.06);color:var(--txt)}
 
-/* ══ DMs ══ */
-.dm-section{padding:0}
-.dm-item{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 14px;cursor:pointer;border-radius:6px;margin:1px 6px;transition:all .15s;font-size:.86rem;color:var(--muted)}
-.dm-item:hover{background:rgba(255,255,255,.05);color:rgba(240,238,248,.75)}
-.dm-item.active{background:rgba(255,87,51,.12);color:var(--txt)}
-.dm-av{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.6rem;flex-shrink:0;position:relative}
-.dm-status{position:absolute;bottom:-1px;right:-1px;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--s1)}
-.dm-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dm-badge{font-family:'DM Mono',monospace;font-size:.6rem;font-weight:700;background:var(--coral);color:#fff;padding:1px 5px;border-radius:50px;min-width:16px;text-align:center;flex-shrink:0}
+/* Messages */
+.msgs-area{flex:1;overflow-y:auto;padding:16px 18px 6px;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.07) transparent;min-height:0}
+.msgs-area::-webkit-scrollbar{width:5px}
+.msgs-area::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
 
-/* ══ TYPING INDICATOR ══ */
-.typing-wrap{padding:2px 20px 8px;min-height:24px;font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:7px;flex-shrink:0}
-.typing-dots{display:inline-flex;gap:3px;align-items:center}
-.typing-dot{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:tdot 1.2s ease-in-out infinite}
-.typing-dot:nth-child(2){animation-delay:.2s}
-.typing-dot:nth-child(3){animation-delay:.4s}
-@keyframes tdot{0%,80%,100%{transform:scale(.7);opacity:.4}40%{transform:scale(1);opacity:1}}
+.date-div{display:flex;align-items:center;gap:10px;margin:16px 0 12px;flex-shrink:0}
+.date-div::before,.date-div::after{content:'';flex:1;height:1px;background:var(--border)}
+.date-div span{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);white-space:nowrap;letter-spacing:.05em}
 
-/* ══ JUMP TO BOTTOM ══ */
-.jump-btn{position:absolute;bottom:160px;right:28px;background:var(--s3);border:1px solid var(--border2);border-radius:50px;padding:6px 14px;font-size:.78rem;font-weight:600;color:var(--txt);cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.3);transition:all .18s;display:none;align-items:center;gap:6px;z-index:20}
+.msg-row{display:flex;gap:10px;padding:2px 6px;border-radius:6px;transition:background .1s;position:relative;flex-shrink:0}
+.msg-row:hover{background:rgba(255,255,255,.022)}
+.msg-row:hover .msg-actions{opacity:1;pointer-events:all}
+.msg-av-col{width:34px;flex-shrink:0;padding-top:1px;display:flex;justify-content:center}
+.msg-av{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.78rem;cursor:pointer}
+.msg-ts-sm{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--faint);opacity:0;transition:opacity .1s;padding-top:6px;text-align:center;width:34px}
+.msg-row:hover .msg-ts-sm{opacity:1}
+.msg-body{flex:1;min-width:0}
+.msg-header{display:flex;align-items:baseline;gap:7px;margin-bottom:2px}
+.msg-name{font-weight:700;font-size:.86rem;cursor:pointer}
+.msg-name:hover{text-decoration:underline}
+.msg-rank{font-family:'DM Mono',monospace;font-size:.54rem;padding:1px 5px;border-radius:3px;letter-spacing:.05em;text-transform:uppercase}
+.msg-time{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--faint)}
+.msg-text{font-size:.87rem;color:rgba(240,238,248,.84);line-height:1.58;word-break:break-word;white-space:pre-wrap}
+.msg-text a{color:var(--sky);text-decoration:underline}
+.msg-text.deleted{font-style:italic;color:var(--faint);font-size:.82rem}
+.msg-edited{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--faint);margin-left:4px}
+.mention{background:rgba(167,139,250,.15);color:var(--lav);border-radius:3px;padding:0 3px;font-weight:600}
+
+/* Reactions */
+.reactions{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+.rxn{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:50px;border:1.5px solid var(--border);background:rgba(255,255,255,.03);cursor:pointer;font-size:.78rem;transition:all .12s;user-select:none}
+.rxn:hover{border-color:var(--border2);background:rgba(255,255,255,.07)}
+.rxn.mine{border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.1)}
+.rxn-count{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted)}
+.rxn.mine .rxn-count{color:var(--lav)}
+
+/* Thread preview */
+.thread-prev{display:flex;align-items:center;gap:8px;margin-top:5px;padding:5px 9px;border-radius:7px;background:rgba(255,255,255,.03);border:1px solid var(--border);cursor:pointer;transition:all .12s;max-width:440px}
+.thread-prev:hover{background:rgba(255,255,255,.06);border-color:var(--border2)}
+.thread-count{font-size:.76rem;font-weight:700;color:var(--lav);flex-shrink:0}
+.thread-last{font-size:.74rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.thread-open{font-size:.72rem;color:var(--muted);flex-shrink:0}
+
+/* Reply quote */
+.reply-q{background:rgba(255,255,255,.04);border-left:2px solid var(--muted);padding:4px 9px;border-radius:0 5px 5px 0;margin-bottom:4px;font-size:.78rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reply-q strong{color:rgba(240,238,248,.6);margin-right:5px}
+
+/* Msg actions */
+.msg-actions{position:absolute;right:6px;top:-13px;background:var(--s2);border:1px solid var(--border2);border-radius:8px;padding:2px 3px;display:flex;gap:1px;opacity:0;pointer-events:none;transition:opacity .1s;z-index:10;box-shadow:0 3px 14px rgba(0,0,0,.3)}
+.ma{width:26px;height:26px;border-radius:5px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.82rem;transition:all .1s}
+.ma:hover{background:rgba(255,255,255,.08);color:var(--txt)}
+.ma.del:hover{background:rgba(255,87,51,.15);color:var(--coral)}
+
+/* Emoji tray */
+.emoji-tray{background:var(--s2);border:1px solid var(--border2);border-radius:11px;padding:7px;display:flex;flex-wrap:wrap;gap:3px;max-width:210px;box-shadow:0 8px 32px rgba(0,0,0,.4);position:fixed;z-index:100}
+.emoji-tray button{width:30px;height:30px;border-radius:6px;border:none;background:transparent;font-size:.95rem;cursor:pointer;transition:background .1s;display:flex;align-items:center;justify-content:center}
+.emoji-tray button:hover{background:rgba(255,255,255,.1)}
+
+/* Typing */
+.typing-bar{padding:0 24px 8px;min-height:22px;font-size:.76rem;color:var(--muted);display:flex;align-items:center;gap:6px;flex-shrink:0}
+.t-dots{display:inline-flex;gap:3px;align-items:center}
+.t-dot{width:4px;height:4px;border-radius:50%;background:var(--muted);animation:td 1.2s ease infinite}
+.t-dot:nth-child(2){animation-delay:.2s}
+.t-dot:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,80%,100%{transform:scale(.6);opacity:.3}40%{transform:scale(1);opacity:1}}
+
+/* Jump btn */
+.jump-btn{position:absolute;bottom:150px;right:24px;background:var(--s3);border:1px solid var(--border2);border-radius:50px;padding:5px 13px;font-size:.76rem;font-weight:600;color:var(--txt);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3);transition:all .16s;display:none;align-items:center;gap:5px;z-index:15}
 .jump-btn.show{display:flex}
 .jump-btn:hover{background:var(--s4);transform:translateY(-2px)}
 
-/* ══ LINK PREVIEW ══ */
-.link-preview{background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--coral);border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;max-width:420px;cursor:pointer;transition:border-color .15s}
-.link-preview:hover{border-color:var(--border2);border-left-color:var(--coral)}
-.lp-site{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);margin-bottom:4px;text-transform:uppercase;letter-spacing:.07em}
-.lp-title{font-size:.85rem;font-weight:700;color:var(--txt);margin-bottom:3px;line-height:1.35}
-.lp-desc{font-size:.78rem;color:var(--muted);line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+/* Compose */
+.compose{padding:0 18px 14px;flex-shrink:0;position:relative}
+.mention-dd{position:absolute;bottom:100%;left:18px;right:18px;background:var(--s3);border:1px solid var(--border2);border-radius:9px 9px 0 0;padding:4px 0;max-height:180px;overflow-y:auto;z-index:20;display:none;box-shadow:0 -6px 20px rgba(0,0,0,.3)}
+.mention-dd.open{display:block}
+.mention-opt{display:flex;align-items:center;gap:9px;padding:7px 12px;cursor:pointer;transition:background .1s}
+.mention-opt:hover,.mention-opt.sel{background:rgba(255,255,255,.06)}
+.mention-av{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.58rem;flex-shrink:0}
+.mention-name{font-size:.82rem;font-weight:600;color:var(--txt)}
+.mention-rank-lbl{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--faint);margin-left:3px}
+.compose-box{background:var(--s2);border:1.5px solid var(--border);border-radius:11px;overflow:hidden;transition:border-color .15s}
+.compose-box:focus-within{border-color:rgba(255,255,255,.14)}
+.reply-bar{padding:7px 12px 0;align-items:center;gap:8px;display:none}
+.reply-bar.show{display:flex}
+.reply-bar-txt{flex:1;font-size:.76rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reply-bar-txt strong{color:rgba(240,238,248,.65)}
+.reply-bar-x{border:none;background:transparent;color:var(--faint);cursor:pointer;font-size:.88rem;padding:0;line-height:1;transition:color .1s}
+.reply-bar-x:hover{color:var(--txt)}
+.compose-ta{width:100%;padding:11px 14px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;resize:none;min-height:42px;max-height:150px;line-height:1.55}
+.compose-ta::placeholder{color:var(--faint)}
+.compose-toolbar{padding:5px 8px;display:flex;align-items:center;gap:3px;border-top:1px solid var(--border)}
+.ct{width:28px;height:28px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .12s}
+.ct:hover{background:rgba(255,255,255,.07);color:var(--txt)}
+.compose-send{margin-left:auto;padding:6px 14px;border-radius:7px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .16s;display:flex;align-items:center;gap:5px}
+.compose-send:hover{background:#e84520;transform:translateY(-1px)}
+.compose-send:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.kbd{display:inline-block;font-family:'DM Mono',monospace;font-size:.58rem;padding:1px 4px;border-radius:3px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:var(--faint)}
 
-/* ══ KEYBOARD SHORTCUT HINT ══ */
-.kbd{display:inline-block;font-family:'DM Mono',monospace;font-size:.6rem;padding:1px 5px;border-radius:4px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:var(--faint)}
+/* Locked */
+.ch-locked{padding:12px 18px;text-align:center;font-size:.78rem;color:var(--faint);border-top:1px solid var(--border)}
 
-/* ══ CHANNEL TOPIC EDIT ══ */
-.ch-desc-edit{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;padding:2px 4px;min-width:160px;max-width:300px}
-.ch-desc-edit:focus{border-bottom-color:var(--coral);color:var(--txt)}
+/* Search panel */
+.search-panel{padding:8px 18px 6px;border-bottom:1px solid var(--border);display:none;flex-shrink:0}
+.search-panel.open{display:block}
+.sp-input{width:100%;padding:8px 12px 8px 32px;border-radius:8px;border:1.5px solid var(--border);background:var(--s2);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;outline:none}
+.sp-input:focus{border-color:rgba(255,255,255,.18)}
+.sp-results{margin-top:5px;max-height:190px;overflow-y:auto;border-radius:7px;border:1px solid var(--border);background:var(--s2);display:none}
+.sp-item{padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}
+.sp-item:last-child{border-bottom:none}
+.sp-item:hover{background:rgba(255,255,255,.04)}
+.sp-author{font-size:.74rem;font-weight:700;margin-bottom:2px}
+.sp-text{font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp-hl{background:rgba(244,197,66,.2);color:var(--gold);border-radius:2px;padding:0 2px}
 
-/* ══ MENTION DROPDOWN ══ */
-.mention-dropdown{position:absolute;bottom:100%;left:0;right:0;background:var(--s3);border:1px solid var(--border2);border-radius:10px 10px 0 0;padding:4px 0;max-height:180px;overflow-y:auto;z-index:30;display:none;box-shadow:0 -8px 24px rgba(0,0,0,.3)}
-.mention-dropdown.open{display:block}
-.mention-opt{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;transition:background .12s}
-.mention-opt:hover,.mention-opt.selected{background:rgba(255,255,255,.06)}
-.mention-av{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.6rem;flex-shrink:0}
-.mention-name{font-size:.84rem;font-weight:600;color:var(--txt)}
-.mention-rank{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint);margin-left:4px}
+/* Pin panel */
+.pin-panel{position:absolute;top:48px;right:0;width:300px;max-height:55vh;background:var(--s2);border:1px solid var(--border2);border-radius:0 0 12px 12px;box-shadow:0 10px 40px rgba(0,0,0,.4);z-index:25;overflow:hidden;transform:translateY(-6px) scaleY(.94);opacity:0;pointer-events:none;transition:all .18s;transform-origin:top right}
+.pin-panel.open{transform:none;opacity:1;pointer-events:all}
+.pin-panel-hdr{padding:10px 14px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:5px}
+.pin-list{max-height:calc(55vh - 40px);overflow-y:auto}
+.pin-item{padding:9px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.pin-item:last-child{border-bottom:none}
+.pin-item:hover{background:rgba(255,255,255,.04)}
+.pin-item-auth{font-size:.72rem;font-weight:700;margin-bottom:2px;color:rgba(240,238,248,.65)}
+.pin-item-text{font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* ══ CHANNEL HEADER ACTIONS ══ */
-.ch-members-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s}
-.ch-members-btn:hover{background:rgba(255,255,255,.06);color:var(--txt)}
+/* Thread panel */
+.thread-panel{width:340px;flex-shrink:0;border-left:1px solid var(--border);background:var(--s1);display:flex;flex-direction:column;overflow:hidden;transform:translateX(100%);transition:transform .2s cubic-bezier(.4,0,.2,1);width:0}
+.thread-panel.open{transform:translateX(0);width:340px}
+.tp-hdr{height:48px;border-bottom:1px solid var(--border);padding:0 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.tp-title{font-weight:700;font-size:.88rem;color:var(--txt)}
+.tp-close{width:26px;height:26px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.88rem;transition:all .12s}
+.tp-close:hover{background:rgba(255,255,255,.07);color:var(--txt)}
+.tp-parent{padding:12px 14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);flex-shrink:0}
+.tp-msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin}
+.tp-compose{padding:8px 10px;border-top:1px solid var(--border);flex-shrink:0}
+.tp-ta{width:100%;padding:8px 11px;border-radius:9px;border:1.5px solid var(--border);background:var(--s3);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;outline:none;resize:none;transition:border-color .15s;min-height:34px;max-height:90px;line-height:1.5}
+.tp-ta:focus{border-color:rgba(255,87,51,.35)}
+.tp-send{margin-top:5px;padding:6px 14px;border-radius:7px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.76rem;cursor:pointer;float:right}
+.tp-send:hover{background:#e84520}
 
-/* ══ UNREAD DIVIDER ══ */
-.unread-divider{display:flex;align-items:center;gap:12px;margin:16px 0;flex-shrink:0}
-.unread-divider::before,.unread-divider::after{content:'';flex:1;height:1px;background:rgba(255,87,51,.4)}
-.unread-divider span{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--coral);white-space:nowrap;letter-spacing:.06em;padding:2px 8px;border-radius:50px;background:rgba(255,87,51,.1);border:1px solid rgba(255,87,51,.25)}
+/* ── MODALS ── */
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(5px);z-index:200;display:none;align-items:center;justify-content:center}
+.backdrop.open{display:flex}
+.modal{background:var(--s2);border:1px solid var(--border2);border-radius:14px;padding:26px;width:100%;max-width:400px;margin:16px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.modal-lg{max-width:540px}
+.modal h3{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900;color:var(--txt);margin-bottom:4px}
+.modal-sub{font-size:.8rem;color:var(--muted);margin-bottom:20px;line-height:1.55}
+.modal label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:5px}
+.modal input,.modal textarea,.modal select{width:100%;padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--s3);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;transition:border-color .15s;margin-bottom:14px}
+.modal input:focus,.modal textarea:focus,.modal select:focus{border-color:rgba(255,87,51,.4)}
+.modal select option{background:var(--s3)}
+.modal-btns{display:flex;gap:8px;margin-top:4px}
+.btn-primary{flex:1;padding:10px;border-radius:8px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:background .15s}
+.btn-primary:hover{background:#e84520}
+.btn-secondary{padding:10px 16px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.84rem;cursor:pointer;transition:all .15s}
+.btn-secondary:hover{border-color:var(--border2);color:var(--txt)}
+.btn-danger{flex:1;padding:10px;border-radius:8px;border:none;background:rgba(255,87,51,.15);color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;border:1px solid rgba(255,87,51,.3);transition:all .15s}
+.btn-danger:hover{background:rgba(255,87,51,.25)}
 
-/* ══ ESC BRANDING ══ */
-.esc-logo{font-family:'Fraunces',serif;font-weight:900;font-size:.88rem;letter-spacing:-.01em;color:var(--txt)}
-.esc-logo em{font-style:italic;font-weight:300;color:var(--coral)}
+/* Settings modal tabs */
+.settings-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:18px;padding-bottom:0}
+.stab{padding:8px 14px;border-radius:7px 7px 0 0;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.stab.active{color:var(--txt);border-bottom-color:var(--coral)}
+.stab:hover:not(.active){color:rgba(240,238,248,.7)}
+.stab-content{display:none}
+.stab-content.active{display:block}
+
+/* Roles */
+.role-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--s3);margin-bottom:7px;cursor:pointer;transition:background .12s}
+.role-item:hover{background:var(--s4)}
+.role-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.role-info{flex:1;min-width:0}
+.role-name{font-size:.85rem;font-weight:600;color:var(--txt)}
+.role-count{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--faint)}
+.role-badge{font-family:'DM Mono',monospace;font-size:.58rem;padding:1px 6px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase}
+.perm-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
+.perm-row:last-child{border-bottom:none}
+.perm-name{font-size:.84rem;color:var(--txt);font-weight:500}
+.perm-desc{font-size:.72rem;color:var(--muted);margin-top:1px}
+.toggle{width:34px;height:18px;border-radius:9px;border:none;cursor:pointer;transition:background .2s;position:relative;flex-shrink:0}
+.toggle::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s}
+.toggle.on{background:var(--sage)}
+.toggle.on::after{transform:translateX(16px)}
+.toggle.off{background:rgba(255,255,255,.15)}
+
+/* Member list */
+.member-item{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--border)}
+.member-item:last-child{border-bottom:none}
+.member-av{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.72rem;flex-shrink:0}
+.member-info{flex:1;min-width:0}
+.member-name{font-size:.84rem;font-weight:600;color:var(--txt)}
+.member-role{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted)}
+
+/* Auth gate */
+.auth-gate{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:40px}
+.auth-gate h2{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:900;color:var(--txt)}
+.auth-gate p{font-size:.86rem;color:var(--muted);max-width:360px;line-height:1.65}
+.auth-gate a{color:var(--coral);font-weight:600;text-decoration:none}
+
+/* Empty state */
+.ch-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);text-align:center;padding:40px}
+.ch-empty-icon{font-size:2.2rem;opacity:.3;margin-bottom:4px}
+.ch-empty h3{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;color:var(--txt)}
+.ch-empty p{font-size:.82rem;max-width:300px;line-height:1.6}
+
+/* Toast */
+.toasts{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.toast{background:var(--s3);border:1px solid var(--border2);border-radius:9px;padding:9px 18px;font-size:.81rem;font-weight:600;color:var(--txt);box-shadow:0 5px 24px rgba(0,0,0,.4);animation:tin .25s cubic-bezier(.22,1,.36,1) both;white-space:nowrap}
+@keyframes tin{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* Spinner */
+.spin-wrap{flex:1;display:flex;align-items:center;justify-content:center}
+.spinner{width:26px;height:26px;border:2.5px solid rgba(255,255,255,.07);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Edit */
+.edit-ta{background:var(--s3);border:1.5px solid rgba(255,87,51,.4);border-radius:7px;padding:7px 10px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;resize:none;width:100%;max-height:110px;line-height:1.5}
+.edit-actions{display:flex;gap:5px;margin-top:4px}
+.edit-save{padding:4px 12px;border-radius:6px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.76rem;cursor:pointer}
+.edit-cancel{padding:4px 10px;border-radius:6px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.76rem;cursor:pointer}
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-logo">elaborate <span style="color:var(--coral)">staff</span><span style="color:rgba(240,238,248,.3)">.</span></div>
-  <div class="topbar-divider"></div>
-  <div id="topbarChannel" class="topbar-channel" style="display:none">
+  <span class="topbar-logo">elaborate <em>staff</em></span>
+  <div class="topbar-sep"></div>
+  <div id="topCh" class="topbar-ch" style="display:none">
     <span style="font-family:'DM Mono',monospace;color:var(--coral)">#</span>
-    <span id="topbarChName">—</span>
+    <span id="topChName"></span>
   </div>
-  <div class="topbar-actions">
-    <span class="topbar-name" id="topbarUserName"></span>
-    <div class="topbar-avatar" id="topbarAv" title="You"></div>
+  <span id="topChDesc" class="topbar-desc" style="display:none"></span>
+  <div class="topbar-right">
+    <span class="topbar-name" id="topName"></span>
+    <div class="topbar-av" id="topAv"></div>
   </div>
 </div>
 
-<!-- MAIN SHELL -->
+<!-- SHELL -->
 <div class="shell">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-workspace">
-        <div class="ws-icon" style="font-size:.6rem;font-family:'DM Mono',monospace;font-weight:700;letter-spacing:-.02em">ESC</div>
-        <span class="esc-logo">elaborate <em>staff</em></span>
-      </div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-header">
+    <div class="sb-workspace">
+      <div class="sb-ws-icon">ESC</div>
+      <span class="sb-ws-name">elaborate <em>staff</em></span>
     </div>
-    <div class="search-bar-wrap">
-      <span class="search-icon-abs">🔍</span>
-      <input class="search-bar" id="searchBar" type="text" placeholder="Search messages…"
-        oninput="handleSearch(this.value)"
-        onkeydown="if(event.key==='Escape'){this.value='';handleSearch('')}"/>
-    </div>
-    <div class="sidebar-scroll" id="sidebarScroll">
-      <div class="sidebar-section">
-        Channels
-        <button class="sidebar-section-add" id="addChannelBtn" title="New channel" onclick="openNewChannelModal()">＋</button>
-      </div>
-      <div id="channelList"></div>
+    <button class="sb-settings-btn" onclick="openSettings()" title="Settings">⚙</button>
+  </div>
+  <div class="sb-search">
+    <span class="sb-search-icon">🔍</span>
+    <input type="text" id="sbSearch" placeholder="Find a channel…"
+      oninput="filterSidebar(this.value)"
+      onkeydown="if(event.key==='Escape'){this.value='';filterSidebar('')}"/>
+  </div>
+  <div class="sb-scroll" id="sbScroll">
+    <!-- Categories + channels rendered here -->
+    <div id="catList"></div>
 
-      <div class="sidebar-section" style="margin-top:8px">Online</div>
-      <div id="onlineList" style="padding:0 6px"></div>
+    <!-- DMs -->
+    <div style="padding:10px 10px 4px;display:flex;align-items:center;justify-content:space-between">
+      <span style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Direct Messages</span>
+      <button class="cat-add" onclick="openDMPicker()" title="New DM" style="width:18px;height:18px">＋</button>
+    </div>
+    <div id="dmList"></div>
 
-      <div class="sidebar-section" style="margin-top:8px">
-        Direct Messages
-        <button class="sidebar-section-add" onclick="openDMPicker()" title="New DM">＋</button>
-      </div>
-      <div id="dmList" style="padding:0 6px"></div>
+    <!-- Online -->
+    <div style="padding:10px 10px 4px">
+      <span style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Online — <span id="onlineCount">0</span></span>
     </div>
-    <!-- Status menu -->
-    <div class="status-menu" id="statusMenu">
-      <div class="status-opt" onclick="setStatus('active')"><span class="status-dot active"></span> Active</div>
-      <div class="status-opt" onclick="setStatus('busy')"><span class="status-dot busy"></span> Busy</div>
-      <div class="status-opt" onclick="setStatus('away')"><span class="status-dot away"></span> Away</div>
-      <div class="status-custom-wrap">
-        <input class="status-custom-input" id="statusMsgInput" placeholder="Set a status message…" maxlength="60"
-          onkeydown="if(event.key==='Enter'){saveStatusMsg();document.getElementById('statusMenu').classList.remove('open')}"/>
-      </div>
-    </div>
-    <div class="sidebar-footer">
-      <div class="sf-av" id="sfAv" style="position:relative">
-        <div class="status-dot active" id="myStatusDot" style="position:absolute;bottom:-1px;right:-1px;border:2px solid var(--s1)"></div>
-      </div>
-      <div class="sf-name">
-        <div class="sf-display" id="sfDisplay">—</div>
-        <div class="sf-rank" id="sfRank" style="display:flex;align-items:center;gap:5px">
-          <span id="sfRankLabel">—</span>
-          <span id="sfStatusMsg" style="color:var(--faint);font-style:italic;font-size:.56rem"></span>
-        </div>
-      </div>
-      <button class="sf-btn" onclick="toggleStatusMenu()" title="Set status">◉</button>
-      <a href="/admin.html" class="sf-btn" title="Admin Portal">⚙</a>
-    </div>
-  </aside>
-
-  <!-- MESSAGE AREA -->
-  <div class="main" id="mainArea">
-    <div class="spin-wrap"><div class="spinner"></div></div>
+    <div id="onlineList"></div>
   </div>
 
-  <!-- THREAD PANEL -->
-  <div class="thread-panel" id="threadPanel">
-    <div class="tp-header">
-      <span class="tp-title">Thread</span>
-      <button class="tp-close" onclick="closeThread()">✕</button>
-    </div>
-    <div class="tp-parent" id="tpParent"></div>
-    <div class="tp-msgs" id="tpMsgs"></div>
-    <div class="tp-compose">
-      <textarea class="tp-input" id="tpInput" placeholder="Reply in thread…" rows="1"
-        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,96)+'px'"
-        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendThreadReply()}"></textarea>
+  <!-- Status popup -->
+  <div class="status-popup" id="statusPopup">
+    <div class="status-opt" onclick="setMyStatus('active')"><span class="status-dot active"></span>Active</div>
+    <div class="status-opt" onclick="setMyStatus('busy')"><span class="status-dot busy"></span>Busy</div>
+    <div class="status-opt" onclick="setMyStatus('away')"><span class="status-dot away"></span>Away</div>
+    <div class="status-sep"></div>
+    <div style="padding:0 4px">
+      <label style="font-family:'DM Mono',monospace;font-size:.56rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase">Status message</label>
+      <input class="status-msg-input" id="statusMsgInput" placeholder="What are you up to?" maxlength="60"
+        onkeydown="if(event.key==='Enter'){saveStatusMsg();closeStatusPopup()}"/>
     </div>
   </div>
 
+  <div class="sb-footer">
+    <div class="sf-av" id="sfAv" onclick="toggleStatusPopup()">
+      <div class="sf-status-dot status-dot active" id="myStatusDot"></div>
+    </div>
+    <div class="sf-info">
+      <div class="sf-name" id="sfName">—</div>
+      <div class="sf-meta"><span id="sfRankLbl">—</span><span id="sfStatusTxt" style="color:var(--faint);font-style:italic"></span></div>
+    </div>
+    <a href="/admin.html" class="sf-btn" title="Admin Portal">⚙</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main" id="main">
+  <div class="spin-wrap"><div class="spinner"></div></div>
 </div>
 
-<!-- NEW CHANNEL MODAL -->
-<div class="modal-backdrop" id="newChModal">
-  <div class="modal-box">
-    <div class="modal-title">Create a channel</div>
-    <div class="modal-sub">Channels are where the team communicates. Name it after a topic or project.</div>
-    <label class="modal-label">Channel name</label>
-    <input class="modal-input" id="newChName" type="text" placeholder="e.g. moderation-tips" maxlength="32"
-      onkeydown="if(event.key==='Enter')confirmNewChannel()"
-      oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-')"/>
-    <label class="modal-label">Description (optional)</label>
-    <input class="modal-input" id="newChDesc" type="text" placeholder="What is this channel for?" maxlength="80"
+<!-- THREAD PANEL -->
+<div class="thread-panel" id="threadPanel">
+  <div class="tp-hdr">
+    <span class="tp-title">Thread</span>
+    <button class="tp-close" onclick="closeThread()">✕</button>
+  </div>
+  <div class="tp-parent" id="tpParent"></div>
+  <div class="tp-msgs" id="tpMsgs"></div>
+  <div class="tp-compose">
+    <textarea class="tp-ta" id="tpTa" placeholder="Reply in thread…" rows="1"
+      oninput="autosize(this)"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendThreadReply()}"></textarea>
+    <button class="tp-send" onclick="sendThreadReply()">Send</button>
+  </div>
+</div>
+
+</div><!-- /shell -->
+
+<!-- ── MODALS ── -->
+
+<!-- New Channel -->
+<div class="backdrop" id="newChModal">
+  <div class="modal">
+    <h3>Create a channel</h3>
+    <p class="modal-sub">Channels are where your team communicates. Pick a name and category.</p>
+    <label>Channel name</label>
+    <input id="newChName" type="text" placeholder="e.g. moderation-tips" maxlength="32"
+      oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-')"
       onkeydown="if(event.key==='Enter')confirmNewChannel()"/>
+    <label>Description (optional)</label>
+    <input id="newChDesc" type="text" placeholder="What is this channel for?" maxlength="80"/>
+    <label>Category</label>
+    <select id="newChCat"></select>
+    <label>Channel type</label>
+    <select id="newChType">
+      <option value="public">Public — all staff can read and post</option>
+      <option value="readonly">Read-only — only admins can post</option>
+      <option value="restricted">Restricted — invite only (role-gated)</option>
+    </select>
+    <label>Required role (for restricted channels)</label>
+    <select id="newChRole"></select>
     <div class="modal-btns">
-      <button class="modal-confirm" onclick="confirmNewChannel()">Create Channel</button>
-      <button class="modal-cancel" onclick="closeNewChannelModal()">Cancel</button>
+      <button class="btn-primary" onclick="confirmNewChannel()">Create Channel</button>
+      <button class="btn-secondary" onclick="closeModal('newChModal')">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST CONTAINER -->
-<div class="toast-wrap" id="toastWrap"></div>
+<!-- New Category -->
+<div class="backdrop" id="newCatModal">
+  <div class="modal">
+    <h3>Create a category</h3>
+    <p class="modal-sub">Categories group related channels together in the sidebar.</p>
+    <label>Category name</label>
+    <input id="newCatName" type="text" placeholder="e.g. Moderation" maxlength="32"
+      onkeydown="if(event.key==='Enter')confirmNewCategory()"/>
+    <div class="modal-btns">
+      <button class="btn-primary" onclick="confirmNewCategory()">Create</button>
+      <button class="btn-secondary" onclick="closeModal('newCatModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings -->
+<div class="backdrop" id="settingsModal">
+  <div class="modal modal-lg">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="margin-bottom:0">ESC Settings</h3>
+      <button class="btn-secondary" style="padding:5px 12px" onclick="closeModal('settingsModal')">✕ Close</button>
+    </div>
+    <div class="settings-tabs">
+      <button class="stab active" onclick="switchSettingsTab('roles')">Roles</button>
+      <button class="stab" onclick="switchSettingsTab('members')">Members</button>
+      <button class="stab" onclick="switchSettingsTab('perms')">Permissions</button>
+      <button class="stab" onclick="switchSettingsTab('categories')">Categories</button>
+    </div>
+
+    <!-- Roles tab -->
+    <div class="stab-content active" id="stab-roles">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-size:.84rem;color:var(--muted)">Custom roles for this workspace</span>
+        <button class="btn-primary" style="padding:6px 14px;font-size:.76rem" onclick="openCreateRole()">+ New Role</button>
+      </div>
+      <div id="rolesList"></div>
+    </div>
+
+    <!-- Members tab -->
+    <div class="stab-content" id="stab-members">
+      <div id="membersList"></div>
+    </div>
+
+    <!-- Permissions tab -->
+    <div class="stab-content" id="stab-perms">
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px;line-height:1.6">These permissions apply globally to all staff in this workspace.</p>
+      <div id="permsList"></div>
+    </div>
+
+    <!-- Categories tab -->
+    <div class="stab-content" id="stab-categories">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-size:.84rem;color:var(--muted)">Manage channel categories</span>
+        <button class="btn-primary" style="padding:6px 14px;font-size:.76rem" onclick="openModal('newCatModal')">+ New Category</button>
+      </div>
+      <div id="catManageList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Role -->
+<div class="backdrop" id="createRoleModal">
+  <div class="modal">
+    <h3 id="roleModalTitle">Create Role</h3>
+    <p class="modal-sub">Roles let you assign permissions and group members in this workspace.</p>
+    <label>Role name</label>
+    <input id="roleNameInput" type="text" placeholder="e.g. Senior Mod" maxlength="32"/>
+    <label>Color</label>
+    <div id="roleColorPicker" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
+    <label>Permissions</label>
+    <div id="rolePermsChecks" style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px"></div>
+    <div class="modal-btns">
+      <button class="btn-primary" onclick="saveRole()">Save Role</button>
+      <button class="btn-secondary" onclick="closeModal('createRoleModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
 
 <script type="module">
-import { initializeApp }     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, doc, getDoc, setDoc, addDoc,
-         updateDoc, deleteDoc, getDocs, query, orderBy, limit,
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc,
+         addDoc, updateDoc, deleteDoc, query, orderBy, limit,
          onSnapshot, serverTimestamp, where, arrayUnion, arrayRemove }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
@@ -503,1144 +570,1276 @@ const auth = getAuth(fbApp);
 const db   = getFirestore(fbApp);
 
 /* ══ CONSTANTS ══ */
+const RANK_COLORS = ['#FF5733','#F4C542','#7DBE8E','#A78BFA','#38BDF8','#F472B6','#FB923C','#60A5FA'];
 const STAFF_RANKS = {
-  owner:    {label:'Owner',    color:'#FF5733', bg:'rgba(255,87,51,.15)'},
-  sr_admin: {label:'Sr. Mod',  color:'#A78BFA', bg:'rgba(167,139,250,.15)'},
-  mod:      {label:'Mod',      color:'#FBBF24', bg:'rgba(251,191,36,.15)'},
-  admin:    {label:'Admin',    color:'#FB923C', bg:'rgba(251,146,60,.15)'},
-  jr_admin: {label:'Jr. Admin',color:'#94A3B8', bg:'rgba(148,163,184,.15)'},
-  developer:{label:'Dev',      color:'#60A5FA', bg:'rgba(96,165,250,.15)'},
-  marketing:{label:'Mktg',     color:'#7DBE8E', bg:'rgba(125,190,142,.15)'},
-  trainee:  {label:'Trainee',  color:'#C084FC', bg:'rgba(192,132,252,.12)'},
+  owner:    {label:'Owner',    color:'#FF5733',bg:'rgba(255,87,51,.15)'},
+  sr_admin: {label:'Sr. Mod',  color:'#A78BFA',bg:'rgba(167,139,250,.15)'},
+  mod:      {label:'Mod',      color:'#FBBF24',bg:'rgba(251,191,36,.15)'},
+  admin:    {label:'Admin',    color:'#FB923C',bg:'rgba(251,146,60,.15)'},
+  jr_admin: {label:'Jr. Admin',color:'#94A3B8',bg:'rgba(148,163,184,.15)'},
+  developer:{label:'Dev',      color:'#60A5FA',bg:'rgba(96,165,250,.15)'},
+  marketing:{label:'Mktg',     color:'#7DBE8E',bg:'rgba(125,190,142,.15)'},
+  trainee:  {label:'Trainee',  color:'#C084FC',bg:'rgba(192,132,252,.12)'},
 };
-const RANK_COLORS = ['#FF5733','#F4C542','#7DBE8E','#A78BFA','#38BDF8','#F472B6','#FB923C'];
-function uidColor(uid){ let h=0; for(const c of(uid||''))h=(Math.imul(31,h)+c.charCodeAt(0))|0; return RANK_COLORS[Math.abs(h)%RANK_COLORS.length]; }
-const EMOJI_SET = ['👍','❤️','😂','🔥','✅','👀','🎉','💯','😮','🤔','💀','🙏'];
+const PERMISSIONS = [
+  {id:'send_messages',    name:'Send Messages',      desc:'Can send messages in channels'},
+  {id:'manage_messages',  name:'Manage Messages',    desc:'Can delete any message'},
+  {id:'manage_channels',  name:'Manage Channels',    desc:'Can create and delete channels'},
+  {id:'manage_roles',     name:'Manage Roles',       desc:'Can create and assign roles'},
+  {id:'manage_categories',name:'Manage Categories',  desc:'Can create and rename categories'},
+  {id:'pin_messages',     name:'Pin Messages',       desc:'Can pin messages in channels'},
+  {id:'post_announcements',name:'Post Announcements',desc:'Can post in locked channels'},
+  {id:'invite_members',   name:'Invite Members',     desc:'Can open DMs with any staff'},
+];
+const EMOJI_SET = ['👍','❤️','😂','🔥','✅','👀','🎉','💯','😮','🤔','💀','🙏','⚡','🎯','✨','🚀'];
+const ROLE_COLORS = ['#FF5733','#F4C542','#7DBE8E','#A78BFA','#38BDF8','#F472B6','#FB923C','#60A5FA','#94A3B8','#E879F9'];
+
+const DEFAULT_CATEGORIES = [
+  {id:'general-cat',  name:'General',      order:0},
+  {id:'moderation',   name:'Moderation',   order:1},
+  {id:'development',  name:'Development',  order:2},
+];
 const DEFAULT_CHANNELS = [
-  {id:'announcements', name:'announcements', desc:'Important updates from leadership', locked:true},
-  {id:'general',       name:'general',       desc:'General staff chat'},
-  {id:'changelog',     name:'changelog',     desc:'What got shipped and when'},
-  {id:'suggestions',   name:'suggestions',   desc:'Ideas to improve Elaborate'},
+  {id:'announcements', name:'announcements', desc:'Important updates from leadership', catId:'general-cat',   type:'readonly', order:0},
+  {id:'general',       name:'general',       desc:'General staff chat',                catId:'general-cat',   type:'public',   order:1},
+  {id:'changelog',     name:'changelog',     desc:'What got shipped and when',         catId:'general-cat',   type:'public',   order:2},
+  {id:'suggestions',   name:'suggestions',   desc:'Ideas to improve Elaborate',        catId:'general-cat',   type:'public',   order:3},
 ];
 
+function uidColor(uid){ let h=0; for(const c of(uid||''))h=(Math.imul(31,h)+c.charCodeAt(0))|0; return RANK_COLORS[Math.abs(h)%RANK_COLORS.length]; }
+
 /* ══ STATE ══ */
-let me = null;          // { uid, displayName, email, rank, color }
-let channels = [];      // [{ id, name, desc, locked, pinned:[] }]
-let activeChId = null;
-let msgsUnsub  = null;
-let threadsUnsub = {};  // msgId → unsub fn
-let activeThread = null; // { parentMsg, replies }
-let replyingTo   = null; // { id, authorName, text }
-let pinnedOpen   = false;
-let staffMembers = [];  // for @mentions
+let me = null;
+let categories = [];
+let channels   = [];
+let roles      = [];
+let staffMembers = [];
+let presenceMap  = {};
+let activeChId   = null;
+let activeDmId   = null;
+let msgsUnsub    = null;
+let dmUnsub      = null;
+let typingUnsub  = null;
+let threadUnsub  = null;
+let replyingTo   = null;
+let editingRole  = null;
+let activeThread = null;
+let collapsedCats = new Set(JSON.parse(localStorage.getItem('esc_collapsed')||'[]'));
+let emojiTray    = null;
+let mentionIdx   = -1;
+let typingTimer  = null;
 
 /* ══ AUTH ══ */
 onAuthStateChanged(auth, async user => {
-  if (!user) {
-    document.getElementById('mainArea').innerHTML = `
-      <div class="auth-gate">
-        <div style="font-size:3rem;margin-bottom:8px">🔒</div>
-        <h2>Staff only</h2>
-        <p>You need to be logged into an Elaborate staff account to access this page.</p>
-        <a href="/admin.html">Go to Admin Portal →</a>
-      </div>`;
-    return;
-  }
-  // Check they are staff
-  const adminSnap = await getDoc(doc(db,'admins',user.uid));
-  if (!adminSnap.exists()) {
-    document.getElementById('mainArea').innerHTML = `
-      <div class="auth-gate">
-        <div style="font-size:3rem;margin-bottom:8px">⛔</div>
-        <h2>Not a staff member</h2>
-        <p>This area is only accessible to Elaborate staff. If you think this is a mistake, contact the admin team.</p>
-        <a href="/index.html">← Back to Elaborate</a>
-      </div>`;
-    return;
-  }
-  const ad = adminSnap.data();
-  // Owner check: email from Auth OR email stored in the admins doc, case-insensitive
-  const OWNER_EMAIL = 'jonnyschoen29@gmail.com';
-  const authEmail = (user.email || '').toLowerCase();
-  const docEmail  = (ad.email  || '').toLowerCase();
-  const isOwner   = authEmail === OWNER_EMAIL || docEmail === OWNER_EMAIL;
+  if (!user) { showGate('not-logged-in'); return; }
+  const snap = await getDoc(doc(db,'admins',user.uid));
+  if (!snap.exists()) { showGate('not-staff'); return; }
+  const ad = snap.data();
+  const OWNER = 'jonnyschoen29@gmail.com';
+  const isOwner = (user.email||'').toLowerCase()===OWNER || (ad.email||'').toLowerCase()===OWNER;
   me = {
-    uid:         user.uid,
+    uid: user.uid,
     displayName: ad.displayName || user.displayName || user.email,
-    email:       user.email,
-    rank:        isOwner ? 'owner' : (ad.rank || 'sr_admin'),
-    color:       uidColor(user.uid),
+    email: user.email,
+    rank: isOwner ? 'owner' : (ad.rank || 'jr_admin'),
+    color: uidColor(user.uid),
+    status: 'active',
+    statusMsg: '',
   };
   initUI();
-  await loadChannels();
-  loadStaffMembers();
+  await bootstrapCollections();
+  loadAll();
   setPresence(true);
+  loadStaffMembers();
 });
 
-/* ══ PRESENCE ══ */
-function setPresence(online) {
-  if (!me) return;
-  setDoc(doc(db,'staffPresence',me.uid), {
-    uid: me.uid,
-    displayName: me.displayName,
-    rank: me.rank,
-    color: me.color,
-    online,
-    lastSeen: serverTimestamp(),
-  }, {merge:true});
-}
-window.addEventListener('beforeunload', () => setPresence(false));
-setInterval(() => { if(me) setPresence(true); }, 60000);
-
-// Listen to presence
-function watchPresence() {
-  onSnapshot(collection(db,'staffPresence'), snap => {
-    const online = snap.docs
-      .map(d=>d.data())
-      .filter(p=>p.online)
-      .sort((a,b)=>(a.displayName||'').localeCompare(b.displayName||''));
-    renderOnline(online);
-  });
-}
-
-function renderOnline(list) {
-  const el = document.getElementById('onlineList');
-  if (!el) return;
-  el.innerHTML = list.map(p => {
-    const ri = STAFF_RANKS[p.rank]||STAFF_RANKS.jr_admin;
-    const isMe = p.uid === me?.uid;
-    const status = p.status || 'active';
-    const statusColors = {active:'#22c55e', busy:'#FF5733', away:'#F4C542', offline:'#555'};
-    const statusDotColor = statusColors[status]||'#22c55e';
-    return `<div onclick="${isMe?'':'openDM(\''+p.uid+'\',\''+esc(p.displayName||'')+'\')'}"
-      style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;margin-bottom:1px;cursor:${isMe?'default':'pointer'};transition:background .12s"
-      onmouseover="if(!${isMe})this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'">
-      <div style="position:relative;flex-shrink:0">
-        <div style="width:26px;height:26px;border-radius:7px;background:${p.color||uidColor(p.uid||'')};display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.65rem;color:#fff">${(p.displayName||'?')[0].toUpperCase()}</div>
-        <div style="position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;background:${statusDotColor};border:1.5px solid var(--s1)"></div>
-      </div>
-      <div style="min-width:0;flex:1">
-        <div style="font-size:.8rem;font-weight:${isMe?700:500};color:${isMe?'var(--txt)':'rgba(240,238,248,.7)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.displayName||'?')}${isMe?' <span style="color:var(--faint);font-size:.7rem">(you)</span>':''}</div>
-        <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--faint)">${ri.label}${p.statusMsg?' · '+esc(p.statusMsg):''}</div>
-      </div>
-    </div>`;
-  }).join('');
+function showGate(type) {
+  const msgs = {
+    'not-logged-in': ['🔒','Staff only','You need a staff account to access this.'],
+    'not-staff': ['⛔','Not a staff member','Contact the admin team if you think this is a mistake.'],
+  };
+  const [icon,title,sub] = msgs[type];
+  document.getElementById('main').innerHTML = `<div class="auth-gate">
+    <div style="font-size:3rem;opacity:.4">${icon}</div>
+    <h2>${title}</h2>
+    <p>${sub}</p>
+    <a href="/admin.html">← Admin Portal</a>
+  </div>`;
 }
 
 /* ══ INIT UI ══ */
 function initUI() {
-  // Top bar
-  document.getElementById('topbarUserName').textContent = me.displayName;
-  const av = document.getElementById('topbarAv');
-  av.textContent = (me.displayName[0]||'?').toUpperCase();
-  av.style.cssText += `;background:${me.color};color:#fff`;
+  const name = me.displayName;
+  document.getElementById('topName').textContent = name;
+  const tav = document.getElementById('topAv');
+  tav.textContent = (name[0]||'?').toUpperCase();
+  tav.style.cssText = `background:${me.color};color:#fff;width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.68rem`;
 
-  // Sidebar footer
   const sfAv = document.getElementById('sfAv');
-  sfAv.textContent = (me.displayName[0]||'?').toUpperCase();
-  sfAv.style.cssText = `background:${me.color};color:#fff;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.78rem;flex-shrink:0;position:relative`;
-  document.getElementById('sfDisplay').textContent = me.displayName;
+  sfAv.textContent = (name[0]||'?').toUpperCase();
+  sfAv.style.cssText = `background:${me.color};color:#fff;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.72rem;flex-shrink:0;position:relative;cursor:pointer`;
+  const dot = document.createElement('div');
+  dot.id = 'myStatusDot';
+  dot.className = 'sf-status-dot status-dot active';
+  sfAv.appendChild(dot);
+
+  document.getElementById('sfName').textContent = name;
   const ri = STAFF_RANKS[me.rank]||STAFF_RANKS.jr_admin;
-  const sfRankEl = document.getElementById('sfRankLabel');
-  if (sfRankEl) sfRankEl.textContent = ri.label;
-  else document.getElementById('sfRank').textContent = ri.label;
+  document.getElementById('sfRankLbl').textContent = ri.label;
 
-  // Only Sr Admin+ can create channels
-  const canCreate = ['owner','sr_admin','admin'].includes(me.rank);
-  document.getElementById('addChannelBtn').style.display = canCreate ? 'flex' : 'none';
-
-  watchPresence();
-  renderDMList();
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey||e.metaKey) && e.key==='k') { e.preventDefault(); document.getElementById('sbSearch')?.focus(); }
+    if ((e.ctrlKey||e.metaKey) && e.key==='f' && activeChId) { e.preventDefault(); toggleSearch(); }
+    if (e.key==='Escape') { closeEmojiTray(); document.getElementById('mentionDD')?.classList.remove('open'); }
+  });
 }
 
-/* ══ CHANNELS ══ */
-async function loadChannels() {
-  // Ensure defaults exist
+/* ══ BOOTSTRAP ══ */
+async function bootstrapCollections() {
+  // Categories
+  for (const cat of DEFAULT_CATEGORIES) {
+    const ref = doc(db,'escCategories',cat.id);
+    if (!(await getDoc(ref)).exists()) await setDoc(ref, {...cat, createdAt:serverTimestamp()});
+  }
+  // Channels
   for (const ch of DEFAULT_CHANNELS) {
-    const ref = doc(db,'staffChannels',ch.id);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) {
-      await setDoc(ref, { name:ch.name, desc:ch.desc, locked:!!ch.locked, pinned:[], createdAt:serverTimestamp() });
-    }
+    const ref = doc(db,'escChannels',ch.id);
+    if (!(await getDoc(ref)).exists()) await setDoc(ref, {...ch, pinned:[], createdAt:serverTimestamp()});
   }
-  // Live listen
-  onSnapshot(collection(db,'staffChannels'), snap => {
-    channels = snap.docs.map(d=>({id:d.id,...d.data()}))
-      .sort((a,b) => {
-        const def = DEFAULT_CHANNELS.map(c=>c.id);
-        const ai = def.indexOf(a.id), bi = def.indexOf(b.id);
-        if (ai>=0 && bi>=0) return ai-bi;
-        if (ai>=0) return -1; if (bi>=0) return 1;
-        return (a.name||'').localeCompare(b.name||'');
-      });
-    renderChannelList();
-    if (!activeChId && channels.length) openChannel(channels[0].id);
-  });
-}
-
-function renderChannelList() {
-  const el = document.getElementById('channelList');
-  el.innerHTML = channels.map(ch => `
-    <div class="ch-item ${ch.id===activeChId?'active':''}" onclick="openChannel('${ch.id}')" id="chitem_${ch.id}">
-      <span class="ch-hash">#</span>
-      <span class="ch-name">${esc(ch.name)}</span>
-      ${ch.locked?'<span style="font-size:.7rem;color:var(--faint);flex-shrink:0">🔒</span>':''}
-      <span class="ch-badge" id="badge_${ch.id}" style="display:none">•</span>
-    </div>`).join('');
-}
-
-async function openChannel(chId) {
-  activeChId = chId;
-  closeThread();
-  renderChannelList();
-
-  const ch = channels.find(c=>c.id===chId);
-  if (!ch) return;
-
-  // Topbar
-  document.getElementById('topbarChannel').style.display = 'flex';
-  document.getElementById('topbarChName').textContent = ch.name;
-
-  // Render main area
-  const canPost = !ch.locked || ['owner','sr_admin','admin'].includes(me.rank);
-  const canEditDesc = ['owner','sr_admin','admin'].includes(me.rank);
-  document.getElementById('mainArea').innerHTML = `
-    <div class="ch-header">
-      <span class="ch-header-hash">#</span>
-      <span class="ch-header-name">${esc(ch.name)}</span>
-      ${ch.desc?`<div class="ch-header-sep"></div><span class="ch-header-desc" id="chDescSpan"${canEditDesc?' onclick="editChannelDesc()" title="Click to edit" style="cursor:pointer"':''}>${esc(ch.desc)}</span>`:''}
-      <div class="ch-header-actions" style="margin-left:auto;display:flex;align-items:center;gap:6px">
-        ${(ch.pinned&&ch.pinned.length)?`<button class="ch-action-btn" onclick="togglePinned()" id="pinnedBtn">📌 ${ch.pinned.length} pinned</button>`:''}
-        <button class="ch-action-btn" onclick="toggleSearchPanel()">🔍 Search</button>
-      </div>
-    </div>
-    <div id="searchPanel" style="display:none;padding:10px 20px 4px;flex-shrink:0;border-bottom:1px solid var(--border)">
-      <div style="position:relative">
-        <input id="chSearchInput" type="text" placeholder="Search in #${esc(ch.name)}…"
-          style="width:100%;padding:9px 14px 9px 36px;border-radius:9px;border:1.5px solid var(--border);background:var(--s2);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none"
-          oninput="searchChannel(this.value)"
-          onkeydown="if(event.key==='Escape')toggleSearchPanel()"/>
-        <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:.82rem;pointer-events:none">🔍</span>
-      </div>
-      <div id="chSearchResults" style="margin-top:6px;max-height:200px;overflow-y:auto;border-radius:8px;border:1px solid var(--border);background:var(--s2);display:none"></div>
-    </div>
-    <div class="msgs-wrap" id="msgsWrap"></div>
-    <div class="typing-wrap" id="typingWrap"></div>
-    <button class="jump-btn" id="jumpBtn" onclick="scrollToBottom()">↓ Jump to latest</button>
-    <div class="compose-wrap" ${canPost?'':'style="display:none"'} style="position:relative">
-      <div class="mention-dropdown" id="mentionDropdown"></div>
-      <div class="compose-box">
-        <div class="compose-reply-bar" id="replyBar">
-          <span style="font-size:.75rem;color:var(--faint)">Replying to</span>
-          <span class="compose-reply-txt" id="replyTxt"></span>
-          <button class="compose-reply-close" onclick="clearReply()">✕</button>
-        </div>
-        <textarea class="compose-input" id="composeInput"
-          placeholder="Message #${esc(ch.name)}  —  @ to mention"
-          oninput="autosize(this);handleMentionInput(this);handleTyping()"
-          onkeydown="handleComposeKey(event)"></textarea>
-        <div class="compose-toolbar">
-          <button class="ct-btn" onclick="toggleEmojiCompose()" title="Emoji">😊</button>
-          <span style="font-size:.68rem;color:var(--faint);margin-left:6px"><span class="kbd">↵</span> send &nbsp;<span class="kbd">⇧↵</span> newline</span>
-          <button class="compose-send" onclick="sendMessage()" id="sendBtn">Send <span style="font-size:.8rem;opacity:.6">↵</span></button>
-        </div>
-      </div>
-    </div>
-    ${!canPost?`<div style="padding:14px 20px;text-align:center;font-size:.8rem;color:var(--faint);border-top:1px solid var(--border)">🔒 Only Admins and above can post in #${esc(ch.name)}</div>`:''}
-    <div class="pinned-panel" id="pinnedPanel" style="position:relative"></div>
-  `;
-
-  // Messages listener
-  if (msgsUnsub) msgsUnsub();
-  const q = query(collection(db,'staffChannels',chId,'messages'), orderBy('createdAt','asc'), limit(200));
-  msgsUnsub = onSnapshot(q, snap => {
-    const msgs = snap.docs.map(d=>({id:d.id,...d.data()}));
-    renderMessages(msgs, ch);
-  });
-
-  // Scroll → jump button
-  setTimeout(() => {
-    const wrap = document.getElementById('msgsWrap');
-    if (wrap) {
-      wrap.addEventListener('scroll', () => {
-        const btn = document.getElementById('jumpBtn');
-        if (!btn) return;
-        const atBottom = wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 120;
-        btn.classList.toggle('show', !atBottom);
-      });
-    }
-  }, 300);
-
-  // Typing listener for this channel
-  watchTyping(chId);
-}
-window.openChannel = openChannel;
-
-/* ══ RENDER MESSAGES ══ */
-function renderMessages(msgs, ch) {
-  const wrap = document.getElementById('msgsWrap');
-  if (!wrap) return;
-  const wasAtBottom = wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 60;
-
-  if (!msgs.length) {
-    wrap.innerHTML = `<div class="ch-empty">
-      <div class="ch-empty-icon">#</div>
-      <h3>Welcome to #${esc(ch.name)}</h3>
-      <p>${esc(ch.desc||'This is the start of the channel.')}</p>
-    </div>`;
-    return;
-  }
-
-  let html = '';
-  let lastDate = null;
-  let lastAuthor = null;
-  let lastTime = null;
-
-  msgs.forEach((m, idx) => {
-    const ts = m.createdAt?.toDate ? m.createdAt.toDate() : new Date();
-    const dateStr = ts.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-    const timeStr = ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    const timeHoverStr = ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    const isToday = dateStr === new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-
-    if (dateStr !== lastDate) {
-      html += `<div class="date-divider"><span>${isToday?'Today':dateStr}</span></div>`;
-      lastDate = dateStr;
-      lastAuthor = null;
-    }
-
-    const timeDiff = lastTime ? (ts - lastTime)/1000 : 999;
-    const isCont = m.authorUid === lastAuthor && timeDiff < 300 && !m.replyTo;
-    lastAuthor = m.authorUid;
-    lastTime   = ts;
-
-    const authorColor = uidColor(m.authorUid||'');
-    const ri = STAFF_RANKS[m.authorRank]||STAFF_RANKS.jr_admin;
-    const isMine = m.authorUid === me?.uid;
-    const isDeleted = m.deleted;
-
-    // Reactions
-    const reactions = m.reactions || {};
-    const reactHtml = Object.entries(reactions).filter(([,v])=>v&&v.length).map(([emoji,uids])=>{
-      const mine = uids.includes(me?.uid);
-      return `<button class="reaction-pill ${mine?'mine':''}" onclick="toggleReaction('${m.id}','${emoji}')">
-        ${emoji}<span class="reaction-count">${uids.length}</span>
-      </button>`;
-    }).join('');
-
-    // Reply quote
-    const replyHtml = m.replyTo ? `<div class="reply-quote"><span class="reply-quote-author">@${esc(m.replyTo.authorName)}</span>${esc((m.replyTo.text||'').slice(0,80))}</div>` : '';
-
-    // Thread preview
-    let threadHtml = '';
-    if ((m.threadCount||0) > 0) {
-      threadHtml = `<div class="thread-preview" onclick="openThread('${m.id}')">
-        <span class="thread-count">${m.threadCount} ${m.threadCount===1?'reply':'replies'}</span>
-        <span class="thread-preview-text">${esc(m.lastThreadPreview||'')}</span>
-        <span style="font-size:.75rem;color:var(--muted);margin-left:auto;flex-shrink:0">View thread →</span>
-      </div>`;
-    }
-
-    const canEdit = isMine && !isDeleted;
-    const canDelete = (isMine || ['owner','sr_admin'].includes(me?.rank)) && !isDeleted;
-    const canPin = ['owner','sr_admin','admin'].includes(me?.rank);
-
-    html += `<div class="msg-row ${isCont?'continuation':''}" id="msg_${m.id}" data-id="${m.id}">
-      ${isCont
-        ? `<div class="msg-av-wrap"><span class="msg-ts-hover">${timeHoverStr.split(' ')[0]}</span></div>`
-        : `<div class="msg-av-wrap">
-            <div class="msg-av" style="background:${authorColor};color:#fff" title="${esc(m.authorName||'')}">
-              ${(m.authorName||'?')[0].toUpperCase()}
-            </div>
-          </div>`
-      }
-      <div class="msg-body">
-        ${!isCont?`<div class="msg-header">
-          <span class="msg-author" style="color:${authorColor}">${esc(m.authorName||'Unknown')}</span>
-          <span class="msg-rank-pill" style="background:${ri.bg};color:${ri.color}">${ri.label}</span>
-          <span class="msg-time">${isToday ? timeStr : dateStr+' '+timeStr}</span>
-        </div>`:''}
-        ${replyHtml}
-        ${isDeleted
-          ? `<span class="msg-text deleted">This message was deleted.</span>`
-          : `<span class="msg-text" id="text_${m.id}">${formatText(m.text||'')}</span>${m.editedAt?'<span class="msg-edited">(edited)</span>':''}`
-        }
-        ${reactHtml ? `<div class="msg-reactions">${reactHtml}<button class="reaction-pill" onclick="openEmojiTray('${m.id}',this)" title="Add reaction" style="padding:3px 6px;font-size:.85rem;color:var(--faint)">＋</button></div>` : ''}
-        ${threadHtml}
-      </div>
-      <div class="msg-actions">
-        <button class="ma-btn" onclick="openEmojiTray('${m.id}',this)" title="React">😊</button>
-        <button class="ma-btn" onclick="replyToMsg('${m.id}','${esc(m.authorName||'')}','${esc((m.text||'').slice(0,60))}')" title="Reply in thread">💬</button>
-        ${canPin?`<button class="ma-btn" onclick="togglePin('${m.id}')" title="Pin">${(ch.pinned||[]).includes(m.id)?'📌':'📍'}</button>`:''}
-        ${canEdit?`<button class="ma-btn" onclick="startEdit('${m.id}')" title="Edit">✎</button>`:''}
-        ${canDelete?`<button class="ma-btn danger" onclick="deleteMsg('${m.id}')" title="Delete">🗑</button>`:''}
-      </div>
-    </div>`;
-  });
-
-  wrap.innerHTML = html;
-  if (wasAtBottom) wrap.scrollTop = wrap.scrollHeight;
-}
-
-/* ══ FORMAT TEXT (mentions, links) ══ */
-function formatText(txt) {
-  return esc(txt)
-    .replace(/@(\w[\w\s]*)/g, '<span class="mention">@$1</span>')
-    .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:var(--sky);text-decoration:underline">$1</a>');
-}
-
-/* ══ SEND MESSAGE ══ */
-async function sendMessage() {
-  const input = document.getElementById('composeInput');
-  const text = (input?.value||'').trim();
-  if (!text || !activeChId || !me) return;
-  input.value = ''; input.style.height = '';
-
-  const data = {
-    text, authorUid: me.uid, authorName: me.displayName,
-    authorRank: me.rank, createdAt: serverTimestamp(),
-    reactions: {}, threadCount: 0, deleted: false,
-  };
-  if (replyingTo) { data.replyTo = replyingTo; clearReply(); }
-
-  await addDoc(collection(db,'staffChannels',activeChId,'messages'), data);
-  const wrap = document.getElementById('msgsWrap');
-  if (wrap) wrap.scrollTop = wrap.scrollHeight;
-}
-window.sendMessage = sendMessage;
-
-/* ══ COMPOSE KEYS ══ */
-window.handleComposeKey = function(e) {
-  if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-};
-
-window.autosize = function(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 160)+'px';
-};
-
-/* ══ REPLY TO ══ */
-window.replyToMsg = function(id, author, preview) {
-  replyingTo = {id, authorName:author, text:preview};
-  const bar = document.getElementById('replyBar');
-  const txt = document.getElementById('replyTxt');
-  if (bar) bar.classList.add('show');
-  if (txt) txt.innerHTML = `<strong>${esc(author)}</strong> ${esc(preview)}`;
-  document.getElementById('composeInput')?.focus();
-};
-window.clearReply = function() {
-  replyingTo = null;
-  document.getElementById('replyBar')?.classList.remove('show');
-};
-
-/* ══ REACTIONS ══ */
-window.toggleReaction = async function(msgId, emoji) {
-  if (!me || !activeChId) return;
-  const ref = doc(db,'staffChannels',activeChId,'messages',msgId);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) return;
-  const reactions = snap.data().reactions || {};
-  const uids = reactions[emoji] || [];
-  const mine = uids.includes(me.uid);
-  await updateDoc(ref, {
-    [`reactions.${emoji}`]: mine ? arrayRemove(me.uid) : arrayUnion(me.uid)
-  });
-};
-
-/* ══ EMOJI TRAY ══ */
-let emojiTray = null;
-window.openEmojiTray = function(msgId, btn) {
-  if (emojiTray) { emojiTray.remove(); emojiTray=null; return; }
-  const tray = document.createElement('div');
-  tray.className = 'emoji-tray';
-  tray.style.cssText = 'position:fixed;z-index:50';
-  EMOJI_SET.forEach(em => {
-    const b = document.createElement('button');
-    b.textContent = em;
-    b.onclick = () => { toggleReaction(msgId, em); tray.remove(); emojiTray=null; };
-    tray.appendChild(b);
-  });
-  document.body.appendChild(tray);
-  emojiTray = tray;
-  // Position near button
-  const rect = btn.getBoundingClientRect();
-  tray.style.top = (rect.top - tray.offsetHeight - 8)+'px';
-  tray.style.left = Math.min(rect.left, window.innerWidth - 230)+'px';
-  // Close on outside click
-  setTimeout(() => document.addEventListener('click', function h(){tray.remove();emojiTray=null;document.removeEventListener('click',h);}), 10);
-};
-
-window.toggleEmojiCompose = function() {
-  if (emojiTray) { emojiTray.remove(); emojiTray=null; return; }
-  const tray = document.createElement('div');
-  tray.className = 'emoji-tray';
-  tray.style.cssText = 'position:fixed;bottom:120px;right:60px;z-index:50';
-  EMOJI_SET.forEach(em => {
-    const b = document.createElement('button');
-    b.textContent = em;
-    b.onclick = () => {
-      const inp = document.getElementById('composeInput');
-      if (inp) { inp.value += em; inp.focus(); }
-      tray.remove(); emojiTray=null;
-    };
-    tray.appendChild(b);
-  });
-  document.body.appendChild(tray);
-  emojiTray = tray;
-  setTimeout(() => document.addEventListener('click', function h(){tray.remove();emojiTray=null;document.removeEventListener('click',h);}), 10);
-};
-
-/* ══ EDIT ══ */
-window.startEdit = function(msgId) {
-  const textEl = document.getElementById('text_'+msgId);
-  if (!textEl) return;
-  const original = textEl.textContent;
-  const row = textEl.closest('.msg-body');
-  const editArea = document.createElement('div');
-  editArea.innerHTML = `
-    <textarea class="edit-input" id="editInput_${msgId}" rows="1">${original}</textarea>
-    <div class="edit-actions">
-      <button class="edit-save" onclick="saveEdit('${msgId}')">Save</button>
-      <button class="edit-cancel" onclick="cancelEdit('${msgId}','${esc(original)}')">Cancel</button>
-      <span style="font-size:.72rem;color:var(--faint);margin-left:auto">escape to cancel · enter to save</span>
-    </div>`;
-  textEl.replaceWith(editArea);
-  const ta = document.getElementById('editInput_'+msgId);
-  if (ta) {
-    ta.focus(); ta.select();
-    ta.style.height = 'auto'; ta.style.height = ta.scrollHeight+'px';
-    ta.addEventListener('keydown', e => {
-      if (e.key==='Escape') { e.preventDefault(); cancelEdit(msgId, original); }
-      if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); saveEdit(msgId); }
+  // Global permissions
+  const permRef = doc(db,'escSettings','permissions');
+  if (!(await getDoc(permRef)).exists()) {
+    const defaults = {};
+    PERMISSIONS.forEach(p => {
+      defaults[p.id] = {
+        owner:true, sr_admin:true, admin:true,
+        mod: ['send_messages','pin_messages','manage_messages'].includes(p.id),
+        jr_admin: p.id==='send_messages',
+        developer: ['send_messages','pin_messages'].includes(p.id),
+        marketing: p.id==='send_messages',
+        trainee: false,
+      };
     });
-  }
-};
-window.saveEdit = async function(msgId) {
-  const ta = document.getElementById('editInput_'+msgId);
-  const newText = (ta?.value||'').trim();
-  if (!newText || !activeChId) return;
-  await updateDoc(doc(db,'staffChannels',activeChId,'messages',msgId), {
-    text: newText, editedAt: serverTimestamp()
-  });
-};
-window.cancelEdit = function(msgId, original) {
-  // Message will re-render via snapshot
-};
-
-/* ══ DELETE ══ */
-window.deleteMsg = async function(msgId) {
-  if (!confirm('Delete this message?')) return;
-  await updateDoc(doc(db,'staffChannels',activeChId,'messages',msgId), {
-    deleted: true, text: '', editedAt: serverTimestamp()
-  });
-};
-
-/* ══ PIN ══ */
-window.togglePin = async function(msgId) {
-  const ch = channels.find(c=>c.id===activeChId);
-  if (!ch) return;
-  const pinned = ch.pinned||[];
-  const ref = doc(db,'staffChannels',activeChId);
-  if (pinned.includes(msgId)) {
-    await updateDoc(ref, {pinned: arrayRemove(msgId)});
-    toast('Message unpinned.');
-  } else {
-    await updateDoc(ref, {pinned: arrayUnion(msgId)});
-    toast('Message pinned! 📌');
-  }
-};
-
-window.togglePinned = function() {
-  pinnedOpen = !pinnedOpen;
-  const panel = document.getElementById('pinnedPanel');
-  if (!panel) return;
-  if (pinnedOpen) { renderPinnedPanel(); panel.classList.add('open'); }
-  else panel.classList.remove('open');
-};
-
-async function renderPinnedPanel() {
-  const ch = channels.find(c=>c.id===activeChId);
-  if (!ch || !ch.pinned?.length) return;
-  const panel = document.getElementById('pinnedPanel');
-  if (!panel) return;
-  panel.innerHTML = `<div class="pinned-panel-header">📌 Pinned Messages</div><div class="pinned-list" id="pinnedListInner"></div>`;
-  for (const msgId of ch.pinned) {
-    const snap = await getDoc(doc(db,'staffChannels',activeChId,'messages',msgId));
-    if (!snap.exists()) continue;
-    const m = snap.data();
-    const li = document.createElement('div');
-    li.className = 'pinned-item';
-    li.innerHTML = `<div class="pinned-author">${esc(m.authorName||'?')}</div><div class="pinned-text">${esc(m.text||'')}</div>`;
-    li.onclick = () => { document.getElementById('msg_'+msgId)?.scrollIntoView({behavior:'smooth',block:'center'}); panel.classList.remove('open'); pinnedOpen=false; };
-    document.getElementById('pinnedListInner')?.appendChild(li);
+    await setDoc(permRef, defaults);
   }
 }
 
-/* ══ THREADS ══ */
-window.openThread = async function(parentId) {
-  const threadPanel = document.getElementById('threadPanel');
-  const msgsWrap = document.getElementById('msgsWrap');
-  // Get parent message
-  const snap = await getDoc(doc(db,'staffChannels',activeChId,'messages',parentId));
-  if (!snap.exists()) return;
-  const parent = {id:parentId,...snap.data()};
-  activeThread = {parentId, parent};
-
-  // Render parent in thread panel
-  const ri = STAFF_RANKS[parent.authorRank]||STAFF_RANKS.jr_admin;
-  const authorColor = uidColor(parent.authorUid||'');
-  document.getElementById('tpParent').innerHTML = `
-    <div style="display:flex;gap:10px;align-items:flex-start">
-      <div style="width:28px;height:28px;border-radius:8px;background:${authorColor};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.72rem;flex-shrink:0">${(parent.authorName||'?')[0].toUpperCase()}</div>
-      <div>
-        <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:3px">
-          <span style="font-weight:700;font-size:.85rem;color:${authorColor}">${esc(parent.authorName||'?')}</span>
-          <span style="font-family:'DM Mono',monospace;font-size:.55rem;padding:1px 5px;border-radius:3px;background:${ri.bg};color:${ri.color}">${ri.label}</span>
-        </div>
-        <div style="font-size:.84rem;color:rgba(240,238,248,.8);line-height:1.55;white-space:pre-wrap">${formatText(parent.text||'')}</div>
-      </div>
-    </div>`;
-
-  threadPanel.classList.add('open');
-
-  // Listen to thread replies
-  if (threadsUnsub[parentId]) threadsUnsub[parentId]();
-  const q = query(collection(db,'staffChannels',activeChId,'messages',parentId,'replies'), orderBy('createdAt','asc'));
-  threadsUnsub[parentId] = onSnapshot(q, snap2 => {
-    const replies = snap2.docs.map(d=>({id:d.id,...d.data()}));
-    renderThreadReplies(replies);
+/* ══ LOAD ALL ══ */
+function loadAll() {
+  // Live categories
+  onSnapshot(collection(db,'escCategories'), snap => {
+    categories = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order||0)-(b.order||0));
+    renderSidebar();
   });
-
-  document.getElementById('tpInput')?.focus();
-};
-window.openThread = openThread;
-
-function renderThreadReplies(replies) {
-  const el = document.getElementById('tpMsgs');
-  if (!el) return;
-  if (!replies.length) {
-    el.innerHTML = `<div style="text-align:center;color:var(--faint);font-size:.8rem;padding:24px 0">No replies yet.</div>`;
-    return;
-  }
-  el.innerHTML = replies.map(r => {
-    const authorColor = uidColor(r.authorUid||'');
-    const ri = STAFF_RANKS[r.authorRank]||STAFF_RANKS.jr_admin;
-    const ts = r.createdAt?.toDate?r.createdAt.toDate().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}):'';
-    return `<div style="display:flex;gap:9px">
-      <div style="width:26px;height:26px;border-radius:7px;background:${authorColor};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.68rem;flex-shrink:0">${(r.authorName||'?')[0].toUpperCase()}</div>
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:2px">
-          <span style="font-weight:700;font-size:.82rem;color:${authorColor}">${esc(r.authorName||'?')}</span>
-          <span style="font-family:'DM Mono',monospace;font-size:.55rem;padding:1px 5px;border-radius:3px;background:${ri.bg};color:${ri.color}">${ri.label}</span>
-          <span style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--faint)">${ts}</span>
-        </div>
-        <div style="font-size:.84rem;color:rgba(240,238,248,.8);line-height:1.55;white-space:pre-wrap">${formatText(r.text||'')}</div>
-      </div>
-    </div>`;
-  }).join('');
-  el.scrollTop = el.scrollHeight;
+  // Live channels
+  onSnapshot(collection(db,'escChannels'), snap => {
+    channels = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order||0)-(b.order||0));
+    renderSidebar();
+    if (!activeChId && !activeDmId && channels.length) openChannel(channels[0].id);
+  });
+  // Live roles
+  onSnapshot(collection(db,'escRoles'), snap => {
+    roles = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderSidebar();
+  });
+  // Presence
+  onSnapshot(collection(db,'escPresence'), snap => {
+    presenceMap = {};
+    snap.docs.forEach(d => { presenceMap[d.id] = d.data(); });
+    renderOnlineList();
+    renderDMList();
+  });
 }
-
-window.sendThreadReply = async function() {
-  if (!activeThread || !me) return;
-  const input = document.getElementById('tpInput');
-  const text = (input?.value||'').trim();
-  if (!text) return;
-  input.value = ''; input.style.height = '';
-
-  const {parentId} = activeThread;
-  // Add reply as subcollection
-  await addDoc(collection(db,'staffChannels',activeChId,'messages',parentId,'replies'), {
-    text, authorUid: me.uid, authorName: me.displayName,
-    authorRank: me.rank, createdAt: serverTimestamp(),
-  });
-  // Update parent thread count + preview
-  const replySnap = await getDocs(collection(db,'staffChannels',activeChId,'messages',parentId,'replies'));
-  await updateDoc(doc(db,'staffChannels',activeChId,'messages',parentId), {
-    threadCount: replySnap.size,
-    lastThreadPreview: me.displayName+': '+text.slice(0,60),
-  });
-};
-
-window.closeThread = function() {
-  document.getElementById('threadPanel')?.classList.remove('open');
-  if (activeThread?.parentId && threadsUnsub[activeThread.parentId]) {
-    threadsUnsub[activeThread.parentId]();
-    delete threadsUnsub[activeThread.parentId];
-  }
-  activeThread = null;
-};
-
-/* ══ NEW CHANNEL ══ */
-window.openNewChannelModal = function() {
-  document.getElementById('newChModal').classList.add('open');
-  document.getElementById('newChName').focus();
-};
-window.closeNewChannelModal = function() {
-  document.getElementById('newChModal').classList.remove('open');
-  document.getElementById('newChName').value = '';
-  document.getElementById('newChDesc').value = '';
-};
-window.confirmNewChannel = async function() {
-  const name = document.getElementById('newChName').value.trim().replace(/[^a-z0-9-]/g,'-');
-  const desc = document.getElementById('newChDesc').value.trim();
-  if (!name) return;
-  if (channels.find(c=>c.name===name)) { toast('A channel with that name already exists.'); return; }
-  const ref = doc(collection(db,'staffChannels'));
-  await setDoc(ref, {name, desc, locked:false, pinned:[], createdAt:serverTimestamp()});
-  closeNewChannelModal();
-  toast('#'+name+' created!');
-  setTimeout(()=>openChannel(ref.id), 400);
-};
-
-/* ══ @MENTION INPUT ══ */
-window.handleMentionInput = function(input) {
-  // Could show a dropdown of staff names — for now just allow free typing
-};
 
 async function loadStaffMembers() {
   const snap = await getDocs(collection(db,'admins'));
   staffMembers = snap.docs.map(d=>({uid:d.id,...d.data()}));
+  renderDMList();
 }
 
-/* ══ UTILS ══ */
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function toast(msg, dur=3000) {
-  const c = document.getElementById('toastWrap');
-  const t = document.createElement('div');
-  t.className = 'toast'; t.textContent = msg;
-  c.appendChild(t);
-  setTimeout(()=>t.remove(), dur);
+/* ══ PRESENCE ══ */
+function setPresence(online) {
+  if (!me) return;
+  setDoc(doc(db,'escPresence',me.uid), {
+    uid:me.uid, displayName:me.displayName, rank:me.rank,
+    color:me.color, status:me.status||'active',
+    statusMsg:me.statusMsg||'', online, lastSeen:serverTimestamp(),
+  },{merge:true});
 }
-window.toast = toast;
+window.addEventListener('beforeunload',()=>setPresence(false));
+setInterval(()=>{ if(me) setPresence(true); },60000);
 
-/* ══ SCROLL TO BOTTOM ══ */
-window.scrollToBottom = function() {
-  const wrap = document.getElementById('msgsWrap');
-  if (wrap) { wrap.scrollTop = wrap.scrollHeight; }
-  const btn = document.getElementById('jumpBtn');
-  if (btn) btn.classList.remove('show');
+/* ══ PERMISSIONS ══ */
+async function canDo(perm) {
+  if (me.rank==='owner') return true;
+  const snap = await getDoc(doc(db,'escSettings','permissions'));
+  if (!snap.exists()) return false;
+  return !!(snap.data()[perm]?.[me.rank]);
+}
+
+/* ══ RENDER SIDEBAR ══ */
+function renderSidebar() {
+  const el = document.getElementById('catList');
+  if (!el) return;
+
+  // Build category → channels map
+  const catMap = {};
+  categories.forEach(c => { catMap[c.id] = []; });
+  catMap['__uncategorized'] = [];
+  channels.forEach(ch => {
+    const catId = ch.catId || '__uncategorized';
+    if (!catMap[catId]) catMap[catId] = [];
+    catMap[catId].push(ch);
+  });
+
+  const isAdmin = ['owner','sr_admin','admin'].includes(me?.rank||'');
+
+  el.innerHTML = [...categories, {id:'__uncategorized',name:'Other'}]
+    .filter(cat => cat.id==='__uncategorized' ? (catMap['__uncategorized']||[]).length>0 : true)
+    .map(cat => {
+      const chs = catMap[cat.id] || [];
+      const collapsed = collapsedCats.has(cat.id);
+      return `<div class="cat-header ${collapsed?'collapsed':''}" onclick="toggleCat('${cat.id}')">
+        <span class="cat-arrow">▾</span>
+        <span class="cat-name">${esc(cat.name||'')}</span>
+        ${isAdmin&&cat.id!=='__uncategorized'?`<button class="cat-add" onclick="event.stopPropagation();openNewChannelWithCat('${cat.id}')" title="Add channel">＋</button>`:''}
+      </div>
+      <div class="cat-channels ${collapsed?'collapsed':''}" style="max-height:${collapsed?'0':chs.length*32+'px'}">
+        ${chs.map(ch => {
+          const isActive = ch.id===activeChId;
+          const canPost = canPostInChannel(ch);
+          return `<div class="ch-item ${isActive?'active':''}" id="chitem_${ch.id}" onclick="openChannel('${ch.id}')">
+            <span class="ch-hash">#</span>
+            <span class="ch-name">${esc(ch.name||'')}</span>
+            ${ch.type==='readonly'?'<span class="ch-lock">🔒</span>':''}
+            ${ch.type==='restricted'?'<span class="ch-lock">🛡</span>':''}
+            <div class="ch-item-actions">
+              ${isAdmin?`<button class="ch-ia-btn" onclick="event.stopPropagation();editChannel('${ch.id}')" title="Settings">⚙</button>`:''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }).join('');
+}
+
+window.toggleCat = function(catId) {
+  if (collapsedCats.has(catId)) collapsedCats.delete(catId);
+  else collapsedCats.add(catId);
+  try { localStorage.setItem('esc_collapsed', JSON.stringify([...collapsedCats])); } catch(e){}
+  renderSidebar();
 };
 
-/* ══ SEARCH ══ */
-window.toggleSearchPanel = function() {
-  const panel = document.getElementById('searchPanel');
-  if (!panel) return;
-  const open = panel.style.display === 'none';
-  panel.style.display = open ? 'block' : 'none';
-  if (open) { document.getElementById('chSearchInput')?.focus(); }
-  else {
-    document.getElementById('chSearchResults').style.display = 'none';
-    document.getElementById('chSearchInput').value = '';
+function canPostInChannel(ch) {
+  if (!ch || !me) return false;
+  if (['owner','sr_admin'].includes(me.rank)) return true;
+  if (ch.type==='readonly') return false;
+  if (ch.type==='restricted' && ch.requiredRole) {
+    return roles.find(r=>r.id===ch.requiredRole)?.members?.includes(me.uid) || false;
   }
-};
+  return true;
+}
 
-window.searchChannel = async function(val) {
-  const el = document.getElementById('chSearchResults');
-  if (!el || !activeChId) return;
-  if (!val.trim()) { el.style.display = 'none'; return; }
-  const q = query(collection(db,'staffChannels',activeChId,'messages'), orderBy('createdAt','asc'), limit(200));
-  const snap = await getDocs(q);
-  const lower = val.toLowerCase();
-  const results = snap.docs
-    .map(d=>({id:d.id,...d.data()}))
-    .filter(m => !m.deleted && (m.text||'').toLowerCase().includes(lower));
-  if (!results.length) {
-    el.style.display = 'block';
-    el.innerHTML = '<div style="padding:12px 16px;font-size:.82rem;color:var(--muted)">No results.</div>';
-    return;
-  }
-  const highlight = txt => esc(txt).replace(new RegExp(esc(val).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'), m=>`<mark class="search-highlight">${m}</mark>`);
-  el.style.display = 'block';
-  el.innerHTML = results.slice(0,20).map(m => {
-    const time = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
-    return `<div class="search-result-item" onclick="jumpToMsg('${m.id}')">
-      <div class="search-result-author" style="color:${uidColor(m.authorUid||'')}">${esc(m.authorName||'?')}</div>
-      <div class="search-result-text">${highlight((m.text||'').slice(0,120))}</div>
-      <div class="search-result-time">${time}</div>
-    </div>`;
-  }).join('');
-};
-
-window.jumpToMsg = function(msgId) {
-  const el = document.getElementById('msg_'+msgId);
-  if (el) {
-    el.scrollIntoView({behavior:'smooth', block:'center'});
-    el.style.background = 'rgba(255,87,51,.1)';
-    setTimeout(()=>{ el.style.background=''; }, 1500);
-  }
-  toggleSearchPanel();
-};
-
-/* ══ TYPING INDICATOR ══ */
-let typingTimeout = null;
-let typingUnsub = null;
-
-window.handleTyping = function() {
-  if (!me || !activeChId) return;
-  setDoc(doc(db,'staffTyping',activeChId+'_'+me.uid), {
-    uid: me.uid, name: me.displayName,
-    channelId: activeChId, at: serverTimestamp(),
-  }, {merge:true});
-  clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(() => {
-    deleteDoc(doc(db,'staffTyping',activeChId+'_'+me.uid)).catch(()=>{});
-  }, 3000);
-};
-
-function watchTyping(chId) {
-  if (typingUnsub) { typingUnsub(); typingUnsub = null; }
-  const q = query(collection(db,'staffTyping'), where('channelId','==',chId));
-  typingUnsub = onSnapshot(q, snap => {
-    const typers = snap.docs
-      .map(d=>d.data())
-      .filter(t => t.uid !== me?.uid && t.at?.toDate && (Date.now()-t.at.toDate().getTime()) < 5000);
-    const el = document.getElementById('typingWrap');
-    if (!el) return;
-    if (!typers.length) { el.innerHTML = ''; return; }
-    const names = typers.map(t=>t.name.split(' ')[0]).join(', ');
-    el.innerHTML = `<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div> <span>${esc(names)} ${typers.length===1?'is':'are'} typing…</span>`;
+/* ══ RENDER ONLINE ══ */
+function renderOnlineList() {
+  const el = document.getElementById('onlineList');
+  const countEl = document.getElementById('onlineCount');
+  if (!el) return;
+  const online = Object.values(presenceMap).filter(p=>p.online).sort((a,b)=>(a.displayName||'').localeCompare(b.displayName||''));
+  if (countEl) countEl.textContent = online.length;
+  const statusColors = {active:'#22c55e',busy:'#FF5733',away:'#F4C542',offline:'#555'};
+  el.innerHTML = '';
+  online.forEach(p => {
+    const isMe = p.uid === me?.uid;
+    const ri = STAFF_RANKS[p.rank]||STAFF_RANKS.jr_admin;
+    const sc = statusColors[p.status||'active'];
+    const row = document.createElement('div');
+    row.style.cssText = `display:flex;align-items:center;gap:8px;padding:4px 8px 4px 12px;cursor:${isMe?'default':'pointer'};border-radius:5px;margin:1px 6px;transition:background .1s`;
+    if (!isMe) {
+      row.onmouseenter = function(){this.style.background='rgba(255,255,255,.05)';};
+      row.onmouseleave = function(){this.style.background='transparent';};
+      row.onclick = () => openDMWithUid(p.uid, p.displayName||'');
+    }
+    row.innerHTML = `<div style="position:relative;flex-shrink:0">
+        <div style="width:24px;height:24px;border-radius:6px;background:${p.color||uidColor(p.uid||'')};display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.6rem;color:#fff">${(p.displayName||'?')[0].toUpperCase()}</div>
+        <div style="position:absolute;bottom:-1px;right:-1px;width:7px;height:7px;border-radius:50%;background:${sc};border:1.5px solid var(--s1)"></div>
+      </div>
+      <div style="min-width:0;flex:1">
+        <div style="font-size:.78rem;font-weight:${isMe?700:500};color:${isMe?'var(--txt)':'rgba(240,238,248,.65)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.displayName||'?')}${isMe?' <span style="color:var(--faint);font-size:.68rem">(you)</span>':''}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.56rem;color:var(--faint)">${ri.label}${p.statusMsg?' · '+esc(p.statusMsg):''}</div>
+      </div>`;
+    el.appendChild(row);
   });
 }
 
-/* ══ STATUS ══ */
-let myStatus = 'active';
+function renderDMList() {
+  const el = document.getElementById('dmList');
+  if (!el || !me) return;
+  const others = staffMembers.filter(s => s.uid !== me.uid);
+  if (!others.length) { el.innerHTML = ''; return; }
+  const recentDMs = others.slice(0,8);
+  el.innerHTML = recentDMs.map(s => {
+    const presence = presenceMap[s.uid];
+    const sc = {active:'#22c55e',busy:'#FF5733',away:'#F4C542',offline:'#555'}[presence?.status||'offline'];
+    const dmId = [me.uid,s.uid].sort().join('_');
+    const isActive = activeDmId === dmId;
+    return `<div class="dm-item ${isActive?'active':''}" onclick="openDMWithUid('${esc(s.uid)}','${esc(s.displayName||s.email||'')}')">
+      <div class="dm-av" style="background:${uidColor(s.uid)};color:#fff">
+        ${(s.displayName||'?')[0].toUpperCase()}
+        <div class="dm-status-dot" style="background:${sc}"></div>
+      </div>
+      <span class="dm-name">${esc(s.displayName||s.email||'?')}</span>
+    </div>`;
+  }).join('');
+}
 
-window.toggleStatusMenu = function() {
-  const m = document.getElementById('statusMenu');
-  if (!m) return;
-  m.classList.toggle('open');
-  if (m.classList.contains('open')) {
-    document.getElementById('statusMsgInput').value = me?.statusMsg || '';
-    setTimeout(() => document.addEventListener('click', function h(e){
-      if (!m.contains(e.target) && e.target.title !== 'Set status') {
-        m.classList.remove('open');
-        document.removeEventListener('click',h);
+/* ══ OPEN CHANNEL ══ */
+window.openChannel = async function(chId) {
+  activeChId = chId;
+  activeDmId = null;
+  closeThread();
+  renderSidebar();
+
+  const ch = channels.find(c=>c.id===chId);
+  if (!ch) return;
+
+  document.getElementById('topCh').style.display='flex';
+  document.getElementById('topChName').textContent = ch.name;
+  document.getElementById('topChDesc').style.display = ch.desc?'block':'none';
+  document.getElementById('topChDesc').textContent = ch.desc||'';
+
+  const canPost = canPostInChannel(ch);
+  const isAdmin = ['owner','sr_admin','admin'].includes(me.rank);
+
+  document.getElementById('main').innerHTML = `
+    <div class="ch-topbar">
+      <span class="ch-topbar-hash">#</span>
+      <span class="ch-topbar-name">${esc(ch.name)}</span>
+      ${ch.desc?`<div class="ch-topbar-sep"></div><span class="ch-topbar-desc" ${isAdmin?'onclick="editChDesc()" title="Click to edit"':''}>${esc(ch.desc)}</span>`:''}
+      <div class="ch-topbar-actions" style="margin-left:auto;display:flex;align-items:center;gap:5px;position:relative">
+        ${(ch.pinned?.length)?`<button class="top-btn" onclick="togglePinPanel()" id="pinBtn">📌 ${ch.pinned.length}</button>`:''}
+        <button class="top-btn" onclick="toggleSearch()">🔍 Search</button>
+        <div class="pin-panel" id="pinPanel"></div>
+      </div>
+    </div>
+    <div class="search-panel" id="searchPanel">
+      <div style="position:relative">
+        <input class="sp-input" id="spInput" type="text" placeholder="Search in #${esc(ch.name)}…"
+          oninput="doSearch(this.value)"
+          onkeydown="if(event.key==='Escape')toggleSearch()"/>
+        <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:.78rem;pointer-events:none">🔍</span>
+      </div>
+      <div class="sp-results" id="spResults"></div>
+    </div>
+    <div class="msgs-area" id="msgsArea"></div>
+    <div class="typing-bar" id="typingBar"></div>
+    <button class="jump-btn" id="jumpBtn" onclick="scrollBottom()">↓ Latest</button>
+    ${canPost ? `<div class="compose" style="position:relative">
+      <div class="mention-dd" id="mentionDD"></div>
+      <div class="compose-box">
+        <div class="reply-bar" id="replyBar">
+          <span style="font-size:.7rem;color:var(--faint)">Replying to</span>
+          <span class="reply-bar-txt" id="replyBarTxt"></span>
+          <button class="reply-bar-x" onclick="clearReply()">✕</button>
+        </div>
+        <textarea class="compose-ta" id="composeTa"
+          placeholder="Message #${esc(ch.name)}"
+          oninput="autosize(this);onComposeTa(this)"
+          onkeydown="onComposeTaKey(event)"></textarea>
+        <div class="compose-toolbar">
+          <button class="ct" onclick="toggleEmojiCompose()" title="Emoji">😊</button>
+          <span style="font-size:.66rem;color:var(--faint);margin-left:6px"><span class="kbd">↵</span> send &nbsp;<span class="kbd">⇧↵</span> newline &nbsp;<span class="kbd">@</span> mention</span>
+          <button class="compose-send" onclick="sendMsg()">Send <span style="opacity:.6;font-size:.78rem">↵</span></button>
+        </div>
+      </div>
+    </div>` : `<div class="ch-locked">🔒 ${ch.type==='readonly'?'Only Admins can post here':ch.type==='restricted'?'Restricted channel — role required':'Read only'}</div>`}
+  `;
+
+  // Scroll listener
+  const area = document.getElementById('msgsArea');
+  area.addEventListener('scroll', () => {
+    const btn = document.getElementById('jumpBtn');
+    if (btn) btn.classList.toggle('show', area.scrollHeight-area.scrollTop-area.clientHeight>100);
+  });
+
+  if (msgsUnsub) msgsUnsub();
+  const q = query(collection(db,'escChannels',chId,'messages'),orderBy('createdAt','asc'),limit(250));
+  msgsUnsub = onSnapshot(q, snap => renderMsgs(snap.docs.map(d=>({id:d.id,...d.data()})), ch));
+
+  watchTyping(chId);
+};
+
+/* ══ RENDER MESSAGES ══ */
+function renderMsgs(msgs, ch) {
+  const area = document.getElementById('msgsArea');
+  if (!area) return;
+  const atBottom = area.scrollHeight - area.scrollTop - area.clientHeight < 80;
+
+  if (!msgs.length) {
+    area.innerHTML = `<div class="ch-empty">
+      <div class="ch-empty-icon">#</div>
+      <h3>Welcome to #${esc(ch.name)}</h3>
+      <p>${esc(ch.desc||'This is the beginning of the channel.')}</p>
+    </div>`;
+    return;
+  }
+
+  let html='', lastDate='', lastAuthor='', lastTime=null;
+  const isAdmin = ['owner','sr_admin','admin'].includes(me?.rank||'');
+
+  msgs.forEach(m => {
+    const ts = m.createdAt?.toDate ? m.createdAt.toDate() : new Date();
+    const dateStr = ts.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+    const timeStr = ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    const isToday = new Date().toDateString()===ts.toDateString();
+
+    if (dateStr!==lastDate) {
+      html+=`<div class="date-div"><span>${isToday?'Today':dateStr}</span></div>`;
+      lastDate=dateStr; lastAuthor='';
+    }
+    const gap = lastTime ? (ts-lastTime)/1000 : 999;
+    const cont = m.authorUid===lastAuthor && gap<300 && !m.replyTo && !m.deleted;
+    lastAuthor = m.authorUid; lastTime = ts;
+
+    const color = uidColor(m.authorUid||'');
+    const ri = STAFF_RANKS[m.authorRank]||STAFF_RANKS.jr_admin;
+    const isMine = m.authorUid===me?.uid;
+    const del = m.deleted;
+
+    // Get custom role if assigned
+    const customRole = roles.find(r=>(r.members||[]).includes(m.authorUid));
+    const displayColor = customRole ? customRole.color : color;
+    const displayRank = customRole ? customRole.name : ri.label;
+    const rankBg = customRole ? customRole.color+'22' : ri.bg;
+    const rankFg = customRole ? customRole.color : ri.color;
+
+    const rxns = Object.entries(m.reactions||{}).filter(([,v])=>v?.length).map(([emoji,uids])=>{
+      const mine = uids.includes(me?.uid);
+      return `<button class="rxn ${mine?'mine':''}" onclick="toggleRxn('${m.id}','${emoji}')">
+        ${emoji}<span class="rxn-count">${uids.length}</span>
+      </button>`;
+    }).join('');
+
+    const replyQ = m.replyTo ? `<div class="reply-q"><strong>@${esc(m.replyTo.authorName)}</strong>${esc((m.replyTo.text||'').slice(0,80))}</div>` : '';
+
+    const threadHtml = (m.threadCount||0)>0 ? `<div class="thread-prev" onclick="openThread('${m.id}')">
+      <span class="thread-count">${m.threadCount} ${m.threadCount===1?'reply':'replies'}</span>
+      <span class="thread-last">${esc(m.lastThreadPreview||'')}</span>
+      <span class="thread-open">View →</span>
+    </div>` : '';
+
+    const canEdit = isMine && !del;
+    const canDel  = (isMine||isAdmin) && !del;
+    const canPin  = isAdmin;
+
+    html += `<div class="msg-row" id="msg_${m.id}">
+      ${cont
+        ? `<div class="msg-av-col"><span class="msg-ts-sm">${timeStr.replace(/ (AM|PM)/,'').toLowerCase()}</span></div>`
+        : `<div class="msg-av-col"><div class="msg-av" style="background:${displayColor};color:#fff" title="${esc(m.authorName||'')}">${(m.authorName||'?')[0].toUpperCase()}</div></div>`
       }
-    }), 50);
-  }
+      <div class="msg-body">
+        ${!cont?`<div class="msg-header">
+          <span class="msg-name" style="color:${displayColor}">${esc(m.authorName||'Unknown')}</span>
+          <span class="msg-rank" style="background:${rankBg};color:${rankFg}">${esc(displayRank)}</span>
+          <span class="msg-time">${isToday?timeStr:dateStr+' '+timeStr}</span>
+        </div>`:''}
+        ${replyQ}
+        ${del
+          ? '<span class="msg-text deleted">This message was deleted.</span>'
+          : `<span class="msg-text" id="txt_${m.id}">${fmtText(m.text||'')}</span>${m.editedAt?'<span class="msg-edited">(edited)</span>':''}`
+        }
+        ${rxns?`<div class="reactions">${rxns}<button class="rxn" onclick="openEmojiTray('${m.id}',this)" style="padding:2px 6px;font-size:.78rem;color:var(--faint)">＋</button></div>`:''}
+        ${threadHtml}
+      </div>
+      <div class="msg-actions">
+        <button class="ma" onclick="openEmojiTray('${m.id}',this)" title="React">😊</button>
+        <button class="ma" onclick="replyTo('${m.id}','${esc(m.authorName||'')}','${esc((m.text||'').slice(0,60))}')" title="Reply in thread">💬</button>
+        ${canPin?`<button class="ma" onclick="togglePin('${m.id}')" title="Pin">📌</button>`:''}
+        ${canEdit?`<button class="ma" onclick="startEdit('${m.id}')" title="Edit">✎</button>`:''}
+        ${canDel?`<button class="ma del" onclick="delMsg('${m.id}')" title="Delete">🗑</button>`:''}
+      </div>
+    </div>`;
+  });
+
+  area.innerHTML = html;
+  if (atBottom) area.scrollTop = area.scrollHeight;
+}
+
+function fmtText(t) {
+  return esc(t)
+    .replace(/@([\w ]+)/g,'<span class="mention">@$1</span>')
+    .replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');
+}
+
+/* ══ SEND ══ */
+window.sendMsg = async function() {
+  const ta = document.getElementById('composeTa');
+  const txt = (ta?.value||'').trim();
+  if (!txt || !activeChId || !me) return;
+  ta.value=''; ta.style.height='';
+  const data = {
+    text:txt, authorUid:me.uid, authorName:me.displayName,
+    authorRank:me.rank, createdAt:serverTimestamp(),
+    reactions:{}, threadCount:0, deleted:false,
+  };
+  if (replyingTo) { data.replyTo = replyingTo; clearReply(); }
+  await addDoc(collection(db,'escChannels',activeChId,'messages'), data);
+  scrollBottom();
+  // Clear typing
+  if (typingTimer) { clearTimeout(typingTimer); typingTimer=null; }
+  deleteDoc(doc(db,'escTyping',activeChId+'_'+me.uid)).catch(()=>{});
 };
 
-window.setStatus = async function(status) {
-  myStatus = status;
-  const dot = document.getElementById('myStatusDot');
-  if (dot) { dot.className = 'status-dot '+status; dot.style.cssText = 'position:absolute;bottom:-1px;right:-1px;border:2px solid var(--s1)'; }
-  if (me) {
-    me.status = status;
-    await setDoc(doc(db,'staffPresence',me.uid), { status, lastSeen: serverTimestamp() }, {merge:true});
-  }
-  document.getElementById('statusMenu')?.classList.remove('open');
-  toast('Status set to '+status);
+window.scrollBottom = function() {
+  const a = document.getElementById('msgsArea');
+  if (a) a.scrollTop = a.scrollHeight;
+  document.getElementById('jumpBtn')?.classList.remove('show');
 };
 
-window.saveStatusMsg = async function() {
-  const msg = document.getElementById('statusMsgInput')?.value.trim() || '';
-  if (me) {
-    me.statusMsg = msg;
-    await setDoc(doc(db,'staffPresence',me.uid), { statusMsg: msg }, {merge:true});
-    document.getElementById('sfStatusMsg').textContent = msg ? '· '+msg : '';
-  }
+/* ══ COMPOSE HANDLERS ══ */
+window.autosize = function(el) {
+  el.style.height='auto';
+  el.style.height = Math.min(el.scrollHeight,150)+'px';
 };
 
-/* ══ @MENTION DROPDOWN (real) ══ */
-let mentionQuery = null;
-let mentionSelectedIdx = -1;
+window.onComposeTa = function(el) {
+  autosize(el);
+  handleMentions(el);
+  handleTypingIndicator();
+};
 
-window.handleMentionInput = function(input) {
-  const val = input.value;
-  const cursor = input.selectionStart;
-  const before = val.slice(0, cursor);
+window.onComposeTaKey = function(e) {
+  const dd = document.getElementById('mentionDD');
+  if (dd?.classList.contains('open')) {
+    const opts = dd.querySelectorAll('.mention-opt');
+    if (e.key==='ArrowDown'){e.preventDefault();mentionIdx=Math.min(mentionIdx+1,opts.length-1);opts.forEach((o,i)=>o.classList.toggle('sel',i===mentionIdx));return;}
+    if (e.key==='ArrowUp'){e.preventDefault();mentionIdx=Math.max(mentionIdx-1,0);opts.forEach((o,i)=>o.classList.toggle('sel',i===mentionIdx));return;}
+    if (e.key==='Enter'&&mentionIdx>=0){e.preventDefault();insertMention(opts[mentionIdx]?.dataset.name||'');return;}
+    if (e.key==='Escape'){dd.classList.remove('open');return;}
+  }
+  if (e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
+};
+
+function handleMentions(input) {
+  const val = input.value, cursor = input.selectionStart;
+  const before = val.slice(0,cursor);
   const match = before.match(/@(\w*)$/);
-  const dropdown = document.getElementById('mentionDropdown');
-  if (!dropdown) return;
-  if (!match) { dropdown.classList.remove('open'); mentionQuery=null; return; }
-  mentionQuery = match[1].toLowerCase();
-  const filtered = staffMembers.filter(s =>
-    (s.displayName||s.email||'').toLowerCase().includes(mentionQuery) && s.uid !== me?.uid
-  ).slice(0,6);
-  if (!filtered.length) { dropdown.classList.remove('open'); return; }
-  mentionSelectedIdx = -1;
-  dropdown.innerHTML = filtered.map((s,i) => {
-    const ri = STAFF_RANKS[s.rank||'jr_admin']||STAFF_RANKS.jr_admin;
+  const dd = document.getElementById('mentionDD');
+  if (!dd) return;
+  if (!match){dd.classList.remove('open');return;}
+  const q2 = match[1].toLowerCase();
+  const filtered = staffMembers.filter(s=>(s.displayName||'').toLowerCase().includes(q2)&&s.uid!==me?.uid).slice(0,6);
+  if (!filtered.length){dd.classList.remove('open');return;}
+  mentionIdx=-1;
+  dd.innerHTML = filtered.map((s,i)=>{
+    const ri2 = STAFF_RANKS[s.rank||'jr_admin']||STAFF_RANKS.jr_admin;
     return `<div class="mention-opt" data-name="${esc(s.displayName||s.email||'')}" data-idx="${i}">
       <div class="mention-av" style="background:${uidColor(s.uid)};color:#fff">${(s.displayName||'?')[0].toUpperCase()}</div>
       <span class="mention-name">${esc(s.displayName||s.email||'?')}</span>
-      <span class="mention-rank">${ri.label}</span>
+      <span class="mention-rank-lbl">${ri2.label}</span>
     </div>`;
   }).join('');
-  dropdown.querySelectorAll('.mention-opt').forEach(opt => {
-    opt.addEventListener('click', () => insertMention(opt.dataset.name));
-  });
-  dropdown.classList.add('open');
-};
-
-function insertMention(name) {
-  const input = document.getElementById('composeInput');
-  if (!input) return;
-  const val = input.value;
-  const cursor = input.selectionStart;
-  const before = val.slice(0, cursor);
-  const after  = val.slice(cursor);
-  const newBefore = before.replace(/@(\w*)$/, '@'+name+' ');
-  input.value = newBefore + after;
-  input.focus();
-  const pos = newBefore.length;
-  input.setSelectionRange(pos, pos);
-  document.getElementById('mentionDropdown')?.classList.remove('open');
-  mentionQuery = null;
+  dd.querySelectorAll('.mention-opt').forEach(opt=>opt.addEventListener('click',()=>insertMention(opt.dataset.name)));
+  dd.classList.add('open');
 }
 
-// Handle arrow keys in compose for mention dropdown
-const origComposeKey = window.handleComposeKey;
-window.handleComposeKey = function(e) {
-  const dropdown = document.getElementById('mentionDropdown');
-  if (dropdown?.classList.contains('open')) {
-    const opts = dropdown.querySelectorAll('.mention-opt');
-    if (e.key === 'ArrowDown') { e.preventDefault(); mentionSelectedIdx=Math.min(mentionSelectedIdx+1,opts.length-1); opts.forEach((o,i)=>o.classList.toggle('selected',i===mentionSelectedIdx)); return; }
-    if (e.key === 'ArrowUp')   { e.preventDefault(); mentionSelectedIdx=Math.max(mentionSelectedIdx-1,0); opts.forEach((o,i)=>o.classList.toggle('selected',i===mentionSelectedIdx)); return; }
-    if (e.key === 'Enter' && mentionSelectedIdx >= 0) { e.preventDefault(); insertMention(opts[mentionSelectedIdx]?.dataset.name||''); return; }
-    if (e.key === 'Escape') { dropdown.classList.remove('open'); return; }
-  }
-  if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+function insertMention(name) {
+  const input = document.getElementById('composeTa');
+  if (!input) return;
+  const cursor = input.selectionStart;
+  const before = input.value.slice(0,cursor).replace(/@(\w*)$/,'@'+name+' ');
+  input.value = before + input.value.slice(cursor);
+  input.focus();
+  input.setSelectionRange(before.length,before.length);
+  document.getElementById('mentionDD')?.classList.remove('open');
+}
+
+/* ══ TYPING INDICATOR ══ */
+function handleTypingIndicator() {
+  if (!me||!activeChId) return;
+  setDoc(doc(db,'escTyping',activeChId+'_'+me.uid),{
+    uid:me.uid, name:me.displayName, channelId:activeChId, at:serverTimestamp()
+  },{merge:true});
+  if (typingTimer) clearTimeout(typingTimer);
+  typingTimer = setTimeout(()=>{
+    deleteDoc(doc(db,'escTyping',activeChId+'_'+me.uid)).catch(()=>{});
+    typingTimer=null;
+  },3500);
+}
+
+function watchTyping(chId) {
+  if (typingUnsub){typingUnsub();typingUnsub=null;}
+  const q2 = query(collection(db,'escTyping'),where('channelId','==',chId));
+  typingUnsub = onSnapshot(q2, snap=>{
+    const typers = snap.docs.map(d=>d.data()).filter(t=>t.uid!==me?.uid&&t.at?.toDate&&Date.now()-t.at.toDate().getTime()<5000);
+    const bar = document.getElementById('typingBar');
+    if (!bar) return;
+    if (!typers.length){bar.innerHTML='';return;}
+    const names = typers.map(t=>t.name.split(' ')[0]).join(', ');
+    bar.innerHTML=`<div class="t-dots"><div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div></div> ${esc(names)} ${typers.length===1?'is':'are'} typing…`;
+  });
+}
+
+/* ══ REPLY ══ */
+window.replyTo = function(id,author,preview) {
+  replyingTo={id,authorName:author,text:preview};
+  const bar=document.getElementById('replyBar');
+  const txt=document.getElementById('replyBarTxt');
+  if(bar)bar.classList.add('show');
+  if(txt)txt.innerHTML=`<strong>${esc(author)}</strong> ${esc(preview)}`;
+  document.getElementById('composeTa')?.focus();
+};
+window.clearReply = function(){
+  replyingTo=null;
+  document.getElementById('replyBar')?.classList.remove('show');
 };
 
-/* ══ DIRECT MESSAGES ══ */
-let activeDmUid = null;
-let dmUnsub = null;
+/* ══ REACTIONS ══ */
+window.toggleRxn = async function(msgId,emoji) {
+  if(!me||!activeChId) return;
+  const ref = doc(db,'escChannels',activeChId,'messages',msgId);
+  const snap = await getDoc(ref);
+  if(!snap.exists()) return;
+  const rxns = snap.data().reactions||{};
+  const uids = rxns[emoji]||[];
+  await updateDoc(ref,{[`reactions.${emoji}`]:uids.includes(me.uid)?arrayRemove(me.uid):arrayUnion(me.uid)});
+};
 
-window.openDMPicker = function() {
-  // Show a quick picker of online staff
-  const online = Object.values(staffMembers).filter(s => s.uid !== me?.uid);
-  if (!online.length) { toast('No other staff members found.'); return; }
-  const existing = document.getElementById('dmPickerModal');
-  if (existing) { existing.remove(); return; }
-  const modal = document.createElement('div');
-  modal.id = 'dmPickerModal';
-  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center';
-  modal.innerHTML = `<div style="background:var(--s2);border:1px solid var(--border2);border-radius:14px;padding:22px;width:320px;max-height:400px;overflow-y:auto">
-    <div style="font-family:Fraunces,serif;font-weight:900;font-size:1.05rem;color:var(--txt);margin-bottom:14px">Open a Direct Message</div>
-    ${online.map(s => `<div onclick="openDM('${s.uid}','${esc(s.displayName||s.email||'')}');document.getElementById('dmPickerModal').remove()"
-      style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;cursor:pointer;transition:background .12s"
-      onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background='transparent'">
-      <div style="width:28px;height:28px;border-radius:8px;background:${uidColor(s.uid)};color:#fff;display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.72rem">${(s.displayName||'?')[0].toUpperCase()}</div>
+window.openEmojiTray = function(msgId,btn) {
+  closeEmojiTray();
+  const tray = document.createElement('div');
+  tray.className='emoji-tray';
+  EMOJI_SET.forEach(em=>{
+    const b=document.createElement('button');
+    b.textContent=em;
+    b.onclick=()=>{toggleRxn(msgId,em);closeEmojiTray();};
+    tray.appendChild(b);
+  });
+  document.body.appendChild(tray);
+  emojiTray=tray;
+  const rect=btn.getBoundingClientRect();
+  tray.style.top=(rect.top-tray.offsetHeight-6)+'px';
+  tray.style.left=Math.min(rect.left,window.innerWidth-220)+'px';
+  setTimeout(()=>document.addEventListener('click',function h(){closeEmojiTray();document.removeEventListener('click',h);}),10);
+};
+window.toggleEmojiCompose = function() {
+  if(emojiTray){closeEmojiTray();return;}
+  const tray=document.createElement('div');
+  tray.className='emoji-tray';
+  tray.style.cssText='position:fixed;bottom:110px;right:80px;z-index:100';
+  EMOJI_SET.forEach(em=>{
+    const b=document.createElement('button');
+    b.textContent=em;
+    b.onclick=()=>{const ta=document.getElementById('composeTa');if(ta){ta.value+=em;ta.focus();}closeEmojiTray();};
+    tray.appendChild(b);
+  });
+  document.body.appendChild(tray);
+  emojiTray=tray;
+  setTimeout(()=>document.addEventListener('click',function h(){closeEmojiTray();document.removeEventListener('click',h);}),10);
+};
+function closeEmojiTray(){if(emojiTray){emojiTray.remove();emojiTray=null;}}
+
+/* ══ EDIT / DELETE ══ */
+window.startEdit = function(msgId) {
+  const span=document.getElementById('txt_'+msgId);
+  if(!span) return;
+  const orig=span.textContent;
+  const wrap=document.createElement('div');
+  wrap.innerHTML=`<textarea class="edit-ta" id="eta_${msgId}" rows="1">${orig}</textarea>
+    <div class="edit-actions">
+      <button class="edit-save" onclick="saveEdit('${msgId}')">Save</button>
+      <button class="edit-cancel" onclick="cancelEdit('${msgId}','${esc(orig)}')">Cancel</button>
+      <span style="font-size:.68rem;color:var(--faint);margin-left:auto">esc to cancel · enter to save</span>
+    </div>`;
+  span.replaceWith(wrap);
+  const ta=document.getElementById('eta_'+msgId);
+  if(ta){
+    ta.focus();ta.select();
+    ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';
+    ta.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){e.preventDefault();cancelEdit(msgId,orig);}
+      if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveEdit(msgId);}
+    });
+  }
+};
+window.saveEdit = async function(msgId) {
+  const ta=document.getElementById('eta_'+msgId);
+  const txt=(ta?.value||'').trim();
+  if(!txt||!activeChId) return;
+  await updateDoc(doc(db,'escChannels',activeChId,'messages',msgId),{text:txt,editedAt:serverTimestamp()});
+};
+window.cancelEdit = function(){};
+window.delMsg = async function(msgId) {
+  if(!confirm('Delete this message?')) return;
+  await updateDoc(doc(db,'escChannels',activeChId,'messages',msgId),{deleted:true,text:'',editedAt:serverTimestamp()});
+};
+
+/* ══ PIN ══ */
+window.togglePin = async function(msgId) {
+  if(!activeChId) return;
+  const ch=channels.find(c=>c.id===activeChId);
+  if(!ch) return;
+  const pinned=ch.pinned||[];
+  const ref=doc(db,'escChannels',activeChId);
+  if(pinned.includes(msgId)){await updateDoc(ref,{pinned:arrayRemove(msgId)});toast('Unpinned.');}
+  else{await updateDoc(ref,{pinned:arrayUnion(msgId)});toast('📌 Pinned!');}
+};
+
+let pinPanelOpen=false;
+window.togglePinPanel = async function() {
+  const panel=document.getElementById('pinPanel');
+  if(!panel) return;
+  pinPanelOpen=!pinPanelOpen;
+  if(!pinPanelOpen){panel.classList.remove('open');return;}
+  const ch=channels.find(c=>c.id===activeChId);
+  if(!ch?.pinned?.length){panel.classList.remove('open');return;}
+  panel.innerHTML=`<div class="pin-panel-hdr">📌 Pinned Messages</div><div class="pin-list" id="pinListInner"></div>`;
+  panel.classList.add('open');
+  for(const id of ch.pinned){
+    const snap=await getDoc(doc(db,'escChannels',activeChId,'messages',id));
+    if(!snap.exists()) continue;
+    const m=snap.data();
+    const li=document.createElement('div');
+    li.className='pin-item';
+    li.innerHTML=`<div class="pin-item-auth">${esc(m.authorName||'?')}</div><div class="pin-item-text">${esc((m.text||'').slice(0,100))}</div>`;
+    li.onclick=()=>{document.getElementById('msg_'+id)?.scrollIntoView({behavior:'smooth',block:'center'});pinPanelOpen=false;panel.classList.remove('open');};
+    document.getElementById('pinListInner')?.appendChild(li);
+  }
+  setTimeout(()=>document.addEventListener('click',function h(e){if(!panel.contains(e.target)&&!e.target.closest('#pinBtn')){panel.classList.remove('open');pinPanelOpen=false;document.removeEventListener('click',h);}}),50);
+};
+
+/* ══ THREADS ══ */
+window.openThread = async function(parentId) {
+  const panel=document.getElementById('threadPanel');
+  const snap=await getDoc(doc(db,'escChannels',activeChId,'messages',parentId));
+  if(!snap.exists()) return;
+  const parent={id:parentId,...snap.data()};
+  activeThread={parentId,parent};
+  const color=uidColor(parent.authorUid||'');
+  const ri2=STAFF_RANKS[parent.authorRank]||STAFF_RANKS.jr_admin;
+  document.getElementById('tpParent').innerHTML=`
+    <div style="display:flex;gap:9px">
+      <div style="width:26px;height:26px;border-radius:7px;background:${color};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.65rem;flex-shrink:0">${(parent.authorName||'?')[0].toUpperCase()}</div>
       <div>
-        <div style="font-size:.84rem;font-weight:600;color:var(--txt)">${esc(s.displayName||s.email||'?')}</div>
-        <div style="font-family:DM Mono,monospace;font-size:.6rem;color:var(--faint)">${(STAFF_RANKS[s.rank||'jr_admin']||STAFF_RANKS.jr_admin).label}</div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:2px">
+          <span style="font-weight:700;font-size:.82rem;color:${color}">${esc(parent.authorName||'?')}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.52rem;padding:1px 5px;border-radius:3px;background:${ri2.bg};color:${ri2.color}">${ri2.label}</span>
+        </div>
+        <div style="font-size:.82rem;color:rgba(240,238,248,.78);line-height:1.5;white-space:pre-wrap">${fmtText(parent.text||'')}</div>
+      </div>
+    </div>`;
+  panel.classList.add('open');
+  if(threadUnsub){threadUnsub();threadUnsub=null;}
+  const q2=query(collection(db,'escChannels',activeChId,'messages',parentId,'replies'),orderBy('createdAt','asc'));
+  threadUnsub=onSnapshot(q2,snap2=>{
+    const replies=snap2.docs.map(d=>({id:d.id,...d.data()}));
+    const el=document.getElementById('tpMsgs');
+    if(!el) return;
+    if(!replies.length){el.innerHTML='<div style="text-align:center;color:var(--faint);font-size:.78rem;padding:20px 0">No replies yet.</div>';return;}
+    el.innerHTML=replies.map(r=>{
+      const rc=uidColor(r.authorUid||'');
+      const rr=STAFF_RANKS[r.authorRank]||STAFF_RANKS.jr_admin;
+      const ts=r.createdAt?.toDate?r.createdAt.toDate().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}):'';
+      return `<div style="display:flex;gap:8px">
+        <div style="width:24px;height:24px;border-radius:6px;background:${rc};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.6rem;flex-shrink:0;margin-top:1px">${(r.authorName||'?')[0].toUpperCase()}</div>
+        <div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:1px">
+            <span style="font-weight:700;font-size:.8rem;color:${rc}">${esc(r.authorName||'?')}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:.52rem;padding:1px 4px;border-radius:3px;background:${rr.bg};color:${rr.color}">${rr.label}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint)">${ts}</span>
+          </div>
+          <div style="font-size:.82rem;color:rgba(240,238,248,.8);line-height:1.5;white-space:pre-wrap">${fmtText(r.text||'')}</div>
+        </div>
+      </div>`;
+    }).join('');
+    el.scrollTop=el.scrollHeight;
+  });
+  document.getElementById('tpTa')?.focus();
+};
+window.closeThread = function(){
+  document.getElementById('threadPanel')?.classList.remove('open');
+  if(threadUnsub){threadUnsub();threadUnsub=null;}
+  activeThread=null;
+};
+window.sendThreadReply = async function(){
+  if(!activeThread||!me||!activeChId) return;
+  const ta=document.getElementById('tpTa');
+  const txt=(ta?.value||'').trim();
+  if(!txt) return;
+  ta.value='';ta.style.height='';
+  const {parentId}=activeThread;
+  await addDoc(collection(db,'escChannels',activeChId,'messages',parentId,'replies'),{
+    text:txt,authorUid:me.uid,authorName:me.displayName,authorRank:me.rank,createdAt:serverTimestamp()
+  });
+  const replySnap=await getDocs(collection(db,'escChannels',activeChId,'messages',parentId,'replies'));
+  await updateDoc(doc(db,'escChannels',activeChId,'messages',parentId),{
+    threadCount:replySnap.size,lastThreadPreview:me.displayName.split(' ')[0]+': '+txt.slice(0,55)
+  });
+};
+
+/* ══ SEARCH ══ */
+let searchOpen=false;
+window.toggleSearch = function(){
+  const panel=document.getElementById('searchPanel');
+  if(!panel) return;
+  searchOpen=!searchOpen;
+  panel.classList.toggle('open',searchOpen);
+  if(searchOpen) document.getElementById('spInput')?.focus();
+  else{document.getElementById('spResults').style.display='none';document.getElementById('spInput').value='';}
+};
+window.doSearch = async function(val){
+  const el=document.getElementById('spResults');
+  if(!el||!activeChId) return;
+  if(!val.trim()){el.style.display='none';return;}
+  const snap=await getDocs(query(collection(db,'escChannels',activeChId,'messages'),orderBy('createdAt','asc'),limit(250)));
+  const lower=val.toLowerCase();
+  const results=snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>!m.deleted&&(m.text||'').toLowerCase().includes(lower));
+  if(!results.length){el.style.display='block';el.innerHTML='<div style="padding:10px 14px;font-size:.8rem;color:var(--muted)">No results found.</div>';return;}
+  const hl=txt=>esc(txt).replace(new RegExp(esc(val).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<mark class="sp-hl">${m}</mark>`);
+  el.style.display='block';
+  el.innerHTML=results.slice(0,15).map(m=>`
+    <div class="sp-item" onclick="jumpToMsg('${m.id}')">
+      <div class="sp-author" style="color:${uidColor(m.authorUid||'')}">${esc(m.authorName||'?')}</div>
+      <div class="sp-text">${hl((m.text||'').slice(0,100))}</div>
+    </div>`).join('');
+};
+window.jumpToMsg = function(id){
+  const el=document.getElementById('msg_'+id);
+  if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.background='rgba(255,87,51,.08)';setTimeout(()=>{el.style.background='';},1600);}
+  toggleSearch();
+};
+
+/* ══ CHANNEL DESC EDIT ══ */
+window.editChDesc = function(){
+  const span=document.querySelector('.ch-topbar-desc');
+  if(!span) return;
+  const orig=span.textContent;
+  const input=document.createElement('input');
+  input.value=orig;
+  input.style.cssText='background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.78rem;outline:none;padding:2px 4px;min-width:200px';
+  input.addEventListener('blur',async()=>{
+    const newDesc=input.value.trim();
+    if(newDesc!==orig&&activeChId) await updateDoc(doc(db,'escChannels',activeChId),{desc:newDesc});
+    input.replaceWith(span); span.textContent=newDesc||orig;
+  });
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')input.blur();if(e.key==='Escape'){input.value=orig;input.blur();}});
+  span.replaceWith(input); input.focus(); input.select();
+};
+
+/* ══ DMs ══ */
+window.openDMPicker = function(){
+  const others=staffMembers.filter(s=>s.uid!==me?.uid);
+  if(!others.length){toast('No other staff members found.');return;}
+  const existing=document.getElementById('dmPickerModal');
+  if(existing){existing.remove();return;}
+  const modal=document.createElement('div');
+  modal.id='dmPickerModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center';
+  modal.innerHTML=`<div style="background:var(--s2);border:1px solid var(--border2);border-radius:12px;padding:20px;width:300px;max-height:380px;overflow-y:auto">
+    <div style="font-family:Fraunces,serif;font-weight:900;font-size:1rem;color:var(--txt);margin-bottom:12px">Open a Direct Message</div>
+    ${others.map(s=>`<div onclick="openDMWithUid('${esc(s.uid)}','${esc(s.displayName||s.email||'')}');document.getElementById('dmPickerModal').remove()"
+      style="display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:background .1s"
+      onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background='transparent'">
+      <div style="width:26px;height:26px;border-radius:7px;background:${uidColor(s.uid)};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.65rem">${(s.displayName||'?')[0].toUpperCase()}</div>
+      <div>
+        <div style="font-size:.82rem;font-weight:600;color:var(--txt)">${esc(s.displayName||s.email||'?')}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--faint)">${(STAFF_RANKS[s.rank||'jr_admin']||STAFF_RANKS.jr_admin).label}</div>
       </div>
     </div>`).join('')}
-    <button onclick="document.getElementById('dmPickerModal').remove()" style="margin-top:10px;width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:DM Sans,sans-serif;cursor:pointer">Cancel</button>
+    <button onclick="document.getElementById('dmPickerModal').remove()" style="margin-top:10px;width:100%;padding:7px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer">Cancel</button>
   </div>`;
-  modal.addEventListener('click', e => { if (e.target===modal) modal.remove(); });
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
   document.body.appendChild(modal);
 };
 
-window.openDM = async function(uid, name) {
-  activeDmUid = uid;
-  activeChId = null;
+window.openDMWithUid = async function(uid, name) {
+  const dmId=[me.uid,uid].sort().join('_');
+  activeDmId=dmId; activeChId=null;
   closeThread();
+  document.querySelectorAll('.ch-item').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.dm-item').forEach(el=>{
+    const id=[me.uid,el.dataset?.uid||''].sort().join('_');
+    el.classList.toggle('active',id===dmId);
+  });
+  document.getElementById('topCh').style.display='flex';
+  document.getElementById('topChName').textContent=name;
+  document.getElementById('topChDesc').style.display='none';
 
-  // DM thread ID = sorted UIDs joined
-  const dmId = [me.uid, uid].sort().join('_');
-
-  // Deactivate channels
-  document.querySelectorAll('.ch-item').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.dm-item').forEach(el => el.classList.toggle('active', el.dataset.uid===uid));
-
-  document.getElementById('topbarChannel').style.display = 'flex';
-  document.getElementById('topbarChName').textContent = name;
-
-  document.getElementById('mainArea').innerHTML = `
-    <div class="ch-header">
-      <div style="width:28px;height:28px;border-radius:8px;background:${uidColor(uid)};color:#fff;display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-weight:900;font-size:.75rem;flex-shrink:0">${(name||'?')[0].toUpperCase()}</div>
-      <span class="ch-header-name" style="margin-left:6px">${esc(name)}</span>
-      <span style="font-family:DM Mono,monospace;font-size:.65rem;color:var(--faint);margin-left:8px">Direct Message</span>
+  document.getElementById('main').innerHTML=`
+    <div class="ch-topbar">
+      <div style="width:26px;height:26px;border-radius:7px;background:${uidColor(uid)};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.65rem">${(name||'?')[0].toUpperCase()}</div>
+      <span class="ch-topbar-name" style="margin-left:5px">${esc(name)}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--faint);margin-left:8px">Direct Message</span>
     </div>
-    <div class="msgs-wrap" id="msgsWrap"></div>
-    <div class="typing-wrap" id="typingWrap"></div>
-    <div class="compose-wrap" style="position:relative">
+    <div class="msgs-area" id="msgsArea"></div>
+    <div class="typing-bar" id="typingBar"></div>
+    <div class="compose" style="position:relative">
       <div class="compose-box">
-        <textarea class="compose-input" id="composeInput"
+        <textarea class="compose-ta" id="composeTa"
           placeholder="Message ${esc(name)}"
-          oninput="autosize(this);handleTypingDM('${dmId}')"
+          oninput="autosize(this)"
           onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendDM('${dmId}','${esc(name)}')}"></textarea>
         <div class="compose-toolbar">
-          <button class="ct-btn" onclick="toggleEmojiCompose()" title="Emoji">😊</button>
+          <button class="ct" onclick="toggleEmojiCompose()">😊</button>
           <button class="compose-send" onclick="sendDM('${dmId}','${esc(name)}')">Send ↵</button>
         </div>
       </div>
     </div>`;
 
-  // Listen to DM messages
-  if (dmUnsub) dmUnsub();
-  const q = query(collection(db,'staffDMs',dmId,'messages'), orderBy('createdAt','asc'), limit(200));
-  dmUnsub = onSnapshot(q, snap => {
-    renderDMMessages(snap.docs.map(d=>({id:d.id,...d.data()})), name, uid);
+  if(dmUnsub){dmUnsub();dmUnsub=null;}
+  const q2=query(collection(db,'escDMs',dmId,'messages'),orderBy('createdAt','asc'),limit(200));
+  dmUnsub=onSnapshot(q2,snap=>{
+    renderDMMsgs(snap.docs.map(d=>({id:d.id,...d.data()})),name,uid);
   });
 
-  // Ensure DM doc exists
-  await setDoc(doc(db,'staffDMs',dmId), {
-    participants: [me.uid, uid],
-    participantNames: {[me.uid]: me.displayName, [uid]: name},
-    lastActivity: serverTimestamp(),
-  }, {merge:true});
-
+  await setDoc(doc(db,'escDMs',dmId),{
+    participants:[me.uid,uid],
+    names:{[me.uid]:me.displayName,[uid]:name},
+    lastActivity:serverTimestamp(),
+  },{merge:true});
   renderDMList();
 };
 
-function renderDMMessages(msgs, otherName, otherUid) {
-  const wrap = document.getElementById('msgsWrap');
-  if (!wrap) return;
-  const wasAtBottom = wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 60;
-  if (!msgs.length) {
-    wrap.innerHTML = `<div class="ch-empty">
-      <div class="ch-empty-icon" style="font-size:2rem">💬</div>
-      <h3>Start a conversation</h3>
-      <p>This is the beginning of your direct message history with ${esc(otherName)}.</p>
-    </div>`;
-    return;
-  }
-  let html = '', lastAuthor = null, lastTime = null;
-  msgs.forEach(m => {
-    const ts = m.createdAt?.toDate ? m.createdAt.toDate() : new Date();
-    const timeStr = ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    const isMine = m.senderUid === me?.uid;
-    const timeDiff = lastTime ? (ts-lastTime)/1000 : 999;
-    const isCont = m.senderUid === lastAuthor && timeDiff < 300;
-    const authorColor = isMine ? me.color : uidColor(otherUid);
-    const authorName = isMine ? me.displayName : otherName;
-    lastAuthor = m.senderUid; lastTime = ts;
-    html += `<div class="msg-row ${isCont?'continuation':''}">
-      ${isCont
-        ? `<div class="msg-av-wrap"><span class="msg-ts-hover">${timeStr.split(' ')[0]}</span></div>`
-        : `<div class="msg-av-wrap"><div class="msg-av" style="background:${authorColor};color:#fff">${(authorName||'?')[0].toUpperCase()}</div></div>`
+function renderDMMsgs(msgs,otherName,otherUid){
+  const area=document.getElementById('msgsArea');
+  if(!area) return;
+  const atBottom=area.scrollHeight-area.scrollTop-area.clientHeight<80;
+  if(!msgs.length){area.innerHTML=`<div class="ch-empty"><div class="ch-empty-icon">💬</div><h3>Start a conversation</h3><p>Beginning of your DM history with ${esc(otherName)}.</p></div>`;return;}
+  let html='',lastAuthor='',lastTime=null;
+  msgs.forEach(m=>{
+    const ts=m.createdAt?.toDate?m.createdAt.toDate():new Date();
+    const timeStr=ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    const isMine=m.senderUid===me?.uid;
+    const gap=lastTime?(ts-lastTime)/1000:999;
+    const cont=m.senderUid===lastAuthor&&gap<300;
+    const color=isMine?me.color:uidColor(otherUid);
+    const name2=isMine?me.displayName:otherName;
+    lastAuthor=m.senderUid;lastTime=ts;
+    html+=`<div class="msg-row">
+      ${cont
+        ? `<div class="msg-av-col"><span class="msg-ts-sm">${timeStr.replace(/ (AM|PM)/,'').toLowerCase()}</span></div>`
+        : `<div class="msg-av-col"><div class="msg-av" style="background:${color};color:#fff">${(name2||'?')[0].toUpperCase()}</div></div>`
       }
       <div class="msg-body">
-        ${!isCont?`<div class="msg-header"><span class="msg-author" style="color:${authorColor}">${esc(authorName)}</span><span class="msg-time">${timeStr}</span></div>`:''}
-        <span class="msg-text">${formatText(m.text||'')}</span>
+        ${!cont?`<div class="msg-header"><span class="msg-name" style="color:${color}">${esc(name2)}</span><span class="msg-time">${timeStr}</span></div>`:''}
+        <span class="msg-text">${fmtText(m.text||'')}</span>
       </div>
     </div>`;
   });
-  wrap.innerHTML = html;
-  if (wasAtBottom) wrap.scrollTop = wrap.scrollHeight;
+  area.innerHTML=html;
+  if(atBottom) area.scrollTop=area.scrollHeight;
 }
 
-window.sendDM = async function(dmId, otherName) {
-  const input = document.getElementById('composeInput');
-  const text = (input?.value||'').trim();
-  if (!text || !me) return;
-  input.value = ''; input.style.height = '';
-  await addDoc(collection(db,'staffDMs',dmId,'messages'), {
-    text, senderUid: me.uid, senderName: me.displayName,
-    createdAt: serverTimestamp(),
+window.sendDM = async function(dmId,name){
+  const ta=document.getElementById('composeTa');
+  const txt=(ta?.value||'').trim();
+  if(!txt||!me) return;
+  ta.value='';ta.style.height='';
+  await addDoc(collection(db,'escDMs',dmId,'messages'),{
+    text:txt,senderUid:me.uid,senderName:me.displayName,createdAt:serverTimestamp()
   });
-  await updateDoc(doc(db,'staffDMs',dmId), {lastActivity:serverTimestamp(), lastMsg:text.slice(0,60), lastSender:me.displayName});
+  await updateDoc(doc(db,'escDMs',dmId),{lastActivity:serverTimestamp(),lastMsg:txt.slice(0,60)});
 };
 
-window.handleTypingDM = function(dmId) {
-  // Reuse typing logic for DMs
-  if (!me) return;
-  setDoc(doc(db,'staffTyping','dm_'+dmId+'_'+me.uid), {
-    uid:me.uid, name:me.displayName, channelId:'dm_'+dmId, at:serverTimestamp()
-  },{merge:true});
-  clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(()=>deleteDoc(doc(db,'staffTyping','dm_'+dmId+'_'+me.uid)).catch(()=>{}), 3000);
+/* ══ STATUS ══ */
+window.toggleStatusPopup = function(){
+  const p=document.getElementById('statusPopup');
+  if(!p) return;
+  const open=p.classList.toggle('open');
+  if(open){
+    document.getElementById('statusMsgInput').value=me?.statusMsg||'';
+    setTimeout(()=>document.addEventListener('click',function h(e){
+      if(!p.contains(e.target)&&!document.getElementById('sfAv').contains(e.target)){
+        p.classList.remove('open');document.removeEventListener('click',h);
+      }
+    }),50);
+  }
+};
+window.closeStatusPopup=()=>document.getElementById('statusPopup')?.classList.remove('open');
+window.setMyStatus = async function(status){
+  me.status=status;
+  const dotColors={active:'#22c55e',busy:'#FF5733',away:'#F4C542'};
+  const dot=document.getElementById('myStatusDot');
+  if(dot){dot.className='sf-status-dot status-dot '+status;}
+  await setDoc(doc(db,'escPresence',me.uid),{status,lastSeen:serverTimestamp()},{merge:true});
+  closeStatusPopup();toast('Status: '+status);
+};
+window.saveStatusMsg = async function(){
+  const msg=document.getElementById('statusMsgInput')?.value.trim()||'';
+  me.statusMsg=msg;
+  document.getElementById('sfStatusTxt').textContent=msg?' · '+msg:'';
+  await setDoc(doc(db,'escPresence',me.uid),{statusMsg:msg},{merge:true});
 };
 
-async function renderDMList() {
-  // Show recent DMs in sidebar
-  const el = document.getElementById('dmList');
-  if (!el || !me) return;
-  try {
-    const snap = await getDocs(query(collection(db,'staffDMs'), where('participants','array-contains',me.uid)));
-    if (snap.empty) { el.innerHTML = ''; return; }
-    const dms = snap.docs.map(d=>({id:d.id,...d.data()}))
-      .sort((a,b)=>(b.lastActivity?.seconds||0)-(a.lastActivity?.seconds||0));
-    el.innerHTML = dms.map(dm => {
-      const otherUid = (dm.participants||[]).find(p=>p!==me.uid)||'';
-      const otherName = (dm.participantNames||{})[otherUid] || 'Unknown';
-      const isActive = activeDmUid === otherUid;
-      return `<div class="dm-item ${isActive?'active':''}" data-uid="${esc(otherUid)}" onclick="openDM('${esc(otherUid)}','${esc(otherName)}')">
-        <div class="dm-av" style="background:${uidColor(otherUid)};color:#fff">${(otherName||'?')[0].toUpperCase()}</div>
-        <span class="dm-name">${esc(otherName)}</span>
-      </div>`;
-    }).join('');
-  } catch(e) {}
+/* ══ NEW CHANNEL ══ */
+let newChCatPrefill='';
+window.openNewChannelWithCat = function(catId){
+  newChCatPrefill=catId;
+  populateNewChModal();
+  openModal('newChModal');
+};
+function populateNewChModal(){
+  const catSel=document.getElementById('newChCat');
+  if(catSel){
+    catSel.innerHTML=categories.map(c=>`<option value="${esc(c.id)}" ${c.id===newChCatPrefill?'selected':''}>${esc(c.name)}</option>`).join('');
+  }
+  const roleSel=document.getElementById('newChRole');
+  if(roleSel){
+    roleSel.innerHTML='<option value="">— None —</option>'+roles.map(r=>`<option value="${esc(r.id)}">${esc(r.name)}</option>`).join('');
+  }
+}
+window.confirmNewChannel = async function(){
+  const name=document.getElementById('newChName').value.trim().replace(/[^a-z0-9-]/g,'-');
+  const desc=document.getElementById('newChDesc').value.trim();
+  const catId=document.getElementById('newChCat')?.value||categories[0]?.id||'';
+  const type=document.getElementById('newChType')?.value||'public';
+  const role=document.getElementById('newChRole')?.value||'';
+  if(!name){toast('Channel name required.');return;}
+  if(channels.find(c=>c.name===name)){toast('Channel already exists.');return;}
+  await addDoc(collection(db,'escChannels'),{
+    name,desc,catId,type,requiredRole:role,
+    pinned:[],order:channels.length,createdAt:serverTimestamp()
+  });
+  closeModal('newChModal');
+  document.getElementById('newChName').value='';
+  document.getElementById('newChDesc').value='';
+  toast('#'+name+' created!');
+};
+
+/* ══ NEW CATEGORY ══ */
+window.confirmNewCategory = async function(){
+  const name=document.getElementById('newCatName').value.trim();
+  if(!name){toast('Name required.');return;}
+  await addDoc(collection(db,'escCategories'),{name,order:categories.length,createdAt:serverTimestamp()});
+  closeModal('newCatModal');
+  document.getElementById('newCatName').value='';
+  toast('Category "'+name+'" created!');
+};
+
+/* ══ SETTINGS ══ */
+window.openSettings = async function(){
+  await loadSettingsData();
+  openModal('settingsModal');
+};
+async function loadSettingsData(){
+  renderRolesList();
+  renderMembersList();
+  renderPermsList();
+  renderCatManageList();
+}
+window.switchSettingsTab = function(tab){
+  document.querySelectorAll('.stab').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().startsWith(tab.slice(0,4))));
+  document.querySelectorAll('.stab-content').forEach(c=>c.classList.toggle('active',c.id==='stab-'+tab));
+};
+
+/* ── ROLES ── */
+function renderRolesList(){
+  const el=document.getElementById('rolesList');
+  if(!el) return;
+  if(!roles.length){el.innerHTML='<div style="color:var(--muted);font-size:.82rem;text-align:center;padding:20px 0">No custom roles yet. Create one to get started.</div>';return;}
+  el.innerHTML=roles.map(r=>`<div class="role-item" onclick="editRoleById('${r.id}')">
+    <div class="role-dot" style="background:${r.color||'#94A3B8'}"></div>
+    <div class="role-info">
+      <div class="role-name">${esc(r.name)}</div>
+      <div class="role-count">${(r.members||[]).length} member${(r.members||[]).length!==1?'s':''}</div>
+    </div>
+    <span class="role-badge" style="background:${r.color||'#94A3B8'}22;color:${r.color||'#94A3B8'}">${esc(r.name)}</span>
+  </div>`).join('');
 }
 
-/* ══ CHANNEL DESCRIPTION EDIT ══ */
-window.editChannelDesc = function() {
-  const span = document.getElementById('chDescSpan');
-  if (!span) return;
-  const current = span.textContent;
-  const input = document.createElement('input');
-  input.className = 'ch-desc-edit';
-  input.value = current;
-  input.addEventListener('blur', async () => {
-    const newDesc = input.value.trim();
-    if (newDesc !== current && activeChId) {
-      await updateDoc(doc(db,'staffChannels',activeChId), {desc:newDesc});
-      toast('Channel description updated.');
-    }
-    input.replaceWith(span);
-  });
-  input.addEventListener('keydown', e => {
-    if (e.key==='Enter') input.blur();
-    if (e.key==='Escape') { input.value=current; input.blur(); }
-  });
-  span.replaceWith(input);
-  input.focus(); input.select();
+function renderMembersList(){
+  const el=document.getElementById('membersList');
+  if(!el) return;
+  el.innerHTML=staffMembers.map(s=>{
+    const ri2=STAFF_RANKS[s.rank||'jr_admin']||STAFF_RANKS.jr_admin;
+    const memberRoles=roles.filter(r=>(r.members||[]).includes(s.uid));
+    return `<div class="member-item">
+      <div class="member-av" style="background:${uidColor(s.uid)};color:#fff">${(s.displayName||'?')[0].toUpperCase()}</div>
+      <div class="member-info">
+        <div class="member-name">${esc(s.displayName||s.email||'?')}</div>
+        <div class="member-role" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:2px">
+          <span style="font-family:'DM Mono',monospace;font-size:.56rem;padding:1px 5px;border-radius:3px;background:${ri2.bg};color:${ri2.color}">${ri2.label}</span>
+          ${memberRoles.map(r=>`<span style="font-family:'DM Mono',monospace;font-size:.56rem;padding:1px 5px;border-radius:3px;background:${r.color}22;color:${r.color}">${esc(r.name)}</span>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0">
+        ${roles.map(r=>{
+          const has=(r.members||[]).includes(s.uid);
+          return `<button onclick="toggleMemberRole('${s.uid}','${r.id}')" title="${has?'Remove':'Add'} ${esc(r.name)}"
+            style="font-family:'DM Mono',monospace;font-size:.56rem;padding:2px 7px;border-radius:4px;cursor:pointer;border:1px solid ${r.color}44;background:${has?r.color+'22':'transparent'};color:${has?r.color:'var(--faint)'};transition:all .12s">
+            ${esc(r.name)}
+          </button>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.toggleMemberRole = async function(uid,roleId){
+  const role=roles.find(r=>r.id===roleId);
+  if(!role) return;
+  const has=(role.members||[]).includes(uid);
+  await updateDoc(doc(db,'escRoles',roleId),{members:has?arrayRemove(uid):arrayUnion(uid)});
+  toast(has?'Role removed.':'Role assigned!');
 };
 
-/* ══ KEYBOARD SHORTCUTS ══ */
-document.addEventListener('keydown', e => {
-  // Ctrl/Cmd+F → search
-  if ((e.ctrlKey||e.metaKey) && e.key==='f' && activeChId) {
-    e.preventDefault();
-    toggleSearchPanel();
-    return;
-  }
-  // Ctrl/Cmd+K → channel switcher (focus sidebar search)
-  if ((e.ctrlKey||e.metaKey) && e.key==='k') {
-    e.preventDefault();
-    const sb = document.getElementById('searchBar');
-    if (sb) { sb.focus(); sb.select(); }
-    return;
-  }
-  // Escape → close open panels
-  if (e.key==='Escape') {
-    document.getElementById('mentionDropdown')?.classList.remove('open');
-    if (emojiTray) { emojiTray.remove(); emojiTray=null; }
-  }
+async function renderPermsList(){
+  const el=document.getElementById('permsList');
+  if(!el) return;
+  const snap=await getDoc(doc(db,'escSettings','permissions'));
+  const perms=snap.exists()?snap.data():{};
+  const isOwner=me.rank==='owner';
+  el.innerHTML=PERMISSIONS.map(p=>{
+    const rankKeys=['owner','sr_admin','admin','mod','jr_admin','developer','marketing','trainee'];
+    return `<div class="perm-row">
+      <div>
+        <div class="perm-name">${p.name}</div>
+        <div class="perm-desc" style="font-size:.72rem;color:var(--muted);margin-top:1px">${p.desc}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+          ${rankKeys.map(rank=>{
+            const ri3=STAFF_RANKS[rank]||STAFF_RANKS.jr_admin;
+            const enabled=!!(perms[p.id]?.[rank]);
+            const locked=rank==='owner';
+            return `<label style="display:flex;align-items:center;gap:4px;cursor:${locked?'default':'pointer'};opacity:${locked?.5:1}">
+              <input type="checkbox" ${enabled?'checked':''} ${locked?'disabled':''}
+                onchange="togglePerm('${p.id}','${rank}',this.checked)"
+                style="accent-color:var(--coral)"/>
+              <span style="font-family:'DM Mono',monospace;font-size:.6rem;color:${ri3.color}">${ri3.label}</span>
+            </label>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+window.togglePerm = async function(permId,rank,val){
+  await updateDoc(doc(db,'escSettings','permissions'),{[`${permId}.${rank}`]:val});
+  toast('Permission updated.');
+};
+
+function renderCatManageList(){
+  const el=document.getElementById('catManageList');
+  if(!el) return;
+  el.innerHTML=categories.map(c=>`<div class="role-item">
+    <div style="font-size:.9rem;color:var(--faint)">📁</div>
+    <div class="role-info">
+      <div class="role-name">${esc(c.name)}</div>
+      <div class="role-count">${channels.filter(ch=>ch.catId===c.id).length} channels</div>
+    </div>
+    <button onclick="deleteCat('${c.id}')" style="font-size:.72rem;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);cursor:pointer">Delete</button>
+  </div>`).join('');
+}
+window.deleteCat = async function(catId){
+  if(!confirm('Delete this category? Channels will move to Uncategorized.')) return;
+  await deleteDoc(doc(db,'escCategories',catId));
+  // Uncategorize channels
+  const chsInCat=channels.filter(c=>c.catId===catId);
+  for(const ch of chsInCat) await updateDoc(doc(db,'escChannels',ch.id),{catId:''});
+  toast('Category deleted.');
+};
+
+/* ── CREATE/EDIT ROLE ── */
+window.openCreateRole = function(){
+  editingRole=null;
+  document.getElementById('roleModalTitle').textContent='Create Role';
+  document.getElementById('roleNameInput').value='';
+  buildRoleColorPicker(null);
+  buildRolePermsChecks(null);
+  openModal('createRoleModal');
+};
+window.editRoleById = function(roleId){
+  const r=roles.find(x=>x.id===roleId);
+  if(!r) return;
+  editingRole=r;
+  document.getElementById('roleModalTitle').textContent='Edit Role: '+r.name;
+  document.getElementById('roleNameInput').value=r.name;
+  buildRoleColorPicker(r.color);
+  buildRolePermsChecks(r.permissions||[]);
+  openModal('createRoleModal');
+};
+function buildRoleColorPicker(selected){
+  const el=document.getElementById('roleColorPicker');
+  el.innerHTML=ROLE_COLORS.map(c=>`<button onclick="selectRoleColor('${c}')" style="width:24px;height:24px;border-radius:50%;background:${c};border:${selected===c?'2px solid #fff':'2px solid transparent'};cursor:pointer;transition:border .15s" id="rc_${c.replace('#','')}"></button>`).join('');
+  if(!selected&&ROLE_COLORS[0]) selectRoleColor(ROLE_COLORS[0]);
+}
+let selectedRoleColor=ROLE_COLORS[0];
+window.selectRoleColor=function(c){
+  selectedRoleColor=c;
+  document.querySelectorAll('#roleColorPicker button').forEach(b=>{b.style.border='2px solid transparent';});
+  const btn=document.getElementById('rc_'+c.replace('#',''));
+  if(btn) btn.style.border='2px solid #fff';
+};
+function buildRolePermsChecks(enabled){
+  const el=document.getElementById('rolePermsChecks');
+  el.innerHTML=PERMISSIONS.map(p=>`<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+    <input type="checkbox" id="rp_${p.id}" ${(enabled||[]).includes(p.id)?'checked':''} style="accent-color:var(--coral)"/>
+    <span style="font-size:.82rem;color:var(--txt)">${p.name}</span>
+    <span style="font-size:.7rem;color:var(--muted)">${p.desc}</span>
+  </label>`).join('');
+}
+window.saveRole = async function(){
+  const name=document.getElementById('roleNameInput').value.trim();
+  if(!name){toast('Role name required.');return;}
+  const perms=PERMISSIONS.filter(p=>document.getElementById('rp_'+p.id)?.checked).map(p=>p.id);
+  const data={name,color:selectedRoleColor,permissions:perms,members:editingRole?.members||[],createdAt:serverTimestamp()};
+  if(editingRole) await updateDoc(doc(db,'escRoles',editingRole.id),data);
+  else await addDoc(collection(db,'escRoles'),data);
+  closeModal('createRoleModal');
+  toast(editingRole?'Role updated!':'Role "'+name+'" created!');
+  editingRole=null;
+  renderRolesList();renderMembersList();
+};
+
+/* ══ EDIT CHANNEL ══ */
+window.editChannel = async function(chId){
+  const ch=channels.find(c=>c.id===chId);
+  if(!ch) return;
+  const name=prompt('Channel name:',ch.name);
+  if(name===null) return;
+  const desc=prompt('Description:',ch.desc||'');
+  if(desc===null) return;
+  const type=prompt('Type (public/readonly/restricted):',ch.type||'public');
+  if(type===null) return;
+  await updateDoc(doc(db,'escChannels',chId),{
+    name:name.toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-')||ch.name,
+    desc:desc||'',
+    type:['public','readonly','restricted'].includes(type)?type:'public',
+  });
+  toast('Channel updated.');
+};
+
+/* ══ FILTER SIDEBAR ══ */
+window.filterSidebar = function(val){
+  const lower=val.toLowerCase();
+  document.querySelectorAll('.ch-item').forEach(el=>{
+    const n=el.querySelector('.ch-name')?.textContent?.toLowerCase()||'';
+    el.style.display=(!lower||n.includes(lower))?'':'none';
+  });
+};
+
+/* ══ MODAL HELPERS ══ */
+window.openModal = function(id){
+  const m=document.getElementById(id);
+  if(m){m.classList.add('open');if(id==='newChModal')populateNewChModal();}
+};
+window.closeModal = function(id){
+  document.getElementById(id)?.classList.remove('open');
+};
+// Close on backdrop click
+document.querySelectorAll('.backdrop').forEach(b=>{
+  b.addEventListener('click',e=>{if(e.target===b)b.classList.remove('open');});
 });
 
-/* ══ SIDEBAR CHANNEL SEARCH ══ */
-window.handleSearch = function(val) {
-  const lower = val.toLowerCase().trim();
-  document.querySelectorAll('.ch-item').forEach(el => {
-    const name = el.querySelector('.ch-name')?.textContent?.toLowerCase()||'';
-    el.style.display = (!lower || name.includes(lower)) ? '' : 'none';
-  });
-};
+/* ══ UTILS ══ */
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-/* ══ UNREAD TRACKING ══ */
-const lastReadTimes = {};
-function markChannelRead(chId) {
-  lastReadTimes[chId] = Date.now();
-  try { localStorage.setItem('esc_read_'+chId, Date.now()); } catch(e){}
-  const badge = document.getElementById('badge_'+chId);
-  if (badge) badge.style.display = 'none';
-  const item = document.getElementById('chitem_'+chId);
-  if (item) item.classList.remove('unread');
+function toast(msg,dur=3000){
+  const c=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className='toast';t.textContent=msg;c.appendChild(t);
+  setTimeout(()=>t.remove(),dur);
 }
-
-// Override openChannel to mark as read
-const _origOpenChannel = window.openChannel;
-window.openChannel = function(chId) {
-  markChannelRead(chId);
-  _origOpenChannel(chId);
-};
-
+window.toast=toast;
 </script>
 </body>
 </html>
