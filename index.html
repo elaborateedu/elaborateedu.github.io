@@ -872,6 +872,7 @@
         <span id="avatarInitial">?</span>
         <div class="avatar-dropdown" id="avatarDropdown">
           <button class="dropdown-item" onclick="showScreen('hub')">My Hub</button>
+          <a class="dropdown-item" href="profile.html">👤 My Profile</a>
           <button class="dropdown-item" onclick="showScreen('settings')">⚙ Settings</button>
           <a class="dropdown-item" href="classroom.html" id="classroomDropdownItem" style="display:none">🏫 My Classroom</a>
           <button class="dropdown-item" id="joinClassroomDropdownItem" style="display:none" onclick="showJoinModal()">🔑 Join Classroom</button>
@@ -897,6 +898,7 @@
 <div class="mobile-menu" id="mobileMenu" style="display:none;position:fixed;top:68px;left:0;right:0;background:rgba(245,240,232,.98);backdrop-filter:blur(14px);border-bottom:1.5px solid rgba(13,27,42,.08);z-index:99;flex-direction:column;padding:12px 16px 20px">
   <a class="dropdown-item" href="about.html">About</a>
   <a class="dropdown-item" href="support.html">Support</a>
+  <a class="dropdown-item" href="status.html">🟢 Status</a>
   <a class="dropdown-item" href="legal.html?tab=terms">Legal</a>
   <div class="dropdown-divider"></div>
   <div id="mobileLoggedOut">
@@ -904,6 +906,7 @@
     <button class="dropdown-item" onclick="showAuth('signup');toggleMobileMenu()">Sign Up Free</button>
   </div>
   <div id="mobileLoggedIn" style="display:none">
+    <a class="dropdown-item" href="profile.html">👤 My Profile</a>
     <button class="dropdown-item" onclick="showScreen('hub');toggleMobileMenu()">My Hub</button>
     <button class="dropdown-item" onclick="showScreen('settings');toggleMobileMenu()">⚙ Settings</button>
     <a class="dropdown-item" href="classroom.html" id="mobileClassroomItem" style="display:none">🏫 My Classroom</a>
@@ -1163,6 +1166,7 @@
       <a href="about.html" style="color:var(--muted);text-decoration:none;font-weight:600">About</a>
       <a href="jobs.html" style="color:var(--muted);text-decoration:none;font-weight:600">Jobs</a>
       <a href="support.html" style="color:var(--muted);text-decoration:none;font-weight:600">Support</a>
+      <a href="status.html" style="color:var(--muted);text-decoration:none;font-weight:600">Status</a>
       <a href="legal.html?tab=terms" style="color:var(--muted);text-decoration:none;font-weight:600">Terms of Service</a>
       <a href="legal.html?tab=privacy" style="color:var(--muted);text-decoration:none;font-weight:600">Privacy Policy</a>
     </div>
