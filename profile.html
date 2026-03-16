@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>My Profile · Elaborate</title>
+<link rel="icon" type="image/png" href="/favicon.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,300&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D1B2A;--coral:#FF5733;--gold:#F4C542;--sage:#7DBE8E;--lav:#A78BFA;--sky:#38BDF8;
+  --cream:#F5F0E8;--card:#FFFFFF;
+  --border:rgba(13,27,42,.09);--muted:rgba(13,27,42,.5);--faint:rgba(13,27,42,.3);
+  --shadow:0 1px 3px rgba(13,27,42,.06),0 4px 16px rgba(13,27,42,.07);
+  --shadow-hover:0 8px 32px rgba(13,27,42,.14);
+  --radius:16px;--tr:.2s cubic-bezier(.4,0,.2,1);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;-webkit-tap-highlight-color:transparent}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;height:64px;background:var(--navy);display:flex;align-items:center;padding:0 24px;gap:16px;z-index:100;box-shadow:0 2px 20px rgba(13,27,42,.25)}
+.nav-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.25rem;letter-spacing:-.02em;color:#fff;text-decoration:none}
+.nav-logo span{color:var(--coral)}
+.nav-back{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.55);font-size:.84rem;font-weight:600;text-decoration:none;transition:color .18s;margin-left:auto}
+.nav-back:hover{color:#fff}
+
+/* ── HERO ── */
+.hero{background:var(--navy);padding:100px 24px 0;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,87,51,.18) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none}
+.hero-inner{max-width:780px;margin:0 auto;position:relative;z-index:1}
+
+/* Avatar */
+.avatar-row{display:flex;align-items:flex-end;gap:20px;margin-bottom:0}
+.avatar-wrap{position:relative;flex-shrink:0}
+.avatar-ring{width:100px;height:100px;border-radius:24px;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:2.4rem;color:#fff;border:4px solid var(--navy);box-shadow:0 8px 32px rgba(0,0,0,.3);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.avatar-ring:hover .avatar-overlay{opacity:1}
+.avatar-ring img{width:100%;height:100%;object-fit:cover;border-radius:20px}
+.avatar-overlay{position:absolute;inset:0;background:rgba(13,27,42,.6);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:.75rem;color:#fff;font-weight:700;flex-direction:column;gap:4px;border-radius:20px}
+.avatar-badge{position:absolute;bottom:-4px;right:-4px;background:var(--gold);color:var(--navy);font-family:'DM Mono',monospace;font-size:.55rem;font-weight:700;padding:2px 6px;border-radius:50px;border:2px solid var(--navy);letter-spacing:.05em;text-transform:uppercase}
+
+.hero-meta{padding-bottom:20px}
+.hero-name{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1.05}
+.hero-email{font-size:.82rem;color:rgba(255,255,255,.45);margin-top:4px;font-family:'DM Mono',monospace}
+.hero-role-pill{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-family:'DM Mono',monospace;font-size:.6rem;padding:3px 10px;border-radius:50px;letter-spacing:.08em;text-transform:uppercase;border:1px solid}
+
+/* Stats bar */
+.stats-bar{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.08);margin-top:20px}
+.stat{flex:1;padding:18px 20px;border-right:1px solid rgba(255,255,255,.08);cursor:default}
+.stat:last-child{border-right:none}
+.stat-val{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:900;color:#fff;line-height:1}
+.stat-lbl{font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
+
+/* ── BODY ── */
+.body{max-width:780px;margin:0 auto;padding:32px 24px 80px}
+
+/* Panels */
+.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1.5px solid var(--border);overflow:hidden;margin-bottom:20px}
+.panel-header{padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:800;color:var(--navy);letter-spacing:-.01em}
+.panel-edit-btn{font-family:'DM Sans',sans-serif;font-size:.76rem;font-weight:700;padding:5px 14px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .18s}
+.panel-edit-btn:hover{border-color:var(--navy);color:var(--navy)}
+.panel-edit-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.panel-body{padding:20px 24px 24px}
+
+/* Form rows */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-row.single{grid-template-columns:1fr}
+.form-group label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:5px}
+.form-input{width:100%;padding:11px 14px;border-radius:11px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--navy);background:var(--cream);outline:none;transition:border-color .18s}
+.form-input:focus{border-color:var(--coral)}
+.form-input:disabled{opacity:.5;cursor:not-allowed;background:rgba(13,27,42,.03)}
+.form-value{font-size:.92rem;color:var(--navy);padding:11px 0}
+
+/* Save btn */
+.save-btn{padding:11px 28px;border-radius:50px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.86rem;cursor:pointer;transition:all .2s}
+.save-btn:hover{background:var(--coral);transform:translateY(-1px)}
+.save-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+/* Avatar picker */
+.avatar-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.av-opt{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;border:2.5px solid transparent;transition:all .18s;background:rgba(13,27,42,.05)}
+.av-opt:hover{transform:scale(1.1)}
+.av-opt.selected{border-color:var(--coral);background:rgba(255,87,51,.08)}
+.av-color-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.av-color{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:all .18s}
+.av-color:hover{transform:scale(1.15)}
+.av-color.selected{border-color:var(--navy)}
+
+/* App grid preview */
+.app-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;margin-top:4px}
+.app-mini{background:var(--cream);border-radius:12px;padding:10px 6px 8px;text-align:center;border:1.5px solid var(--border)}
+.app-mini-icon{width:36px;height:36px;border-radius:10px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.app-mini-icon img{width:24px;height:24px;border-radius:6px;object-fit:contain}
+.app-mini-name{font-size:.65rem;font-weight:600;color:var(--navy);line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Streak / badge */
+.streak-wrap{display:flex;align-items:center;gap:12px;padding:14px 0}
+.streak-flame{font-size:2rem}
+.streak-info h3{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900;color:var(--navy)}
+.streak-info p{font-size:.8rem;color:var(--muted);margin-top:2px}
+
+/* Badges */
+.badges-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.badge-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 14px;background:var(--cream);border-radius:12px;border:1.5px solid var(--border);min-width:72px;text-align:center}
+.badge-icon{font-size:1.6rem}
+.badge-name{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.badge-item.locked{opacity:.35;filter:grayscale(1)}
+
+/* Spinner */
+.spin-wrap{display:flex;align-items:center;justify-content:center;min-height:60vh}
+.spinner{width:32px;height:32px;border:2.5px solid rgba(13,27,42,.1);border-top-color:var(--coral);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Toast */
+.toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
+.toast{background:var(--navy);border-radius:10px;padding:11px 22px;font-size:.83rem;font-weight:600;color:#fff;box-shadow:0 8px 32px rgba(13,27,42,.25);animation:tin .3s cubic-bezier(.22,1,.36,1) both;white-space:nowrap}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Hidden file input */
+#avatarFileInput{display:none}
+
+@media(max-width:600px){
+  .form-row{grid-template-columns:1fr}
+  .stats-bar{flex-wrap:wrap}
+  .stat{flex:1 1 45%;min-width:100px}
+  .hero-name{font-size:1.6rem}
+  .avatar-ring{width:80px;height:80px;font-size:2rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/index.html">elaborate<span>.</span></a>
+  <a class="nav-back" href="/index.html">← Back to Hub</a>
+</nav>
+
+<div id="spinWrap" class="spin-wrap"><div class="spinner"></div></div>
+
+<div id="profilePage" style="display:none">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="avatar-row">
+        <div class="avatar-wrap">
+          <div class="avatar-ring" id="avatarRing" onclick="openAvatarPicker()">
+            <span id="avatarInitial">?</span>
+            <div class="avatar-overlay">📷<span>Change</span></div>
+          </div>
+          <span class="avatar-badge" id="roleBadge">Student</span>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-name" id="heroName">Loading…</div>
+          <div class="hero-email" id="heroEmail"></div>
+        </div>
+      </div>
+
+      <div class="stats-bar" id="statsBar">
+        <div class="stat">
+          <div class="stat-val" id="statApps">—</div>
+          <div class="stat-lbl">Apps Pinned</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="statStreak">—</div>
+          <div class="stat-lbl">Day Streak</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="statFavs">—</div>
+          <div class="stat-lbl">Favourites</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="statMember">—</div>
+          <div class="stat-lbl">Days as Member</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- Profile info -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Profile Info</div>
+        <button class="panel-edit-btn" id="editProfileBtn" onclick="toggleEditProfile()">Edit</button>
+      </div>
+      <div class="panel-body">
+        <div class="form-row" id="profileView">
+          <div class="form-group">
+            <label>First Name</label>
+            <div class="form-value" id="viewFirst">—</div>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <div class="form-value" id="viewLast">—</div>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <div class="form-value" id="viewEmail">—</div>
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <div class="form-value" id="viewRole">—</div>
+          </div>
+        </div>
+        <div id="profileEdit" style="display:none">
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input class="form-input" id="editFirst" type="text" placeholder="First name"/>
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input class="form-input" id="editLast" type="text" placeholder="Last name"/>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label>Email</label>
+              <input class="form-input" id="editEmail" type="email" disabled/>
+            </div>
+          </div>
+          <button class="save-btn" onclick="saveProfile()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avatar picker panel (hidden by default) -->
+    <div class="panel" id="avatarPanel" style="display:none">
+      <div class="panel-header">
+        <div class="panel-title">Choose Avatar</div>
+        <button class="panel-edit-btn active" onclick="closeAvatarPicker()">Done</button>
+      </div>
+      <div class="panel-body">
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Pick an emoji</label>
+          <div class="avatar-options" id="emojiAvatarOpts"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Pick a colour</label>
+          <div class="av-color-row" id="colorAvatarOpts"></div>
+        </div>
+        <div class="form-group">
+          <label>Or upload a photo</label>
+          <button class="panel-edit-btn" onclick="document.getElementById('avatarFileInput').click()" style="margin-top:4px">📷 Upload Image</button>
+          <input type="file" id="avatarFileInput" accept="image/*" onchange="handleAvatarUpload(event)"/>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:6px">Images are stored locally on this device.</div>
+        </div>
+        <button class="save-btn" onclick="saveAvatar()" style="margin-top:12px">Apply Avatar</button>
+      </div>
+    </div>
+
+    <!-- Streak & Badges -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Activity</div>
+      </div>
+      <div class="panel-body">
+        <div class="streak-wrap">
+          <div class="streak-flame" id="streakFlame">🔥</div>
+          <div class="streak-info">
+            <h3 id="streakTitle">0 day streak</h3>
+            <p id="streakDesc">Log in every day to build your streak!</p>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="form-group" style="margin-bottom:10px"><label>Badges</label></div>
+          <div class="badges-grid" id="badgesGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Apps preview -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">My Apps</div>
+        <a href="/index.html" class="panel-edit-btn">Manage →</a>
+      </div>
+      <div class="panel-body">
+        <div class="app-preview-grid" id="appPreviewGrid">
+          <div style="color:var(--muted);font-size:.82rem">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Classroom info -->
+    <div class="panel" id="classroomPanel" style="display:none">
+      <div class="panel-header">
+        <div class="panel-title">Classroom</div>
+      </div>
+      <div class="panel-body">
+        <div id="classroomInfo" style="font-size:.88rem;color:var(--muted)">Loading…</div>
+      </div>
+    </div>
+
+    <!-- Account actions -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Account</div>
+      </div>
+      <div class="panel-body" style="display:flex;flex-wrap:wrap;gap:10px">
+        <a href="/index.html" class="panel-edit-btn" style="text-decoration:none">← Back to Hub</a>
+        <button class="panel-edit-btn" onclick="goSettings()">⚙ Settings</button>
+        <button class="panel-edit-btn" onclick="doSignOut()" style="color:var(--coral);border-color:rgba(255,87,51,.3)">Sign Out</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script type="module">
+import { initializeApp }        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, updateDoc, collection, getDocs }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const app  = initializeApp({apiKey:"AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs",authDomain:"elaborate-edc16.firebaseapp.com",projectId:"elaborate-edc16"});
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const AVATAR_EMOJIS = ['🎒','📚','🔬','🎨','🧮','🌍','🎵','🏆','🔭','💻','✏️','🌱','🚀','🎯','⚡','🦋','🐉','🌙'];
+const AVATAR_COLORS = ['#FF5733','#F4C542','#7DBE8E','#A78BFA','#38BDF8','#F472B6','#FB923C','#0D1B2A','#60A5FA','#34D399'];
+
+const BADGES = [
+  {id:'first_app',   icon:'📌', name:'First Pin',     desc:'Added your first app',           check: p => (p.apps||[]).length >= 1},
+  {id:'five_apps',   icon:'🗂',  name:'Collector',     desc:'Pinned 5+ apps',                 check: p => (p.apps||[]).length >= 5},
+  {id:'ten_apps',    icon:'🏆',  name:'Power User',    desc:'Pinned 10+ apps',                check: p => (p.apps||[]).length >= 10},
+  {id:'has_fav',     icon:'⭐',  name:'Favourites',    desc:'Starred your first app',         check: p => (p.favoriteIds||[]).length >= 1},
+  {id:'streak_3',    icon:'🔥',  name:'On a Roll',     desc:'3 day login streak',             check: p => (p.streak||0) >= 3},
+  {id:'streak_7',    icon:'💥',  name:'Week Warrior',  desc:'7 day login streak',             check: p => (p.streak||0) >= 7},
+  {id:'has_class',   icon:'🏫',  name:'In Class',      desc:'Joined a classroom',             check: p => !!p.classroomId},
+  {id:'custom_app',  icon:'🔗',  name:'Maker',         desc:'Added a custom app',             check: p => (p.apps||[]).some(a=>a.custom)},
+];
+
+let userProfile = null;
+let currentUser = null;
+let selectedEmoji = '🎒';
+let selectedColor = '#FF5733';
+let uploadedAvatarData = null;
+
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = '/index.html'; return; }
+  currentUser = user;
+  const snap = await getDoc(doc(db,'users',user.uid));
+  if (!snap.exists()) { window.location.href = '/index.html'; return; }
+  userProfile = snap.data();
+  renderPage();
+});
+
+function renderPage() {
+  const p = userProfile;
+  const name = `${p.firstName||''} ${p.lastName||''}`.trim() || 'Elaborator';
+
+  // Hero
+  document.getElementById('heroName').textContent = name;
+  document.getElementById('heroEmail').textContent = currentUser.email || '';
+  renderAvatar();
+
+  const roleColors = {student:{bg:'rgba(56,189,248,.2)',color:'#0ea5e9',icon:'🎒',label:'Student'}, teacher:{bg:'rgba(125,190,142,.2)',color:'#16a34a',icon:'🍎',label:'Teacher'}, district_admin:{bg:'rgba(167,139,250,.2)',color:'#7c3aed',icon:'🏛',label:'District Admin'}};
+  const rc = roleColors[p.role||'student'] || roleColors.student;
+  const badge = document.getElementById('roleBadge');
+  badge.textContent = rc.icon + ' ' + rc.label;
+  badge.style.cssText += `;background:${rc.bg};color:${rc.color};border-color:${rc.color}44`;
+
+  // Stats
+  const apps = p.apps || [];
+  document.getElementById('statApps').textContent = apps.length;
+  document.getElementById('statFavs').textContent = (p.favoriteIds||[]).length;
+  const streak = p.streak || 0;
+  document.getElementById('statStreak').textContent = streak;
+  // Days as member
+  let daysMember = '—';
+  if (p.createdAt) {
+    const created = p.createdAt.toDate ? p.createdAt.toDate() : new Date(p.createdAt);
+    daysMember = Math.max(1, Math.floor((Date.now() - created.getTime()) / 86400000));
+  }
+  document.getElementById('statMember').textContent = daysMember;
+
+  // Profile view
+  document.getElementById('viewFirst').textContent = p.firstName || '—';
+  document.getElementById('viewLast').textContent  = p.lastName  || '—';
+  document.getElementById('viewEmail').textContent = currentUser.email || '—';
+  document.getElementById('viewRole').textContent  = rc.label;
+
+  // Edit fields
+  document.getElementById('editFirst').value = p.firstName || '';
+  document.getElementById('editLast').value  = p.lastName  || '';
+  document.getElementById('editEmail').value = currentUser.email || '';
+
+  // Streak
+  document.getElementById('streakFlame').textContent = streak >= 7 ? '🔥' : streak >= 3 ? '🔥' : '💤';
+  document.getElementById('streakTitle').textContent = streak > 0 ? streak + ' day streak' : 'No streak yet';
+  document.getElementById('streakDesc').textContent  = streak >= 7 ? 'Incredible — keep it going!' : streak >= 3 ? 'You are on a roll!' : streak > 0 ? 'Come back tomorrow to grow it!' : 'Log in every day to build a streak.';
+
+  // Badges
+  const badgesEl = document.getElementById('badgesGrid');
+  badgesEl.innerHTML = BADGES.map(b => {
+    const earned = b.check(p);
+    return `<div class="badge-item ${earned?'':'locked'}" title="${b.desc}">
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${b.name}</div>
+    </div>`;
+  }).join('');
+
+  // Apps preview
+  const grid = document.getElementById('appPreviewGrid');
+  const topApps = apps.slice(0, 12);
+  if (!topApps.length) {
+    grid.innerHTML = '<div style="color:var(--muted);font-size:.82rem;grid-column:1/-1">No apps yet. Add some from the hub!</div>';
+  } else {
+    grid.innerHTML = topApps.map(a => {
+      const hostname = (() => { try { return new URL(a.url.startsWith('http')?a.url:'https://'+a.url).hostname; } catch(e) { return ''; } })();
+      return `<div class="app-mini">
+        <div class="app-mini-icon" style="background:${(a.color?.val||a.color||'#A78BFA')}18">
+          ${hostname ? `<img src="https://www.google.com/s2/favicons?domain=${hostname}&sz=64" onerror="this.style.display='none'" alt="${a.name}"/>` : ''}
+        </div>
+        <div class="app-mini-name">${esc(a.name)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Classroom
+  if (p.classroomId || p.role === 'teacher') {
+    document.getElementById('classroomPanel').style.display = 'block';
+    const info = document.getElementById('classroomInfo');
+    if (p.classroomId) {
+      getDoc(doc(db,'classrooms',p.classroomId)).then(snap => {
+        if (snap.exists()) {
+          const cls = snap.data();
+          info.innerHTML = `<div style="font-weight:600;color:var(--navy);margin-bottom:3px">${esc(cls.name||'My Classroom')}</div>
+            <div style="font-size:.8rem;color:var(--muted)">Teacher: ${esc(cls.teacherName||'—')}</div>`;
+        } else { info.textContent = 'Classroom not found.'; }
+      });
+    } else {
+      info.innerHTML = `<a href="/classroom.html" style="color:var(--coral);font-weight:600;text-decoration:none">Open Teacher Dashboard →</a>`;
+    }
+  }
+
+  // Avatar picker defaults
+  selectedEmoji = p.avatarEmoji || '🎒';
+  selectedColor = p.avatarColor || '#FF5733';
+  buildAvatarPicker();
+
+  document.getElementById('spinWrap').style.display = 'none';
+  document.getElementById('profilePage').style.display = 'block';
+}
+
+function renderAvatar() {
+  const p = userProfile;
+  const ring = document.getElementById('avatarRing');
+  if (p.avatarData) {
+    ring.innerHTML = `<img src="${p.avatarData}" alt="avatar"/><div class="avatar-overlay">📷<span>Change</span></div>`;
+  } else {
+    const emoji = p.avatarEmoji || '';
+    const color = p.avatarColor || '#FF5733';
+    ring.style.background = color;
+    if (emoji) {
+      ring.innerHTML = `<span style="font-size:2.4rem">${emoji}</span><div class="avatar-overlay">📷<span>Change</span></div>`;
+    } else {
+      const init = (userProfile.firstName||'?')[0].toUpperCase();
+      ring.innerHTML = `<span id="avatarInitial">${init}</span><div class="avatar-overlay">📷<span>Change</span></div>`;
+    }
+  }
+}
+
+function buildAvatarPicker() {
+  const emojiEl = document.getElementById('emojiAvatarOpts');
+  emojiEl.innerHTML = AVATAR_EMOJIS.map(em => `
+    <div class="av-opt ${em===selectedEmoji?'selected':''}" onclick="selectEmoji('${em}')">${em}</div>
+  `).join('');
+
+  const colorEl = document.getElementById('colorAvatarOpts');
+  colorEl.innerHTML = AVATAR_COLORS.map(c => `
+    <div class="av-color ${c===selectedColor?'selected':''}" style="background:${c}" onclick="selectColor('${c}')"></div>
+  `).join('');
+}
+
+window.selectEmoji = function(em) {
+  selectedEmoji = em; uploadedAvatarData = null;
+  buildAvatarPicker();
+};
+window.selectColor = function(c) {
+  selectedColor = c;
+  buildAvatarPicker();
+};
+window.handleAvatarUpload = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { uploadedAvatarData = ev.target.result; toast('Image ready — click Apply Avatar.'); };
+  reader.readAsDataURL(file);
+};
+
+window.openAvatarPicker = function() {
+  document.getElementById('avatarPanel').style.display = 'block';
+  document.getElementById('avatarPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+window.closeAvatarPicker = function() {
+  document.getElementById('avatarPanel').style.display = 'none';
+};
+window.saveAvatar = async function() {
+  const updates = { avatarEmoji: selectedEmoji, avatarColor: selectedColor };
+  if (uploadedAvatarData) updates.avatarData = uploadedAvatarData;
+  else updates.avatarData = null;
+  await updateDoc(doc(db,'users',currentUser.uid), updates);
+  Object.assign(userProfile, updates);
+  renderAvatar();
+  closeAvatarPicker();
+  toast('Avatar updated!');
+};
+
+window.toggleEditProfile = function() {
+  const editing = document.getElementById('profileEdit').style.display === 'block';
+  document.getElementById('profileEdit').style.display = editing ? 'none' : 'block';
+  document.getElementById('profileView').style.display = editing ? 'grid' : 'none';
+  document.getElementById('editProfileBtn').textContent = editing ? 'Edit' : 'Cancel';
+  document.getElementById('editProfileBtn').classList.toggle('active', !editing);
+};
+
+window.saveProfile = async function() {
+  const first = document.getElementById('editFirst').value.trim();
+  const last  = document.getElementById('editLast').value.trim();
+  if (!first) { toast('First name is required.'); return; }
+  await updateDoc(doc(db,'users',currentUser.uid), {firstName:first, lastName:last});
+  userProfile.firstName = first;
+  userProfile.lastName  = last;
+  document.getElementById('viewFirst').textContent = first;
+  document.getElementById('viewLast').textContent  = last || '—';
+  document.getElementById('heroName').textContent  = `${first} ${last}`.trim();
+  toggleEditProfile();
+  toast('Profile saved!');
+};
+
+window.goSettings = function() { window.location.href = '/index.html#settings'; };
+window.doSignOut = async function() {
+  await signOut(auth);
+  window.location.href = '/index.html';
+};
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function toast(msg, dur=3000) {
+  const c = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className='toast'; t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>t.remove(), dur);
+}
+</script>
+</body>
+</html>
