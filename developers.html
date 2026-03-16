@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Elaborate for Developers</title>
+<link rel="icon" type="image/png" href="/favicon.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;--navy:#0D1B2A;--coral:#FF5733;--gold:#F4C542;
+  --sage:#7DBE8E;--lav:#A78BFA;--sky:#38BDF8;--pink:#F472B6;
+  --card:#FFFFFF;--muted:rgba(13,27,42,.5);--faint:rgba(13,27,42,.28);
+  --border:rgba(13,27,42,.09);
+  --shadow:0 1px 3px rgba(13,27,42,.06),0 6px 24px rgba(13,27,42,.08);
+  --shadow-lg:0 12px 48px rgba(13,27,42,.16);
+  --radius:18px;--tr:.22s cubic-bezier(.4,0,.2,1);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;height:64px;background:var(--navy);display:flex;align-items:center;padding:0 32px;gap:16px;z-index:100;box-shadow:0 2px 20px rgba(13,27,42,.25)}
+.nav-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.2rem;letter-spacing:-.02em;color:#fff;text-decoration:none}
+.nav-logo span{color:var(--coral)}
+.nav-logo em{font-style:italic;font-weight:300;color:rgba(255,255,255,.5);font-size:1rem}
+.nav-pill{font-family:'DM Mono',monospace;font-size:.58rem;padding:3px 9px;border-radius:50px;background:rgba(167,139,250,.18);color:var(--lav);letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(167,139,250,.3)}
+.nav-links{margin-left:auto;display:flex;align-items:center;gap:6px}
+.nav-link{color:rgba(255,255,255,.5);font-size:.84rem;font-weight:600;text-decoration:none;padding:6px 12px;border-radius:8px;transition:all .18s}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.08)}
+.nav-cta{padding:7px 18px;border-radius:50px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:all .18s;text-decoration:none}
+.nav-cta:hover{background:#e84520;transform:translateY(-1px)}
+
+/* ── HERO ── */
+.hero{background:var(--navy);padding:130px 32px 80px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.15) 0%,transparent 65%);top:-250px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero::after{content:'✦';font-family:'Fraunces',serif;position:absolute;font-size:18rem;color:rgba(255,255,255,.02);right:-40px;bottom:-60px;line-height:1;pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lav);background:rgba(167,139,250,.12);border:1.5px solid rgba(167,139,250,.25);padding:6px 16px;border-radius:50px;margin-bottom:28px}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.02;margin-bottom:20px;position:relative;z-index:1}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--lav)}
+.hero-sub{font-size:1.1rem;color:rgba(255,255,255,.55);max-width:560px;margin:0 auto 36px;line-height:1.72;position:relative;z-index:1}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.btn-primary{padding:13px 30px;border-radius:50px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(255,87,51,.35)}
+.btn-primary:hover{background:#e84520;transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,87,51,.45)}
+.btn-ghost{padding:13px 30px;border-radius:50px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.8);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.92rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-ghost:hover{border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.06)}
+
+/* Hero stats */
+.hero-stats{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.08);margin-top:60px;max-width:700px;margin-left:auto;margin-right:auto}
+.hero-stat{flex:1;padding:24px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+.hero-stat:last-child{border-right:none}
+.hero-stat-val{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#fff;line-height:1}
+.hero-stat-lbl{font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.35);margin-top:5px;letter-spacing:.1em;text-transform:uppercase}
+
+/* ── STICKY SUBNAV ── */
+.subnav{position:sticky;top:64px;background:var(--card);border-bottom:1.5px solid var(--border);z-index:50;padding:0 32px}
+.subnav-inner{display:flex;gap:2px;max-width:1080px;margin:0 auto;overflow-x:auto;scrollbar-width:none}
+.subnav-inner::-webkit-scrollbar{display:none}
+.subnav-btn{padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;color:var(--muted);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .18s;text-decoration:none;display:flex;align-items:center;gap:6px}
+.subnav-btn:hover{color:var(--navy)}
+.subnav-btn.active{color:var(--navy);border-bottom-color:var(--coral)}
+
+/* ── CONTENT ── */
+.page{max-width:1080px;margin:0 auto;padding:0 32px}
+
+/* Section */
+.section{padding:80px 0;border-bottom:1.5px solid var(--border)}
+.section:last-child{border-bottom:none}
+.section-eyebrow{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);margin-bottom:12px}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(1.9rem,3.5vw,3rem);font-weight:900;color:var(--navy);letter-spacing:-.02em;line-height:1.08;margin-bottom:16px}
+.section-title em{font-style:italic;font-weight:300;color:var(--coral)}
+.section-sub{font-size:.98rem;color:var(--muted);line-height:1.75;max-width:580px}
+
+/* Cards grid */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:36px}
+.card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);box-shadow:var(--shadow);padding:28px;transition:all var(--tr)}
+.card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:rgba(13,27,42,.15)}
+.card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:18px}
+.card-title{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:8px}
+.card-body{font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:16px}
+.card-link{font-size:.82rem;font-weight:700;color:var(--coral);text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:gap .18s}
+.card-link:hover{gap:8px}
+
+/* Two-col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-top:40px}
+.two-col.reverse{direction:rtl}
+.two-col.reverse>*{direction:ltr}
+@media(max-width:720px){.two-col{grid-template-columns:1fr}.two-col.reverse{direction:ltr}}
+
+/* Code block */
+.code-block{background:var(--navy);border-radius:14px;padding:24px;font-family:'DM Mono',monospace;font-size:.82rem;color:rgba(240,238,248,.85);line-height:1.7;overflow-x:auto;position:relative;margin-top:16px}
+.code-block::before{content:attr(data-lang);position:absolute;top:10px;right:14px;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.2)}
+.code-comment{color:rgba(255,255,255,.3)}
+.code-key{color:var(--lav)}
+.code-val{color:var(--sage)}
+.code-str{color:var(--gold)}
+.code-coral{color:var(--coral)}
+
+/* Steps */
+.steps{display:flex;flex-direction:column;gap:24px;margin-top:32px}
+.step{display:flex;gap:18px;align-items:flex-start}
+.step-num{width:32px;height:32px;border-radius:9px;background:var(--navy);color:#fff;font-family:'Fraunces',serif;font-weight:900;font-size:.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-body{}
+.step-title{font-weight:700;font-size:.95rem;color:var(--navy);margin-bottom:4px}
+.step-desc{font-size:.86rem;color:var(--muted);line-height:1.65}
+
+/* Schema table */
+.schema-table{width:100%;border-collapse:collapse;margin-top:20px;font-size:.84rem}
+.schema-table th{text-align:left;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:8px 14px;border-bottom:1.5px solid var(--border)}
+.schema-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.schema-table tr:last-child td{border-bottom:none}
+.schema-table tr:hover td{background:rgba(13,27,42,.02)}
+.field-name{font-family:'DM Mono',monospace;color:var(--navy);font-weight:500}
+.field-type{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--lav);background:rgba(167,139,250,.1);padding:2px 7px;border-radius:4px}
+.field-desc{color:var(--muted)}
+
+/* Status embed */
+.status-embed{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-top:28px}
+.status-embed-header{padding:16px 22px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.status-embed-title{font-weight:700;font-size:.9rem;color:var(--navy);display:flex;align-items:center;gap:8px}
+.status-live-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.status-rows{padding:8px 0}
+.status-row{display:flex;align-items:center;gap:12px;padding:10px 22px;border-bottom:1px solid var(--border);transition:background .12s}
+.status-row:last-child{border-bottom:none}
+.status-row:hover{background:rgba(13,27,42,.02)}
+.status-row-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.status-row-name{flex:1;font-size:.86rem;font-weight:600;color:var(--navy)}
+.status-badge{font-family:'DM Mono',monospace;font-size:.6rem;padding:3px 9px;border-radius:50px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.status-badge.ok{background:rgba(34,197,94,.1);color:#16a34a;border:1px solid rgba(34,197,94,.2)}
+.status-badge.warn{background:rgba(234,179,8,.1);color:#b45309;border:1px solid rgba(234,179,8,.2)}
+.status-badge.down{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.2)}
+.status-footer{padding:12px 22px;background:rgba(13,27,42,.02);display:flex;align-items:center;justify-content:space-between}
+.status-footer-txt{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--faint)}
+
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:560px){.form-grid{grid-template-columns:1fr}}
+.form-group label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:6px}
+.form-input,.form-textarea,.form-select{width:100%;padding:11px 14px;border-radius:11px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--navy);background:var(--cream);outline:none;transition:border-color .18s}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--coral)}
+.form-textarea{resize:vertical;min-height:110px;line-height:1.6}
+.form-select option{background:var(--card)}
+.form-full{grid-column:1/-1}
+.submit-btn{padding:13px 32px;border-radius:50px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.submit-btn:hover{background:var(--coral);transform:translateY(-1px)}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.form-note{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.55}
+.form-success{background:rgba(125,190,142,.1);border:1.5px solid rgba(125,190,142,.3);border-radius:12px;padding:20px;text-align:center;display:none}
+.form-success h3{font-family:'Fraunces',serif;font-weight:800;color:var(--navy);margin-bottom:6px}
+.form-success p{font-size:.86rem;color:var(--muted)}
+
+/* Changelog */
+.changelog-list{margin-top:28px;display:flex;flex-direction:column;gap:0}
+.cl-item{display:flex;gap:20px;padding:24px 0;border-bottom:1.5px solid var(--border)}
+.cl-item:last-child{border-bottom:none}
+.cl-date-col{width:100px;flex-shrink:0}
+.cl-date{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);line-height:1.4}
+.cl-version{font-family:'DM Mono',monospace;font-size:.62rem;padding:2px 7px;border-radius:4px;background:rgba(13,27,42,.06);color:var(--navy);margin-top:5px;display:inline-block}
+.cl-body{}
+.cl-title{font-weight:700;font-size:.95rem;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cl-tag{font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 8px;border-radius:50px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.cl-tag.new{background:rgba(125,190,142,.12);color:#15803d}
+.cl-tag.fix{background:rgba(255,87,51,.1);color:var(--coral)}
+.cl-tag.improve{background:rgba(167,139,250,.1);color:#7c3aed}
+.cl-tag.infra{background:rgba(56,189,248,.1);color:#0284c7}
+.cl-desc{font-size:.85rem;color:var(--muted);line-height:1.68}
+
+/* Pill tags */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.pill{font-family:'DM Mono',monospace;font-size:.68rem;padding:5px 13px;border-radius:50px;background:rgba(13,27,42,.06);color:var(--navy);border:1.5px solid var(--border);font-weight:500}
+.pill.coral{background:rgba(255,87,51,.08);color:var(--coral);border-color:rgba(255,87,51,.2)}
+.pill.lav{background:rgba(167,139,250,.08);color:#7c3aed;border-color:rgba(167,139,250,.2)}
+.pill.sage{background:rgba(125,190,142,.08);color:#15803d;border-color:rgba(125,190,142,.2)}
+
+/* Quote / callout */
+.callout{background:var(--navy);border-radius:var(--radius);padding:28px 32px;margin-top:28px;position:relative;overflow:hidden}
+.callout::before{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(167,139,250,.1);top:-100px;right:-60px;pointer-events:none}
+.callout h3{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:8px;position:relative;z-index:1}
+.callout p{font-size:.88rem;color:rgba(255,255,255,.55);line-height:1.7;max-width:500px;position:relative;z-index:1}
+.callout-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+
+/* Footer */
+footer{background:var(--navy);padding:48px 32px;text-align:center;margin-top:0}
+footer .logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;color:#fff;margin-bottom:12px}
+footer .logo span{color:var(--coral)}
+footer p{font-size:.82rem;color:rgba(255,255,255,.35);margin-bottom:16px}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.footer-link{color:rgba(255,255,255,.4);font-size:.82rem;text-decoration:none;font-weight:600;transition:color .18s}
+.footer-link:hover{color:#fff}
+
+/* Toast */
+.toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
+.toast{background:var(--navy);border-radius:10px;padding:11px 22px;font-size:.83rem;font-weight:600;color:#fff;box-shadow:0 6px 24px rgba(13,27,42,.3);animation:tin .25s cubic-bezier(.22,1,.36,1) both;white-space:nowrap}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+@media(max-width:640px){
+  nav{padding:0 16px}
+  .hero{padding:100px 18px 60px}
+  .hero h1{font-size:2.4rem}
+  .subnav{padding:0 16px}
+  .page{padding:0 18px}
+  .section{padding:56px 0}
+  .hero-stats{flex-wrap:wrap}
+  .hero-stat{flex:1 1 45%}
+  .cards-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/index.html">elaborate<span>.</span> <em>developers</em></a>
+  <span class="nav-pill">Beta</span>
+  <div class="nav-links">
+    <a class="nav-link" href="#submit">Submit App</a>
+    <a class="nav-link" href="#status">Status</a>
+    <a class="nav-link" href="#docs">Docs</a>
+    <a class="nav-link" href="/index.html">← Hub</a>
+    <a class="nav-cta" href="#submit">Submit an App</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">🛠 Elaborate for Developers</div>
+  <h1>Build on <em>Elaborate</em>.<br/>Reach every classroom.</h1>
+  <p class="hero-sub">Get your app in front of thousands of students and teachers. Submit to the Elaborate App Library, monitor platform health in real time, and explore our resources for integrators.</p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="#submit">Submit Your App ✦</a>
+    <a class="btn-ghost" href="#docs">Read the Docs →</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-val">40+</div>
+      <div class="hero-stat-lbl">Apps in Library</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">K-12</div>
+      <div class="hero-stat-lbl">Grade Range</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">Free</div>
+      <div class="hero-stat-lbl">To List</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">24h</div>
+      <div class="hero-stat-lbl">Review Time</div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBNAV -->
+<div class="subnav">
+  <div class="subnav-inner">
+    <a class="subnav-btn active" href="#overview">Overview</a>
+    <a class="subnav-btn" href="#submit">📬 Submit an App</a>
+    <a class="subnav-btn" href="#status">🟢 Platform Status</a>
+    <a class="subnav-btn" href="#docs">📖 Documentation</a>
+    <a class="subnav-btn" href="#schema">🗄 Data Schema</a>
+    <a class="subnav-btn" href="#changelog">📦 Changelog</a>
+    <a class="subnav-btn" href="#community">💬 Community</a>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ── OVERVIEW ── -->
+  <div class="section" id="overview">
+    <div class="section-eyebrow">What is Elaborate?</div>
+    <div class="section-title">A hub for every<br/><em>student and teacher.</em></div>
+    <div class="section-sub">Elaborate is a free educational platform where students pin their favourite apps, join classrooms, and build a personalised learning hub. Teachers use it to push curated app lists, send announcements, and track engagement.</div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(255,87,51,.1)">📚</div>
+        <div class="card-title">App Library</div>
+        <div class="card-body">A curated directory of 40+ vetted educational tools. Students can browse, filter by subject, and add apps to their hub in one tap. Getting listed means permanent discoverability.</div>
+        <a class="card-link" href="#submit">Submit your app →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(167,139,250,.1)">🏫</div>
+        <div class="card-title">Classroom Integration</div>
+        <div class="card-body">Teachers can push app collections to all students in their classroom at once. If your app is in the library, teachers can instantly surface it to their entire class.</div>
+        <a class="card-link" href="#docs">Integration docs →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(56,189,248,.1)">🔒</div>
+        <div class="card-title">Student Privacy</div>
+        <div class="card-body">Elaborate does not sell student data. All apps in the library are reviewed for COPPA compliance. We require apps to have a working privacy policy before listing.</div>
+        <a class="card-link" href="#submit">Submission checklist →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(125,190,142,.1)">🆓</div>
+        <div class="card-title">Free to List</div>
+        <div class="card-body">There is no cost to submit or maintain a listing in the Elaborate App Library. We do not take a revenue share. Our goal is to surface the best tools for learning.</div>
+        <a class="card-link" href="#submit">Get started →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SUBMIT ── -->
+  <div class="section" id="submit">
+    <div class="section-eyebrow">App Submission</div>
+    <div class="section-title">Get your app into<br/>the <em>Elaborate Library.</em></div>
+    <div class="section-sub">Fill out the form below and our team will review your submission within 24 hours. We look for apps that are safe for students, genuinely useful in a classroom context, and free or freemium.</div>
+
+    <div class="two-col" style="margin-top:40px">
+      <div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Complete the submission form</div>
+              <div class="step-desc">Tell us about your app — name, URL, category, age range, and a short description. Attach your privacy policy link.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">We review within 24 hours</div>
+              <div class="step-desc">Our team checks the app is working, age-appropriate, and has a valid privacy policy. We will email you with approval or feedback.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Live in the library</div>
+              <div class="step-desc">Approved apps appear in the Discover tab immediately. Students and teachers can find, add, and share your app across all classrooms on Elaborate.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Stay in touch</div>
+              <div class="step-desc">Update your listing any time via email. We will notify you if there are reports or concerns about your app.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:28px">
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:10px">Requirements</div>
+          <div class="pill-row">
+            <span class="pill sage">Free or freemium</span>
+            <span class="pill sage">Privacy policy</span>
+            <span class="pill sage">HTTPS</span>
+            <span class="pill sage">No account required (or guest mode)</span>
+            <span class="pill coral">No adult content</span>
+            <span class="pill coral">No data selling</span>
+            <span class="pill lav">K-12 relevant</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div id="submitForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>App Name *</label>
+              <input class="form-input" id="appName" type="text" placeholder="e.g. Desmos Calculator" maxlength="60"/>
+            </div>
+            <div class="form-group">
+              <label>App URL *</label>
+              <input class="form-input" id="appUrl" type="url" placeholder="https://yourapp.com"/>
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select class="form-select" id="appCategory">
+                <option value="">Select a category…</option>
+                <option>Math</option>
+                <option>Science</option>
+                <option>English / Reading</option>
+                <option>Social Studies</option>
+                <option>Languages</option>
+                <option>Coding / CS</option>
+                <option>Art & Music</option>
+                <option>Productivity / Tools</option>
+                <option>Study / Research</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Age Range *</label>
+              <select class="form-select" id="appAge">
+                <option value="">Select age range…</option>
+                <option>K–2 (Ages 5–7)</option>
+                <option>3–5 (Ages 8–10)</option>
+                <option>6–8 (Ages 11–13)</option>
+                <option>9–12 (Ages 14–18)</option>
+                <option>All Ages (K–12)</option>
+              </select>
+            </div>
+            <div class="form-group form-full">
+              <label>Short Description * (max 120 chars)</label>
+              <input class="form-input" id="appDesc" type="text" maxlength="120" placeholder="What does your app do? Be clear and concise."/>
+            </div>
+            <div class="form-group">
+              <label>Privacy Policy URL *</label>
+              <input class="form-input" id="appPrivacy" type="url" placeholder="https://yourapp.com/privacy"/>
+            </div>
+            <div class="form-group">
+              <label>Your Email *</label>
+              <input class="form-input" id="appEmail" type="email" placeholder="hello@yourcompany.com"/>
+            </div>
+            <div class="form-group form-full">
+              <label>Why does this belong in the Elaborate Library?</label>
+              <textarea class="form-textarea" id="appReason" placeholder="Tell us about classroom use cases, how teachers use it, student outcomes, etc." style="min-height:90px"></textarea>
+            </div>
+          </div>
+          <button class="submit-btn" id="submitAppBtn" onclick="submitApp()">Submit for Review ✦</button>
+          <div class="form-note">By submitting, you confirm you have the right to list this app and agree to our <a href="/legal.html" style="color:var(--coral)">Terms of Service</a>. We will respond within 24 hours.</div>
+        </div>
+        <div class="form-success" id="submitSuccess">
+          <div style="font-size:2rem;margin-bottom:10px">🎉</div>
+          <h3>Submission received!</h3>
+          <p>We will review your app and email you at the address you provided within 24 hours. Thank you for building for students.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STATUS ── -->
+  <div class="section" id="status">
+    <div class="section-eyebrow">Platform Status</div>
+    <div class="section-title">Real-time <em>system health.</em></div>
+    <div class="section-sub">All Elaborate services, live. If something is broken for your students, check here first. You can also subscribe to incident notifications on the full status page.</div>
+
+    <div class="status-embed">
+      <div class="status-embed-header">
+        <div class="status-embed-title">
+          <div class="status-live-dot"></div>
+          Elaborate System Status
+        </div>
+        <a href="/status.html" style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);text-decoration:none;font-weight:600;transition:color .18s" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--muted)'">Full status page →</a>
+      </div>
+      <div class="status-rows" id="statusRows">
+        <!-- Populated by JS -->
+        <div style="padding:20px 22px;color:var(--muted);font-size:.84rem">Loading…</div>
+      </div>
+      <div class="status-footer">
+        <span class="status-footer-txt" id="statusUpdated">Checking…</span>
+        <a href="/status.html" style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--coral);text-decoration:none;font-weight:700">View history & subscribe →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DOCS ── -->
+  <div class="section" id="docs">
+    <div class="section-eyebrow">Documentation</div>
+    <div class="section-title">Everything you need<br/>to <em>integrate.</em></div>
+    <div class="section-sub">Elaborate is a web-first platform. Apps in the library open in a new tab — there is no SDK to install. Here is how the ecosystem works under the hood.</div>
+
+    <div class="two-col" style="margin-top:40px">
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:1.15rem;font-weight:800;color:var(--navy);margin-bottom:14px">How the App Library Works</div>
+        <div style="font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:16px">Each app in the Elaborate library is a simple record stored in Firestore with a name, URL, description, category, and icon. When a student taps your app, Elaborate opens your URL. There is no iframe embedding — your app runs natively in the browser.</div>
+        <div style="font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:16px">Teachers can push your app to all students in their classroom from their dashboard. Students can also browse the Discover tab and add your app themselves with a single tap.</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:10px;margin-top:20px">Supported launch modes</div>
+        <div class="pill-row">
+          <span class="pill sage">New tab (default)</span>
+          <span class="pill lav">Same tab (opt-in)</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px">Example App Record</div>
+        <div class="code-block" data-lang="JSON">
+{
+  <span class="code-key">"name"</span>: <span class="code-str">"Desmos"</span>,
+  <span class="code-key">"url"</span>:  <span class="code-str">"https://desmos.com/calculator"</span>,
+  <span class="code-key">"desc"</span>: <span class="code-str">"Powerful graphing calculator"</span>,
+  <span class="code-key">"category"</span>: <span class="code-str">"Math"</span>,
+  <span class="code-key">"ageRange"</span>: <span class="code-str">"6–12"</span>,
+  <span class="code-key">"approved"</span>: <span class="code-val">true</span>,
+  <span class="code-key">"featured"</span>: <span class="code-val">false</span>,
+  <span class="code-key">"privacyUrl"</span>: <span class="code-str">"https://desmos.com/privacy"</span>,
+  <span class="code-key">"submittedBy"</span>: <span class="code-str">"team@desmos.com"</span>
+}</div>
+      </div>
+    </div>
+
+    <div class="two-col reverse" style="margin-top:56px">
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:1.15rem;font-weight:800;color:var(--navy);margin-bottom:14px">Classroom Push API (Beta)</div>
+        <div style="font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:16px">Teachers on Elaborate can push a collection of apps to all students in their classroom. When your app is part of a pushed collection, it appears at the top of each student's hub pinned automatically.</div>
+        <div style="font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:16px">There is no API key required for this — it is entirely teacher-initiated from within the Elaborate classroom dashboard. Your app just needs to be listed in the library.</div>
+        <div class="callout" style="margin-top:0">
+          <h3>Want direct integration?</h3>
+          <p>If you want to build a deeper integration — like passing a student identifier or syncing progress — get in touch. We are exploring authenticated handoffs for verified partners.</p>
+          <div class="callout-actions">
+            <a class="btn-primary" href="mailto:dev@elaborateedu.com" style="font-size:.82rem;padding:9px 20px">Contact the team →</a>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px">Teacher push — what happens</div>
+        <div class="code-block" data-lang="Flow">
+<span class="code-comment">// Teacher taps "Push apps to class"</span>
+<span class="code-coral">classroom</span>.<span class="code-key">appRequests</span> → Firestore
+
+<span class="code-comment">// Each student's hub listener fires</span>
+<span class="code-coral">onSnapshot</span>(<span class="code-str">'appRequests'</span>) {
+  <span class="code-comment">// Merge into student's app list</span>
+  <span class="code-key">userProfile</span>.<span class="code-val">apps</span>.push(app)
+  <span class="code-comment">// App pinned, visible instantly</span>
+}
+
+<span class="code-comment">// Student opens your app URL</span>
+<span class="code-coral">window</span>.open(<span class="code-str">app.url</span>, <span class="code-str">'_blank'</span>)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCHEMA ── -->
+  <div class="section" id="schema">
+    <div class="section-eyebrow">Data Schema</div>
+    <div class="section-title">Firestore <em>collections.</em></div>
+    <div class="section-sub">Elaborate uses Firebase Firestore. Here is a high-level reference of the public-adjacent collections that relate to app library integration and classroom use.</div>
+
+    <div style="margin-top:32px">
+      <div style="font-weight:700;font-size:.92rem;color:var(--navy);margin-bottom:4px;font-family:'Fraunces',serif">appLibrary / {appId}</div>
+      <div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">The approved app library. Read by all students; write by Elaborate admins only.</div>
+      <div style="overflow-x:auto">
+        <table class="schema-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">name</td><td><span class="field-type">string</span></td><td class="field-desc">Display name of the app</td></tr>
+            <tr><td class="field-name">url</td><td><span class="field-type">string</span></td><td class="field-desc">Full HTTPS URL the app opens to</td></tr>
+            <tr><td class="field-name">desc</td><td><span class="field-type">string</span></td><td class="field-desc">One-line description (max 120 chars)</td></tr>
+            <tr><td class="field-name">category</td><td><span class="field-type">string</span></td><td class="field-desc">e.g. "Math", "Science", "Coding"</td></tr>
+            <tr><td class="field-name">ageRange</td><td><span class="field-type">string</span></td><td class="field-desc">e.g. "K–12", "6–8"</td></tr>
+            <tr><td class="field-name">approved</td><td><span class="field-type">boolean</span></td><td class="field-desc">Only true apps are shown in the Discover tab</td></tr>
+            <tr><td class="field-name">featured</td><td><span class="field-type">boolean</span></td><td class="field-desc">Featured apps appear at the top of the library</td></tr>
+            <tr><td class="field-name">privacyUrl</td><td><span class="field-type">string</span></td><td class="field-desc">Link to app's privacy policy</td></tr>
+            <tr><td class="field-name">submittedAt</td><td><span class="field-type">timestamp</span></td><td class="field-desc">When the submission was received</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:40px">
+      <div style="font-weight:700;font-size:.92rem;color:var(--navy);margin-bottom:4px;font-family:'Fraunces',serif">users / {uid}</div>
+      <div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Student and teacher profiles. Private — only readable by the owner.</div>
+      <div style="overflow-x:auto">
+        <table class="schema-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">firstName / lastName</td><td><span class="field-type">string</span></td><td class="field-desc">Display name, set during onboarding</td></tr>
+            <tr><td class="field-name">role</td><td><span class="field-type">string</span></td><td class="field-desc">"student" | "teacher" | "district_admin"</td></tr>
+            <tr><td class="field-name">apps</td><td><span class="field-type">array</span></td><td class="field-desc">Pinned apps array — each has name, url, color, category</td></tr>
+            <tr><td class="field-name">classroomId</td><td><span class="field-type">string?</span></td><td class="field-desc">ID of the classroom the student is enrolled in</td></tr>
+            <tr><td class="field-name">streak</td><td><span class="field-type">number</span></td><td class="field-desc">Consecutive daily login streak</td></tr>
+            <tr><td class="field-name">favoriteIds</td><td><span class="field-type">array</span></td><td class="field-desc">App IDs the user has starred</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:40px">
+      <div style="font-weight:700;font-size:.92rem;color:var(--navy);margin-bottom:4px;font-family:'Fraunces',serif">classrooms / {classroomId}</div>
+      <div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Teacher-owned classroom documents. Readable by enrolled students.</div>
+      <div style="overflow-x:auto">
+        <table class="schema-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">name</td><td><span class="field-type">string</span></td><td class="field-desc">Classroom display name</td></tr>
+            <tr><td class="field-name">teacherId / teacherName</td><td><span class="field-type">string</span></td><td class="field-desc">UID and display name of the teacher</td></tr>
+            <tr><td class="field-name">joinCode</td><td><span class="field-type">string</span></td><td class="field-desc">6-character code students use to join</td></tr>
+            <tr><td class="field-name">students</td><td><span class="field-type">array</span></td><td class="field-desc">Array of enrolled student UIDs</td></tr>
+            <tr><td class="field-name">appRequests</td><td><span class="field-type">subcollection</span></td><td class="field-desc">Apps the teacher has pushed to the class</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CHANGELOG ── -->
+  <div class="section" id="changelog">
+    <div class="section-eyebrow">Changelog</div>
+    <div class="section-title">What's been <em>shipped.</em></div>
+    <div class="section-sub">Recent updates to the Elaborate platform, relevant to developers and integrators.</div>
+
+    <div class="changelog-list" id="changelogList">
+      <!-- Static recent entries — admin can push Firestore changelog -->
+      <div class="cl-item">
+        <div class="cl-date-col">
+          <div class="cl-date">Mar 2026</div>
+          <div class="cl-version">v3.2</div>
+        </div>
+        <div class="cl-body">
+          <div class="cl-title">
+            Elaborate Staff Connect (ESC)
+            <span class="cl-tag new">New</span>
+          </div>
+          <div class="cl-desc">Full Discord/Slack-style messaging platform for Elaborate staff. Includes categories, channels, direct messages, threads, reactions, custom roles, and permissions.</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-date-col">
+          <div class="cl-date">Mar 2026</div>
+          <div class="cl-version">v3.1</div>
+        </div>
+        <div class="cl-body">
+          <div class="cl-title">
+            Student Profile Page
+            <span class="cl-tag new">New</span>
+          </div>
+          <div class="cl-desc">Students now have a dedicated profile page showing their stats, badges, pinned apps, and classroom info. Avatar customisation with emoji, color, or uploaded photo.</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-date-col">
+          <div class="cl-date">Mar 2026</div>
+          <div class="cl-version">v3.0</div>
+        </div>
+        <div class="cl-body">
+          <div class="cl-title">
+            Public Status Page
+            <span class="cl-tag new">New</span>
+            <span class="cl-tag infra">Infra</span>
+          </div>
+          <div class="cl-desc">System status page at /status.html with component health, 90-day uptime bar, incident timeline, and email subscription for outage notifications.</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-date-col">
+          <div class="cl-date">Feb 2026</div>
+          <div class="cl-version">v2.8</div>
+        </div>
+        <div class="cl-body">
+          <div class="cl-title">
+            Staff Training Portal
+            <span class="cl-tag new">New</span>
+          </div>
+          <div class="cl-desc">Three-phase onboarding and training system for new Elaborate staff. Includes lessons, quizzes, and a real-time chat with trainers.</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-date-col">
+          <div class="cl-date">Jan 2026</div>
+          <div class="cl-version">v2.5</div>
+        </div>
+        <div class="cl-body">
+          <div class="cl-title">
+            App Library — Discover Tab
+            <span class="cl-tag new">New</span>
+          </div>
+          <div class="cl-desc">Students can now browse 40+ curated apps by category. One-tap add to hub. Apps are sourced from the Elaborate App Library and approved by the admin team.</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-date-col">
+          <div class="cl-date">Jan 2026</div>
+          <div class="cl-version">v2.3</div>
+        </div>
+        <div class="cl-body">
+          <div class="cl-title">
+            District Support
+            <span class="cl-tag improve">Improvement</span>
+          </div>
+          <div class="cl-desc">Districts can now onboard with a 6-character join code, get a dedicated admin portal, and manage multiple schools from one account.</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-date-col">
+          <div class="cl-date">Dec 2025</div>
+          <div class="cl-version">v2.0</div>
+        </div>
+        <div class="cl-body">
+          <div class="cl-title">
+            Classroom System
+            <span class="cl-tag new">New</span>
+          </div>
+          <div class="cl-desc">Teachers can create classrooms, generate join codes, push app collections to all students, and send announcements. Students see pushed apps pinned at the top of their hub.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COMMUNITY ── -->
+  <div class="section" id="community">
+    <div class="section-eyebrow">Community & Contact</div>
+    <div class="section-title">Let's build <em>together.</em></div>
+    <div class="section-sub">Got a question about integration? Want to report a bug? Interested in a partnership? Reach out — we respond to everything.</div>
+
+    <div class="cards-grid" style="margin-top:36px">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(255,87,51,.1)">📬</div>
+        <div class="card-title">Developer Support</div>
+        <div class="card-body">Questions about app submission, integration, or your listing. We respond within one business day.</div>
+        <a class="card-link" href="mailto:dev@elaborateedu.com">dev@elaborateedu.com →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(125,190,142,.1)">🐛</div>
+        <div class="card-title">Bug Reports</div>
+        <div class="card-body">Found a bug that affects your students or your listing? Let us know and we will prioritise it.</div>
+        <a class="card-link" href="/support.html">File a support ticket →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(167,139,250,.1)">🤝</div>
+        <div class="card-title">Partnerships</div>
+        <div class="card-body">Interested in a deeper integration, co-marketing, or district-level rollout? We would love to talk.</div>
+        <a class="card-link" href="mailto:hello@elaborateedu.com">Get in touch →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(56,189,248,.1)">💼</div>
+        <div class="card-title">Join the Team</div>
+        <div class="card-body">We are always looking for developers, designers, and educators who want to help build the future of classroom tools.</div>
+        <a class="card-link" href="/jobs.html">See open roles →</a>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:40px">
+      <h3>Already in the library?</h3>
+      <p>Need to update your listing — new URL, updated description, changed privacy policy? Email us and we will update it within 24 hours. We do not have a self-serve portal yet, but it is on the roadmap.</p>
+      <div class="callout-actions">
+        <a class="btn-primary" href="mailto:dev@elaborateedu.com?subject=Update my listing" style="font-size:.84rem;padding:10px 22px">Update my listing →</a>
+        <a class="btn-ghost" href="/status.html" style="font-size:.84rem;padding:10px 22px;border-color:rgba(255,255,255,.25)">Check status page →</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<footer>
+  <div class="logo">elaborate<span>.</span></div>
+  <p>The educational hub built for every classroom.</p>
+  <div class="footer-links">
+    <a class="footer-link" href="/index.html">Hub</a>
+    <a class="footer-link" href="/about.html">About</a>
+    <a class="footer-link" href="/status.html">Status</a>
+    <a class="footer-link" href="/support.html">Support</a>
+    <a class="footer-link" href="/jobs.html">Jobs</a>
+    <a class="footer-link" href="/legal.html">Legal</a>
+    <a class="footer-link" href="mailto:dev@elaborateedu.com">Contact</a>
+  </div>
+</footer>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script type="module">
+import { initializeApp }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const app = initializeApp({apiKey:"AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs",authDomain:"elaborate-edc16.firebaseapp.com",projectId:"elaborate-edc16"});
+const db  = getFirestore(app);
+
+/* ── STATUS EMBED ── */
+const COMPONENTS = [
+  {id:'hub',       name:'Student Hub',    icon:'🏠', bg:'rgba(255,87,51,.1)'},
+  {id:'auth',      name:'Authentication', icon:'🔐', bg:'rgba(167,139,250,.1)'},
+  {id:'classroom', name:'Classroom',      icon:'🏫', bg:'rgba(125,190,142,.1)'},
+  {id:'admin',     name:'Admin Portal',   icon:'⚙️', bg:'rgba(56,189,248,.1)'},
+  {id:'firestore', name:'Database',       icon:'🗄',  bg:'rgba(244,197,66,.1)'},
+  {id:'esc',       name:'Staff Connect',  icon:'💬', bg:'rgba(244,114,182,.1)'},
+];
+
+async function loadStatusEmbed() {
+  const el = document.getElementById('statusRows');
+  const updEl = document.getElementById('statusUpdated');
+  if (!el) return;
+  try {
+    const snap = await getDoc(doc(db,'siteConfig','status'));
+    const data = snap.exists() ? snap.data() : {};
+    const statusMap = {operational:{label:'Operational',cls:'ok'},degraded:{label:'Degraded',cls:'warn'},outage:{label:'Outage',cls:'down'},maintenance:{label:'Maintenance',cls:'warn'}};
+    el.innerHTML = COMPONENTS.map(c => {
+      const st = data[c.id]?.status || 'operational';
+      const sm = statusMap[st] || statusMap.operational;
+      return `<div class="status-row">
+        <div class="status-row-icon" style="background:${c.bg}">${c.icon}</div>
+        <div class="status-row-name">${c.name}</div>
+        <span class="status-badge ${sm.cls}">${sm.label}</span>
+      </div>`;
+    }).join('');
+    const now = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    updEl.textContent = 'Updated at ' + now;
+  } catch(e) {
+    // Default to all operational if siteConfig not yet seeded
+    el.innerHTML = COMPONENTS.map(c => `<div class="status-row">
+      <div class="status-row-icon" style="background:${c.bg}">${c.icon}</div>
+      <div class="status-row-name">${c.name}</div>
+      <span class="status-badge ok">Operational</span>
+    </div>`).join('');
+    updEl.textContent = 'Updated just now';
+  }
+}
+loadStatusEmbed();
+setInterval(loadStatusEmbed, 60000);
+
+/* ── APP SUBMISSION ── */
+window.submitApp = async function() {
+  const name     = document.getElementById('appName').value.trim();
+  const url      = document.getElementById('appUrl').value.trim();
+  const category = document.getElementById('appCategory').value;
+  const age      = document.getElementById('appAge').value;
+  const desc     = document.getElementById('appDesc').value.trim();
+  const privacy  = document.getElementById('appPrivacy').value.trim();
+  const email    = document.getElementById('appEmail').value.trim();
+  const reason   = document.getElementById('appReason').value.trim();
+
+  if (!name || !url || !category || !age || !desc || !privacy || !email) {
+    toast('Please fill in all required fields.');
+    return;
+  }
+  if (!email.includes('@')) { toast('Please enter a valid email address.'); return; }
+  if (!url.startsWith('http')) { toast('App URL must start with https://'); return; }
+  if (!privacy.startsWith('http')) { toast('Privacy policy URL must start with https://'); return; }
+
+  const btn = document.getElementById('submitAppBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  try {
+    await addDoc(collection(db,'appSubmissions'), {
+      name, url, category, ageRange:age, desc, privacyUrl:privacy,
+      submittedBy:email, reason, status:'pending',
+      submittedAt: serverTimestamp(),
+    });
+    document.getElementById('submitForm').style.display = 'none';
+    document.getElementById('submitSuccess').style.display = 'block';
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Submit for Review ✦';
+    toast('Something went wrong. Please try emailing dev@elaborateedu.com directly.');
+    console.error(e);
+  }
+};
+
+/* ── SUBNAV ACTIVE STATE ── */
+const sections = ['overview','submit','status','docs','schema','changelog','community'];
+const navBtns  = document.querySelectorAll('.subnav-btn');
+function updateSubnav() {
+  let active = 'overview';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) active = id;
+  });
+  navBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('href') === '#'+active);
+  });
+}
+window.addEventListener('scroll', updateSubnav, {passive:true});
+updateSubnav();
+
+/* ── SMOOTH SCROLL ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) { e.preventDefault(); el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  });
+});
+
+function toast(msg, dur=3200) {
+  const c = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className='toast'; t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>t.remove(), dur);
+}
+</script>
+</body>
+</html>
