@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="/favicon.png">
 <title>Support — Elaborate</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
@@ -86,6 +87,8 @@
     <a class="nav-btn ghost" href="about.html">About</a>
     <a class="nav-btn ghost" href="districts.html">Districts</a>
     <a class="nav-btn ghost" id="myTicketsNavBtn" href="my-tickets.html" style="display:none">My Tickets</a>
+    <a class="nav-btn ghost" href="/docs.html">Docs</a>
+    <a class="nav-btn ghost" href="/developers.html">Developers</a>
     <a class="nav-btn primary" href="index.html">Go to Hub →</a>
   </div>
 </nav>
@@ -114,6 +117,8 @@
           <option value="bug">🐛 Bug / Something is broken</option>
           <option value="account">🔐 Account issue</option>
           <option value="feature">💡 Feature request</option>
+          <option value="developer">🛠 Developer / App listing</option>
+          <option value="partnership">🤝 Partnership inquiry</option>
           <option value="appeal">📋 Account suspension appeal</option>
           <option value="privacy">🔒 Privacy concern</option>
           <option value="district">🏛 Request a District</option>
@@ -130,6 +135,16 @@
           <li>Estimated number of teachers and students</li>
           <li>Any specific apps or tools you'd like pinned district-wide</li>
           <li>Preferred subscription plan (Trial / Monthly / Annual)</li>
+        </ul>
+      </div>
+      <!-- Developer / Partnership helper -->
+      <div id="developerHelper" style="display:none;background:linear-gradient(135deg,rgba(167,139,250,.08),rgba(255,87,51,.05));border:1.5px solid rgba(167,139,250,.25);border-radius:14px;padding:18px 20px;margin-bottom:8px">
+        <div style="font-weight:700;color:var(--navy);font-size:.9rem;margin-bottom:8px">🛠 Tips for developer tickets</div>
+        <ul style="margin:0;padding-left:18px;font-size:.84rem;color:#4B5563;line-height:1.9">
+          <li>For <strong>app submissions</strong> — fill in the <a href="/developers.html#submit" style="color:var(--coral);font-weight:600">submission form</a> on the Developers page instead, it is faster</li>
+          <li>For <strong>listing updates</strong> — include your app name, current URL, and what needs to change</li>
+          <li>For <strong>integration questions</strong> — include a link to your app and describe what you are trying to build</li>
+          <li>For <strong>partnership inquiries</strong> — include your company name, what you do, and what kind of partnership you have in mind</li>
         </ul>
       </div>
       <div class="form-group"><label>Subject</label><input type="text" id="ticketSubject" placeholder="Brief summary of your issue" /></div>
@@ -322,12 +337,35 @@ function handleCategoryChange() {
   const val = document.getElementById('ticketCategory').value;
   const helper = document.getElementById('districtHelper');
   if (helper) helper.style.display = val === 'district' ? 'block' : 'none';
-  // Pre-fill subject for district requests
+  const devHelper = document.getElementById('developerHelper');
+  if (devHelper) devHelper.style.display = (val === 'developer' || val === 'partnership') ? 'block' : 'none';
   if (val === 'district') {
     const sub = document.getElementById('ticketSubject');
     if (sub && !sub.value.trim()) sub.value = 'District account request';
   }
+  if (val === 'developer') {
+    const sub = document.getElementById('ticketSubject');
+    if (sub && !sub.value.trim()) sub.value = 'Developer inquiry';
+  }
+  if (val === 'partnership') {
+    const sub = document.getElementById('ticketSubject');
+    if (sub && !sub.value.trim()) sub.value = 'Partnership inquiry';
+  }
 }
+
+// Auto-select category from URL query param e.g. /support.html?category=developer
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get('category');
+  if (cat) {
+    const sel = document.getElementById('ticketCategory');
+    if (sel) {
+      // Find matching option
+      const opt = Array.from(sel.options).find(o => o.value === cat);
+      if (opt) { sel.value = cat; handleCategoryChange(); }
+    }
+  }
+})();
 </script>
 <script>function toggleFaq(el){el.classList.toggle('open');}</script>
 </body>
