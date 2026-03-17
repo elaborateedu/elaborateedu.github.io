@@ -2635,11 +2635,19 @@ window.enterHubWithSplash = function() {
   // Only show splash when coming from outside the hub
   const hubEl = document.getElementById('hub');
   if (hubEl && hubEl.classList.contains('active')) {
-    // Already in hub, no splash
     return;
   }
-  // Hide all screens first
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+  // Only play the splash once per day
+  const today = new Date().toDateString();
+  const lastSplash = localStorage.getItem('elaborateSplashDate');
+  if (lastSplash === today) {
+    // Already played today — skip straight to hub
+    showScreen('hub');
+    return;
+  }
+  localStorage.setItem('elaborateSplashDate', today);
   showHubSplash(() => showScreen('hub'));
 };
 window.showAuth = function(panel) {
