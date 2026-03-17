@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="/favicon.png">
 <title>Districts — Elaborate</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
@@ -159,9 +160,12 @@
   <a class="logo" href="index.html">Elaborate<span>.</span></a>
   <div class="nav-links">
     <a class="nav-btn ghost" href="about.html">About</a>
+    <a class="nav-btn ghost" href="developers.html">Developers</a>
     <a class="nav-btn ghost active" href="districts.html">Districts</a>
     <a class="nav-btn ghost" href="support.html">Support</a>
     <a class="nav-btn ghost" href="donate.html">Pricing</a>
+    <a class="nav-btn ghost" href="/docs.html">Docs</a>
+    <a class="nav-btn ghost" href="/developers.html">Developers</a>
     <a class="nav-btn primary" href="index.html">Open Hub →</a>
   </div>
 </nav>
@@ -291,7 +295,7 @@
         <li>District announcements</li>
         <li>Basic branding</li>
       </ul>
-      <a class="plan-btn" href="support.html?category=district">Request Trial →</a>
+      <a class="plan-btn" href="#" onclick="event.preventDefault();showComingSoon()">Request Trial →</a>
     </div>
     <div class="plan-card featured">
       <div class="plan-badge">Most Popular</div>
@@ -305,7 +309,7 @@
         <li>Teacher invite by email</li>
         <li>Cancel anytime</li>
       </ul>
-      <a class="plan-btn" href="mailto:jonnyschoen29@gmail.com?subject=District Monthly Plan&body=Hi, I'd like to set up a monthly district plan for my school.">Get Started →</a>
+      <a class="plan-btn" href="#" onclick="event.preventDefault();showComingSoon()">Get Started →</a>
     </div>
     <div class="plan-card">
       <div class="plan-badge">Best Value</div>
@@ -319,7 +323,7 @@
         <li>Dedicated setup assistance</li>
         <li>Locked-in rate guarantee</li>
       </ul>
-      <a class="plan-btn" href="mailto:jonnyschoen29@gmail.com?subject=District Annual Plan&body=Hi, I'd like to set up an annual district plan for my school.">Get Started →</a>
+      <a class="plan-btn" href="#" onclick="event.preventDefault();showComingSoon()">Get Started →</a>
     </div>
   </div>
 </section>
@@ -381,6 +385,7 @@
     <p>It takes less than 5 minutes to get set up. Submit a request and we'll handle the rest.</p>
     <div class="hero-cta">
       <a class="btn-lg btn-coral" href="support.html?category=district">Submit a District Request →</a>
+      <a href="/support.html?category=district" class="btn-lg btn-outline">Open a Support Ticket</a>
     </div>
   </div>
 </div>
@@ -400,17 +405,4 @@
 <script>
 function toggleFaq(el) {
   const item = el.closest('.faq-item');
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-  if (!isOpen) item.classList.add('open');
-}
-
-// Auto-open district category on support page if coming from CTA
-document.querySelectorAll('a[href*="support.html?category=district"]').forEach(a => {
-  a.addEventListener('click', () => {
-    sessionStorage.setItem('prefillCategory', 'district');
-  });
-});
-</script>
-</body>
-</html>
+  con
