@@ -3226,30 +3226,47 @@ const STATUS_OPTS = [
 ];
 
 async function loadStatusTab() {
-  // Load component statuses
+  // Ensure siteConfig/status exists
+  const statusRef = doc(db,'siteConfig','status');
+  let data = {};
   try {
-    const snap = await getDoc(doc(db,'siteConfig','status'));
-    const data = snap.exists() ? snap.data() : {};
-    const el = document.getElementById('statusComponentControls');
-    if (!el) return;
-    el.innerHTML = STATUS_COMPONENTS.map(c => {
-      const cur = data[c.id]?.status || 'operational';
-      const curNote = data[c.id]?.note || '';
-      return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-        <div style="font-size:1.1rem;flex-shrink:0">${c.icon}</div>
-        <div style="flex:1;min-width:0">
-          <div style="font-weight:700;font-size:.86rem;color:var(--txt);margin-bottom:2px">${c.name}</div>
-          <input type="text" id="note_${c.id}" value="${escHtml(curNote)}" placeholder="Optional note shown on status page"
-            style="width:100%;padding:5px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-family:DM Sans,sans-serif;font-size:.76rem;outline:none;max-width:320px"/>
-        </div>
-        <select id="status_${c.id}" style="padding:7px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.82rem;outline:none;flex-shrink:0">
-          ${STATUS_OPTS.map(o=>`<option value="${o.val}" ${cur===o.val?'selected':''}>${o.label}</option>`).join('')}
-        </select>
-      </div>`;
-    }).join('');
+    const snap = await getDoc(statusRef);
+    if (!snap.exists()) {
+      // Seed defaults
+      const defaults = { updatedAt: serverTimestamp() };
+      STATUS_COMPONENTS.forEach(c => { defaults[c.id] = { status:'operational', note:'' }; });
+      await setDoc(statusRef, defaults);
+      data = defaults;
+      showToast('Status document created with defaults.');
+    } else {
+      data = snap.data();
+    }
   } catch(e) {
-    document.getElementById('statusComponentControls').innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
+    document.getElementById('statusComponentControls').innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error loading status: ${e.message}</div>`;
+    return;
   }
+
+  // Render component controls
+  const el = document.getElementById('statusComponentControls');
+  if (!el) return;
+  el.innerHTML = STATUS_COMPONENTS.map(c => {
+    const cur = data[c.id]?.status || 'operational';
+    const curNote = data[c.id]?.note || '';
+    const statusColor = {operational:'var(--sage)',degraded:'var(--gold)',outage:'var(--coral)',maintenance:'var(--lav)'}[cur]||'var(--sage)';
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${statusColor};border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="font-size:1.1rem;flex-shrink:0">${c.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:.86rem;color:var(--txt);margin-bottom:6px">${c.name}</div>
+        <input type="text" id="note_${c.id}" value="${escHtml(curNote)}" placeholder="Optional note (shown on public status page)"
+          style="width:100%;padding:5px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-family:DM Sans,sans-serif;font-size:.76rem;outline:none;max-width:320px"
+          onfocus="this.style.borderColor='rgba(255,87,51,.4)'" onblur="this.style.borderColor='var(--border)'"/>
+      </div>
+      <select id="status_${c.id}" onchange="document.getElementById('comp_border_${c.id}')?.style && (this.closest('div[style]').style.borderLeftColor = {operational:'var(--sage)',degraded:'var(--gold)',outage:'var(--coral)',maintenance:'var(--lav)'}[this.value]||'var(--sage)')"
+        style="padding:7px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.82rem;outline:none;flex-shrink:0">
+        ${STATUS_OPTS.map(o=>`<option value="${o.val}" ${cur===o.val?'selected':''}>${o.label}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
 
   // Load incidents
   try {
