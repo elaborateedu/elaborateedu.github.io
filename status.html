@@ -258,7 +258,7 @@ async function loadStatus() {
   }
 
   try {
-    const iSnap = await getDocs(query(collection(db,'siteConfig','status','incidents'), orderBy('createdAt','desc'), limit(10)));
+    const iSnap = await getDocs(query(collection(db,'statusIncidents'), orderBy('createdAt','desc'), limit(10)));
     incidents = iSnap.docs.map(d=>({id:d.id,...d.data()}));
   } catch(e) {
     incidents = [];

@@ -572,14 +572,14 @@ const db   = getFirestore(fbApp);
 /* ══ CONSTANTS ══ */
 const RANK_COLORS = ['#FF5733','#F4C542','#7DBE8E','#A78BFA','#38BDF8','#F472B6','#FB923C','#60A5FA'];
 const STAFF_RANKS = {
-  owner:    {label:'Owner',    color:'#FF5733',bg:'rgba(255,87,51,.15)'},
-  sr_admin: {label:'Sr. Mod',  color:'#A78BFA',bg:'rgba(167,139,250,.15)'},
-  mod:      {label:'Mod',      color:'#FBBF24',bg:'rgba(251,191,36,.15)'},
-  admin:    {label:'Admin',    color:'#FB923C',bg:'rgba(251,146,60,.15)'},
-  jr_admin: {label:'Jr. Admin',color:'#94A3B8',bg:'rgba(148,163,184,.15)'},
-  developer:{label:'Dev',      color:'#60A5FA',bg:'rgba(96,165,250,.15)'},
-  marketing:{label:'Mktg',     color:'#7DBE8E',bg:'rgba(125,190,142,.15)'},
-  trainee:  {label:'Trainee',  color:'#C084FC',bg:'rgba(192,132,252,.12)'},
+  owner:    {label:'Owner',           color:'#FF5733',bg:'rgba(255,87,51,.15)'},
+  sr_admin: {label:'Sr. Moderator',   color:'#A78BFA',bg:'rgba(167,139,250,.15)'},
+  mod:      {label:'Moderator',       color:'#FBBF24',bg:'rgba(251,191,36,.15)'},
+  admin:    {label:'Jr. Moderator',   color:'#FB923C',bg:'rgba(251,146,60,.15)'},
+  jr_admin: {label:'Trial Mod',       color:'#94A3B8',bg:'rgba(148,163,184,.15)'},
+  developer:{label:'Developer',       color:'#60A5FA',bg:'rgba(96,165,250,.15)'},
+  marketing:{label:'Marketing',       color:'#7DBE8E',bg:'rgba(125,190,142,.15)'},
+  trainee:  {label:'Trainee',         color:'#C084FC',bg:'rgba(192,132,252,.12)'},
 };
 const PERMISSIONS = [
   {id:'send_messages',    name:'Send Messages',      desc:'Can send messages in channels'},

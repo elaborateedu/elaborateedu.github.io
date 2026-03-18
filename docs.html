@@ -737,7 +737,7 @@ window.open(app.url, '_blank')
   eyebrow:'For Developers',
   lead:'A complete reference for every Firestore collection in the Elaborate platform.',
   content:`
-<div class="callout info"><div class="callout-icon">ℹ️</div><div class="callout-body"><div class="callout-title">Firebase project</div><div class="callout-text">Project ID: <code>elaborate-edc16</code> — Firestore is in the default database in us-central1.</div></div></div>
+<div class="callout info"><div class="callout-icon">ℹ️</div><div class="callout-body"><div class="callout-title">Firebase project</div><div class="callout-text">Firebase project details are not publicly disclosed. Contact the team if you need integration access.</div></div></div>
 
 <h2 class="doc-h2" id="users">users / {uid}</h2>
 <p class="doc-p">One document per authenticated user. Created during onboarding. Readable and writable only by the owner.</p>
@@ -790,7 +790,6 @@ window.open(app.url, '_blank')
 
 <h2 class="doc-h2" id="other-collections">Other Collections</h2>
 <table class="doc-table"><thead><tr><th>Collection</th><th>Description</th><th>Access</th></tr></thead><tbody>
-<tr><td class="td-mono">admins/{uid}</td><td>Staff member profiles and ranks</td><td>Any auth user (read), owner doc (write)</td></tr>
 <tr><td class="td-mono">tickets/{id}</td><td>Support tickets with messages subcollection</td><td>Public create; owner + admins read</td></tr>
 <tr><td class="td-mono">districts/{id}</td><td>School district accounts</td><td>Auth users read; admins write</td></tr>
 <tr><td class="td-mono">siteConfig/{id}</td><td>Announcements, feature flags, status</td><td>Public read; admins write</td></tr>
@@ -806,18 +805,11 @@ window.open(app.url, '_blank')
 'dev-rules': {
   title:'Security Rules',
   eyebrow:'For Developers',
-  lead:'How Firestore security rules protect every collection in Elaborate.',
+  lead:'Firestore security rules control read/write access to every collection. Full rules are not publicly disclosed — contact the team for integration access.',
   content:`
-<h2 class="doc-h2" id="helper">isAdmin() Helper</h2>
-<p class="doc-p">Most admin-only collections use a helper function that checks whether the requesting user is either the site owner or has a document in the <code>admins</code> collection:</p>
-<div class="code-block" data-lang="Rules">
-function isAdmin() {
-  return request.auth != null && (
-    request.auth.token.email == <span class="c-str">"jonnyschoen29@gmail.com"</span> ||
-    exists(/databases/$(database)/documents/admins/$(request.auth.uid))
-  );
-}
-</div>
+<h2 class="doc-h2" id="helper">Access Model</h2>
+<p class="doc-p">Elaborate uses a helper function <code>isAdmin()</code> in its Firestore rules that checks whether the requesting user is an authorised staff member. Most internal collections require this check.</p>
+<div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><div class="callout-title">Rules not publicly disclosed</div><div class="callout-text">The full Firestore security rules are not published here. If you need specific access for a verified integration, contact the team via a support ticket.</div></div></div>
 
 <h2 class="doc-h2" id="user-rules">User Document Rules</h2>
 <div class="code-block" data-lang="Rules">
@@ -929,15 +921,15 @@ match /users/{userId} {
   lead:'The admin portal at /admin.html is the control centre for Elaborate staff.',
   content:`
 <h2 class="doc-h2" id="access">Access</h2>
-<p class="doc-p">The admin portal is accessible only to users whose UID has a document in the <code>admins</code> Firestore collection, or the site owner email (<code>jonnyschoen29@gmail.com</code>). Attempting to access it without credentials shows a login screen.</p>
+<p class="doc-p">The admin portal is accessible only to users whose UID has a document in the <code>admins</code> Firestore collection, or the designated site owner account. Attempting to access it without credentials shows a login screen.</p>
 
 <h2 class="doc-h2" id="ranks">Staff Ranks</h2>
 <table class="doc-table"><thead><tr><th>Rank</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td class="td-mono">owner</td><td><span class="badge red">Owner</span></td><td>Full access to everything, including deleting staff</td></tr>
-<tr><td class="td-mono">sr_admin</td><td><span class="badge purple">Sr. Mod</span></td><td>Can manage all staff, post to locked channels, manage training</td></tr>
-<tr><td class="td-mono">admin</td><td><span class="badge gold">Admin</span></td><td>Can manage users, tickets, content, and push apps</td></tr>
-<tr><td class="td-mono">mod</td><td><span class="badge gold">Mod</span></td><td>Can handle tickets, view users, moderate content</td></tr>
-<tr><td class="td-mono">jr_admin</td><td><span class="badge blue">Jr. Admin</span></td><td>Limited access — tickets and announcements only</td></tr>
+<tr><td class="td-mono">sr_admin</td><td><span class="badge purple">Sr. Moderator</span></td><td>Can manage all staff, post to locked channels, manage training</td></tr>
+<tr><td class="td-mono">admin</td><td><span class="badge gold">Jr. Moderator</span></td><td>Can manage users, tickets, content, and push apps</td></tr>
+<tr><td class="td-mono">mod</td><td><span class="badge gold">Moderator</span></td><td>Can handle tickets, view users, moderate content</td></tr>
+<tr><td class="td-mono">jr_admin</td><td><span class="badge blue">Trial Mod</span></td><td>Limited access — tickets and announcements only</td></tr>
 <tr><td class="td-mono">developer</td><td><span class="badge blue">Dev</span></td><td>Access to dev-relevant tabs</td></tr>
 <tr><td class="td-mono">marketing</td><td><span class="badge green">Mktg</span></td><td>Can post highlights and announcements</td></tr>
 <tr><td class="td-mono">trainee</td><td><span class="badge purple">Trainee</span></td><td>Access to Training tab only until graduated</td></tr>
