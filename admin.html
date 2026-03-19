@@ -3254,15 +3254,14 @@ async function loadStatusTab() {
     const cur = data[c.id]?.status || 'operational';
     const curNote = data[c.id]?.note || '';
     const statusColor = {operational:'var(--sage)',degraded:'var(--gold)',outage:'var(--coral)',maintenance:'var(--lav)'}[cur]||'var(--sage)';
-    return `<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${statusColor};border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${statusColor};border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap" id="comp_row_${c.id}">
       <div style="font-size:1.1rem;flex-shrink:0">${c.icon}</div>
       <div style="flex:1;min-width:0">
         <div style="font-weight:700;font-size:.86rem;color:var(--txt);margin-bottom:6px">${c.name}</div>
-        <input type="text" id="note_${c.id}" value="${escHtml(curNote)}" placeholder="Optional note (shown on public status page)"
-          style="width:100%;padding:5px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-family:DM Sans,sans-serif;font-size:.76rem;outline:none;max-width:320px"
-          onfocus="this.style.borderColor='rgba(255,87,51,.4)'" onblur="this.style.borderColor='var(--border)'"/>
+        <input type="text" id="note_${c.id}" value="${escHtml(curNote)}" placeholder="Optional note shown on public status page"
+          style="width:100%;padding:5px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-family:DM Sans,sans-serif;font-size:.76rem;outline:none;max-width:320px"/>
       </div>
-      <select id="status_${c.id}" onchange="document.getElementById('comp_border_${c.id}')?.style && (this.closest('div[style]').style.borderLeftColor = {operational:'var(--sage)',degraded:'var(--gold)',outage:'var(--coral)',maintenance:'var(--lav)'}[this.value]||'var(--sage)')"
+      <select id="status_${c.id}" onchange="updateStatusRowColor('${c.id}',this.value)"
         style="padding:7px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.82rem;outline:none;flex-shrink:0">
         ${STATUS_OPTS.map(o=>`<option value="${o.val}" ${cur===o.val?'selected':''}>${o.label}</option>`).join('')}
       </select>
@@ -3298,6 +3297,12 @@ async function loadStatusTab() {
     document.getElementById('statusIncidentsList').innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
   }
 }
+
+window.updateStatusRowColor = function(compId, val) {
+  const colors = {operational:'var(--sage)',degraded:'var(--gold)',outage:'var(--coral)',maintenance:'var(--lav)'};
+  const row = document.getElementById('comp_row_'+compId);
+  if (row) row.style.borderLeftColor = colors[val] || 'var(--sage)';
+};
 
 window.saveAllStatuses = async function() {
   const updates = { updatedAt: serverTimestamp() };
