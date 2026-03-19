@@ -152,8 +152,28 @@
     .steps::before{display:none}
   }
 </style>
-</head>
+<style id="_sysdown_style">
+#_sysdown{display:none;position:fixed;inset:0;z-index:99999;background:#0D1B2A;color:#fff;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:'DM Sans',sans-serif}
+#_sysdown.show{display:flex}
+#_sysdown h1{font-size:2.2rem;font-weight:900;letter-spacing:-.03em;margin-bottom:12px;font-family:'Fraunces',serif}
+#_sysdown h1 em{color:#FF5733;font-style:italic;font-weight:300}
+#_sysdown p{color:rgba(255,255,255,.5);max-width:420px;line-height:1.7;margin-bottom:28px;font-size:.95rem}
+#_sysdown a{padding:11px 26px;border-radius:50px;background:#FF5733;color:#fff;text-decoration:none;font-weight:700;font-size:.88rem;margin:4px}
+#_sysdown .ghost{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15)}
+#_sysdown .dot{width:8px;height:8px;border-radius:50%;background:#F4C542;animation:_sdpulse 2s ease infinite;display:inline-block;margin-bottom:24px}
+@keyframes _sdpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+</style></head>
 <body>
+<div id="_sysdown">
+  <div class="dot"></div>
+  <h1>System <em>Down.</em></h1>
+  <p>Elaborate is having trouble connecting right now. Try again in a few minutes.</p>
+  <div>
+    <a href="/status.html">View Status Page</a>
+    <a href="javascript:location.reload()" class="ghost">Try Again</a>
+  </div>
+</div>
+
 
 <!-- NAV -->
 <nav>
@@ -406,3 +426,47 @@
 function toggleFaq(el) {
   const item = el.closest('.faq-item');
   con
+<!-- ══ MAINTENANCE + SYSTEM DOWN CHECK ══ -->
+<div id="elaborateSystemDown" style="display:none;position:fixed;inset:0;background:#0D1B2A;z-index:99999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;font-family:'DM Sans',sans-serif">
+  <div style="font-size:3rem;margin-bottom:20px">⚡</div>
+  <div style="font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:12px">System <em style="font-style:italic;font-weight:300;color:#FF5733">Down</em></div>
+  <div style="color:rgba(255,255,255,.5);font-size:.95rem;max-width:400px;line-height:1.7;margin-bottom:28px">Elaborate couldn't connect to its servers. Check your internet connection or visit the status page.</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+    <button onclick="location.reload()" style="padding:11px 24px;border-radius:50px;border:none;background:#FF5733;color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer">Try Again</button>
+    <a href="/status.html" style="padding:11px 24px;border-radius:50px;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;text-decoration:none">Status Page</a>
+  </div>
+</div>
+<script>
+(function() {
+  const PAGE_KEY = 'districts';
+  const TIMEOUT_MS = 8000;
+  function showSystemDown() {
+    const el = document.getElementById('elaborateSystemDown');
+    if (el) el.style.display = 'flex';
+  }
+  const PROJECT = 'elaborate-edc16';
+  const API_KEY = 'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs';
+  const url = 'https://firestore.googleapis.com/v1/projects/' + PROJECT + '/databases/(default)/documents/siteConfig/maintenance?key=' + API_KEY;
+  const timer = setTimeout(showSystemDown, TIMEOUT_MS);
+  fetch(url)
+    .then(function(r) { if (!r.ok) throw new Error('bad'); return r.json(); })
+    .then(function(data) {
+      clearTimeout(timer);
+      const fields = data.fields || {};
+      const pageDown   = fields[PAGE_KEY] && fields[PAGE_KEY].mapValue && fields[PAGE_KEY].mapValue.fields && fields[PAGE_KEY].mapValue.fields.enabled && fields[PAGE_KEY].mapValue.fields.enabled.booleanValue === true;
+      const globalDown = fields['global'] && fields['global'].mapValue && fields['global'].mapValue.fields && fields['global'].mapValue.fields.enabled && fields['global'].mapValue.fields.enabled.booleanValue === true;
+      if (pageDown || globalDown) {
+        var msg = (fields[PAGE_KEY] && fields[PAGE_KEY].mapValue && fields[PAGE_KEY].mapValue.fields && fields[PAGE_KEY].mapValue.fields.message && fields[PAGE_KEY].mapValue.fields.message.stringValue) || (fields['global'] && fields['global'].mapValue && fields['global'].mapValue.fields && fields['global'].mapValue.fields.message && fields['global'].mapValue.fields.message.stringValue) || '';
+        var eta = (fields[PAGE_KEY] && fields[PAGE_KEY].mapValue && fields[PAGE_KEY].mapValue.fields && fields[PAGE_KEY].mapValue.fields.eta && fields[PAGE_KEY].mapValue.fields.eta.stringValue) || (fields['global'] && fields['global'].mapValue && fields['global'].mapValue.fields && fields['global'].mapValue.fields.eta && fields['global'].mapValue.fields.eta.stringValue) || '';
+        var params = 'page=' + encodeURIComponent(PAGE_KEY);
+        if (msg) params += '&msg=' + encodeURIComponent(msg);
+        if (eta) params += '&eta=' + encodeURIComponent(eta);
+        window.location.href = '/maintenance.html?' + params;
+      }
+    })
+    .catch(function() {
+      clearTimeout(timer);
+      showSystemDown();
+    });
+})();
+</script>
