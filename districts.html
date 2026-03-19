@@ -436,37 +436,31 @@ function toggleFaq(el) {
     <a href="/status.html" style="padding:11px 24px;border-radius:50px;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;text-decoration:none">Status Page</a>
   </div>
 </div>
-<script>
-(function() {
-  const PAGE_KEY = 'districts';
-  const TIMEOUT_MS = 8000;
-  function showSystemDown() {
-    const el = document.getElementById('elaborateSystemDown');
-    if (el) el.style.display = 'flex';
-  }
-  const PROJECT = 'elaborate-edc16';
-  const API_KEY = 'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs';
-  const url = 'https://firestore.googleapis.com/v1/projects/' + PROJECT + '/databases/(default)/documents/siteConfig/maintenance?key=' + API_KEY;
-  const timer = setTimeout(showSystemDown, TIMEOUT_MS);
-  fetch(url)
-    .then(function(r) { if (!r.ok) throw new Error('bad'); return r.json(); })
-    .then(function(data) {
-      clearTimeout(timer);
-      const fields = data.fields || {};
-      const pageDown   = fields[PAGE_KEY] && fields[PAGE_KEY].mapValue && fields[PAGE_KEY].mapValue.fields && fields[PAGE_KEY].mapValue.fields.enabled && fields[PAGE_KEY].mapValue.fields.enabled.booleanValue === true;
-      const globalDown = fields['global'] && fields['global'].mapValue && fields['global'].mapValue.fields && fields['global'].mapValue.fields.enabled && fields['global'].mapValue.fields.enabled.booleanValue === true;
-      if (pageDown || globalDown) {
-        var msg = (fields[PAGE_KEY] && fields[PAGE_KEY].mapValue && fields[PAGE_KEY].mapValue.fields && fields[PAGE_KEY].mapValue.fields.message && fields[PAGE_KEY].mapValue.fields.message.stringValue) || (fields['global'] && fields['global'].mapValue && fields['global'].mapValue.fields && fields['global'].mapValue.fields.message && fields['global'].mapValue.fields.message.stringValue) || '';
-        var eta = (fields[PAGE_KEY] && fields[PAGE_KEY].mapValue && fields[PAGE_KEY].mapValue.fields && fields[PAGE_KEY].mapValue.fields.eta && fields[PAGE_KEY].mapValue.fields.eta.stringValue) || (fields['global'] && fields['global'].mapValue && fields['global'].mapValue.fields && fields['global'].mapValue.fields.eta && fields['global'].mapValue.fields.eta.stringValue) || '';
-        var params = 'page=' + encodeURIComponent(PAGE_KEY);
-        if (msg) params += '&msg=' + encodeURIComponent(msg);
-        if (eta) params += '&eta=' + encodeURIComponent(eta);
-        window.location.href = '/maintenance.html?' + params;
+
+
+
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+(async function() {
+  var PAGE_KEY =  + page_key + ;
+  try {
+    var app = getApps().length ? getApps()[0] : initializeApp({apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',authDomain:'elaborate-edc16.firebaseapp.com',projectId:'elaborate-edc16'});
+    var db = getFirestore(app);
+    var snap = await getDoc(doc(db,'siteConfig','maintenance'));
+    if (snap.exists()) {
+      var data = snap.data();
+      if (data[PAGE_KEY] && data[PAGE_KEY].enabled === true) {
+        window.location.href = '/maintenance.html?page=' + PAGE_KEY;
       }
-    })
-    .catch(function() {
-      clearTimeout(timer);
-      showSystemDown();
-    });
+    }
+  } catch(e) {
+    if (e.code === 'unavailable' || (e.message && e.message.indexOf('Failed to fetch') > -1)) {
+      var el = document.getElementById('_sysdown');
+      if (el) el.classList.add('show');
+    }
+  }
 })();
 </script>
+</body>
+</html>

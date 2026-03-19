@@ -669,75 +669,29 @@ window.submitApplication = async function() {
   </div>
 </div>
 
-<script>
-(function() {
-  const PAGE_KEY = 'jobs';
-  const TIMEOUT_MS = 8000;
 
-  // Show system-down overlay
-  function showSystemDown() {
-    const el = document.getElementById('elaborateSystemDown');
-    if (el) el.style.display = 'flex';
-  }
 
-  // Check maintenance via Firestore REST (no SDK needed — works on any page)
-  const PROJECT = 'elaborate-edc16';
-  const API_KEY = 'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs';
-  const url = `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/siteConfig/maintenance?key=${API_KEY}`;
 
-  const timer = setTimeout(showSystemDown, TIMEOUT_MS);
 
-  fetch(url)
-    .then(r => { if (!r.ok) throw new Error('bad response'); return r.json(); })
-    .then(data => {
-      clearTimeout(timer);
-      const fields = data.fields || {};
-      // Check this page's key and global
-      const pageDown   = fields[PAGE_KEY]?.mapValue?.fields?.enabled?.booleanValue === true;
-      const globalDown = fields['global']?.mapValue?.fields?.enabled?.booleanValue === true;
-      if ((pageDown || globalDown) && PAGE_KEY !== 'admin') {
-        const msg = fields[PAGE_KEY]?.mapValue?.fields?.message?.stringValue
-                 || fields['global']?.mapValue?.fields?.message?.stringValue
-                 || '';
-        const eta = fields[PAGE_KEY]?.mapValue?.fields?.eta?.stringValue
-                 || fields['global']?.mapValue?.fields?.eta?.stringValue
-                 || '';
-        const params = new URLSearchParams({ page: PAGE_KEY });
-        if (msg) params.set('msg', msg);
-        if (eta) params.set('eta', eta);
-        window.location.href = '/maintenance.html?' + params.toString();
-      }
-    })
-    .catch(() => {
-      clearTimeout(timer);
-      // Firebase unreachable — show system down
-      showSystemDown();
-    });
-})();
-</script>
-<script>
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 (async function() {
-  var PAGE_KEY = 'jobs';
-  var FB = {apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',authDomain:'elaborate-edc16.firebaseapp.com',projectId:'elaborate-edc16'};
-  function showSysDown() { var el=document.getElementById('_sysdown'); if(el) el.classList.add('show'); }
+  var PAGE_KEY =  + page_key + ;
   try {
-    var fim = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    var ffs = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    var app = fim.getApps().length ? fim.getApps()[0] : fim.initializeApp(FB);
-    var db  = ffs.getFirestore(app);
-    var timeout = new Promise(function(_,r){ setTimeout(function(){ r(new Error('timeout')); }, 6000); });
-    var snap = await Promise.race([ffs.getDoc(ffs.doc(db,'siteConfig','maintenance')), timeout]);
-    if (snap.exists && snap.exists()) {
+    var app = getApps().length ? getApps()[0] : initializeApp({apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',authDomain:'elaborate-edc16.firebaseapp.com',projectId:'elaborate-edc16'});
+    var db = getFirestore(app);
+    var snap = await getDoc(doc(db,'siteConfig','maintenance'));
+    if (snap.exists()) {
       var data = snap.data();
       if (data[PAGE_KEY] && data[PAGE_KEY].enabled === true) {
         window.location.href = '/maintenance.html?page=' + PAGE_KEY;
-        return;
       }
     }
   } catch(e) {
-    console.warn('[Elaborate] System check:', e.message);
-    if (e.message === 'timeout' || e.message.indexOf('fetch') > -1 || e.message.indexOf('network') > -1) {
-      showSysDown();
+    if (e.code === 'unavailable' || (e.message && e.message.indexOf('Failed to fetch') > -1)) {
+      var el = document.getElementById('_sysdown');
+      if (el) el.classList.add('show');
     }
   }
 })();
