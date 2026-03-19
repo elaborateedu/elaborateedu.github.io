@@ -1473,7 +1473,8 @@ import { getAuth, signInWithEmailAndPassword,
          signOut, onAuthStateChanged }            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, getDocs,
          doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc,
-         onSnapshot, orderBy, query, where,
+         onSnapshot, orderBy, query, where, limit,
+         arrayUnion, arrayRemove,
          serverTimestamp }                        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
