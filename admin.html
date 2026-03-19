@@ -3332,7 +3332,7 @@ window.postIncident = async function() {
     await addDoc(collection(db,'statusIncidents'), {
       title, status, createdAt: serverTimestamp(),
       postedBy: currentAdmin?.displayName || 'Admin',
-      updates: [{ status, message: msg, at: serverTimestamp() }],
+      updates: [{ status, message: msg, at: new Date().toISOString() }],
     });
     document.getElementById('incidentTitle').value = '';
     document.getElementById('incidentMsg').value   = '';
@@ -3356,7 +3356,7 @@ window.resolveIncident = async function(incId) {
     } else {
       await updateDoc(ref, {
         status: 'resolved',
-        updates: [...(inc.updates||[]), {status:'resolved', message:'This incident has been resolved.', at: serverTimestamp()}],
+        updates: [...(inc.updates||[]), {status:'resolved', message:'This incident has been resolved.', at: new Date().toISOString()}],
       });
       showToast('✅ Incident marked as resolved.');
     }
