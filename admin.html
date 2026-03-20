@@ -134,7 +134,7 @@
   }
   .sidebar-item.active .sidebar-badge,.sidebar-item:hover .sidebar-badge{display:inline}
 
-  .sidebar-bottom{margin-top:auto;padding:16px 12px;border-top:1px solid rgba(255,255,255,.08)}
+  .sidebar-bottom{padding:16px 12px;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0}
   .admin-profile-btn{
     display:flex;align-items:center;gap:10px;width:100%;
     background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:12px;
@@ -283,6 +283,8 @@
         <div class="sidebar-tag">Admin Panel</div>
       </div>
 
+      <div style="flex:1;overflow-y:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent">
+
       <div class="sidebar-section">Support</div>
       <button id="tabTicketsBtn" class="sidebar-item active" onclick="switchAdminTab('tickets')">
         <div class="sidebar-icon">🎫</div>
@@ -356,6 +358,8 @@
         <div class="sidebar-icon">⚙️</div>
         <span class="sidebar-item-label">Settings</span>
       </button>
+
+      </div><!-- /scrollable nav -->
 
       <div class="sidebar-bottom">
         <a href="/staff.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);text-decoration:none;font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:600;margin-bottom:8px;transition:all .18s" onmouseover="this.style.background='rgba(255,255,255,.07)';this.style.color='var(--txt)'" onmouseout="this.style.background='rgba(255,255,255,.03)';this.style.color='var(--muted)'">
@@ -881,6 +885,32 @@
     <div style="background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:28px;margin-bottom:20px">
       <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:20px">Platform Flags</div>
       <div id="settingsFlagsList"></div>
+    </div>
+
+    <!-- Page Maintenance -->
+    <div style="background:var(--surface);border-radius:12px;border:1px solid rgba(244,197,66,.2);padding:28px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Page Maintenance</div>
+        <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted)">Sr. Admin+ only</span>
+      </div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:20px">Toggle any page into maintenance mode. Users will see a maintenance screen and cannot access the page until you re-enable it.</div>
+      <div id="maintenancePageList" style="display:flex;flex-direction:column;gap:10px">
+        <div style="color:var(--muted);font-size:.84rem">Loading…</div>
+      </div>
+      <!-- Optional message -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px">Custom Maintenance Message <span style="color:var(--muted);font-weight:400">(shown to users on all down pages)</span></div>
+        <textarea id="maintenanceMsgInput" rows="2" placeholder="e.g. We're upgrading the database. Back in 30 mins." maxlength="200"
+          style="width:100%;padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;resize:none;margin-bottom:10px"
+          onfocus="this.style.borderColor='rgba(244,197,66,.4)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:2px">ETA</div>
+          <input type="text" id="maintenanceEtaInput" placeholder="e.g. 3:00 PM EST" maxlength="40"
+            style="flex:1;padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none"
+            onfocus="this.style.borderColor='rgba(244,197,66,.4)'" onblur="this.style.borderColor='var(--border)'"/>
+          <button onclick="saveMaintenanceMessage()" style="padding:9px 20px;border-radius:8px;border:none;background:var(--gold);color:var(--navy);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap">Save Message</button>
+        </div>
+      </div>
     </div>
 
     <!-- Danger zone -->
@@ -1473,7 +1503,8 @@ import { getAuth, signInWithEmailAndPassword,
          signOut, onAuthStateChanged }            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, getDocs,
          doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc,
-         onSnapshot, orderBy, query, where,
+         onSnapshot, orderBy, query, where, limit,
+         arrayUnion, arrayRemove,
          serverTimestamp }                        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -3226,30 +3257,46 @@ const STATUS_OPTS = [
 ];
 
 async function loadStatusTab() {
-  // Load component statuses
+  // Ensure siteConfig/status exists
+  const statusRef = doc(db,'siteConfig','status');
+  let data = {};
   try {
-    const snap = await getDoc(doc(db,'siteConfig','status'));
-    const data = snap.exists() ? snap.data() : {};
-    const el = document.getElementById('statusComponentControls');
-    if (!el) return;
-    el.innerHTML = STATUS_COMPONENTS.map(c => {
-      const cur = data[c.id]?.status || 'operational';
-      const curNote = data[c.id]?.note || '';
-      return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-        <div style="font-size:1.1rem;flex-shrink:0">${c.icon}</div>
-        <div style="flex:1;min-width:0">
-          <div style="font-weight:700;font-size:.86rem;color:var(--txt);margin-bottom:2px">${c.name}</div>
-          <input type="text" id="note_${c.id}" value="${escHtml(curNote)}" placeholder="Optional note shown on status page"
-            style="width:100%;padding:5px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-family:DM Sans,sans-serif;font-size:.76rem;outline:none;max-width:320px"/>
-        </div>
-        <select id="status_${c.id}" style="padding:7px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.82rem;outline:none;flex-shrink:0">
-          ${STATUS_OPTS.map(o=>`<option value="${o.val}" ${cur===o.val?'selected':''}>${o.label}</option>`).join('')}
-        </select>
-      </div>`;
-    }).join('');
+    const snap = await getDoc(statusRef);
+    if (!snap.exists()) {
+      // Seed defaults
+      const defaults = { updatedAt: serverTimestamp() };
+      STATUS_COMPONENTS.forEach(c => { defaults[c.id] = { status:'operational', note:'' }; });
+      await setDoc(statusRef, defaults);
+      data = defaults;
+      showToast('Status document created with defaults.');
+    } else {
+      data = snap.data();
+    }
   } catch(e) {
-    document.getElementById('statusComponentControls').innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
+    document.getElementById('statusComponentControls').innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error loading status: ${e.message}</div>`;
+    return;
   }
+
+  // Render component controls
+  const el = document.getElementById('statusComponentControls');
+  if (!el) return;
+  el.innerHTML = STATUS_COMPONENTS.map(c => {
+    const cur = data[c.id]?.status || 'operational';
+    const curNote = data[c.id]?.note || '';
+    const statusColor = {operational:'var(--sage)',degraded:'var(--gold)',outage:'var(--coral)',maintenance:'var(--lav)'}[cur]||'var(--sage)';
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${statusColor};border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap" id="comp_row_${c.id}">
+      <div style="font-size:1.1rem;flex-shrink:0">${c.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:.86rem;color:var(--txt);margin-bottom:6px">${c.name}</div>
+        <input type="text" id="note_${c.id}" value="${escHtml(curNote)}" placeholder="Optional note shown on public status page"
+          style="width:100%;padding:5px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-family:DM Sans,sans-serif;font-size:.76rem;outline:none;max-width:320px"/>
+      </div>
+      <select id="status_${c.id}" onchange="updateStatusRowColor('${c.id}',this.value)"
+        style="padding:7px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:DM Sans,sans-serif;font-size:.82rem;outline:none;flex-shrink:0">
+        ${STATUS_OPTS.map(o=>`<option value="${o.val}" ${cur===o.val?'selected':''}>${o.label}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
 
   // Load incidents
   try {
@@ -3281,6 +3328,12 @@ async function loadStatusTab() {
   }
 }
 
+window.updateStatusRowColor = function(compId, val) {
+  const colors = {operational:'var(--sage)',degraded:'var(--gold)',outage:'var(--coral)',maintenance:'var(--lav)'};
+  const row = document.getElementById('comp_row_'+compId);
+  if (row) row.style.borderLeftColor = colors[val] || 'var(--sage)';
+};
+
 window.saveAllStatuses = async function() {
   const updates = { updatedAt: serverTimestamp() };
   STATUS_COMPONENTS.forEach(c => {
@@ -3305,7 +3358,7 @@ window.postIncident = async function() {
     await addDoc(collection(db,'statusIncidents'), {
       title, status, createdAt: serverTimestamp(),
       postedBy: currentAdmin?.displayName || 'Admin',
-      updates: [{ status, message: msg, at: serverTimestamp() }],
+      updates: [{ status, message: msg, at: new Date().toISOString() }],
     });
     document.getElementById('incidentTitle').value = '';
     document.getElementById('incidentMsg').value   = '';
@@ -3329,7 +3382,7 @@ window.resolveIncident = async function(incId) {
     } else {
       await updateDoc(ref, {
         status: 'resolved',
-        updates: [...(inc.updates||[]), {status:'resolved', message:'This incident has been resolved.', at: serverTimestamp()}],
+        updates: [...(inc.updates||[]), {status:'resolved', message:'This incident has been resolved.', at: new Date().toISOString()}],
       });
       showToast('✅ Incident marked as resolved.');
     }
@@ -3359,7 +3412,106 @@ async function loadSettings() {
       </div>`;
     }).join('');
   } catch(e) { console.error(e); listEl.innerHTML = '<div style="color:var(--coral);font-size:.84rem">Failed to load settings.</div>'; }
+
+  // Load maintenance page states
+  loadMaintenanceList();
 }
+
+const MAINTENANCE_PAGES = [
+  { key:'index',      label:'Student Hub',       icon:'🏠' },
+  { key:'profile',    label:'Profile',            icon:'👤' },
+  { key:'classroom',  label:'Classroom',          icon:'🏫' },
+  { key:'support',    label:'Support',            icon:'🎫' },
+  { key:'docs',       label:'Documentation',      icon:'📖' },
+  { key:'developers', label:'Developer Portal',   icon:'🛠' },
+  { key:'status',     label:'Status Page',        icon:'🟢' },
+  { key:'about',      label:'About',              icon:'ℹ️' },
+  { key:'jobs',       label:'Jobs',               icon:'💼' },
+  { key:'districts',  label:'Districts',          icon:'🏛' },
+  { key:'donate',     label:'Donate',             icon:'💛' },
+  { key:'legal',      label:'Legal',              icon:'⚖️' },
+];
+
+async function loadMaintenanceList() {
+  const listEl = document.getElementById('maintenancePageList');
+  if (!listEl) return;
+
+  // Only sr_admin and owner can use this
+  const rank = currentAdmin?.rank || 'jr_admin';
+  if (!['sr_admin','owner'].includes(rank)) {
+    listEl.innerHTML = '<div style="color:var(--muted);font-size:.82rem">Only Sr. Moderators and above can manage page maintenance.</div>';
+    return;
+  }
+
+  try {
+    const snap = await getDoc(doc(db, 'siteConfig', 'maintenance'));
+    const data = snap.exists() ? snap.data() : {};
+    const msg  = data.global?.message || '';
+    const eta  = data.global?.eta     || '';
+    if (msg) document.getElementById('maintenanceMsgInput').value = msg;
+    if (eta) document.getElementById('maintenanceEtaInput').value = eta;
+
+    listEl.innerHTML = MAINTENANCE_PAGES.map(p => {
+      const enabled = data[p.key]?.enabled === true;
+      return `<div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);border-radius:8px;border:1px solid ${enabled ? 'rgba(244,197,66,.3)' : 'var(--border)'};transition:border-color .2s" id="mrow_${p.key}">
+        <div style="font-size:1.1rem;flex-shrink:0">${p.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:.88rem;color:var(--txt)">${escHtml(p.label)}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted)">/${p.key}.html</div>
+        </div>
+        <span id="mlbl_${p.key}" style="font-family:'DM Mono',monospace;font-size:.62rem;padding:2px 9px;border-radius:4px;background:${enabled ? 'rgba(244,197,66,.15)' : 'rgba(255,255,255,.05)'};color:${enabled ? 'var(--gold)' : 'var(--muted)'};flex-shrink:0">
+          ${enabled ? 'MAINTENANCE' : 'LIVE'}
+        </span>
+        <div onclick="toggleMaintenance('${p.key}',this)" data-on="${enabled}"
+          style="width:44px;height:24px;border-radius:50px;background:${enabled ? 'var(--gold)' : 'var(--border2)'};position:relative;cursor:pointer;transition:background .2s;flex-shrink:0">
+          <div style="position:absolute;top:3px;left:${enabled ? '22px' : '3px'};width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    listEl.innerHTML = `<div style="color:var(--coral);font-size:.84rem">Error: ${e.message}</div>`;
+  }
+}
+
+window.toggleMaintenance = async function(pageKey, el) {
+  const rank = currentAdmin?.rank || 'jr_admin';
+  if (!['sr_admin','owner'].includes(rank)) { showToast('⚠️ Sr. Moderator+ required.'); return; }
+  const current = el.dataset.on === 'true';
+  const newVal  = !current;
+  try {
+    await setDoc(doc(db, 'siteConfig', 'maintenance'), {
+      [pageKey]: { enabled: newVal, updatedAt: new Date().toISOString(), updatedBy: currentAdmin?.displayName || 'Admin' }
+    }, { merge: true });
+    // Update toggle UI
+    el.dataset.on = String(newVal);
+    el.style.background = newVal ? 'var(--gold)' : 'var(--border2)';
+    el.querySelector('div').style.left = newVal ? '22px' : '3px';
+    // Update row border and label
+    const row = document.getElementById('mrow_' + pageKey);
+    const lbl = document.getElementById('mlbl_' + pageKey);
+    if (row) row.style.borderColor = newVal ? 'rgba(244,197,66,.3)' : 'var(--border)';
+    if (lbl) {
+      lbl.textContent = newVal ? 'MAINTENANCE' : 'LIVE';
+      lbl.style.background = newVal ? 'rgba(244,197,66,.15)' : 'rgba(255,255,255,.05)';
+      lbl.style.color = newVal ? 'var(--gold)' : 'var(--muted)';
+    }
+    const page = MAINTENANCE_PAGES.find(p => p.key === pageKey);
+    showToast(newVal ? `🔧 ${page?.label} set to maintenance.` : `✅ ${page?.label} is live again.`);
+  } catch(e) { showToast('Error: ' + e.message); }
+};
+
+window.saveMaintenanceMessage = async function() {
+  const rank = currentAdmin?.rank || 'jr_admin';
+  if (!['sr_admin','owner'].includes(rank)) { showToast('⚠️ Sr. Moderator+ required.'); return; }
+  const msg = document.getElementById('maintenanceMsgInput').value.trim();
+  const eta = document.getElementById('maintenanceEtaInput').value.trim();
+  try {
+    await setDoc(doc(db, 'siteConfig', 'maintenance'), {
+      global: { message: msg, eta, updatedAt: new Date().toISOString() }
+    }, { merge: true });
+    showToast('✅ Maintenance message saved.');
+  } catch(e) { showToast('Error: ' + e.message); }
+};
 
 window.toggleFlag = async function(key, el) {
   const current = el.dataset.on === 'true';

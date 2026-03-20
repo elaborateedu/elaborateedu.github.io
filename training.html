@@ -986,5 +986,18 @@ window.sendMsg = async function() {
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function toast(msg){const c=document.getElementById('toasts');const t=document.createElement('div');t.className='toast';t.textContent=msg;c.appendChild(t);setTimeout(()=>t.remove(),3200)}
 </script>
+
+<!-- ══ MAINTENANCE + SYSTEM DOWN CHECK ══ -->
+<div id="elaborateSystemDown" style="display:none;position:fixed;inset:0;background:#0D1B2A;z-index:99999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;font-family:'DM Sans',sans-serif">
+  <div style="font-size:3rem;margin-bottom:20px">⚡</div>
+  <div style="font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:12px">System <em style="font-style:italic;font-weight:300;color:#FF5733">Down</em></div>
+  <div style="color:rgba(255,255,255,.5);font-size:.95rem;max-width:400px;line-height:1.7;margin-bottom:28px">Elaborate couldn't connect to its servers. Check your internet connection or visit the status page.</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+    <button onclick="location.reload()" style="padding:11px 24px;border-radius:50px;border:none;background:#FF5733;color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer">Try Again</button>
+    <a href="/status.html" style="padding:11px 24px;border-radius:50px;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;text-decoration:none">Status Page</a>
+  </div>
+</div>
+
+
 </body>
 </html>
