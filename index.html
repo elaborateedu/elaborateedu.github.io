@@ -1543,10 +1543,11 @@
   <div class="modal sched-modal">
     <button class="modal-close" onclick="closeSchedModal()">✕</button>
     <h2 id="schedModalTitle">Add Class</h2>
-    <p class="modal-sub">Add a period to your schedule. It will highlight automatically when class is in session.</p>
-    <div class="sched-aspen-btn" onclick="showAspenInfo()" title="Coming soon">
-      <span>🎓</span> Sync with Follett Aspen <span style="font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:4px;background:rgba(167,139,250,.15);color:var(--lavender)">COMING SOON</span>
-    </div>
+    <p class="modal-sub">Add a period manually, or import your full schedule from Aspen.</p>
+    <button class="sched-aspen-btn" onclick="closeSchedModal();openAspenModal()">
+      <span>🎓</span> Import from Follett Aspen (.ics)
+      <span style="font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:4px;background:rgba(167,139,250,.15);color:var(--lavender)">FREE · SAFE</span>
+    </button>
     <div class="sched-form-group">
       <label class="sched-form-label">Class Name</label>
       <input class="sched-input" id="schedClassName" type="text" placeholder="e.g. AP Biology" maxlength="48"/>
@@ -1586,6 +1587,60 @@
       <button class="modal-submit" onclick="saveSchedPeriod()">Save Class ✦</button>
       <button id="schedDeleteBtn" style="display:none;padding:14px 20px;border-radius:50px;border:1.5px solid rgba(255,87,51,.25);background:rgba(255,87,51,.06);color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s;white-space:nowrap" onclick="deleteSchedPeriod()" onmouseover="this.style.background='rgba(255,87,51,.14)'" onmouseout="this.style.background='rgba(255,87,51,.06)'">Delete</button>
     </div>
+  </div>
+</div>
+
+<!-- ASPEN IMPORT MODAL -->
+<div class="modal-overlay" id="aspenModal" onclick="if(event.target===this)closeAspenModal()">
+  <div class="modal" style="max-width:500px">
+    <button class="modal-close" onclick="closeAspenModal()">✕</button>
+    <h2>Import from Aspen</h2>
+    <p class="modal-sub">Import your full schedule in seconds — no login required.</p>
+
+    <!-- Safety notice -->
+    <div style="background:rgba(125,190,142,.08);border:1.5px solid rgba(125,190,142,.25);border-radius:14px;padding:16px 18px;margin-bottom:22px">
+      <div style="font-weight:700;font-size:.84rem;color:#15803d;margin-bottom:8px">🔒 How this works (it is safe)</div>
+      <ul style="margin:0;padding-left:16px;font-size:.8rem;color:#166534;line-height:1.85;list-style:disc">
+        <li>You download a calendar file directly from Aspen — <strong>your login never touches Elaborate</strong></li>
+        <li>The file is read <strong>entirely in your browser</strong> — nothing is uploaded to any server</li>
+        <li>Only class names, times, teachers, and room numbers are saved — <strong>no personal data</strong></li>
+        <li>The file is discarded immediately after import</li>
+      </ul>
+    </div>
+
+    <!-- Steps -->
+    <div style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">How to export from Aspen</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px">
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:24px;height:24px;border-radius:7px;background:var(--navy);color:#fff;font-family:'Fraunces',serif;font-weight:900;font-size:.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">1</div>
+        <div style="font-size:.84rem;color:var(--navy);line-height:1.6">Log in to your school Aspen portal (e.g. <code style="font-family:'DM Mono',monospace;font-size:.78rem;background:rgba(13,27,42,.07);padding:1px 5px;border-radius:4px">aspen.yourdistrict.org</code>)</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:24px;height:24px;border-radius:7px;background:var(--navy);color:#fff;font-family:'Fraunces',serif;font-weight:900;font-size:.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">2</div>
+        <div style="font-size:.84rem;color:var(--navy);line-height:1.6">Go to <strong>My Info → Schedule</strong> and look for an <strong>Export</strong> or <strong>iCal</strong> button. Some schools show it under <strong>Calendar → Export</strong>.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:24px;height:24px;border-radius:7px;background:var(--navy);color:#fff;font-family:'Fraunces',serif;font-weight:900;font-size:.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">3</div>
+        <div style="font-size:.84rem;color:var(--navy);line-height:1.6">Download the <code style="font-family:'DM Mono',monospace;font-size:.78rem;background:rgba(13,27,42,.07);padding:1px 5px;border-radius:4px">.ics</code> file to your device, then upload it below.</div>
+      </div>
+    </div>
+
+    <!-- File drop zone -->
+    <div id="aspenDropZone" style="border:2px dashed rgba(167,139,250,.35);border-radius:16px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px;position:relative"
+      onclick="document.getElementById('aspenFileInput').click()"
+      ondragover="event.preventDefault();this.style.borderColor='var(--lavender)';this.style.background='rgba(167,139,250,.06)'"
+      ondragleave="this.style.borderColor='rgba(167,139,250,.35)';this.style.background=''"
+      ondrop="event.preventDefault();this.style.borderColor='rgba(167,139,250,.35)';this.style.background='';handleAspenDrop(event)">
+      <div style="font-size:2rem;margin-bottom:10px">📅</div>
+      <div style="font-weight:700;font-size:.9rem;color:var(--navy);margin-bottom:4px">Drop your .ics file here</div>
+      <div style="font-size:.78rem;color:var(--muted)">or click to browse</div>
+      <input type="file" id="aspenFileInput" accept=".ics,text/calendar" style="display:none" onchange="handleAspenFile(this.files[0])"/>
+    </div>
+
+    <!-- Status / preview -->
+    <div id="aspenStatus" style="display:none"></div>
+    <div id="aspenPreview" style="display:none;margin-bottom:16px"></div>
+    <button id="aspenImportBtn" style="display:none;width:100%;padding:14px;border-radius:50px;border:none;background:var(--navy);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s" onclick="confirmAspenImport()" onmouseover="this.style.background='var(--coral)'" onmouseout="this.style.background='var(--navy)'">Import Schedule ✦</button>
   </div>
 </div>
 
@@ -3855,11 +3910,199 @@ window.toggleSchedDay = function(btn) {
   btn.classList.toggle('selected');
 };
 
-window.showAspenInfo = function() {
+window.openAspenModal = function() {
+  document.getElementById('aspenModal').classList.add('open');
+  document.getElementById('aspenStatus').style.display = 'none';
+  document.getElementById('aspenPreview').style.display = 'none';
+  document.getElementById('aspenImportBtn').style.display = 'none';
+  document.getElementById('aspenFileInput').value = '';
+  aspenParsed = [];
+};
+
+window.closeAspenModal = function() {
+  document.getElementById('aspenModal').classList.remove('open');
+  aspenParsed = [];
+};
+
+let aspenParsed = [];
+
+function showAspenStatus(msg, type) {
+  const el = document.getElementById('aspenStatus');
+  const colors = {
+    error:   { bg:'rgba(255,87,51,.08)',  border:'rgba(255,87,51,.25)',  color:'var(--coral)' },
+    success: { bg:'rgba(125,190,142,.08)',border:'rgba(125,190,142,.25)',color:'#15803d' },
+    info:    { bg:'rgba(56,189,248,.07)', border:'rgba(56,189,248,.2)',  color:'#0284c7' },
+  };
+  const c = colors[type] || colors.info;
+  el.style.cssText = `display:block;padding:12px 16px;border-radius:10px;border:1.5px solid ${c.border};background:${c.bg};color:${c.color};font-size:.84rem;font-weight:600;margin-bottom:12px`;
+  el.textContent = msg;
+}
+
+window.handleAspenDrop = function(e) {
+  const file = e.dataTransfer.files[0];
+  if (file) handleAspenFile(file);
+};
+
+window.handleAspenFile = function(file) {
+  if (!file) return;
+  if (!file.name.endsWith('.ics') && file.type !== 'text/calendar') {
+    showAspenStatus('Please upload a .ics calendar file from Aspen.', 'error');
+    return;
+  }
+  showAspenStatus('Reading file...', 'info');
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      aspenParsed = parseICS(e.target.result);
+      if (!aspenParsed.length) {
+        showAspenStatus('No class periods found in this file. Make sure you exported your schedule (not just events) from Aspen.', 'error');
+        return;
+      }
+      showAspenStatus(`Found ${aspenParsed.length} class period${aspenParsed.length !== 1 ? 's' : ''}. Review below then click Import.`, 'success');
+      renderAspenPreview(aspenParsed);
+      document.getElementById('aspenImportBtn').style.display = 'block';
+    } catch(err) {
+      showAspenStatus('Could not read this file. Make sure it is a valid .ics export from Aspen.', 'error');
+      console.warn('[Aspen] Parse error:', err);
+    }
+  };
+  reader.readAsText(file);
+};
+
+function parseICS(text) {
+  // Split into VEVENT blocks
+  const events = [];
+  const blocks = text.split('BEGIN:VEVENT');
+  blocks.shift(); // remove preamble
+
+  const DAY_MAP = { MO:0, TU:1, WE:2, TH:3, FR:4 };
+
+  blocks.forEach(block => {
+    // Helper to extract a field value, handling line folding (lines starting with space/tab are continuations)
+    const unfold = t => t.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '');
+    const src = unfold(block);
+
+    const get = key => {
+      // Match KEY or KEY;params=val: VALUE
+      const m = src.match(new RegExp('(?:^|\n)' + key + '(?:;[^:\n]*)?: *([^\n\r]+)', 'i'));
+      return m ? m[1].trim() : '';
+    };
+
+    const summary  = get('SUMMARY').replace(/\\,/g,',').replace(/\\n/g,' ').trim();
+    const dtstart  = get('DTSTART');
+    const dtend    = get('DTEND');
+    const location = get('LOCATION').replace(/\\,/g,',').trim();
+    const desc     = get('DESCRIPTION').replace(/\\n/g,' ').replace(/\\,/g,',').trim();
+    const rrule    = get('RRULE');
+
+    if (!summary || !dtstart) return;
+
+    // Parse time from DTSTART (handles TZID and UTC formats)
+    // Format: 20240901T080000 or 20240901T080000Z or with TZID
+    const parseTime = str => {
+      const t = str.replace(/^[^T]*T/, '').replace(/Z$/, '').slice(0,6);
+      if (t.length < 6) return null;
+      const h = parseInt(t.slice(0,2));
+      const m = parseInt(t.slice(2,4));
+      return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+    };
+
+    const start = parseTime(dtstart);
+    const end   = parseTime(dtend);
+    if (!start || !end) return;
+
+    // Parse RRULE for recurring days: BYDAY=MO,WE,FR
+    let days = [];
+    if (rrule) {
+      const byday = rrule.match(/BYDAY=([^;]+)/i);
+      if (byday) {
+        days = byday[1].split(',').map(d => DAY_MAP[d.toUpperCase().slice(-2)]).filter(d => d !== undefined);
+      }
+    }
+
+    // If no RRULE days, try to infer from DTSTART day of week
+    if (!days.length && dtstart) {
+      const dateStr = dtstart.replace(/T.*/, '');
+      if (dateStr.length === 8) {
+        const y = +dateStr.slice(0,4), mo = +dateStr.slice(4,6)-1, day = +dateStr.slice(6,8);
+        const dow = new Date(y, mo, day).getDay(); // 0=Sun
+        if (dow >= 1 && dow <= 5) days = [dow - 1];
+      }
+    }
+
+    // Extract teacher from description or location heuristics
+    let teacher = '';
+    const teacherMatch = desc.match(/(?:teacher|instructor|faculty)[:\s]+([A-Za-z\s.]+?)(?:\n|,|$)/i);
+    if (teacherMatch) teacher = teacherMatch[1].trim();
+
+    // Extract room from location
+    let room = location ? location.split(',')[0].trim() : '';
+
+    // Deduplicate: merge events with same summary+start+end into more days
+    const existing = events.find(e => e.name === summary && e.start === start && e.end === end);
+    if (existing) {
+      days.forEach(d => { if (!existing.days.includes(d)) existing.days.push(d); });
+    } else {
+      events.push({
+        id: 'p' + Date.now() + Math.random().toString(36).slice(2,6),
+        name: summary,
+        start, end,
+        days: days.length ? days : [0,1,2,3,4], // fallback: every weekday
+        teacher,
+        room,
+      });
+    }
+  });
+
+  // Sort by start time
+  return events.sort((a,b) => a.start.localeCompare(b.start));
+}
+
+function renderAspenPreview(periods) {
+  const el = document.getElementById('aspenPreview');
+  const DAY_LABELS = ['Mon','Tue','Wed','Thu','Fri'];
+  el.style.display = 'block';
+  el.innerHTML = `
+    <div style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Preview (${periods.length} classes)</div>
+    <div style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto;padding-right:4px">
+      ${periods.map(p => `
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(13,27,42,.03);border-radius:10px;border:1px solid rgba(13,27,42,.07)">
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:.86rem;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(p.name)}</div>
+            <div style="font-size:.74rem;color:var(--muted);margin-top:2px">
+              ${minsToTime(timeToMins(p.start))} – ${minsToTime(timeToMins(p.end))}
+              ${p.teacher ? ' · ' + escHtml(p.teacher) : ''}
+              ${p.room ? ' · ' + escHtml(p.room) : ''}
+            </div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);flex-shrink:0">${p.days.sort().map(d => DAY_LABELS[d]).join(', ')}</div>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+window.confirmAspenImport = async function() {
+  if (!aspenParsed.length) return;
+  const btn = document.getElementById('aspenImportBtn');
+  btn.textContent = 'Importing...';
+  btn.disabled = true;
+
+  // Merge with existing schedule (keep manual entries, replace imported ones)
+  const existing = getSchedule().filter(p => !p.fromAspen);
+  const imported = aspenParsed.map(p => ({ ...p, fromAspen: true }));
+  userProfile.schedule = [...existing, ...imported];
+
+  await saveProfile();
+
+  btn.textContent = 'Import Schedule ✦';
+  btn.disabled = false;
+  closeAspenModal();
+  renderSchedule();
+
   const toast = document.getElementById('saveToast');
-  toast.textContent = '🎓 Aspen sync coming soon — stay tuned!';
+  toast.textContent = `✓ Imported ${imported.length} classes from Aspen!`;
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
+  setTimeout(() => toast.classList.remove('show'), 3000);
 };
 
 window.saveSchedPeriod = async function() {
