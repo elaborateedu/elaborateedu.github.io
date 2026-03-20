@@ -450,6 +450,52 @@
   .save-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 24px;border-radius:50px;font-size:.88rem;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none}
   .save-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+  /* ── SCHEDULE ── */
+  .schedule-view{padding:0 0 80px}
+  .schedule-now{background:linear-gradient(135deg,var(--coral),#e84520);border-radius:20px;padding:20px 24px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(255,87,51,.25)}
+  .schedule-now::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08);top:-80px;right:-40px}
+  .schedule-now-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-bottom:6px}
+  .schedule-now-class{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:900;letter-spacing:-.02em;margin-bottom:4px}
+  .schedule-now-time{font-size:.82rem;opacity:.75;font-weight:500}
+  .schedule-now-teacher{font-size:.78rem;opacity:.65;margin-top:2px}
+  .schedule-now-progress{height:3px;background:rgba(255,255,255,.2);border-radius:2px;margin-top:14px;overflow:hidden}
+  .schedule-now-bar{height:100%;background:#fff;border-radius:2px;transition:width 60s linear}
+  .schedule-empty-now{background:rgba(125,190,142,.1);border:1.5px solid rgba(125,190,142,.25);border-radius:20px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:14px}
+  .schedule-period{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--card-bg);border-radius:14px;border:1.5px solid rgba(13,27,42,.06);transition:all .18s;margin-bottom:10px;position:relative}
+  .schedule-period.active{border-color:rgba(255,87,51,.3);background:rgba(255,87,51,.04);box-shadow:0 4px 20px rgba(255,87,51,.1)}
+  .schedule-period.past{opacity:.45}
+  .schedule-period-num{width:32px;height:32px;border-radius:10px;background:rgba(13,27,42,.07);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.72rem;font-weight:700;color:var(--navy);flex-shrink:0}
+  .schedule-period.active .schedule-period-num{background:var(--coral);color:#fff}
+  .schedule-period-info{flex:1;min-width:0}
+  .schedule-period-name{font-weight:700;font-size:.92rem;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .schedule-period-meta{font-size:.76rem;color:var(--muted);margin-top:2px}
+  .schedule-period-time{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);flex-shrink:0;text-align:right}
+  .schedule-period-active-dot{width:7px;height:7px;border-radius:50%;background:var(--coral);flex-shrink:0;animation:sdpulse 2s ease infinite}
+  @keyframes sdpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+  .sched-edit-btn{opacity:0;background:rgba(13,27,42,.06);border:none;border-radius:8px;padding:5px 9px;cursor:pointer;font-size:.75rem;color:var(--muted);transition:all .15s;flex-shrink:0}
+  .schedule-period:hover .sched-edit-btn{opacity:1}
+  .sched-edit-btn:hover{background:rgba(255,87,51,.1);color:var(--coral)}
+  .sched-add-btn{width:100%;padding:12px;border-radius:14px;border:2px dashed rgba(13,27,42,.12);background:transparent;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s;margin-top:4px}
+  .sched-add-btn:hover{border-color:var(--coral);color:var(--coral);background:rgba(255,87,51,.03)}
+  .sched-day-tabs{display:flex;gap:4px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+  .sched-day-tabs::-webkit-scrollbar{display:none}
+  .sched-day-tab{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;padding:6px 14px;border-radius:50px;border:none;cursor:pointer;background:transparent;color:var(--muted);transition:all .15s;white-space:nowrap}
+  .sched-day-tab.active{background:var(--navy);color:#fff}
+  .sched-day-tab.today{border:1.5px solid rgba(255,87,51,.3);color:var(--coral)}
+  .sched-day-tab.active.today{background:var(--coral);border-color:transparent;color:#fff}
+
+  /* Schedule modal */
+  .sched-modal{max-width:480px}
+  .sched-form-group{margin-bottom:16px}
+  .sched-form-label{font-size:.75rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:block}
+  .sched-input{width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid rgba(13,27,42,.12);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);background:var(--cream);outline:none;transition:border-color .18s}
+  .sched-input:focus{border-color:var(--coral)}
+  .sched-time-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .sched-aspen-btn{width:100%;padding:11px;border-radius:12px;border:1.5px solid rgba(167,139,250,.3);background:rgba(167,139,250,.06);font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;color:var(--lavender);cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px}
+  .sched-aspen-btn:hover{background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.5)}
+  .sched-day-pick{padding:7px 14px;border-radius:50px;border:1.5px solid rgba(13,27,42,.12);background:transparent;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s}
+  .sched-day-pick.selected{background:var(--navy);color:#fff;border-color:transparent}
+
   /* CHANGELOG DRAWER */
   .cl-drawer{position:fixed;top:0;right:0;height:100vh;width:420px;max-width:100vw;background:var(--navy);z-index:300;transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 48px rgba(13,27,42,.4)}
   .cl-drawer.open{transform:translateX(0)}
@@ -488,6 +534,7 @@
   .tag-new{background:rgba(125,190,142,.15);color:#7DBE8E}
   .tag-improved{background:rgba(167,139,250,.15);color:#A78BFA}
   .tag-fix{background:rgba(244,197,66,.15);color:var(--gold)}
+  .tag-soon{background:rgba(56,189,248,.12);color:#38BDF8}
 
   /* Nav badge */
   .cl-nav-badge{position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--coral);border:2px solid var(--card-bg);animation:pulse-dot 2s ease-in-out infinite}
@@ -827,8 +874,28 @@
   /* ── COLLECTIONS ── */
   .collection-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:50px;font-size:.65rem;font-weight:700;margin-top:5px;letter-spacing:.03em}
 </style>
-</head>
+<style id="_sysdown_style">
+#_sysdown{display:none;position:fixed;inset:0;z-index:99999;background:#0D1B2A;color:#fff;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:'DM Sans',sans-serif}
+#_sysdown.show{display:flex}
+#_sysdown h1{font-size:2.2rem;font-weight:900;letter-spacing:-.03em;margin-bottom:12px;font-family:'Fraunces',serif}
+#_sysdown h1 em{color:#FF5733;font-style:italic;font-weight:300}
+#_sysdown p{color:rgba(255,255,255,.5);max-width:420px;line-height:1.7;margin-bottom:28px;font-size:.95rem}
+#_sysdown a{padding:11px 26px;border-radius:50px;background:#FF5733;color:#fff;text-decoration:none;font-weight:700;font-size:.88rem;margin:4px}
+#_sysdown .ghost{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15)}
+#_sysdown .dot{width:8px;height:8px;border-radius:50%;background:#F4C542;animation:_sdpulse 2s ease infinite;display:inline-block;margin-bottom:24px}
+@keyframes _sdpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+</style></head>
 <body>
+<div id="_sysdown">
+  <div class="dot"></div>
+  <h1>System <em>Down.</em></h1>
+  <p>Elaborate is having trouble connecting right now. Try again in a few minutes.</p>
+  <div>
+    <a href="/status.html">View Status Page</a>
+    <a href="javascript:location.reload()" class="ghost">Try Again</a>
+  </div>
+</div>
+
 
 <!-- Spinner -->
 <div class="spinner-overlay" id="spinnerOverlay"><div class="spinner"></div></div>
@@ -1261,6 +1328,10 @@
       <span class="si-label">Favorites</span>
       <span class="si-badge" id="favBadge" style="display:none">0</span>
     </button>
+    <button class="sidebar-item" id="sb-schedule" onclick="setSidebarView('schedule',this)">
+      <div class="si-icon" style="background:rgba(255,87,51,.1)">🗓</div>
+      <span class="si-label">Schedule</span>
+    </button>
     <button class="sidebar-item" id="sb-discover" onclick="openDiscoverFromSidebar(this)" style="background:linear-gradient(135deg,rgba(167,139,250,.12),rgba(56,189,248,.08));border:1px solid rgba(167,139,250,.2)">
       <div class="si-icon" style="background:rgba(167,139,250,.18);color:var(--lavender)">✦</div>
       <span class="si-label" style="color:var(--lavender);font-weight:700">Discover Apps</span>
@@ -1289,11 +1360,13 @@
 
     <!-- DATE / STREAK LINE -->
     <div id="studentDashboard" style="display:none;margin-top:10px">
-      <div style="display:inline-flex;align-items:center;gap:8px">
+      <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap">
         <span style="font-family:DM Mono,monospace;font-size:.7rem;color:rgba(255,255,255,.3);letter-spacing:.07em" id="dashDateLabel">—</span>
         <span style="width:1px;height:10px;background:rgba(255,255,255,.12);display:inline-block"></span>
         <span id="dashStreakFire" style="opacity:0;font-size:.78rem">🔥</span>
         <span style="font-size:.75rem;color:rgba(255,255,255,.35);font-weight:500" id="dashStreakText"></span>
+        <!-- Current class chip — shown if user has a schedule and is in class -->
+        <span id="dashCurrentClass" style="display:none;font-family:'DM Mono',monospace;font-size:.62rem;padding:3px 10px;border-radius:50px;background:rgba(255,87,51,.25);color:rgba(255,255,255,.9);border:1px solid rgba(255,87,51,.4);cursor:pointer" onclick="setSidebarView('schedule',document.getElementById('sb-schedule'))">🔴 In class</span>
       </div>
     </div>
 
@@ -1374,6 +1447,14 @@
       <div id="lib-cats" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px"></div>
       <div class="app-grid" id="lib-grid"></div>
     </div>
+
+    <!-- SCHEDULE VIEW -->
+    <div id="schedule-view" style="display:none" class="schedule-view">
+      <div id="sched-now-wrap"></div>
+      <div class="sched-day-tabs" id="schedDayTabs"></div>
+      <div id="sched-periods-list"></div>
+      <button class="sched-add-btn" onclick="openSchedModal()">＋ Add a Class</button>
+    </div>
   </div>
   </div><!-- /hub-main -->
   </div><!-- /hub-layout -->
@@ -1453,6 +1534,57 @@
         style="flex:1;padding:10px 14px;border-radius:10px;border:1.5px solid rgba(13,27,42,.12);font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--navy);background:var(--cream);outline:none"
         onkeydown="if(event.key==='Enter')createCollection()" />
       <button onclick="createCollection()" style="padding:10px 18px;border-radius:10px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='var(--coral)'" onmouseout="this.style.background='var(--navy)'">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCHEDULE PERIOD MODAL -->
+<div class="modal-overlay" id="schedModal" onclick="if(event.target===this)closeSchedModal()">
+  <div class="modal sched-modal">
+    <button class="modal-close" onclick="closeSchedModal()">✕</button>
+    <h2 id="schedModalTitle">Add Class</h2>
+    <p class="modal-sub">Add a period to your schedule. It will highlight automatically when class is in session.</p>
+    <div class="sched-aspen-btn" onclick="showAspenInfo()" title="Coming soon">
+      <span>🎓</span> Sync with Follett Aspen <span style="font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:4px;background:rgba(167,139,250,.15);color:var(--lavender)">COMING SOON</span>
+    </div>
+    <div class="sched-form-group">
+      <label class="sched-form-label">Class Name</label>
+      <input class="sched-input" id="schedClassName" type="text" placeholder="e.g. AP Biology" maxlength="48"/>
+    </div>
+    <div class="sched-form-group">
+      <label class="sched-form-label">Teacher (optional)</label>
+      <input class="sched-input" id="schedTeacher" type="text" placeholder="e.g. Ms. Johnson" maxlength="48"/>
+    </div>
+    <div class="sched-form-group">
+      <label class="sched-form-label">Room (optional)</label>
+      <input class="sched-input" id="schedRoom" type="text" placeholder="e.g. Room 214" maxlength="24"/>
+    </div>
+    <div class="sched-form-group">
+      <label class="sched-form-label">Days</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="schedDayPicker">
+        <button type="button" data-day="0" class="sched-day-pick" onclick="toggleSchedDay(this)">Mon</button>
+        <button type="button" data-day="1" class="sched-day-pick" onclick="toggleSchedDay(this)">Tue</button>
+        <button type="button" data-day="2" class="sched-day-pick" onclick="toggleSchedDay(this)">Wed</button>
+        <button type="button" data-day="3" class="sched-day-pick" onclick="toggleSchedDay(this)">Thu</button>
+        <button type="button" data-day="4" class="sched-day-pick" onclick="toggleSchedDay(this)">Fri</button>
+      </div>
+    </div>
+    <div class="sched-form-group">
+      <label class="sched-form-label">Time</label>
+      <div class="sched-time-row">
+        <div>
+          <div style="font-size:.7rem;color:var(--muted);margin-bottom:4px">Start</div>
+          <input class="sched-input" id="schedStart" type="time"/>
+        </div>
+        <div>
+          <div style="font-size:.7rem;color:var(--muted);margin-bottom:4px">End</div>
+          <input class="sched-input" id="schedEnd" type="time"/>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="modal-submit" onclick="saveSchedPeriod()">Save Class ✦</button>
+      <button id="schedDeleteBtn" style="display:none;padding:14px 20px;border-radius:50px;border:1.5px solid rgba(255,87,51,.25);background:rgba(255,87,51,.06);color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s;white-space:nowrap" onclick="deleteSchedPeriod()" onmouseover="this.style.background='rgba(255,87,51,.14)'" onmouseout="this.style.background='rgba(255,87,51,.06)'">Delete</button>
     </div>
   </div>
 </div>
@@ -2705,6 +2837,23 @@ function updateStudentDashboard() {
   const streakFire = document.getElementById('dashStreakFire');
   if (streakText) streakText.textContent = newStreak > 1 ? `${newStreak}-day streak` : 'First visit today';
   if (streakFire) streakFire.style.opacity = newStreak >= 3 ? '1' : '0';
+
+  // Current class chip
+  updateCurrentClassChip();
+}
+
+function updateCurrentClassChip() {
+  const chip = document.getElementById('dashCurrentClass');
+  if (!chip || !userProfile?.schedule?.length) return;
+  const d = new Date().getDay();
+  const todayIdx = d >= 1 && d <= 5 ? d - 1 : null;
+  const now = currentClass ? currentClass(todayIdx) : null;
+  if (now) {
+    chip.textContent = `🔴 ${now.name}`;
+    chip.style.display = 'inline';
+  } else {
+    chip.style.display = 'none';
+  }
 }
 
 /* ════════════════════════════════════
@@ -3465,6 +3614,30 @@ window.setSidebarView = function(view, btn) {
   sidebarView = view;
   document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
+
+  // Show/hide schedule view vs normal grid
+  const schedView  = document.getElementById('schedule-view');
+  const appGrid    = document.getElementById('app-grid');
+  const libView    = document.getElementById('app-library-view');
+  const discBanner = document.getElementById('discoverBanner');
+  const gridLabel  = document.getElementById('grid-label');
+  const reqBtn     = document.getElementById('requestAppBtn');
+
+  if (view === 'schedule') {
+    if (schedView)  schedView.style.display  = 'block';
+    if (appGrid)    appGrid.style.display    = 'none';
+    if (libView)    libView.style.display    = 'none';
+    if (discBanner) discBanner.style.display = 'none';
+    if (gridLabel)  gridLabel.textContent    = 'My Schedule';
+    if (reqBtn)     reqBtn.style.display     = 'none';
+    renderSchedule();
+    if (window.innerWidth <= 768) document.getElementById('hubSidebar').classList.remove('open');
+    return;
+  }
+
+  // Any other view — hide schedule
+  if (schedView) schedView.style.display = 'none';
+
   // Update grid label
   const labels = { all:'All Apps', favorites:'⭐ Favorites' };
   let label = labels[view] || '';
@@ -3496,6 +3669,244 @@ window.setSidebarView = function(view, btn) {
   // Close sidebar on mobile after selection
   if (window.innerWidth <= 768) document.getElementById('hubSidebar').classList.remove('open');
 };
+
+/* ══════════════════════════════════════════════
+   SCHEDULE SYSTEM
+══════════════════════════════════════════════ */
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+const DAY_SHORT = ['Mon','Tue','Wed','Thu','Fri'];
+let schedEditId = null; // id of period being edited, null = new
+let schedCurrentDay = null; // 0-4 (Mon-Fri), null = today
+
+function getSchedule() {
+  return userProfile?.schedule || [];
+}
+
+function todayDayIndex() {
+  const d = new Date().getDay(); // 0=Sun,1=Mon...
+  return d >= 1 && d <= 5 ? d - 1 : null; // null on weekends
+}
+
+function timeToMins(t) {
+  if (!t) return null;
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function minsToTime(m) {
+  const h = Math.floor(m / 60);
+  const min = m % 60;
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hh = h > 12 ? h - 12 : h === 0 ? 12 : h;
+  return `${hh}:${String(min).padStart(2,'0')} ${ampm}`;
+}
+
+function currentClass(dayIdx) {
+  if (dayIdx === null) return null;
+  const now = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+  const periods = getSchedule().filter(p => p.days?.includes(dayIdx));
+  return periods.find(p => {
+    const start = timeToMins(p.start);
+    const end   = timeToMins(p.end);
+    return start !== null && end !== null && nowMins >= start && nowMins < end;
+  }) || null;
+}
+
+function renderSchedule() {
+  const todayIdx = todayDayIndex();
+  if (schedCurrentDay === null) schedCurrentDay = todayIdx ?? 0;
+
+  renderSchedDayTabs();
+  renderSchedNow(todayIdx);
+  renderSchedPeriods(schedCurrentDay);
+}
+
+function renderSchedDayTabs() {
+  const todayIdx = todayDayIndex();
+  const el = document.getElementById('schedDayTabs');
+  if (!el) return;
+  el.innerHTML = DAY_SHORT.map((d, i) => {
+    const isToday   = i === todayIdx;
+    const isActive  = i === schedCurrentDay;
+    return `<button class="sched-day-tab${isActive?' active':''}${isToday?' today':''}"
+      onclick="setSchedDay(${i})">${d}${isToday?' •':''}</button>`;
+  }).join('');
+}
+
+function renderSchedNow(todayIdx) {
+  const wrap = document.getElementById('sched-now-wrap');
+  if (!wrap) return;
+  const now = currentClass(todayIdx);
+  if (todayIdx === null) {
+    wrap.innerHTML = `<div class="schedule-empty-now"><span style="font-size:1.4rem">🌤</span><div><div style="font-weight:700;color:var(--navy);font-size:.92rem">Enjoy your weekend!</div><div style="font-size:.8rem;color:var(--muted);margin-top:2px">No classes today.</div></div></div>`;
+    return;
+  }
+  if (!now) {
+    // Find next class today
+    const nowMins = new Date().getHours() * 60 + new Date().getMinutes();
+    const todayPeriods = getSchedule().filter(p => p.days?.includes(todayIdx)).sort((a,b) => timeToMins(a.start)-timeToMins(b.start));
+    const next = todayPeriods.find(p => timeToMins(p.start) > nowMins);
+    const nextText = next ? `Next: ${next.name} at ${minsToTime(timeToMins(next.start))}` : 'No more classes today';
+    wrap.innerHTML = `<div class="schedule-empty-now"><span style="font-size:1.4rem">☕</span><div><div style="font-weight:700;color:var(--navy);font-size:.92rem">No class right now</div><div style="font-size:.8rem;color:var(--muted);margin-top:2px">${nextText}</div></div></div>`;
+    return;
+  }
+  const startM = timeToMins(now.start);
+  const endM   = timeToMins(now.end);
+  const nowM   = new Date().getHours() * 60 + new Date().getMinutes();
+  const pct    = Math.min(100, Math.round(((nowM - startM) / (endM - startM)) * 100));
+  const remaining = endM - nowM;
+  const remText = remaining <= 1 ? 'Ending soon' : `${remaining} min remaining`;
+  wrap.innerHTML = `<div class="schedule-now">
+    <div class="schedule-now-label">🔴 Currently in class</div>
+    <div class="schedule-now-class">${escHtml(now.name)}</div>
+    <div class="schedule-now-time">${minsToTime(startM)} – ${minsToTime(endM)} · ${remText}</div>
+    ${now.teacher ? `<div class="schedule-now-teacher">${escHtml(now.teacher)}${now.room ? ' · ' + escHtml(now.room) : ''}</div>` : ''}
+    <div class="schedule-now-progress"><div class="schedule-now-bar" style="width:${pct}%"></div></div>
+  </div>`;
+}
+
+function renderSchedPeriods(dayIdx) {
+  const el = document.getElementById('sched-periods-list');
+  if (!el) return;
+  const todayIdx = todayDayIndex();
+  const nowMins  = new Date().getHours() * 60 + new Date().getMinutes();
+  const periods  = getSchedule()
+    .filter(p => p.days?.includes(dayIdx))
+    .sort((a,b) => timeToMins(a.start) - timeToMins(b.start));
+
+  if (!periods.length) {
+    el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--muted)">
+      <div style="font-size:2rem;margin-bottom:10px">📅</div>
+      <div style="font-weight:600;font-size:.9rem;margin-bottom:6px">No classes on ${DAYS[dayIdx]}</div>
+      <div style="font-size:.8rem">Click "Add a Class" below to build your schedule.</div>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = periods.map((p, i) => {
+    const startM   = timeToMins(p.start);
+    const endM     = timeToMins(p.end);
+    const isActive = dayIdx === todayIdx && nowMins >= startM && nowMins < endM;
+    const isPast   = dayIdx === todayIdx && nowMins >= endM;
+    return `<div class="schedule-period${isActive?' active':''}${isPast?' past':''}">
+      <div class="schedule-period-num">${i + 1}</div>
+      <div class="schedule-period-info">
+        <div class="schedule-period-name">${escHtml(p.name)}</div>
+        <div class="schedule-period-meta">${p.teacher ? escHtml(p.teacher) : ''}${p.teacher && p.room ? ' · ' : ''}${p.room ? escHtml(p.room) : ''}</div>
+      </div>
+      <div class="schedule-period-time">${minsToTime(startM)}<br><span style="opacity:.55">${minsToTime(endM)}</span></div>
+      ${isActive ? '<div class="schedule-period-active-dot"></div>' : ''}
+      <button class="sched-edit-btn" onclick="openSchedModal('${p.id}')">✎ Edit</button>
+    </div>`;
+  }).join('');
+}
+
+window.setSchedDay = function(idx) {
+  schedCurrentDay = idx;
+  renderSchedDayTabs();
+  renderSchedPeriods(idx);
+};
+
+window.openSchedModal = function(id) {
+  schedEditId = id || null;
+  const modal = document.getElementById('schedModal');
+  const deleteBtn = document.getElementById('schedDeleteBtn');
+  document.getElementById('schedModalTitle').textContent = id ? 'Edit Class' : 'Add Class';
+  deleteBtn.style.display = id ? 'block' : 'none';
+
+  // Clear
+  document.getElementById('schedClassName').value = '';
+  document.getElementById('schedTeacher').value   = '';
+  document.getElementById('schedRoom').value       = '';
+  document.getElementById('schedStart').value      = '';
+  document.getElementById('schedEnd').value        = '';
+  document.querySelectorAll('.sched-day-pick').forEach(b => b.classList.remove('selected'));
+
+  if (id) {
+    const p = getSchedule().find(p => p.id === id);
+    if (p) {
+      document.getElementById('schedClassName').value = p.name  || '';
+      document.getElementById('schedTeacher').value   = p.teacher || '';
+      document.getElementById('schedRoom').value       = p.room   || '';
+      document.getElementById('schedStart').value      = p.start  || '';
+      document.getElementById('schedEnd').value        = p.end    || '';
+      (p.days || []).forEach(d => {
+        const btn = document.querySelector(`.sched-day-pick[data-day="${d}"]`);
+        if (btn) btn.classList.add('selected');
+      });
+    }
+  } else {
+    // Pre-select current view day
+    const d = schedCurrentDay ?? todayDayIndex() ?? 0;
+    const btn = document.querySelector(`.sched-day-pick[data-day="${d}"]`);
+    if (btn) btn.classList.add('selected');
+  }
+  modal.classList.add('open');
+  setTimeout(() => document.getElementById('schedClassName').focus(), 100);
+};
+
+window.closeSchedModal = function() {
+  document.getElementById('schedModal').classList.remove('open');
+  schedEditId = null;
+};
+
+window.toggleSchedDay = function(btn) {
+  btn.classList.toggle('selected');
+};
+
+window.showAspenInfo = function() {
+  const toast = document.getElementById('saveToast');
+  toast.textContent = '🎓 Aspen sync coming soon — stay tuned!';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+};
+
+window.saveSchedPeriod = async function() {
+  const name  = document.getElementById('schedClassName').value.trim();
+  const teacher = document.getElementById('schedTeacher').value.trim();
+  const room  = document.getElementById('schedRoom').value.trim();
+  const start = document.getElementById('schedStart').value;
+  const end   = document.getElementById('schedEnd').value;
+  const days  = [...document.querySelectorAll('.sched-day-pick.selected')].map(b => Number(b.dataset.day));
+
+  if (!name) { alert('Please enter a class name.'); return; }
+  if (!start || !end) { alert('Please set a start and end time.'); return; }
+  if (!days.length) { alert('Please select at least one day.'); return; }
+  if (timeToMins(start) >= timeToMins(end)) { alert('End time must be after start time.'); return; }
+
+  const schedule = getSchedule().filter(Boolean);
+
+  if (schedEditId) {
+    const idx = schedule.findIndex(p => p.id === schedEditId);
+    if (idx > -1) schedule[idx] = { ...schedule[idx], name, teacher, room, start, end, days };
+  } else {
+    schedule.push({ id: 'p' + Date.now(), name, teacher, room, start, end, days });
+  }
+
+  userProfile.schedule = schedule;
+  await saveProfile();
+  closeSchedModal();
+  renderSchedule();
+};
+
+window.deleteSchedPeriod = async function() {
+  if (!schedEditId) return;
+  if (!confirm('Remove this class from your schedule?')) return;
+  userProfile.schedule = getSchedule().filter(p => p.id !== schedEditId);
+  await saveProfile();
+  closeSchedModal();
+  renderSchedule();
+};
+
+// Refresh current-class highlight every minute
+setInterval(() => {
+  if (document.getElementById('schedule-view')?.style.display === 'block') {
+    renderSchedNow(todayDayIndex());
+    renderSchedPeriods(schedCurrentDay ?? todayDayIndex() ?? 0);
+  }
+  updateCurrentClassChip();
+}, 60000);
 
 async function buildSidebar() {
   if (!userProfile) return;
@@ -4327,6 +4738,24 @@ window.toggleAppInCollection = function(collId) {
 ════════════════════════════════════ */
 const CHANGELOG = [
   {
+    version: 'v1.7',
+    name: 'The Schedule Update',
+    date: 'Mar 2026',
+    emoji: '🗓',
+    color: 'rgba(255,87,51,.22)',
+    dotColor: '#FF5733',
+    features: [
+      { icon:'🗓', name:'Class Schedule', tag:'new', desc:'Add your full weekly schedule to your hub. Each period shows class name, teacher, room, and time. The current class highlights automatically in real time.' },
+      { icon:'🔴', name:'Live Class Indicator', tag:'new', desc:'A pulsing dot and a "Currently in class" banner appear when you are in session, with a progress bar showing how far through the period you are.' },
+      { icon:'📅', name:'Day-by-Day View', tag:'new', desc:'Browse any day of the week using the day tabs. Today is always highlighted. The schedule updates automatically at the top of every minute.' },
+      { icon:'🎓', name:'Follett Aspen Sync', tag:'soon', desc:'One-tap import from your school Follett Aspen student portal. Syncs all periods, teachers, and rooms automatically. Coming soon.' },
+      { icon:'🟢', name:'Status Page Controls', tag:'new', desc:'Admins can now update the public status page directly from the admin portal — toggle component health, post incidents, and set maintenance mode per page.' },
+      { icon:'🔧', name:'Page Maintenance Mode', tag:'new', desc:'Sr. Moderators can put any page into maintenance mode from Settings. Users see a custom maintenance screen with message and ETA.' },
+      { icon:'📖', name:'Full Documentation Site', tag:'new', desc:'Stripe-style docs at /docs.html covering everything — student guides, teacher tools, developer API reference, Firestore schema, security rules, and more.' },
+      { icon:'👤', name:'Student Profile Page', tag:'new', desc:'Dedicated /profile.html with stats, all earned badges, avatar picker, and a live preview of your app hub.' },
+    ]
+  },
+  {
     version: 'v1.6',
     name: 'The Support & Districts Update',
     date: 'Mar 2026',
@@ -4338,8 +4767,8 @@ const CHANGELOG = [
       { icon:'📎', name:'Image Attachments', tag:'new', desc:'Users can attach images in ticket chat. Thumbnails preview before sending and open in a full lightbox viewer.' },
       { icon:'🔒', name:'Internal Staff Notes', tag:'new', desc:'Admins can leave private internal notes on any ticket — visible only to staff, completely hidden from users.' },
       { icon:'⚡', name:'Canned Responses', tag:'new', desc:'Six quick-reply templates admins can insert with one click — greeting, resolved, looking into it, and more.' },
-      { icon:'🔴', name:'Unread Ticket Dots', tag:'new', desc:'A live coral dot appears next to any ticket where the user has replied and admin hasn’t read it yet. Clears on open.' },
-      { icon:'🏛', name:'District Plan Editor', tag:'new', desc:'District admins can now change a district’s subscription plan (Trial / Active / Inactive) directly from the admin panel with a dropdown.' },
+      { icon:'🔴', name:'Unread Ticket Dots', tag:'new', desc:'A live coral dot appears next to any ticket where the user has replied and the admin has not read it yet. Clears on open.' },
+      { icon:'🏛', name:'District Plan Editor', tag:'new', desc:'District admins can now change a district subscription plan (Trial / Active / Inactive) directly from the admin panel with a dropdown.' },
       { icon:'👥', name:'Multi-Admin System', tag:'new', desc:'Any user can be promoted to staff by adding their UID to the admins Firestore collection. Each admin gets a unique color and profile.' },
       { icon:'🌐', name:'Districts Info Page', tag:'new', desc:'New public-facing districts.html marketing page with pricing, features, FAQ, and how-it-works flow.' },
       { icon:'🔐', name:'Firestore Security', tag:'improved', desc:'Internal notes blocked from users at the database level. Admin permissions now use a shared isAdmin() helper covering all collections.' },
@@ -4450,7 +4879,6 @@ window.closeChangelog = function() {
 
 function renderChangelog() {
   const body = document.getElementById('clBody');
-  if (body.innerHTML) return; // already rendered
   body.innerHTML = CHANGELOG.map((rel, ri) => `
     <div class="cl-release" style="animation:fadeUp .4s ${ri*0.07}s both">
       <div class="cl-version-row">
@@ -4502,7 +4930,7 @@ window.dismissWarning = async function() {
   <div class="warning-card">
     <div class="warning-icon">⚠️</div>
     <h2>Account Warning</h2>
-    <p>You’ve received a message from the Elaborate team:</p>
+    <p>You've received a message from the Elaborate team:</p>
     <div class="warning-body" id="warningBody"></div>
     <p style="font-size:.78rem;color:rgba(255,255,255,.3);margin-bottom:16px">This notice will be dismissed once you click below. If you have questions, <a href="support.html" style="color:#F4C542">contact support</a>.</p>
     <button class="warning-dismiss" onclick="dismissWarning()">I understand — Dismiss</button>
@@ -4993,6 +5421,45 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
 }
+</script>
+
+<!-- ══ MAINTENANCE + SYSTEM DOWN CHECK ══ -->
+<div id="elaborateSystemDown" style="display:none;position:fixed;inset:0;background:#0D1B2A;z-index:99999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;font-family:'DM Sans',sans-serif">
+  <div style="font-size:3rem;margin-bottom:20px">⚡</div>
+  <div style="font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:12px">System <em style="font-style:italic;font-weight:300;color:#FF5733">Down</em></div>
+  <div style="color:rgba(255,255,255,.5);font-size:.95rem;max-width:400px;line-height:1.7;margin-bottom:28px">Elaborate couldn't connect to its servers. Check your internet connection or visit the status page.</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+    <button onclick="location.reload()" style="padding:11px 24px;border-radius:50px;border:none;background:#FF5733;color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer">Try Again</button>
+    <a href="/status.html" style="padding:11px 24px;border-radius:50px;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;text-decoration:none">Status Page</a>
+  </div>
+</div>
+
+
+
+
+
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+(async function() {
+  var PAGE_KEY =  + page_key + ;
+  try {
+    var app = getApps().length ? getApps()[0] : initializeApp({apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',authDomain:'elaborate-edc16.firebaseapp.com',projectId:'elaborate-edc16'});
+    var db = getFirestore(app);
+    var snap = await getDoc(doc(db,'siteConfig','maintenance'));
+    if (snap.exists()) {
+      var data = snap.data();
+      if (data[PAGE_KEY] && data[PAGE_KEY].enabled === true) {
+        window.location.href = '/maintenance.html?page=' + PAGE_KEY;
+      }
+    }
+  } catch(e) {
+    if (e.code === 'unavailable' || (e.message && e.message.indexOf('Failed to fetch') > -1)) {
+      var el = document.getElementById('_sysdown');
+      if (el) el.classList.add('show');
+    }
+  }
+})();
 </script>
 </body>
 </html>
