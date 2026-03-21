@@ -730,7 +730,7 @@ footer p{font-size:.82rem;color:rgba(255,255,255,.35);margin-bottom:16px}
         <div class="card-icon" style="background:rgba(56,189,248,.1)">💼</div>
         <div class="card-title">Join the Team</div>
         <div class="card-body">We are always looking for developers, designers, and educators who want to help build the future of classroom tools.</div>
-        <a class="card-link" href="/jobs.html">See open roles →</a>
+        <a class="card-link" href="/careers.html">See open roles →</a>
       </div>
     </div>
 
@@ -754,7 +754,7 @@ footer p{font-size:.82rem;color:rgba(255,255,255,.35);margin-bottom:16px}
     <a class="footer-link" href="/about.html">About</a>
     <a class="footer-link" href="/status.html">Status</a>
     <a class="footer-link" href="/support.html">Support</a>
-    <a class="footer-link" href="/jobs.html">Jobs</a>
+    <a class="footer-link" href="/careers.html">Careers</a>
     <a class="footer-link" href="/legal.html">Legal</a>
     <a class="footer-link" href="/support.html">Contact</a>
   </div>
@@ -870,7 +870,7 @@ const sections = ['overview','submit','status','docs','schema','changelog','comm
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 (async function() {
-  var PAGE_KEY =  + page_key + ;
+  var PAGE_KEY = 'developers';
   try {
     var app = getApps().length ? getApps()[0] : initializeApp({apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',authDomain:'elaborate-edc16.firebaseapp.com',projectId:'elaborate-edc16'});
     var db = getFirestore(app);

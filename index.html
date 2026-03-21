@@ -926,7 +926,7 @@
     <a class="nav-btn ghost" href="about.html">About</a>
     <a class="nav-btn ghost" href="districts.html">Districts</a>
     <a class="nav-btn ghost" href="support.html">Support</a>
-    <a class="nav-btn ghost" href="jobs.html">Join Us</a>
+    <a class="nav-btn ghost" href="careers.html">Careers</a>
     <a class="nav-btn ghost" href="legal.html?tab=terms">Legal</a>
     <button class="nav-btn ghost" onclick="openChangelog()" style="position:relative">
       What's New
@@ -1221,7 +1221,7 @@
         <p style="font-size:.92rem;color:var(--muted);line-height:1.7;max-width:520px">We're a volunteer team building Elaborate in the open. If you want to help with moderation, development, or marketing — we'd love to have you.</p>
       </div>
       <div style="flex-shrink:0">
-        <a href="jobs.html" style="display:inline-flex;align-items:center;gap:10px;padding:16px 32px;border-radius:50px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;text-decoration:none;transition:all .2s;white-space:nowrap" onmouseover="this.style.background='var(--coral)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='var(--navy)';this.style.transform='none'">View Open Roles →</a>
+        <a href="careers.html" style="display:inline-flex;align-items:center;gap:10px;padding:16px 32px;border-radius:50px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;text-decoration:none;transition:all .2s;white-space:nowrap" onmouseover="this.style.background='var(--coral)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='var(--navy)';this.style.transform='none'">View Open Roles →</a>
       </div>
     </div>
   </section>
@@ -1242,7 +1242,7 @@
       <a href="docs.html" style="color:var(--muted);text-decoration:none;font-weight:600">Docs</a>
       <a href="developers.html" style="color:var(--muted);text-decoration:none;font-weight:600">Developers</a>
       <a href="about.html" style="color:var(--muted);text-decoration:none;font-weight:600">About</a>
-      <a href="jobs.html" style="color:var(--muted);text-decoration:none;font-weight:600">Jobs</a>
+      <a href="careers.html" style="color:var(--muted);text-decoration:none;font-weight:600">Careers</a>
       <a href="support.html" style="color:var(--muted);text-decoration:none;font-weight:600">Support</a>
       <a href="status.html" style="color:var(--muted);text-decoration:none;font-weight:600">Status</a>
       <a href="legal.html?tab=terms" style="color:var(--muted);text-decoration:none;font-weight:600">Terms of Service</a>
@@ -5762,7 +5762,7 @@ if ('serviceWorker' in navigator) {
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 (async function() {
-  var PAGE_KEY =  + page_key + ;
+  var PAGE_KEY = 'index';
   try {
     var app = getApps().length ? getApps()[0] : initializeApp({apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',authDomain:'elaborate-edc16.firebaseapp.com',projectId:'elaborate-edc16'});
     var db = getFirestore(app);
