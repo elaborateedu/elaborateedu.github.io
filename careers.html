@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Careers &mdash; Elaborate</title>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;--navy:#0D1B2A;--coral:#FF5733;--gold:#F4C542;
+  --sage:#7DBE8E;--lav:#A78BFA;--sky:#38BDF8;
+  --muted:rgba(13,27,42,.5);--border:rgba(13,27,42,.1);
+  --dark:#07090D;--dark2:#0F1218;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(7,9,13,.85);backdrop-filter:blur(16px)}
+.nav-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:#fff;text-decoration:none;letter-spacing:-.02em}
+.nav-logo span{color:var(--coral)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-link{font-size:.82rem;font-weight:600;color:rgba(255,255,255,.45);text-decoration:none;padding:6px 12px;border-radius:8px;transition:all .15s}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.06)}
+.nav-cta{padding:8px 20px;border-radius:50px;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;text-decoration:none;transition:all .15s;border:none;cursor:pointer;display:inline-block}
+.nav-cta:hover{background:#e84520;transform:translateY(-1px)}
+
+/* HERO — editorial full-bleed */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 64px 80px;position:relative;overflow:hidden;background:var(--dark)}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:80px 80px;pointer-events:none}
+.hero-orb1{position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(255,87,51,.18) 0%,transparent 65%);top:-200px;right:-200px;pointer-events:none}
+.hero-orb2{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.12) 0%,transparent 65%);bottom:-200px;left:-100px;pointer-events:none}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:28px;display:flex;align-items:center;gap:14px}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:rgba(255,255,255,.2)}
+.hero-h1{font-family:'Fraunces',serif;font-size:clamp(4rem,9vw,8rem);font-weight:900;letter-spacing:-.04em;line-height:.95;margin-bottom:40px;position:relative}
+.hero-h1 .line2{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.25);display:block;font-style:italic;font-weight:300}
+.hero-h1 .accent{color:var(--coral)}
+.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap;padding-top:48px;border-top:1px solid rgba(255,255,255,.08)}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.5);max-width:420px;line-height:1.75}
+.hero-stats{display:flex;gap:40px;flex-shrink:0}
+.hero-stat{text-align:right}
+.hero-stat-val{font-family:'Fraunces',serif;font-weight:900;font-size:2.4rem;color:#fff;line-height:1;letter-spacing:-.03em}
+.hero-stat-val span{color:var(--coral)}
+.hero-stat-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px}
+.scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.2);display:flex;flex-direction:column;align-items:center;gap:8px}
+.scroll-hint::after{content:'';width:1px;height:36px;background:linear-gradient(to bottom,rgba(255,255,255,.15),transparent)}
+
+/* MARQUEE STRIP */
+.marquee-strip{background:var(--coral);padding:12px 0;overflow:hidden;white-space:nowrap}
+.marquee-inner{display:inline-flex;animation:marquee 20s linear infinite;gap:0}
+.marquee-item{font-family:'Fraunces',serif;font-size:.95rem;font-weight:700;color:#fff;padding:0 32px;letter-spacing:-.01em}
+.marquee-dot{color:rgba(255,255,255,.5);padding:0}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* VALUES — cream section */
+.values-section{background:var(--cream);padding:96px 64px;color:var(--navy)}
+.values-inner{max-width:1140px;margin:0 auto}
+.tag-pill{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:4px 12px;border-radius:50px;display:inline-block;margin-bottom:24px}
+.section-title{font-family:'Fraunces',serif;font-weight:900;letter-spacing:-.03em;line-height:1.05}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:64px;border:2px solid rgba(13,27,42,.08);border-radius:24px;overflow:hidden}
+.value-item{padding:36px 32px;border-right:2px solid rgba(13,27,42,.08);border-bottom:2px solid rgba(13,27,42,.08);transition:background .2s}
+.value-item:hover{background:rgba(13,27,42,.03)}
+.value-item:nth-child(3n){border-right:none}
+.value-item:nth-child(n+4){border-bottom:none}
+.value-num{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;color:var(--muted);margin-bottom:16px}
+.value-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.15rem;margin-bottom:10px;letter-spacing:-.01em}
+.value-desc{font-size:.86rem;color:var(--muted);line-height:1.7}
+
+/* ROLES — dark section */
+.roles-section{background:var(--dark);padding:96px 64px;position:relative}
+.roles-inner{max-width:1140px;margin:0 auto}
+.dept-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:48px}
+.dept-pill{font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:7px 18px;border-radius:50px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.45);cursor:pointer;transition:all .15s}
+.dept-pill:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+.dept-pill.active{background:#fff;color:var(--dark);border-color:#fff}
+.dept-group{margin-bottom:56px}
+.dept-heading{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.dept-heading-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.dept-heading-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;color:#fff;letter-spacing:-.02em}
+.dept-heading-count{font-family:'DM Mono',monospace;font-size:.6rem;padding:3px 9px;border-radius:50px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.35);margin-left:auto}
+.role-row{display:flex;align-items:center;gap:20px;padding:22px 28px;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);cursor:pointer;transition:all .18s;margin-bottom:10px;text-decoration:none;color:inherit}
+.role-row:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.06);transform:translateX(4px)}
+.role-row.hot{border-color:rgba(255,87,51,.28);background:rgba(255,87,51,.05)}
+.role-row.hot:hover{border-color:rgba(255,87,51,.5);background:rgba(255,87,51,.09)}
+.role-row-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.role-row-body{flex:1;min-width:0}
+.role-row-title{font-family:'Fraunces',serif;font-weight:900;font-size:1rem;color:#fff;margin-bottom:4px;letter-spacing:-.01em}
+.role-row-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.role-chip{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:50px;border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.35)}
+.hot-chip{background:rgba(255,87,51,.15);color:var(--coral);border-color:rgba(255,87,51,.25)}
+.role-row-desc{font-size:.82rem;color:rgba(255,255,255,.38);margin-top:6px;max-width:640px;line-height:1.6}
+.role-row-arrow{font-size:1rem;color:rgba(255,255,255,.2);flex-shrink:0;transition:all .18s}
+.role-row:hover .role-row-arrow{color:#fff;transform:translateX(3px)}
+
+/* PROCESS — alternating cream */
+.process-section{background:var(--cream);padding:96px 64px;color:var(--navy)}
+.process-inner{max-width:1140px;margin:0 auto}
+.process-list{margin-top:64px;display:flex;flex-direction:column;gap:0}
+.process-item{display:grid;grid-template-columns:120px 1fr 1fr;gap:48px;align-items:start;padding:48px 0;border-bottom:1px solid rgba(13,27,42,.08)}
+.process-item:last-child{border-bottom:none}
+.process-num{font-family:'Fraunces',serif;font-weight:900;font-size:5rem;color:rgba(13,27,42,.07);line-height:1;letter-spacing:-.05em}
+.process-left{}
+.process-badge{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:50px;display:inline-block;margin-bottom:12px}
+.process-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem;letter-spacing:-.02em;margin-bottom:8px}
+.process-desc{font-size:.88rem;color:var(--muted);line-height:1.7}
+.process-note{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);padding:14px 18px;border-left:3px solid rgba(13,27,42,.1);line-height:1.7;margin-top:12px}
+
+/* CTA FOOTER */
+.cta-section{background:var(--coral);padding:80px 64px;text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:rgba(255,255,255,.07);top:-300px;left:50%;transform:translateX(-50%)}
+.cta-h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.4rem,5vw,4rem);color:#fff;letter-spacing:-.03em;line-height:1.05;margin-bottom:18px;position:relative}
+.cta-h2 em{font-style:italic;font-weight:300}
+.cta-sub{font-size:1rem;color:rgba(255,255,255,.7);max-width:440px;margin:0 auto 36px;line-height:1.75;position:relative}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+.cta-btn-primary{padding:13px 32px;border-radius:50px;background:#fff;color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;border:none;cursor:pointer;transition:all .18s}
+.cta-btn-primary:hover{background:var(--dark);color:#fff;transform:translateY(-2px)}
+.cta-btn-ghost{padding:13px 32px;border-radius:50px;background:transparent;color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;border:2px solid rgba(255,255,255,.3);cursor:pointer;transition:all .18s;text-decoration:none;display:inline-block}
+.cta-btn-ghost:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.6)}
+
+/* SITE FOOTER */
+.site-footer{background:var(--dark);padding:28px 64px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:1px solid rgba(255,255,255,.06)}
+.site-footer-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1rem;color:#fff;letter-spacing:-.02em}
+.site-footer-logo span{color:var(--coral)}
+.site-footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.site-footer-links a{font-size:.8rem;color:rgba(255,255,255,.3);text-decoration:none;transition:color .15s}
+.site-footer-links a:hover{color:#fff}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--dark2);border:1px solid rgba(255,255,255,.1);border-radius:24px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.6);transform:translateY(24px) scale(.96);transition:transform .3s cubic-bezier(.4,0,.2,1);scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-top{background:linear-gradient(135deg,rgba(255,87,51,.15),rgba(167,139,250,.1));border-bottom:1px solid rgba(255,255,255,.08);padding:28px 32px 24px;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.modal-close:hover{background:rgba(255,87,51,.2);color:#fff}
+.modal-dept{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px}
+.modal-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;color:#fff;letter-spacing:-.02em}
+.modal-note{font-size:.78rem;color:rgba(255,255,255,.35);margin-top:6px}
+.modal-body{padding:28px 32px 32px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:7px}
+.form-input,.form-select,.form-textarea{width:100%;padding:11px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.1);font-family:'DM Sans',sans-serif;font-size:.9rem;color:#fff;background:rgba(255,255,255,.06);outline:none;transition:border-color .18s;-webkit-appearance:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(255,87,51,.5);background:rgba(255,255,255,.08)}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,.22)}
+.form-select option{background:#1a1a2e;color:#fff}
+.form-textarea{resize:vertical;min-height:100px;line-height:1.6}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-hint{font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.22);margin-top:5px;line-height:1.5;letter-spacing:.03em}
+.cb-group{display:flex;flex-direction:column;gap:6px}
+.cb-opt{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .15s;background:rgba(255,255,255,.03)}
+.cb-opt:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.06)}
+.cb-opt input{width:15px;height:15px;accent-color:var(--coral);flex-shrink:0;cursor:pointer}
+.cb-opt span{font-size:.84rem;font-weight:500;color:rgba(255,255,255,.7)}
+.form-error{background:rgba(255,87,51,.1);border:1px solid rgba(255,87,51,.3);border-radius:9px;padding:10px 14px;font-size:.82rem;color:var(--coral);margin-bottom:14px}
+.submit-btn{width:100%;padding:14px;border-radius:50px;border:none;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px}
+.submit-btn:hover:not(:disabled){background:#e84520;transform:translateY(-1px)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.success-state{text-align:center;padding:20px 0 8px}
+.success-icon{font-size:3rem;margin-bottom:16px}
+.success-h3{font-family:'Fraunces',serif;font-weight:900;font-size:1.4rem;color:#fff;margin-bottom:10px}
+.success-p{font-size:.86rem;color:rgba(255,255,255,.45);line-height:1.75;margin-bottom:24px}
+.back-btn{padding:11px 26px;border-radius:50px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.86rem;cursor:pointer;transition:all .18s}
+.back-btn:hover{background:rgba(255,255,255,.14);color:#fff}
+
+/* SYSTEM DOWN */
+#_sysdown{display:none;position:fixed;inset:0;z-index:99999;background:var(--dark);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;font-family:'DM Sans',sans-serif}
+#_sysdown.show{display:flex}
+#_sysdown h1{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#fff;margin-bottom:10px}
+#_sysdown h1 em{color:var(--coral);font-style:italic;font-weight:300}
+#_sysdown p{color:rgba(255,255,255,.45);max-width:400px;line-height:1.7;margin-bottom:24px}
+#_sysdown a,#_sysdown button{padding:10px 24px;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;margin:4px;border:none;cursor:pointer;text-decoration:none;display:inline-block}
+#_sysdown a{background:var(--coral);color:#fff}
+#_sysdown button{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .hero{padding:100px 24px 60px}
+  .hero-h1{font-size:clamp(3rem,10vw,5rem)}
+  .hero-bottom{flex-direction:column;align-items:flex-start}
+  .hero-stats{flex-direction:row;gap:24px}
+  .values-section,.roles-section,.process-section,.cta-section{padding:64px 24px}
+  .values-grid{grid-template-columns:1fr}
+  .value-item{border-right:none}
+  .process-item{grid-template-columns:60px 1fr;grid-template-rows:auto auto}
+  .process-item > :last-child{grid-column:2}
+  .form-row{grid-template-columns:1fr}
+  .modal-body,.modal-top{padding:20px 20px}
+  .site-footer{padding:20px 24px}
+  .dept-group[style*="none"]{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<div id="_sysdown">
+  <h1>System <em>Down.</em></h1>
+  <p>Elaborate is having trouble connecting. Try again in a moment.</p>
+  <div>
+    <a href="/status.html">Status Page</a>
+    <button onclick="location.reload()">Try Again</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/index.html">Elaborate<span>.</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="/index.html">Hub</a>
+    <a class="nav-link" href="/about.html">About</a>
+    <a class="nav-link" href="/docs.html">Docs</a>
+    <a class="nav-link" href="/developers.html">Developers</a>
+    <a class="nav-link" href="/support.html">Support</a>
+    <button class="nav-cta" onclick="openApply('general')">Apply Now</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-eyebrow">Open Positions &mdash; Elaborate</div>
+  <h1 class="hero-h1">
+    Build what<br/>
+    <span class="line2">students<br/></span>
+    <span class="accent">actually use.</span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-sub">We are a small, passionate volunteer team building tools that make school life less chaotic. No corporate ladder. No bureaucracy. Just real work that real students depend on.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">8<span>+</span></div>
+        <div class="hero-stat-label">Open roles</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">4</div>
+        <div class="hero-stat-label">Departments</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">~1<span>wk</span></div>
+        <div class="hero-stat-label">Response time</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-inner">
+    <span class="marquee-item">Volunteer</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Fully Remote</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Real Impact</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Student Built</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Promote From Within</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Ship Real Features</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">No Resume Required</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Volunteer</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Fully Remote</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Real Impact</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Student Built</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Promote From Within</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">Ship Real Features</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">No Resume Required</span><span class="marquee-dot">&middot;</span>
+  </div>
+</div>
+
+<!-- VALUES -->
+<section class="values-section">
+  <div class="values-inner">
+    <span class="tag-pill" style="background:rgba(13,27,42,.07);color:var(--muted)">Why join us</span>
+    <h2 class="section-title" style="font-size:clamp(2rem,4vw,3.2rem)">We build for students,<br/><em style="color:var(--coral);font-weight:300">by students.</em></h2>
+    <div class="values-grid">
+      <div class="value-item">
+        <div class="value-num">01</div>
+        <div class="value-title">Real Ownership</div>
+        <div class="value-desc">You ship features that real students use every day. No busy-work, no sandbox projects. Your name is on what you build.</div>
+      </div>
+      <div class="value-item">
+        <div class="value-num">02</div>
+        <div class="value-title">Total Transparency</div>
+        <div class="value-desc">The codebase, roadmap, and every decision is open to the whole team. Nothing is hidden from the people building it.</div>
+      </div>
+      <div class="value-item">
+        <div class="value-num">03</div>
+        <div class="value-title">A Path Forward</div>
+        <div class="value-desc">Every senior role on the team started at entry level. Promotions are based entirely on contribution and impact, not time served.</div>
+      </div>
+      <div class="value-item">
+        <div class="value-num">04</div>
+        <div class="value-title">Practical Skills</div>
+        <div class="value-desc">Firebase, Firestore, product thinking, moderation systems. Skills you will put on your resume and actually use in your career.</div>
+      </div>
+      <div class="value-item">
+        <div class="value-num">05</div>
+        <div class="value-title">A Team That Cares</div>
+        <div class="value-desc">Small, close-knit, and direct. We all use the platform we build. Every person has a voice in how it evolves.</div>
+      </div>
+      <div class="value-item">
+        <div class="value-num">06</div>
+        <div class="value-title">Move Fast</div>
+        <div class="value-desc">No six-layer approval chains. If you have a good idea and can execute it, you probably will. We deploy constantly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN ROLES -->
+<section class="roles-section" id="roles">
+  <div class="roles-inner">
+    <span class="tag-pill" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.4)">Open positions</span>
+    <h2 class="section-title" style="font-size:clamp(2rem,4vw,3.2rem);color:#fff;margin-bottom:14px">Find your <em style="color:var(--coral);font-weight:300">place.</em></h2>
+    <p style="font-size:.9rem;color:rgba(255,255,255,.38);margin-bottom:48px;line-height:1.7">8 open positions. All volunteer, all remote. Click any role to apply.</p>
+
+    <div class="dept-nav">
+      <button class="dept-pill active" onclick="filterDept('all',this)">All</button>
+      <button class="dept-pill" onclick="filterDept('moderation',this)">🛡&nbsp; Moderation</button>
+      <button class="dept-pill" onclick="filterDept('engineering',this)">&#x1F4BB;&nbsp; Engineering</button>
+      <button class="dept-pill" onclick="filterDept('community',this)">📣&nbsp; Community</button>
+      <button class="dept-pill" onclick="filterDept('support',this)">🎫&nbsp; Support</button>
+    </div>
+
+    <!-- MODERATION -->
+    <div class="dept-group" id="dept-moderation">
+      <div class="dept-heading">
+        <span class="dept-heading-label">Dept</span>
+        <span class="dept-heading-title">🛡 Moderation</span>
+        <span class="dept-heading-count">2 roles</span>
+      </div>
+      <div class="role-row" onclick="openApply('trial-mod')">
+        <div class="role-row-icon" style="background:rgba(148,163,184,.1)">📋</div>
+        <div class="role-row-body">
+          <div class="role-row-title">Trial Moderator</div>
+          <div class="role-row-meta">
+            <span class="role-chip">Entry Level</span>
+            <span class="role-chip">2 Spots</span>
+          </div>
+          <div class="role-row-desc">The entry point for everyone on the moderation team. Handle incoming tickets, learn the platform, and shadow a senior mod before working independently.</div>
+        </div>
+        <div class="role-row-arrow">&#8594;</div>
+      </div>
+      <div class="role-row hot" onclick="openApply('jr-moderator')">
+        <div class="role-row-icon" style="background:rgba(251,146,60,.1)">🔰</div>
+        <div class="role-row-body">
+          <div class="role-row-title">Jr. Moderator</div>
+          <div class="role-row-meta">
+            <span class="role-chip">Mid Level</span>
+            <span class="role-chip hot-chip">Most Needed</span>
+          </div>
+          <div class="role-row-desc">Handle day-to-day moderation independently. Respond to tickets, issue warnings and suspensions, uphold platform standards. Prior experience required.</div>
+        </div>
+        <div class="role-row-arrow">&#8594;</div>
+      </div>
+    </div>
+
+    <!-- ENGINEERING -->
+    <div class="dept-group" id="dept-engineering">
+      <div class="dept-heading">
+        <span class="dept-heading-label">Dept</span>
+        <span class="dept-heading-title">&#x1F4BB; Engineering</span>
+        <span class="dept-heading-count">3 roles</span>
+      </div>
+      <div class="role-row hot" onclick="openApply('frontend-dev')">
+        <div class="role-row-icon" style="background:rgba(96,165,250,.1)">&#x26A1;</div>
+        <div class="role-row-body">
+          <div class="role-row-title">Frontend Developer</div>
+          <div class="role-row-meta">
+            <span class="role-chip">Mid&ndash;Senior</span>
+            <span class="role-chip hot-chip">Most Needed</span>
+          </div>
+          <div class="role-row-desc">Build the student hub, teacher classroom, admin portal, and ESC messaging. Vanilla HTML, CSS, JavaScript, Firebase. No frameworks. You own features end to end.</div>
+        </div>
+        <div class="role-row-arrow">&#8594;</div>
+      </div>
+      <div class="role-row" onclick="openApply('firebase-engineer')">
+        <div class="role-row-icon" style="background:rgba(251,191,36,.1)">&#x1F525;</div>
+        <div class="role-row-body">
+          <div class="role-row-title">Firebase / Backend Engineer</div>
+          <div class="role-row-meta">
+            <span class="role-chip">Mid Level</span>
+          </div>
+          <div class="role-row-desc">Own the Firestore schema, security rules, and data architecture. Optimize queries, review rule edge cases, and design new collections as features expand.</div>
+        </div>
+        <div class="role-row-arrow">&#8594;</div>
+      </div>
+      <div class="role-row" onclick="openApply('qa-engineer')">
+        <div class="role-row-icon" style="background:rgba(125,190,142,.1)">&#x1F9EA;</div>
+        <div class="role-row-body">
+          <div class="role-row-title">QA Engineer</div>
+          <div class="role-row-meta">
+            <span class="role-chip">All Levels</span>
+          </div>
+          <div class="role-row-desc">Find bugs before students do. Test new features across browsers and devices, write clear reproduction steps, work directly with developers to resolve issues fast.</div>
+        </div>
+        <div class="role-row-arrow">&#8594;</div>
+      </div>
+    </div>
+
+    <!-- COMMUNITY -->
+    <div class="dept-group" id="dept-community">
+      <div class="dept-heading">
+        <span class="dept-heading-label">Dept</span>
+        <span class="dept-heading-title">📣 Community</span>
+        <span class="dept-heading-count">2 roles</span>
+      </div>
+      <div class="role-row" onclick="openApply('community-manager')">
+        <div class="role-row-icon" style="background:rgba(167,139,250,.1)">📣</div>
+        <div class="role-row-body">
+          <div class="role-row-title">Community Manager</div>
+          <div class="role-row-meta">
+            <span class="role-chip">Mid Level</span>
+          </div>
+          <div class="role-row-desc">Be the voice of Elaborate. Write announcements, engage with students and educators, collect user feedback, and help grow awareness of the platform. Strong written communication essential.</div>
+        </div>
+        <div class="role-row-arrow">&#8594;</div>
+      </div>
+      <div class="role-row" onclick="openApply('content-writer')">
+        <div class="role-row-icon" style="background:rgba(244,114,182,.1)">&#x270D;&#xFE0F;</div>
+        <div class="role-row-body">
+          <div class="role-row-title">Content Writer / Docs</div>
+          <div class="role-row-meta">
+            <span class="role-chip">All Levels</span>
+          </div>
+          <div class="role-row-desc">Keep the documentation site accurate and approachable. Write guides for students, teachers, and developers. Update the changelog. Draft in-product copy.</div>
+        </div>
+        <div class="role-row-arrow">&#8594;</div>
+      </div>
+    </div>
+
+    <!-- SUPPORT -->
+    <div class="dept-group" id="dept-support">
+      <div class="dept-heading">
+        <span class="dept-heading-label">Dept</span>
+        <span class="dept-heading-title">🎫 Support</span>
+        <span class="dept-heading-count">1 role</span>
+      </div>
+      <div class="role-row" onclick="openApply('support-specialist')">
+        <div class="role-row-icon" style="background:rgba(56,189,248,.1)">🎫</div>
+        <div class="role-row-body">
+          <div class="role-row-title">Support Specialist</div>
+          <div class="role-row-meta">
+            <span class="role-chip">Entry Level</span>
+            <span class="role-chip">2 Spots</span>
+          </div>
+          <div class="role-row-desc">First responder for student and teacher tickets. Diagnose common issues, write helpful replies, escalate anything technical. Patient, clear communicator. No experience required.</div>
+        </div>
+        <div class="role-row-arrow">&#8594;</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section">
+  <div class="process-inner">
+    <span class="tag-pill" style="background:rgba(13,27,42,.07);color:var(--muted)">How it works</span>
+    <h2 class="section-title" style="font-size:clamp(2rem,4vw,3.2rem)">The hiring <em style="color:var(--coral);font-weight:300">process.</em></h2>
+    <div class="process-list">
+      <div class="process-item">
+        <div class="process-num">01</div>
+        <div class="process-left">
+          <span class="process-badge" style="background:rgba(255,87,51,.1);color:var(--coral)">~5 minutes</span>
+          <div class="process-title">Apply</div>
+          <div class="process-desc">Fill out the application for the role you want. Tell us who you are, why Elaborate, and what you bring. No resume required &mdash; just be honest and specific.</div>
+        </div>
+        <div>
+          <div class="process-note">We read every single application. Generic answers are easy to spot. The best applications are the specific ones.</div>
+        </div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">02</div>
+        <div class="process-left">
+          <span class="process-badge" style="background:rgba(244,197,66,.1);color:#b45309">~1 week</span>
+          <div class="process-title">We Review</div>
+          <div class="process-desc">The owner and a senior moderator review your application together. We look for genuine interest, clear communication, and alignment with the role. Everyone hears back &mdash; no ghosting.</div>
+        </div>
+        <div>
+          <div class="process-note">We are not looking for perfection. We are looking for people who are honest about what they know, curious about what they do not, and genuinely excited about what Elaborate is building.</div>
+        </div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">03</div>
+        <div class="process-left">
+          <span class="process-badge" style="background:rgba(125,190,142,.1);color:#15803d">~1 week</span>
+          <div class="process-title">Trial Phase</div>
+          <div class="process-desc">Accepted applicants enter a supervised trial period. Work alongside the team on real tasks, get direct feedback, and get a feel for how we operate. You also get to evaluate us.</div>
+        </div>
+        <div>
+          <div class="process-note">This is a two-way evaluation. We want to make sure we are worth your time as much as you are worth ours.</div>
+        </div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">04</div>
+        <div class="process-left">
+          <span class="process-badge" style="background:rgba(167,139,250,.1);color:#7c3aed">Ongoing</span>
+          <div class="process-title">Full Member</div>
+          <div class="process-desc">You get your role, access to Staff Connect and the admin panel, and you start shipping. Moderator, Sr. Moderator, and beyond are earned through impact over time &mdash; not applied for.</div>
+        </div>
+        <div>
+          <div class="process-note">A note on the Owner rank: this is not a position that is hired for. It is the founder role and is not open. All other senior roles are earned through internal promotion.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="cta-h2">Ready to build<br/><em>something real?</em></h2>
+  <p class="cta-sub">Not sure which role fits you? Submit a general application and we will figure it out together. Or just reach out through support.</p>
+  <div class="cta-btns">
+    <button class="cta-btn-primary" onclick="openApply('general')">Apply Now &rarr;</button>
+    <a class="cta-btn-ghost" href="/support.html">Ask a Question</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="site-footer-logo">Elaborate<span>.</span></div>
+  <div class="site-footer-links">
+    <a href="/index.html">Hub</a>
+    <a href="/about.html">About</a>
+    <a href="/docs.html">Docs</a>
+    <a href="/developers.html">Developers</a>
+    <a href="/support.html">Support</a>
+    <a href="/legal.html">Legal</a>
+  </div>
+</footer>
+
+<!-- APPLICATION MODAL -->
+<div class="modal-overlay" id="applyModal" onclick="if(event.target===this)closeApply()">
+  <div class="modal" id="applyModalInner">
+    <div class="modal-top">
+      <button class="modal-close" onclick="closeApply()">&#x2715;</button>
+      <div class="modal-dept" id="applyDept">Elaborate &mdash; Open Roles</div>
+      <div class="modal-title" id="applyTitle">Apply</div>
+      <div class="modal-note">Volunteer &middot; Remote &middot; Elaborate</div>
+    </div>
+    <div class="modal-body">
+      <div id="applyFormWrap">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input class="form-input" id="appFirst" type="text" placeholder="Jane" maxlength="40"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" id="appLast" type="text" placeholder="Smith" maxlength="40"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" id="appEmail" type="email" placeholder="jane@example.com"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Age</label>
+            <input class="form-input" id="appAge" type="number" placeholder="16" min="13" max="99"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Role</label>
+          <select class="form-select" id="appRole">
+            <option value="">Select a role...</option>
+            <optgroup label="Moderation">
+              <option value="trial-mod">Trial Moderator</option>
+              <option value="jr-moderator">Jr. Moderator</option>
+            </optgroup>
+            <optgroup label="Engineering">
+              <option value="frontend-dev">Frontend Developer</option>
+              <option value="firebase-engineer">Firebase / Backend Engineer</option>
+              <option value="qa-engineer">QA Engineer</option>
+            </optgroup>
+            <optgroup label="Community">
+              <option value="community-manager">Community Manager</option>
+              <option value="content-writer">Content Writer / Docs</option>
+            </optgroup>
+            <optgroup label="Support">
+              <option value="support-specialist">Support Specialist</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="general">General / Not sure yet</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Relevant Skills</label>
+          <div class="cb-group">
+            <label class="cb-opt"><input type="checkbox" name="skills" value="moderation"/><span>Community moderation or online safety</span></label>
+            <label class="cb-opt"><input type="checkbox" name="skills" value="support"/><span>Customer or community support</span></label>
+            <label class="cb-opt"><input type="checkbox" name="skills" value="frontend"/><span>HTML / CSS / JavaScript</span></label>
+            <label class="cb-opt"><input type="checkbox" name="skills" value="firebase"/><span>Firebase / Firestore / backend development</span></label>
+            <label class="cb-opt"><input type="checkbox" name="skills" value="writing"/><span>Writing, communication, or documentation</span></label>
+            <label class="cb-opt"><input type="checkbox" name="skills" value="design"/><span>UI / UX design</span></label>
+            <label class="cb-opt"><input type="checkbox" name="skills" value="education"/><span>Education or teaching background</span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Why Elaborate?</label>
+          <textarea class="form-textarea" id="appWhy" placeholder="Tell us what drew you to this platform and what you want to contribute. Be specific."></textarea>
+          <div class="form-hint">Generic answers are easy to spot. The best ones are honest and specific.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Relevant Experience</label>
+          <textarea class="form-textarea" id="appExperience" placeholder="Any past roles, projects, or experience that is relevant. No experience is fine, just be honest." style="min-height:90px"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Anything else? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.75rem;opacity:.6">(optional)</span></label>
+          <textarea class="form-textarea" id="appExtra" placeholder="Questions, links to past work, ideas for the platform, or anything you want us to know." style="min-height:68px"></textarea>
+        </div>
+        <div id="appError" class="form-error" style="display:none"></div>
+        <button class="submit-btn" id="submitBtn" onclick="submitApplication()">
+          <span id="submitBtnText">Submit Application &rarr;</span>
+        </button>
+      </div>
+      <div class="success-state" id="applySuccess" style="display:none">
+        <div class="success-icon">&#x1F389;</div>
+        <div class="success-h3">Application received!</div>
+        <div class="success-p">Thanks for applying to Elaborate. We read every application personally and will respond to the email you provided within a week.<br/><br/>In the meantime, keep using the platform. We love seeing how applicants engage with what they are helping to build.</div>
+        <button class="back-btn" onclick="closeApply()">Back to Roles</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Plain script — NOT type="module" — so onclick handlers can reach these functions
+
+var FB_CONFIG = {
+  apiKey: 'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',
+  authDomain: 'elaborate-edc16.firebaseapp.com',
+  projectId: 'elaborate-edc16'
+};
+
+var db = null;
+
+// Bootstrap Firebase via dynamic import (avoids module scope issue)
+(async function() {
+  try {
+    var fim = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    var ffs = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    var app = fim.getApps().length ? fim.getApps()[0] : fim.initializeApp(FB_CONFIG);
+    db = ffs.getFirestore(app);
+    window._ffs = ffs;
+
+    // Maintenance check
+    var snap = await ffs.getDoc(ffs.doc(db, 'siteConfig', 'maintenance'));
+    if (snap.exists() && snap.data()['jobs'] && snap.data()['jobs'].enabled === true) {
+      window.location.href = '/maintenance.html?page=jobs';
+    }
+  } catch(e) {
+    if (e.code === 'unavailable' || (e.message && e.message.indexOf('fetch') > -1)) {
+      document.getElementById('_sysdown').classList.add('show');
+    }
+  }
+})();
+
+var ROLES = {
+  'trial-mod':          { title: 'Trial Moderator',             dept: 'Moderation'  },
+  'jr-moderator':       { title: 'Jr. Moderator',               dept: 'Moderation'  },
+  'frontend-dev':       { title: 'Frontend Developer',          dept: 'Engineering' },
+  'firebase-engineer':  { title: 'Firebase / Backend Engineer', dept: 'Engineering' },
+  'qa-engineer':        { title: 'QA Engineer',                 dept: 'Engineering' },
+  'community-manager':  { title: 'Community Manager',           dept: 'Community'   },
+  'content-writer':     { title: 'Content Writer / Docs',       dept: 'Community'   },
+  'support-specialist': { title: 'Support Specialist',          dept: 'Support'     },
+  'general':            { title: 'General Application',         dept: 'Open'        }
+};
+
+function filterDept(dept, btn) {
+  document.querySelectorAll('.dept-pill').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  ['moderation','engineering','community','support'].forEach(function(d) {
+    var el = document.getElementById('dept-' + d);
+    if (el) el.style.display = (dept === 'all' || dept === d) ? 'block' : 'none';
+  });
+}
+
+function openApply(roleKey) {
+  var role = ROLES[roleKey] || ROLES['general'];
+  document.getElementById('applyDept').textContent = role.dept + ' — Elaborate';
+  document.getElementById('applyTitle').textContent = role.title;
+
+  var sel = document.getElementById('appRole');
+  var found = Array.prototype.find.call(sel.options, function(o) { return o.value === roleKey; });
+  if (found) sel.value = roleKey;
+
+  document.getElementById('applyFormWrap').style.display = 'block';
+  document.getElementById('applySuccess').style.display = 'none';
+  document.getElementById('appError').style.display = 'none';
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('submitBtnText').textContent = 'Submit Application →';
+
+  document.getElementById('applyModal').classList.add('open');
+  document.getElementById('applyModalInner').scrollTop = 0;
+  setTimeout(function() { document.getElementById('appFirst').focus(); }, 120);
+}
+
+function closeApply() {
+  document.getElementById('applyModal').classList.remove('open');
+}
+
+function submitApplication() {
+  var first      = document.getElementById('appFirst').value.trim();
+  var last       = document.getElementById('appLast').value.trim();
+  var email      = document.getElementById('appEmail').value.trim();
+  var age        = document.getElementById('appAge').value.trim();
+  var role       = document.getElementById('appRole').value;
+  var why        = document.getElementById('appWhy').value.trim();
+  var experience = document.getElementById('appExperience').value.trim();
+  var extra      = document.getElementById('appExtra').value.trim();
+  var skills     = Array.prototype.map.call(
+    document.querySelectorAll('input[name=skills]:checked'),
+    function(c) { return c.value; }
+  );
+  var errEl = document.getElementById('appError');
+
+  function show(msg) {
+    errEl.textContent = msg;
+    errEl.style.display = 'block';
+    errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  errEl.style.display = 'none';
+  if (!first || !last)                return show('Please enter your full name.');
+  if (!email || email.indexOf('@') < 0) return show('Please enter a valid email address.');
+  if (!age || parseInt(age) < 13)     return show('You must be at least 13 to apply.');
+  if (!role)                          return show('Please select the role you are applying for.');
+  if (!why)                           return show('Please tell us why you want to join Elaborate.');
+  if (!experience)                    return show('Please share your relevant experience.');
+
+  var btn = document.getElementById('submitBtn');
+  var txt = document.getElementById('submitBtnText');
+  btn.disabled = true;
+  txt.textContent = 'Submitting…';
+
+  if (!db || !window._ffs) {
+    show('Still connecting to the server. Please wait a moment and try again.');
+    btn.disabled = false;
+    txt.textContent = 'Submit Application →';
+    return;
+  }
+
+  var roleInfo = ROLES[role] || {};
+  window._ffs.addDoc(window._ffs.collection(db, 'jobApplications'), {
+    firstName: first, lastName: last,
+    email: email, age: parseInt(age),
+    role: role, roleLabel: roleInfo.title || role,
+    department: roleInfo.dept || '',
+    why: why, experience: experience,
+    extra: extra || '',
+    skills: skills,
+    status: 'pending',
+    read: false,
+    createdAt: window._ffs.serverTimestamp()
+  }).then(function() {
+    document.getElementById('applyFormWrap').style.display = 'none';
+    document.getElementById('applySuccess').style.display = 'block';
+    document.getElementById('applyModalInner').scrollTop = 0;
+  }).catch(function(e) {
+    show('Submission failed: ' + e.message + '. Please try again.');
+    btn.disabled = false;
+    txt.textContent = 'Submit Application →';
+  });
+}
+</script>
+</body>
+</html>
