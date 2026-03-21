@@ -1,62 +1,85 @@
 /* ═══════════════════════════════════════════
-   Elaborate Service Worker
-   Caches shell for offline + fast load
+   Elaborate Service Worker v3
+   Network-first for HTML — always fresh
+   Cache-first only for fonts/images/icons
 ═══════════════════════════════════════════ */
-const CACHE = 'elaborate-v1';
-const SHELL = [
-  '/',
-  '/index.html',
-  '/app.html',
-  '/manifest.json',
+
+const CACHE_VERSION = 'elaborate-v3';
+
+const STATIC_ASSETS = [
   '/favicon.png',
-  'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap',
+  '/manifest.json',
 ];
 
-// Install — cache the shell
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())
+    caches.open(CACHE_VERSION)
+      .then(c => c.addAll(STATIC_ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
-// Activate — delete old caches
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.filter(k => k !== CACHE_VERSION).map(k => caches.delete(k))
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch — cache-first for shell, network-first for Firebase/API
 self.addEventListener('fetch', e => {
   const url = e.request.url;
+  if (e.request.method !== 'GET') return;
 
-  // Always go network for Firebase, Google APIs, analytics
-  if (url.includes('firestore.googleapis.com') ||
-      url.includes('firebase') ||
-      url.includes('googleapis.com/identitytoolkit') ||
-      url.includes('googleapis.com/securetoken')) {
-    return; // let browser handle it
+  // Never intercept Firebase / Google auth / API calls
+  if (
+    url.includes('firestore.googleapis.com') ||
+    url.includes('firebase') ||
+    url.includes('googleapis.com/identitytoolkit') ||
+    url.includes('googleapis.com/securetoken') ||
+    url.includes('gstatic.com/firebasejs')
+  ) return;
+
+  const isHTML = e.request.mode === 'navigate' || url.endsWith('.html');
+  const isFont = url.includes('fonts.gstatic.com') || url.includes('fonts.googleapis.com');
+  const isImage = /\.(png|jpg|jpeg|svg|ico|webp)(\?|$)/.test(url);
+
+  if (isHTML) {
+    // Network-first: always fetch fresh, fall back to cache when offline
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          if (res.ok) caches.open(CACHE_VERSION).then(c => c.put(e.request, res.clone()));
+          return res;
+        })
+        .catch(() => caches.match(e.request))
+    );
+    return;
   }
 
+  if (isFont || isImage) {
+    // Cache-first: static assets never change
+    e.respondWith(
+      caches.match(e.request).then(cached => {
+        if (cached) return cached;
+        return fetch(e.request).then(res => {
+          if (res.ok) caches.open(CACHE_VERSION).then(c => c.put(e.request, res.clone()));
+          return res;
+        });
+      })
+    );
+    return;
+  }
+
+  // Everything else (JS inline in HTML, manifest etc): network-first
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      if (cached) return cached;
-      return fetch(e.request).then(res => {
-        // Cache successful GET responses for same-origin assets
-        if (res.ok && e.request.method === 'GET' &&
-            (url.startsWith(self.location.origin) || url.includes('fonts.gstatic') || url.includes('fonts.googleapis'))) {
-          const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
+    fetch(e.request)
+      .then(res => {
+        if (res.ok) caches.open(CACHE_VERSION).then(c => c.put(e.request, res.clone()));
         return res;
-      }).catch(() => {
-        // Offline fallback for navigation
-        if (e.request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
-      });
-    })
+      })
+      .catch(() => caches.match(e.request))
   );
 });

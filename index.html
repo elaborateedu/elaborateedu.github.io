@@ -3789,31 +3789,52 @@ function renderSchedHeader() {
   if (!hdr) {
     hdr = document.createElement('div');
     hdr.id = 'schedFormatBar';
-    hdr.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px';
+    hdr.style.cssText = 'margin-bottom:18px';
     const tabsEl = document.getElementById('schedDayTabs');
     tabsEl.parentNode.insertBefore(hdr, tabsEl);
   }
   const fmt    = getSchedFormat();
   const labels = getBlockLabels();
   const todayIdx = todayDayIndex();
-  const btnBase = 'padding:5px 12px;border-radius:50px;font-family:DM Sans,sans-serif;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .15s;border:1.5px solid';
+  const btnBase = 'padding:5px 14px;border-radius:50px;font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s;border:1.5px solid';
+
   hdr.innerHTML = `
-    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:${fmt==='block'?'12':'0'}px">
       <span style="font-family:DM Mono,monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Format</span>
       <button onclick="setSchedFormat('weekday')" style="${btnBase} ${fmt==='weekday'?'var(--navy);background:var(--navy);color:#fff':'rgba(13,27,42,.15);background:transparent;color:var(--muted)'}">Mon–Fri</button>
-      <button onclick="setSchedFormat('block')"   style="${btnBase} ${fmt==='block'?'var(--coral);background:var(--coral);color:#fff':'rgba(13,27,42,.15);background:transparent;color:var(--muted)'}">A/B/C Block</button>
+      <button onclick="setSchedFormat('block')"   style="${btnBase} ${fmt==='block'?'var(--coral);background:var(--coral);color:#fff':'rgba(13,27,42,.15);background:transparent;color:var(--muted)'}">Block Days</button>
     </div>
-    ${fmt==='block' ? `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-      <input id="blockLabelsInput" value="${escHtml(labels.join(','))}" maxlength="30"
-        style="width:110px;padding:4px 10px;border-radius:8px;border:1.5px solid rgba(13,27,42,.12);font-family:DM Sans,sans-serif;font-size:.78rem;outline:none;background:var(--card-bg);color:var(--navy)"
-        placeholder="A,B,C" title="Comma-separated block day labels"
-        onchange="saveBlockLabels(this.value)"/>
-      <span style="font-family:DM Mono,monospace;font-size:.6rem;color:var(--muted)">labels</span>
-      ${todayIdx===null ? `<select id="todayBlockSelect" onchange="setTodayBlock(this.value)"
-        style="padding:4px 10px;border-radius:8px;border:1.5px solid rgba(255,87,51,.3);background:rgba(255,87,51,.05);font-family:DM Sans,sans-serif;font-size:.78rem;color:var(--coral);font-weight:600;outline:none;cursor:pointer">
-        <option value="">Today is…?</option>
-        ${labels.map((l,i)=>`<option value="${i}">${l} Day</option>`).join('')}
-      </select>` : `<span style="font-family:DM Mono,monospace;font-size:.7rem;background:rgba(255,87,51,.1);color:var(--coral);padding:3px 9px;border-radius:50px;cursor:pointer" onclick="clearTodayBlock()">Today: ${labels[todayIdx]} Day ✕</span>`}
+    ${fmt==='block' ? `
+    <div style="background:rgba(13,27,42,.03);border:1.5px solid rgba(13,27,42,.08);border-radius:14px;padding:14px 16px">
+      <div style="font-family:DM Mono,monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Day Schedule (${labels.length} day${labels.length!==1?'s':''})</div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="blockDayChips">
+        ${labels.map((l,i) => `
+          <div style="display:inline-flex;align-items:center;gap:5px;padding:4px 6px 4px 10px;border-radius:50px;background:var(--navy);color:#fff;font-family:DM Sans,sans-serif;font-size:.78rem;font-weight:600">
+            <span>${escHtml(l)} Day</span>
+            <button onclick="removeBlockDay(${i})" style="width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:.6rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;flex-shrink:0" title="Remove">&times;</button>
+          </div>`).join('')}
+        <div style="display:inline-flex;align-items:center;gap:4px">
+          <input id="newBlockDayInput" type="text" maxlength="8" placeholder="e.g. D"
+            style="width:52px;padding:4px 8px;border-radius:8px;border:1.5px solid rgba(13,27,42,.15);font-family:DM Sans,sans-serif;font-size:.78rem;outline:none;background:#fff;color:var(--navy)"
+            onfocus="this.style.borderColor='var(--coral)'" onblur="this.style.borderColor='rgba(13,27,42,.15)'"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();addBlockDay();}"/>
+          <button onclick="addBlockDay()" style="padding:4px 10px;border-radius:8px;border:none;background:var(--coral);color:#fff;font-family:DM Sans,sans-serif;font-size:.75rem;font-weight:700;cursor:pointer">+ Add</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-family:DM Mono,monospace;font-size:.62rem;color:var(--muted)">Today:</span>
+        ${todayIdx===null
+          ? `<select id="todayBlockSelect" onchange="setTodayBlock(this.value)"
+              style="padding:4px 10px;border-radius:8px;border:1.5px solid rgba(255,87,51,.3);background:rgba(255,87,51,.05);font-family:DM Sans,sans-serif;font-size:.78rem;color:var(--coral);font-weight:600;outline:none;cursor:pointer">
+              <option value="">Select today...</option>
+              ${labels.map((l,i)=>`<option value="${i}">${l} Day</option>`).join('')}
+            </select>`
+          : `<span style="font-family:DM Mono,monospace;font-size:.7rem;background:rgba(255,87,51,.1);color:var(--coral);padding:3px 10px;border-radius:50px;cursor:pointer" onclick="clearTodayBlock()">
+              ${escHtml(labels[todayIdx])} Day &nbsp;&#x2715;
+            </span>`
+        }
+        <span style="font-family:DM Mono,monospace;font-size:.6rem;color:rgba(13,27,42,.25)">(resets midnight)</span>
+      </div>
     </div>` : ''}`;
 }
 
@@ -3825,10 +3846,45 @@ window.setSchedFormat = async function(fmt) {
 };
 
 window.saveBlockLabels = async function(val) {
-  const labels = val.split(',').map(s => s.trim().slice(0,5)).filter(Boolean).slice(0,8);
+  const labels = val.split(',').map(s => s.trim().slice(0,8)).filter(Boolean).slice(0,20);
   if (!labels.length) return;
   userProfile.scheduleBlockLabels = labels;
   schedCurrentDay = 0;
+  await saveProfile();
+  renderSchedule();
+};
+
+window.addBlockDay = async function() {
+  const input = document.getElementById('newBlockDayInput');
+  if (!input) return;
+  const val = input.value.trim().slice(0, 8);
+  if (!val) { input.focus(); return; }
+  const labels = getBlockLabels();
+  if (labels.length >= 20) { input.value = ''; return; }
+  // Prevent duplicates
+  if (labels.some(l => l.toLowerCase() === val.toLowerCase())) {
+    input.style.borderColor = 'var(--coral)';
+    setTimeout(() => { input.style.borderColor = 'rgba(13,27,42,.15)'; }, 1000);
+    return;
+  }
+  labels.push(val);
+  userProfile.scheduleBlockLabels = labels;
+  input.value = '';
+  await saveProfile();
+  renderSchedule();
+};
+
+window.removeBlockDay = async function(idx) {
+  const labels = getBlockLabels();
+  if (labels.length <= 1) return; // must have at least one
+  labels.splice(idx, 1);
+  userProfile.scheduleBlockLabels = labels;
+  // Adjust today block if needed
+  if (userProfile.scheduleTodayBlock && userProfile.scheduleTodayBlock.day >= labels.length) {
+    userProfile.scheduleTodayBlock = null;
+  }
+  // Adjust schedCurrentDay if out of range
+  if (schedCurrentDay >= labels.length) schedCurrentDay = 0;
   await saveProfile();
   renderSchedule();
 };
