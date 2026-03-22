@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Help Center — Elaborate</title>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;--navy:#0D1B2A;--coral:#FF5733;--gold:#F4C542;
+  --sage:#7DBE8E;--lav:#A78BFA;--sky:#38BDF8;--pink:#F472B6;
+  --muted:rgba(13,27,42,.48);--border:rgba(13,27,42,.09);--border2:rgba(13,27,42,.15);
+  --card:#fff;--tr:.18s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(13,27,42,.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07)}
+.nav-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:#fff;text-decoration:none;letter-spacing:-.02em}
+.nav-logo span{color:var(--coral)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-link{font-size:.82rem;font-weight:600;color:rgba(255,255,255,.45);text-decoration:none;padding:6px 12px;border-radius:8px;transition:all .15s}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}
+.nav-cta{padding:8px 18px;border-radius:50px;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;text-decoration:none;transition:all .15s;border:none;cursor:pointer;display:inline-block}
+.nav-cta:hover{background:#e84520;transform:translateY(-1px)}
+
+/* HERO */
+.hero{background:var(--navy);padding:90px 48px 0;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(255,87,51,.16),transparent 65%);top:-400px;right:-200px;pointer-events:none}
+.hero::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.1),transparent 65%);bottom:-150px;left:-100px;pointer-events:none}
+.hero-inner{max-width:720px;margin:0 auto;text-align:center;position:relative;z-index:1;padding-bottom:0}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:18px}
+.hero-h1{font-family:'Fraunces',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;color:#fff;margin-bottom:12px}
+.hero-h1 em{font-style:italic;font-weight:300;color:var(--coral)}
+.hero-sub{font-size:.95rem;color:rgba(255,255,255,.45);margin-bottom:36px;line-height:1.7}
+
+/* SEARCH BOX */
+.search-wrap{position:relative;max-width:580px;margin:0 auto}
+.search-box{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 20px;transition:all .2s;cursor:text}
+.search-box:focus-within{border-color:rgba(255,87,51,.5);background:rgba(255,255,255,.09)}
+.search-icon{font-size:1.1rem;color:rgba(255,255,255,.3);flex-shrink:0}
+.search-input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:1rem;line-height:1}
+.search-input::placeholder{color:rgba(255,255,255,.28)}
+.search-kbd{font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 8px;border-radius:5px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.1);flex-shrink:0}
+
+/* Search results dropdown */
+.search-results{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--card);border-radius:14px;border:1.5px solid var(--border2);box-shadow:0 20px 60px rgba(13,27,42,.22);overflow:hidden;display:none;z-index:50}
+.search-results.show{display:block}
+.sr-section-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px 16px 4px}
+.sr-item{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;cursor:pointer;transition:background .12s;text-decoration:none;color:inherit}
+.sr-item:hover{background:rgba(13,27,42,.04)}
+.sr-item-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.sr-item-body{flex:1;min-width:0}
+.sr-item-title{font-size:.88rem;font-weight:600;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sr-item-preview{font-size:.76rem;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sr-badge{font-family:'DM Mono',monospace;font-size:.55rem;padding:2px 7px;border-radius:4px;flex-shrink:0;margin-top:2px}
+.sr-empty{padding:20px 16px;text-align:center;font-size:.86rem;color:var(--muted)}
+.sr-footer{padding:10px 16px;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.sr-footer a{color:var(--coral);font-weight:600;text-decoration:none}
+
+/* Tab strip at bottom of hero */
+.hero-tab-strip{display:flex;justify-content:center;gap:0;margin-top:40px;border-bottom:1px solid rgba(255,255,255,.08);position:relative}
+.hero-tab{font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;padding:12px 20px;background:transparent;border:none;color:rgba(255,255,255,.4);cursor:pointer;transition:color .15s;border-bottom:2px solid transparent;margin-bottom:-1px}
+.hero-tab:hover{color:rgba(255,255,255,.75)}
+.hero-tab.active{color:#fff;border-bottom-color:var(--coral)}
+
+/* MAIN CONTENT */
+.page{max-width:1080px;margin:0 auto;padding:56px 48px 80px}
+
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:56px}
+.cat-card{background:var(--card);border-radius:18px;padding:26px 22px;border:1.5px solid var(--border);cursor:pointer;transition:all var(--tr);text-decoration:none;color:inherit;display:block}
+.cat-card:hover{box-shadow:0 8px 28px rgba(13,27,42,.1);transform:translateY(-3px);border-color:var(--border2)}
+.cat-card-icon{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:14px}
+.cat-card-name{font-family:'Fraunces',serif;font-weight:900;font-size:1rem;letter-spacing:-.01em;margin-bottom:5px}
+.cat-card-count{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted)}
+
+/* SECTION HEADER */
+.section-eyebrow{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.section-eyebrow::after{content:'';flex:1;height:1px;background:var(--border)}
+.section-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;letter-spacing:-.02em;margin-bottom:24px}
+
+/* FEATURED ARTICLES */
+.featured-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:56px}
+.featured-card{background:var(--card);border-radius:18px;padding:26px 24px;border:1.5px solid var(--border);cursor:pointer;transition:all var(--tr)}
+.featured-card:hover{box-shadow:0 8px 28px rgba(13,27,42,.1);transform:translateY(-3px);border-color:var(--border2)}
+.featured-cat-tag{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:4px;display:inline-block;margin-bottom:10px}
+.featured-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem;letter-spacing:-.01em;margin-bottom:8px;line-height:1.25}
+.featured-summary{font-size:.82rem;color:var(--muted);line-height:1.6;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.featured-meta{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:14px}
+
+/* ARTICLE LIST (per category view) */
+.article-list{display:flex;flex-direction:column;gap:10px;margin-bottom:40px}
+.article-row{background:var(--card);border-radius:14px;padding:18px 22px;border:1.5px solid var(--border);cursor:pointer;transition:all var(--tr);display:flex;align-items:center;gap:16px}
+.article-row:hover{box-shadow:0 4px 20px rgba(13,27,42,.08);transform:translateX(4px);border-color:var(--border2)}
+.article-row-icon{font-size:1.1rem;flex-shrink:0}
+.article-row-body{flex:1;min-width:0}
+.article-row-title{font-weight:700;font-size:.9rem;color:var(--navy);margin-bottom:3px}
+.article-row-summary{font-size:.78rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.article-row-arrow{color:var(--muted);font-size:.9rem;transition:all .15s;flex-shrink:0}
+.article-row:hover .article-row-arrow{color:var(--coral);transform:translateX(3px)}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:color .15s}
+.breadcrumb a:hover{color:var(--coral)}
+.breadcrumb-sep{font-size:.7rem;opacity:.4}
+
+/* ARTICLE READER */
+.article-reader{max-width:700px}
+.article-reader-title{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:10px}
+.article-reader-meta{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.article-reader-body{font-size:.96rem;line-height:1.82;color:var(--navy)}
+.article-reader-body h2{font-family:'Fraunces',serif;font-weight:900;font-size:1.3rem;letter-spacing:-.02em;margin:32px 0 10px}
+.article-reader-body h3{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;margin:22px 0 8px}
+.article-reader-body p{margin-bottom:16px}
+.article-reader-body ul,.article-reader-body ol{padding-left:22px;margin-bottom:16px}
+.article-reader-body li{margin-bottom:7px}
+.article-reader-body code{font-family:'DM Mono',monospace;background:rgba(13,27,42,.07);padding:2px 7px;border-radius:5px;font-size:.88em}
+.article-reader-body hr{border:none;border-top:1px solid var(--border);margin:24px 0}
+.article-reader-body a{color:var(--coral);font-weight:600;text-decoration:none}
+.article-reader-body a:hover{text-decoration:underline}
+/* Callout blocks written from editor */
+.article-reader-body div[style*="border-left"]{background:rgba(56,189,248,.06)!important;border-left:3px solid var(--sky)!important;border-radius:0 10px 10px 0!important;padding:14px 18px!important;margin:16px 0!important;line-height:1.7}
+
+/* Feedback widget */
+.article-feedback{margin-top:48px;padding:24px;background:var(--card);border-radius:16px;border:1.5px solid var(--border);text-align:center}
+.article-feedback p{font-size:.88rem;color:var(--muted);margin-bottom:14px}
+.feedback-btn{padding:8px 22px;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:all .15s;border:1.5px solid}
+.feedback-btn.yes{border-color:rgba(125,190,142,.35);background:rgba(125,190,142,.08);color:#2E7D47}
+.feedback-btn.yes:hover{background:rgba(125,190,142,.18)}
+.feedback-btn.no{border-color:rgba(255,87,51,.28);background:rgba(255,87,51,.05);color:var(--coral);margin-left:8px}
+.feedback-btn.no:hover{background:rgba(255,87,51,.12)}
+
+/* RELATED ARTICLES */
+.related-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.related-item{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--card);border-radius:11px;border:1.5px solid var(--border);cursor:pointer;transition:all .15s;text-decoration:none;color:inherit}
+.related-item:hover{border-color:var(--border2);transform:translateX(3px)}
+.related-item-title{font-size:.86rem;font-weight:600;color:var(--navy);flex:1}
+.related-item-arrow{color:var(--muted);font-size:.8rem;transition:color .15s}
+.related-item:hover .related-item-arrow{color:var(--coral)}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:64px 24px;color:var(--muted)}
+.empty-icon{font-size:2.8rem;margin-bottom:14px;opacity:.4}
+.empty-h{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;color:var(--navy);margin-bottom:8px}
+.empty-p{font-size:.88rem;line-height:1.7}
+
+/* LOADING */
+.loading-pulse{display:flex;flex-direction:column;gap:12px}
+.pulse-line{height:14px;border-radius:7px;background:linear-gradient(90deg,rgba(13,27,42,.06),rgba(13,27,42,.12),rgba(13,27,42,.06));background-size:200% 100%;animation:pulse-load 1.4s ease infinite}
+@keyframes pulse-load{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:24px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.footer-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1rem;color:var(--navy)}
+.footer-logo span{color:var(--coral)}
+.footer-links{display:flex;gap:18px;flex-wrap:wrap}
+.footer-links a{font-size:.8rem;color:var(--muted);text-decoration:none;transition:color .15s}
+.footer-links a:hover{color:var(--navy)}
+
+/* SYSTEM DOWN */
+#_sysdown{display:none;position:fixed;inset:0;z-index:99999;background:var(--navy);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;font-family:'DM Sans',sans-serif}
+#_sysdown.show{display:flex}
+#_sysdown h1{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:#fff;margin-bottom:10px}
+#_sysdown h1 em{color:var(--coral);font-style:italic;font-weight:300}
+#_sysdown p{color:rgba(255,255,255,.5);max-width:400px;line-height:1.7;margin-bottom:24px}
+#_sysdown a,#_sysdown button{padding:10px 22px;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.86rem;margin:4px;border:none;cursor:pointer;text-decoration:none;display:inline-block}
+#_sysdown a{background:var(--coral);color:#fff}
+#_sysdown button{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .hero{padding:80px 20px 0}
+  .page{padding:40px 20px 60px}
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .featured-grid{grid-template-columns:1fr}
+  footer{padding:20px}
+  .hero-tab{font-size:.76rem;padding:10px 13px}
+}
+</style>
+</head>
+<body>
+
+<div id="_sysdown">
+  <h1>System <em>Down.</em></h1>
+  <p>Elaborate is having trouble connecting. Try again in a moment.</p>
+  <div>
+    <a href="/status.html">Status Page</a>
+    <button onclick="location.reload()">Try Again</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/index.html">Elaborate<span>.</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="/index.html">Hub</a>
+    <a class="nav-link" href="/support.html">Support</a>
+    <a class="nav-link" href="/my-tickets.html">My Tickets</a>
+    <a class="nav-cta" href="/support.html#ticket-form">Open a Ticket</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Elaborate Help Center</div>
+    <h1 class="hero-h1">How can we<br/><em>help?</em></h1>
+    <p class="hero-sub">Search articles, browse by category, or open a support ticket.</p>
+    <div class="search-wrap">
+      <div class="search-box" onclick="document.getElementById('searchInput').focus()">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search help articles…" autocomplete="off" oninput="handleSearch(this.value)" onkeydown="handleSearchKey(event)"/>
+        <span class="search-kbd">⌘K</span>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    <div class="hero-tab-strip" id="heroTabStrip">
+      <button class="hero-tab active" onclick="setView('home',this)">Home</button>
+      <button class="hero-tab" onclick="setView('all',this)">All Articles</button>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN PAGE CONTENT -->
+<div class="page" id="mainPage">
+  <!-- Home view -->
+  <div id="viewHome">
+    <div class="section-eyebrow">Browse by category</div>
+    <div class="cat-grid" id="catGrid">
+      <div class="loading-pulse">
+        <div class="pulse-line" style="width:60%"></div>
+        <div class="pulse-line" style="width:40%"></div>
+      </div>
+    </div>
+
+    <div class="section-eyebrow">Featured articles</div>
+    <div class="featured-grid" id="featuredGrid">
+      <div class="loading-pulse">
+        <div class="pulse-line"></div>
+        <div class="pulse-line" style="width:80%"></div>
+        <div class="pulse-line" style="width:60%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category view -->
+  <div id="viewCategory" style="display:none">
+    <div class="breadcrumb" id="catBreadcrumb"></div>
+    <div class="section-title" id="catViewTitle"></div>
+    <div class="article-list" id="catArticleList"></div>
+  </div>
+
+  <!-- Article reader view -->
+  <div id="viewArticle" style="display:none">
+    <div class="breadcrumb" id="articleBreadcrumb"></div>
+    <div class="article-reader">
+      <div id="articleReaderContent"></div>
+      <div class="article-feedback" id="articleFeedback">
+        <p>Was this article helpful?</p>
+        <button class="feedback-btn yes" onclick="feedbackYes(this)">👍 Yes, thanks</button>
+        <button class="feedback-btn no" onclick="feedbackNo()">👎 No — I need more help</button>
+      </div>
+      <div id="relatedSection" style="display:none;margin-top:32px">
+        <div class="section-eyebrow" style="margin-bottom:12px">Related articles</div>
+        <div class="related-list" id="relatedList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All articles view -->
+  <div id="viewAll" style="display:none">
+    <div class="section-eyebrow">All articles</div>
+    <div id="allArticleSections"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Elaborate<span>.</span></div>
+  <div class="footer-links">
+    <a href="/index.html">Hub</a>
+    <a href="/support.html">Support</a>
+    <a href="/support.html#ticket-form">Open a Ticket</a>
+    <a href="/my-tickets.html">My Tickets</a>
+    <a href="/docs.html">Docs</a>
+    <a href="/legal.html?tab=privacy">Privacy</a>
+  </div>
+</footer>
+
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, getDocs, doc, getDoc, query, where, orderBy, serverTimestamp, updateDoc }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const FB = {
+  apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',
+  authDomain:'elaborate-edc16.firebaseapp.com',
+  projectId:'elaborate-edc16',
+  storageBucket:'elaborate-edc16.firebasestorage.app',
+  messagingSenderId:'923385978777',
+  appId:'1:923385978777:web:7d0fdb0472e14e8500bd08'
+};
+const app = getApps().length ? getApps()[0] : initializeApp(FB);
+const db  = getFirestore(app);
+
+// Maintenance check
+(async () => {
+  try {
+    const snap = await getDoc(doc(db,'siteConfig','maintenance'));
+    if (snap.exists() && snap.data()['help']?.enabled === true) {
+      window.location.href = '/maintenance.html?page=help';
+    }
+  } catch(e) {
+    if (e.code === 'unavailable' || e.message?.includes('fetch')) {
+      document.getElementById('_sysdown').classList.add('show');
+    }
+  }
+})();
+
+// ── Config ─────────────────────────────────────────────────────────────────
+const CATS = [
+  { key:'account',   name:'Account & Login',   icon:'🔐', color:'rgba(167,139,250,.12)', accent:'#A78BFA' },
+  { key:'apps',      name:'Apps & Library',    icon:'📱', color:'rgba(56,189,248,.12)',  accent:'#38BDF8' },
+  { key:'schedule',  name:'Schedule',          icon:'🗓', color:'rgba(125,190,142,.12)', accent:'#7DBE8E' },
+  { key:'classroom', name:'Classroom',         icon:'🏫', color:'rgba(251,191,36,.12)',  accent:'#FBBF24' },
+  { key:'teachers',  name:'For Teachers',      icon:'🍎', color:'rgba(251,146,60,.12)',  accent:'#FB923C' },
+  { key:'billing',   name:'Billing & Plans',   icon:'💳', color:'rgba(244,114,182,.12)', accent:'#F472B6' },
+  { key:'privacy',   name:'Privacy & Data',    icon:'🔒', color:'rgba(148,163,184,.12)', accent:'#94A3B8' },
+  { key:'general',   name:'General',           icon:'💬', color:'rgba(13,27,42,.06)',    accent:'#6B7280' },
+];
+const CAT_MAP = Object.fromEntries(CATS.map(c => [c.key, c]));
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Data ───────────────────────────────────────────────────────────────────
+let articles = [];
+let currentView = 'home';
+let currentArticleId = null;
+
+async function loadArticles() {
+  try {
+    const snap = await getDocs(collection(db, 'supportArticles'));
+    articles = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(a => a.status === 'published')
+      .sort((a,b) => (b.updatedAt?.seconds||0) - (a.updatedAt?.seconds||0));
+    renderHome();
+    // Check URL params for deep linking
+    const params = new URLSearchParams(window.location.search);
+    const artId = params.get('article');
+    const cat   = params.get('category');
+    if (artId) openArticle(artId);
+    else if (cat) openCategory(cat);
+  } catch(e) {
+    console.warn('Articles load error:', e);
+    document.getElementById('catGrid').innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-h">No articles yet</div><div class="empty-p">Check back soon.</div></div>';
+    document.getElementById('featuredGrid').innerHTML = '';
+  }
+}
+
+function renderHome() {
+  renderCatGrid();
+  renderFeatured();
+  // Add category tabs to hero
+  const strip = document.getElementById('heroTabStrip');
+  // Remove any previous cat tabs
+  [...strip.querySelectorAll('.cat-tab')].forEach(b => b.remove());
+  // Keep existing Home / All Articles tabs
+}
+
+function renderCatGrid() {
+  const grid = document.getElementById('catGrid');
+  const countByCat = {};
+  articles.forEach(a => { const k = a.category||'general'; countByCat[k] = (countByCat[k]||0)+1; });
+  const catsWithArticles = CATS.filter(c => (countByCat[c.key]||0) > 0);
+  if (!catsWithArticles.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div><div class="empty-h">No articles yet</div><div class="empty-p">Articles will appear here once published.</div></div>';
+    return;
+  }
+  grid.innerHTML = catsWithArticles.map(c => `
+    <a class="cat-card" onclick="openCategory('${c.key}')" href="?category=${c.key}" onclick="event.preventDefault();openCategory('${c.key}')">
+      <div class="cat-card-icon" style="background:${c.color}">${c.icon}</div>
+      <div class="cat-card-name">${c.name}</div>
+      <div class="cat-card-count">${countByCat[c.key]||0} article${(countByCat[c.key]||0)!==1?'s':''}</div>
+    </a>`).join('');
+}
+
+function renderFeatured() {
+  const grid = document.getElementById('featuredGrid');
+  const featured = articles.slice(0, 6);
+  if (!featured.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = featured.map(a => {
+    const cat = CAT_MAP[a.category] || CAT_MAP.general;
+    const date = a.updatedAt?.toDate?.().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) || '';
+    return `<div class="featured-card" onclick="openArticle('${a.id}')">
+      <span class="featured-cat-tag" style="background:${cat.color};color:${cat.accent}">${cat.icon} ${cat.name}</span>
+      <div class="featured-title">${esc(a.title||'Untitled')}</div>
+      <div class="featured-summary">${esc(a.summary||'')}</div>
+      <div class="featured-meta">${a.author?a.author+' · ':''}${date}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Views ──────────────────────────────────────────────────────────────────
+window.setView = function(view, btn) {
+  currentView = view;
+  document.querySelectorAll('.hero-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('viewHome').style.display     = view === 'home' ? 'block' : 'none';
+  document.getElementById('viewCategory').style.display = view === 'category' ? 'block' : 'none';
+  document.getElementById('viewArticle').style.display  = view === 'article' ? 'block' : 'none';
+  document.getElementById('viewAll').style.display      = view === 'all' ? 'block' : 'none';
+  if (view === 'all') renderAllArticles();
+};
+
+window.openCategory = function(catKey) {
+  const cat = CAT_MAP[catKey] || { name: catKey, icon: '📄', color: 'rgba(13,27,42,.06)', accent: '#6B7280' };
+  const catArticles = articles.filter(a => (a.category||'general') === catKey);
+
+  document.getElementById('catBreadcrumb').innerHTML = `
+    <a href="#" onclick="setView('home',document.querySelector('.hero-tab'));return false">Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>${cat.name}</span>`;
+
+  document.getElementById('catViewTitle').innerHTML = `<span style="margin-right:10px">${cat.icon}</span>${cat.name}`;
+
+  const list = document.getElementById('catArticleList');
+  if (!catArticles.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-h">No articles here yet</div><div class="empty-p">Check back soon or <a href="/support.html" style="color:var(--coral);font-weight:600">open a ticket</a>.</div></div>';
+  } else {
+    list.innerHTML = catArticles.map(a => `
+      <div class="article-row" onclick="openArticle('${a.id}')">
+        <span class="article-row-icon">${cat.icon}</span>
+        <div class="article-row-body">
+          <div class="article-row-title">${esc(a.title||'Untitled')}</div>
+          <div class="article-row-summary">${esc(a.summary||'')}</div>
+        </div>
+        <span class="article-row-arrow">→</span>
+      </div>`).join('');
+  }
+
+  history.pushState({}, '', '?category=' + catKey);
+  setView('category', null);
+  window.scrollTo(0, 0);
+};
+
+window.openArticle = function(id) {
+  const a = articles.find(x => x.id === id);
+  if (!a) return;
+  currentArticleId = id;
+  const cat = CAT_MAP[a.category||'general'] || CAT_MAP.general;
+  const date = a.updatedAt?.toDate?.().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) || '';
+  const tags = (a.tags||[]).slice(0,5);
+
+  document.getElementById('articleBreadcrumb').innerHTML = `
+    <a href="#" onclick="setView('home',document.querySelector('.hero-tab'));return false">Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="#" onclick="openCategory('${a.category||'general'}');return false">${cat.name}</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>${esc(a.title||'Untitled')}</span>`;
+
+  document.getElementById('articleReaderContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <span style="font-family:'DM Mono',monospace;font-size:.6rem;padding:3px 10px;border-radius:50px;background:${cat.color};color:${cat.accent};letter-spacing:.06em;text-transform:uppercase">${cat.icon} ${cat.name}</span>
+      ${tags.map(t=>`<span style="font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 8px;border-radius:4px;background:rgba(13,27,42,.06);color:var(--muted)">${esc(t)}</span>`).join('')}
+    </div>
+    <h1 class="article-reader-title">${esc(a.title||'Untitled')}</h1>
+    <div class="article-reader-meta">
+      ${a.author ? `<span>By ${esc(a.author)}</span>` : ''}
+      <span>${date}</span>
+    </div>
+    <div class="article-reader-body">${a.bodyHtml||'<p>No content yet.</p>'}</div>`;
+
+  // Reset feedback
+  const fb = document.getElementById('articleFeedback');
+  fb.style.display = 'block';
+  fb.querySelector('p').textContent = 'Was this article helpful?';
+  fb.querySelectorAll('.feedback-btn').forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+
+  // Related articles (same category, different article)
+  const related = articles.filter(x => x.id !== id && (x.category||'general') === (a.category||'general')).slice(0,4);
+  const relSection = document.getElementById('relatedSection');
+  const relList = document.getElementById('relatedList');
+  if (related.length) {
+    relList.innerHTML = related.map(r => `
+      <a class="related-item" onclick="openArticle('${r.id}');return false" href="?article=${r.id}">
+        <span>${cat.icon}</span>
+        <span class="related-item-title">${esc(r.title||'Untitled')}</span>
+        <span class="related-item-arrow">→</span>
+      </a>`).join('');
+    relSection.style.display = 'block';
+  } else {
+    relSection.style.display = 'none';
+  }
+
+  history.pushState({}, '', '?article=' + id);
+  setView('article', null);
+  window.scrollTo(0, 0);
+};
+
+function renderAllArticles() {
+  const el = document.getElementById('allArticleSections');
+  if (!articles.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-h">No articles yet</div></div>';
+    return;
+  }
+  const byCat = {};
+  articles.forEach(a => {
+    const k = a.category || 'general';
+    if (!byCat[k]) byCat[k] = [];
+    byCat[k].push(a);
+  });
+  el.innerHTML = CATS.filter(c => byCat[c.key]?.length).map(c => `
+    <div style="margin-bottom:36px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+        <div style="width:32px;height:32px;border-radius:9px;background:${c.color};display:flex;align-items:center;justify-content:center;font-size:.9rem">${c.icon}</div>
+        <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem">${c.name}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);margin-left:auto">${byCat[c.key].length} article${byCat[c.key].length!==1?'s':''}</div>
+      </div>
+      <div class="article-list">
+        ${byCat[c.key].map(a => `
+          <div class="article-row" onclick="openArticle('${a.id}')">
+            <span class="article-row-icon">${c.icon}</span>
+            <div class="article-row-body">
+              <div class="article-row-title">${esc(a.title||'Untitled')}</div>
+              <div class="article-row-summary">${esc(a.summary||'')}</div>
+            </div>
+            <span class="article-row-arrow">→</span>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// ── Search ─────────────────────────────────────────────────────────────────
+window.handleSearch = function(val) {
+  const res = document.getElementById('searchResults');
+  const q = val.trim().toLowerCase();
+  if (!q) { res.classList.remove('show'); return; }
+
+  const hits = articles.filter(a => {
+    const blob = [a.title, a.summary, a.bodyText, ...(a.tags||[])].join(' ').toLowerCase();
+    return blob.includes(q);
+  }).slice(0, 8);
+
+  if (!hits.length) {
+    res.innerHTML = `<div class="sr-empty">No results for "<strong>${esc(val)}</strong>"<br/><a href="/support.html#ticket-form" style="color:var(--coral);font-weight:600;font-size:.84rem">Open a support ticket →</a></div>`;
+    res.classList.add('show');
+    return;
+  }
+
+  // Group by category
+  const grouped = {};
+  hits.forEach(a => {
+    const k = a.category || 'general';
+    if (!grouped[k]) grouped[k] = [];
+    grouped[k].push(a);
+  });
+
+  res.innerHTML = Object.entries(grouped).map(([catKey, catHits]) => {
+    const cat = CAT_MAP[catKey] || CAT_MAP.general;
+    return `<div class="sr-section-label">${cat.icon} ${cat.name}</div>` +
+      catHits.map(a => `
+        <div class="sr-item" onclick="openArticle('${a.id}');document.getElementById('searchResults').classList.remove('show');document.getElementById('searchInput').value=''">
+          <div class="sr-item-icon" style="background:${cat.color}">${cat.icon}</div>
+          <div class="sr-item-body">
+            <div class="sr-item-title">${esc(a.title||'Untitled')}</div>
+            ${a.summary ? `<div class="sr-item-preview">${esc(a.summary)}</div>` : ''}
+          </div>
+        </div>`).join('');
+  }).join('') +
+  `<div class="sr-footer"><span>${hits.length} result${hits.length!==1?'s':''}</span><a href="/support.html" onclick="document.getElementById('searchResults').classList.remove('show')">Can't find it? Open a ticket →</a></div>`;
+  res.classList.add('show');
+};
+
+window.handleSearchKey = function(e) {
+  if (e.key === 'Escape') {
+    document.getElementById('searchResults').classList.remove('show');
+    document.getElementById('searchInput').value = '';
+  }
+};
+
+// Close search on outside click
+document.addEventListener('click', e => {
+  if (!document.querySelector('.search-wrap').contains(e.target)) {
+    document.getElementById('searchResults').classList.remove('show');
+  }
+});
+
+// ⌘K / Ctrl+K to focus search
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+
+// ── Feedback ───────────────────────────────────────────────────────────────
+window.feedbackYes = function(btn) {
+  const fb = document.getElementById('articleFeedback');
+  fb.querySelector('p').textContent = 'Glad it helped! 🎉';
+  fb.querySelectorAll('.feedback-btn').forEach(b => { b.disabled = true; b.style.opacity = '.4'; });
+};
+
+window.feedbackNo = function() {
+  window.location.href = '/support.html#ticket-form';
+};
+
+// ── Back button support ────────────────────────────────────────────────────
+window.addEventListener('popstate', () => {
+  const params = new URLSearchParams(window.location.search);
+  const artId = params.get('article');
+  const cat   = params.get('category');
+  if (artId) openArticle(artId);
+  else if (cat) openCategory(cat);
+  else setView('home', document.querySelector('.hero-tab'));
+});
+
+// ── Boot ───────────────────────────────────────────────────────────────────
+loadArticles();
+</script>
+</body>
+</html>
