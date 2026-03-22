@@ -170,7 +170,21 @@ footer{border-top:1px solid var(--border);padding:24px 64px;display:flex;align-i
 .footer-links a{font-size:.8rem;color:var(--muted);text-decoration:none;transition:color .15s}
 .footer-links a:hover{color:var(--navy)}
 
-/* SYSTEM DOWN */
+/* ARTICLE OVERLAY */
+.article-overlay{position:fixed;inset:0;z-index:150;background:var(--cream);overflow-y:auto;opacity:0;pointer-events:none;transform:translateY(16px);transition:opacity .25s,transform .25s}
+.article-overlay.open{opacity:1;pointer-events:all;transform:translateY(0)}
+.article-overlay-inner{max-width:680px;margin:0 auto;padding:80px 40px 80px}
+.article-overlay-bar{position:sticky;top:0;z-index:10;background:rgba(245,240,232,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.article-body-render{font-size:.95rem;line-height:1.8;color:var(--navy)}
+.article-body-render h2{font-family:'Fraunces',serif;font-weight:900;font-size:1.3rem;letter-spacing:-.02em;margin:28px 0 10px;color:var(--navy)}
+.article-body-render p{margin-bottom:14px}
+.article-body-render ul,.article-body-render ol{padding-left:22px;margin-bottom:14px}
+.article-body-render li{margin-bottom:6px}
+.article-body-render code{font-family:'DM Mono',monospace;background:rgba(13,27,42,.07);padding:2px 6px;border-radius:4px;font-size:.88em}
+.article-body-render hr{border:none;border-top:1px solid var(--border);margin:20px 0}
+.article-body-render a{color:var(--coral);text-decoration:none;font-weight:600}
+.article-body-render a:hover{text-decoration:underline}
+@media(max-width:600px){.article-overlay-inner{padding:70px 20px 60px}.article-overlay-bar{padding:0 20px}}
 #_sysdown{display:none;position:fixed;inset:0;z-index:99999;background:var(--navy);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;font-family:'DM Sans',sans-serif}
 #_sysdown.show{display:flex}
 #_sysdown h1{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#fff;margin-bottom:10px}
@@ -762,22 +776,64 @@ const FAQ_DATA = [
   {q:'How do I delete my account?', a:'Submit a Privacy concern ticket with your account email.'},
 ];
 
-// Hero search
+// Hero search — queries both FAQ_DATA and Firestore supportArticles
+let supportArticlesCache = [];
+(async () => {
+  try {
+    const snap = await getDocs(collection(db, 'supportArticles'));
+    supportArticlesCache = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(a => a.status === 'published');
+  } catch(e) { /* silently fail — FAQ search still works */ }
+})();
+
 window.heroSearchInput = function(val) {
   const res = document.getElementById('heroSearchResults');
   const q = val.trim().toLowerCase();
   if (!q) { res.innerHTML = ''; return; }
-  const hits = FAQ_DATA.filter(f => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q)).slice(0,4);
+
+  // Search FAQ
+  const faqHits = FAQ_DATA
+    .filter(f => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q))
+    .slice(0, 2)
+    .map(f => ({
+      type: 'faq',
+      title: f.q,
+      preview: f.a.slice(0, 90) + (f.a.length > 90 ? '…' : ''),
+      onclick: `scrollToFaq('${f.q.replace(/'/g, "\\'").replace(/\n/g, ' ')}')`,
+    }));
+
+  // Search articles
+  const artHits = supportArticlesCache
+    .filter(a => {
+      const blob = [(a.title||''), (a.summary||''), (a.bodyText||''), ...(a.tags||[])].join(' ').toLowerCase();
+      return blob.includes(q);
+    })
+    .slice(0, 4)
+    .map(a => ({
+      type: 'article',
+      title: a.title || 'Untitled',
+      preview: a.summary || '',
+      cat: a.category || 'general',
+      id: a.id,
+      onclick: `openArticleOverlay('${a.id}')`,
+    }));
+
+  const hits = [...artHits, ...faqHits];
   if (!hits.length) {
     res.innerHTML = '<div class="search-none">No results — try opening a ticket below.</div>';
     return;
   }
-  res.innerHTML = hits.map(f =>
-    `<div class="search-hit" onclick="scrollToFaq('${f.q.replace(/'/g,"\\'")}')">
-      <div class="search-hit-q">${f.q}</div>
-      <div class="search-hit-a">${f.a.slice(0,90)}${f.a.length>90?'…':''}</div>
-    </div>`
-  ).join('');
+  const CAT_COLORS_FRONT = {account:'#A78BFA',apps:'#38BDF8',schedule:'#7DBE8E',classroom:'#FBBF24',teachers:'#FB923C',billing:'#F472B6',privacy:'#94A3B8',general:'rgba(255,255,255,.3)'};
+  res.innerHTML = hits.map(h => {
+    const badge = h.type === 'article'
+      ? `<span style="font-family:'DM Mono',monospace;font-size:.55rem;padding:1px 7px;border-radius:4px;background:rgba(56,189,248,.15);color:#38BDF8;margin-right:6px">Article</span>`
+      : `<span style="font-family:'DM Mono',monospace;font-size:.55rem;padding:1px 7px;border-radius:4px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.4);margin-right:6px">FAQ</span>`;
+    return `<div class="search-hit" onclick="${h.onclick}">
+      <div class="search-hit-q">${badge}${h.title}</div>
+      ${h.preview ? `<div class="search-hit-a">${h.preview}</div>` : ''}
+    </div>`;
+  }).join('');
 };
 
 window.scrollToFaq = function(question) {
@@ -789,6 +845,35 @@ window.scrollToFaq = function(question) {
       setTimeout(() => { if (!item.classList.contains('open')) item.click(); }, 400);
     }
   });
+};
+
+// Article overlay
+window.openArticleOverlay = function(id) {
+  const a = supportArticlesCache.find(x => x.id === id);
+  if (!a) return;
+  const CAT_LABELS = {account:'Account & Login',apps:'Apps & Library',schedule:'Schedule',classroom:'Classroom',teachers:'For Teachers',billing:'Billing & Plans',privacy:'Privacy & Data',general:'General'};
+  const date = a.updatedAt?.toDate?.().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) || '';
+  document.getElementById('articleOverlayContent').innerHTML = `
+    <div style="margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-family:'DM Mono',monospace;font-size:.62rem;padding:3px 10px;border-radius:50px;background:rgba(13,27,42,.07);color:var(--muted);letter-spacing:.06em;text-transform:uppercase">${CAT_LABELS[a.category]||a.category||'General'}</span>
+      ${(a.tags||[]).map(t=>`<span style="font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 8px;border-radius:4px;background:rgba(13,27,42,.05);color:var(--muted)">${t}</span>`).join('')}
+    </div>
+    <h1 style="font-family:'Fraunces',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:10px;color:var(--navy)">${a.title||'Untitled'}</h1>
+    ${a.summary?`<p style="font-size:1rem;color:var(--muted);line-height:1.7;margin-bottom:8px">${a.summary}</p>`:''}
+    <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid rgba(13,27,42,.09)">${a.author?`By ${a.author} · `:''}${date}</div>
+    <div class="article-body-render">${a.bodyHtml||''}</div>
+    <div style="margin-top:40px;padding-top:20px;border-top:1px solid rgba(13,27,42,.09);font-size:.84rem;color:var(--muted)">
+      Was this article helpful?
+      <button onclick="this.textContent='Thanks!';this.disabled=true" style="margin-left:10px;padding:5px 14px;border-radius:50px;border:1.5px solid rgba(125,190,142,.3);background:rgba(125,190,142,.08);color:#2E7D47;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer">👍 Yes</button>
+      <button onclick="document.getElementById('ticketForm').scrollIntoView({behavior:'smooth'});closeArticleOverlay()" style="margin-left:6px;padding:5px 14px;border-radius:50px;border:1.5px solid rgba(255,87,51,.25);background:rgba(255,87,51,.05);color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer">👎 No — open a ticket</button>
+    </div>`;
+  document.getElementById('articleOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeArticleOverlay = function() {
+  document.getElementById('articleOverlay').classList.remove('open');
+  document.body.style.overflow = '';
 };
 
 // FAQ sidebar search
@@ -806,5 +891,16 @@ window.faqSearch = function(val) {
 
 window.toggleFaq = function(el) { el.classList.toggle('open'); };
 </script>
+<!-- ARTICLE OVERLAY -->
+<div class="article-overlay" id="articleOverlay">
+  <div class="article-overlay-bar">
+    <a class="nav-logo" href="/support.html" onclick="closeArticleOverlay();return false;">Elaborate<span>.</span></a>
+    <button onclick="closeArticleOverlay()" style="padding:7px 16px;border-radius:50px;border:1.5px solid var(--border2);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .15s" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--muted)'">← Back to Support</button>
+  </div>
+  <div class="article-overlay-inner">
+    <div id="articleOverlayContent"></div>
+  </div>
+</div>
+
 </body>
 </html>

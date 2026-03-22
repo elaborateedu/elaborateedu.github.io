@@ -89,7 +89,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;ali
 .mini-spinner{width:16px;height:16px;border:2px solid rgba(13,27,42,.1);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── CHAT MODAL ── */
+/* TICKET TRACKER */
+.tracker{padding:14px 24px 0;background:var(--card);border-bottom:1.5px solid var(--border);flex-shrink:0}
+.tracker-steps{display:flex;align-items:center;justify-content:space-between;position:relative;padding-bottom:16px}
+.tracker-line{position:absolute;top:14px;left:0;right:0;height:2px;background:var(--border);z-index:0}
+.tracker-progress{position:absolute;top:14px;left:0;height:2px;background:var(--coral);z-index:1;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.tracker-step{display:flex;flex-direction:column;align-items:center;gap:6px;z-index:2;min-width:0;flex:1}
+.tracker-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;border:2px solid var(--border);background:var(--cream);transition:all .3s;flex-shrink:0}
+.tracker-dot.done{background:var(--coral);border-color:var(--coral);color:#fff}
+.tracker-dot.active{background:#fff;border-color:var(--coral);box-shadow:0 0 0 3px rgba(255,87,51,.15);color:var(--coral)}
+.tracker-label{font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;line-height:1.3;max-width:64px}
+.tracker-label.done{color:var(--navy);font-weight:600}
+.tracker-label.active{color:var(--coral);font-weight:700}
 .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(13,27,42,.5);backdrop-filter:blur(10px);display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;transition:opacity .25s}
 @media(min-width:640px){.modal-overlay{align-items:center;padding:24px}}
 .modal-overlay.open{opacity:1;pointer-events:all}
@@ -247,6 +258,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;ali
       </div>
       <button class="modal-close" onclick="closeChat()">✕</button>
     </div>
+    <!-- TRACKER -->
+    <div class="tracker" id="chatTracker"></div>
     <div class="chat-messages" id="chatMessages"></div>
     <div id="chatInputArea"></div>
   </div>
@@ -403,20 +416,66 @@ function renderTickets() {
   }).join('');
 }
 
+// ── Ticket status tracker ──────────────────────────────────────────────────
+const TRACKER_STEPS = [
+  { key: 'sent',         label: 'Ticket\nSent',        icon: '📨' },
+  { key: 'acknowledged', label: 'Ticket\nReceived',    icon: '👀' },
+  { key: 'in-progress',  label: 'Working\nOn It',      icon: '🔧' },
+  { key: 'replied',      label: 'Reply\nSent',         icon: '💬' },
+  { key: 'resolved',     label: 'Ticket\nClosed',      icon: '✅' },
+];
+
+// Map Firestore status values to tracker step index
+function statusToStep(status) {
+  const map = {
+    'open':         0, // ticket sent, not yet acknowledged
+    'acknowledged': 1,
+    'in-progress':  2,
+    'replied':      3,
+    'resolved':     4,
+  };
+  return map[status] ?? 0;
+}
+
+function renderTracker(status) {
+  const el = document.getElementById('chatTracker');
+  if (!el) return;
+  const activeIdx = statusToStep(status);
+  const pct = activeIdx === 0 ? 0 : (activeIdx / (TRACKER_STEPS.length - 1)) * 100;
+
+  el.innerHTML = `
+    <div class="tracker-steps">
+      <div class="tracker-line"></div>
+      <div class="tracker-progress" style="width:${pct}%"></div>
+      ${TRACKER_STEPS.map((s, i) => {
+        const isDone   = i < activeIdx;
+        const isActive = i === activeIdx;
+        const cls = isDone ? 'done' : isActive ? 'active' : '';
+        const dotContent = isDone ? '✓' : s.icon;
+        return `<div class="tracker-step">
+          <div class="tracker-dot ${cls}">${dotContent}</div>
+          <div class="tracker-label ${cls}">${s.label.replace('\n','<br/>')}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
 window.openTicket = function(tJson) {
   currentTicket = JSON.parse(tJson);
   const t = currentTicket;
   const status = t.status || 'open';
-  const slLabel = {open:'Open','in-progress':'In Progress',resolved:'Resolved'};
+  const slLabel = {open:'Open',acknowledged:'Acknowledged','in-progress':'In Progress',replied:'Reply Sent',resolved:'Resolved'};
   const date = t.createdAt?.toDate?.().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) || '';
   document.getElementById('chatCat').textContent = t.category || '';
   document.getElementById('chatSubject').textContent = t.subject || '(no subject)';
   document.getElementById('chatTicketId').textContent = t.ticketId || '';
   document.getElementById('chatDate').textContent = date;
-  document.getElementById('chatPriority').textContent = t.priority ? `Priority: ${t.priority}` : '';
+  document.getElementById('chatPriority').textContent = t.priority && t.priority !== 'low' ? `Priority: ${t.priority}` : '';
   const pill = document.getElementById('chatStatusPill');
-  pill.textContent = slLabel[status]||status;
-  pill.className = `status-pill ${status}`;
+  pill.textContent = slLabel[status] || status;
+  pill.className = `status-pill ${status === 'acknowledged' || status === 'replied' ? 'in-progress' : status}`;
+
+  renderTracker(status);
 
   const ia = document.getElementById('chatInputArea');
   if (status === 'resolved') {
@@ -437,9 +496,30 @@ window.openTicket = function(tJson) {
   document.getElementById('modalOverlay').classList.add('open');
   pendingImages = [];
   if (unsubMessages) { unsubMessages(); unsubMessages = null; }
-  const msgsQ = query(collection(db,'tickets',t._docId,'messages'), orderBy('createdAt','asc'));
-  unsubMessages = onSnapshot(msgsQ, snap => {
-    renderMessages(snap.docs.map(d => d.data()).filter(m => !m.internal));
+  // Live-update the tracker when status changes
+  const ticketDocRef = doc(db, 'tickets', t._docId);
+  unsubMessages = onSnapshot(
+    query(collection(db,'tickets',t._docId,'messages'), orderBy('createdAt','asc')),
+    snap => { renderMessages(snap.docs.map(d => d.data()).filter(m => !m.internal)); }
+  );
+  // Also watch the ticket doc itself for status changes
+  if (window._unsubTicketDoc) { window._unsubTicketDoc(); window._unsubTicketDoc = null; }
+  window._unsubTicketDoc = onSnapshot(ticketDocRef, snap => {
+    if (!snap.exists()) return;
+    const newStatus = snap.data().status || 'open';
+    renderTracker(newStatus);
+    // Update pill
+    const pill = document.getElementById('chatStatusPill');
+    const slLabel = {open:'Open',acknowledged:'Acknowledged','in-progress':'In Progress',replied:'Reply Sent',resolved:'Resolved'};
+    if (pill) {
+      pill.textContent = slLabel[newStatus] || newStatus;
+      pill.className = `status-pill ${newStatus === 'acknowledged' || newStatus === 'replied' ? 'in-progress' : newStatus}`;
+    }
+    // Update input area if ticket just got resolved
+    const ia = document.getElementById('chatInputArea');
+    if (ia && newStatus === 'resolved' && !ia.querySelector('.resolved-notice')) {
+      ia.innerHTML = '<div class="resolved-notice">This ticket has been resolved. <a href="/support.html" style="color:var(--coral);text-decoration:none;font-weight:600">Open a new ticket →</a></div>';
+    }
   });
 };
 
@@ -553,6 +633,7 @@ window.sendMessage = async function() {
 window.closeChat = function() {
   document.getElementById('modalOverlay').classList.remove('open');
   if (unsubMessages) { unsubMessages(); unsubMessages = null; }
+  if (window._unsubTicketDoc) { window._unsubTicketDoc(); window._unsubTicketDoc = null; }
   currentTicket = null;
 };
 window.handleOverlayClick = function(e) { if (e.target===document.getElementById('modalOverlay')) closeChat(); };

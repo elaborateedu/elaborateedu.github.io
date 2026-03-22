@@ -307,6 +307,10 @@
         <div class="sidebar-icon">📋</div>
         <span class="sidebar-item-label">Applications <span id="appsBadge" style="display:none;background:#F472B6;color:#fff;font-size:.55rem;padding:1px 6px;border-radius:50px;margin-left:4px;font-family:DM Mono,monospace;vertical-align:middle">0</span></span>
       </button>
+      <button id="tabHelpArticlesBtn" class="sidebar-item helparticles-tab" onclick="switchAdminTab('helpArticles')">
+        <div class="sidebar-icon">📖</div>
+        <span class="sidebar-item-label">Help Articles</span>
+      </button>
 
       <div class="sidebar-section">Platform</div>
       <button id="tabDistrictsBtn" class="sidebar-item districts-tab" onclick="switchAdminTab('districts')">
@@ -416,18 +420,24 @@
       <select class="filter-select" id="statusFilter" onchange="renderTickets()">
         <option value="all">All Statuses</option>
         <option value="open">Open</option>
+        <option value="acknowledged">Acknowledged</option>
         <option value="in-progress">In Progress</option>
+        <option value="replied">Reply Sent</option>
         <option value="resolved">Resolved</option>
       </select>
       <select class="filter-select" id="categoryFilter" onchange="renderTickets()">
         <option value="all">All Categories</option>
-        <option value="bug">Bug</option>
-        <option value="account">Account</option>
-        <option value="feature">Feature Request</option>
-        <option value="appeal">Suspension Appeal</option>
-        <option value="privacy">Privacy</option>
-        <option value="district">District Request</option>
-        <option value="other">Other</option>
+        <option value="bug">🐛 Bug</option>
+        <option value="account">🔐 Account</option>
+        <option value="feature">💡 Feature Request</option>
+        <option value="classroom">🏫 Classroom</option>
+        <option value="schedule">🗓 Schedule</option>
+        <option value="appeal">📋 Suspension Appeal</option>
+        <option value="privacy">🔒 Privacy</option>
+        <option value="developer">🛠 Developer</option>
+        <option value="district">🏛 District Request</option>
+        <option value="partnership">🤝 Partnership</option>
+        <option value="other">💬 Other</option>
       </select>
     </div>
 
@@ -1222,16 +1232,134 @@
       </select>
       <select id="appRoleFilter" onchange="renderApplications()" style="font-family:DM Sans,sans-serif;font-size:.82rem;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--txt);outline:none;cursor:pointer">
         <option value="all">All Roles</option>
-        <option value="jr_admin">Jr. Admin</option>
-        <option value="admin">Admin</option>
-        <option value="sr_admin">Sr. Admin</option>
+        <optgroup label="Moderation">
+          <option value="trial-mod">Trial Moderator</option>
+          <option value="jr-moderator">Jr. Moderator</option>
+        </optgroup>
+        <optgroup label="Engineering">
+          <option value="frontend-dev">Frontend Developer</option>
+          <option value="firebase-engineer">Firebase / Backend</option>
+          <option value="qa-engineer">QA Engineer</option>
+        </optgroup>
+        <optgroup label="Community">
+          <option value="community-manager">Community Manager</option>
+          <option value="content-writer">Content Writer / Docs</option>
+        </optgroup>
+        <optgroup label="Support">
+          <option value="support-specialist">Support Specialist</option>
+        </optgroup>
+        <option value="general">General</option>
       </select>
     </div>
     <div id="applicationsList"><div style="padding:32px;text-align:center;color:var(--muted)">Loading…</div></div>
   </div>
 </div><!-- /tabApplications -->
 
-<!-- ══ STAFF NOTES TAB ══ -->
+<!-- ══ HELP ARTICLES TAB ══ -->
+<div id="tabHelpArticles" style="display:none">
+  <div class="dash-main">
+    <div class="page-header" style="border-bottom-color:rgba(56,189,248,.2)">
+      <div class="page-header-eyebrow" style="color:#38BDF8">Support / Help Articles</div>
+      <h1 style="color:#38BDF8">Help Articles</h1>
+      <div class="page-header-sub">Write articles that appear in the support page search. Students and teachers can search and read them without filing a ticket.</div>
+    </div>
+
+    <!-- Toolbar -->
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap">
+      <button onclick="openArticleEditor(null)" style="padding:9px 20px;border-radius:8px;border:none;background:#38BDF8;color:var(--navy);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:all .15s;white-space:nowrap">+ New Article</button>
+      <select id="articleCatFilter" onchange="renderArticleList()" style="font-family:'DM Sans',sans-serif;font-size:.82rem;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--txt);outline:none;cursor:pointer">
+        <option value="all">All Categories</option>
+        <option value="account">Account & Login</option>
+        <option value="apps">Apps & Library</option>
+        <option value="schedule">Schedule</option>
+        <option value="classroom">Classroom</option>
+        <option value="teachers">For Teachers</option>
+        <option value="billing">Billing & Plans</option>
+        <option value="privacy">Privacy & Data</option>
+        <option value="general">General</option>
+      </select>
+      <select id="articleStatusFilter" onchange="renderArticleList()" style="font-family:'DM Sans',sans-serif;font-size:.82rem;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--txt);outline:none;cursor:pointer">
+        <option value="all">All Statuses</option>
+        <option value="published">Published</option>
+        <option value="draft">Drafts</option>
+      </select>
+      <span id="articleCount" style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--faint);margin-left:auto"></span>
+    </div>
+
+    <!-- Article list -->
+    <div id="articleList">
+      <div style="padding:32px;text-align:center;color:var(--muted)">Loading…</div>
+    </div>
+  </div>
+</div><!-- /tabHelpArticles -->
+
+<!-- ARTICLE EDITOR OVERLAY -->
+<div id="articleEditorOverlay" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto">
+  <div style="max-width:780px;margin:0 auto;padding:40px 32px 80px">
+    <!-- Editor header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:32px;flex-wrap:wrap">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Help Articles / Editor</div>
+        <div id="articleEditorStatus" style="font-family:'DM Mono',monospace;font-size:.68rem;padding:3px 10px;border-radius:50px;background:rgba(255,255,255,.06);color:var(--muted);display:inline-block">Draft</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="saveArticle('draft')" id="articleSaveDraftBtn" style="padding:9px 20px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.84rem;cursor:pointer;transition:all .15s">Save Draft</button>
+        <button onclick="saveArticle('published')" id="articlePublishBtn" style="padding:9px 20px;border-radius:8px;border:none;background:#38BDF8;color:var(--navy);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:all .15s">Publish</button>
+        <button onclick="closeArticleEditor()" style="padding:9px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.84rem;cursor:pointer">✕ Close</button>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <input id="articleTitle" type="text" placeholder="Article title…" maxlength="120"
+      style="width:100%;padding:14px 0;background:transparent;border:none;border-bottom:2px solid var(--border2);color:var(--txt);font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;letter-spacing:-.02em;outline:none;margin-bottom:20px;transition:border-color .18s"
+      onfocus="this.style.borderBottomColor='#38BDF8'" onblur="this.style.borderBottomColor='var(--border2)'"/>
+
+    <!-- Meta row -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;align-items:center">
+      <select id="articleCat" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;outline:none;cursor:pointer">
+        <option value="general">General</option>
+        <option value="account">Account & Login</option>
+        <option value="apps">Apps & Library</option>
+        <option value="schedule">Schedule</option>
+        <option value="classroom">Classroom</option>
+        <option value="teachers">For Teachers</option>
+        <option value="billing">Billing & Plans</option>
+        <option value="privacy">Privacy & Data</option>
+      </select>
+      <input id="articleTags" type="text" placeholder="Tags (comma separated, e.g. password, login, account)"
+        style="flex:1;min-width:200px;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;outline:none"
+        onfocus="this.style.borderColor='#38BDF8'" onblur="this.style.borderColor='var(--border)'"/>
+    </div>
+
+    <!-- Summary -->
+    <input id="articleSummary" type="text" placeholder="Short summary (shown in search results, max 160 chars)" maxlength="160"
+      style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;margin-bottom:20px"
+      onfocus="this.style.borderColor='#38BDF8'" onblur="this.style.borderColor='var(--border)'"/>
+
+    <!-- Formatting toolbar -->
+    <div style="display:flex;gap:4px;margin-bottom:8px;padding:6px 8px;background:var(--surface);border-radius:8px 8px 0 0;border:1px solid var(--border);border-bottom:none;flex-wrap:wrap">
+      <button onclick="articleFmt('bold')"        title="Bold"          style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'"><b>B</b></button>
+      <button onclick="articleFmt('italic')"      title="Italic"        style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-style:italic;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'"><i>I</i></button>
+      <button onclick="articleFmt('underline')"   title="Underline"     style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;text-decoration:underline;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'">U</button>
+      <div style="width:1px;background:var(--border);margin:2px 4px;align-self:stretch"></div>
+      <button onclick="articleInsertH2()"         title="Heading"       style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'">H2</button>
+      <button onclick="articleInsertUL()"         title="Bullet list"   style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'">• List</button>
+      <button onclick="articleInsertOL()"         title="Numbered list" style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'">1. List</button>
+      <button onclick="articleInsertCode()"       title="Code"          style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Mono',monospace;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'">&lt;/&gt;</button>
+      <button onclick="articleInsertLink()"       title="Link"          style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'">🔗 Link</button>
+      <button onclick="articleInsertDivider()"    title="Divider"       style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'">— HR</button>
+      <button onclick="articleInsertCallout()"    title="Callout"       style="padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;cursor:pointer;transition:background .1s" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='transparent'">💡 Callout</button>
+    </div>
+
+    <!-- Content editor -->
+    <div id="articleBody" contenteditable="true"
+      style="min-height:400px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:0 0 8px 8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.95rem;line-height:1.75;outline:none;word-break:break-word"
+      onfocus="this.style.borderColor='#38BDF8'" onblur="this.style.borderColor='var(--border)'"
+      placeholder="Start writing your article…"></div>
+
+    <div id="articleSaveMsg" style="font-size:.8rem;color:#38BDF8;margin-top:12px;height:18px;font-family:'DM Mono',monospace"></div>
+  </div>
+</div>
 <div id="tabStaffNotes" style="display:none">
   <div class="dash-main">
     <div class="page-header" style="border-bottom-color:rgba(110,231,183,.2)">
@@ -1421,11 +1549,17 @@
       <div class="modal-field-label">Original Message</div>
       <div class="modal-field-value" id="modalBody"></div>
     </div>
+    <div class="modal-field" id="modalDeviceWrap" style="display:none">
+      <div class="modal-field-label">Browser / Device</div>
+      <div class="modal-field-value" id="modalDevice" style="font-family:'DM Mono',monospace;font-size:.75rem"></div>
+    </div>
     <div class="modal-field">
       <div class="modal-field-label">Status</div>
       <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
         <button class="status-badge open"        onclick="setStatus('open')">● Open</button>
+        <button class="status-badge in-progress" onclick="setStatus('acknowledged')">● Acknowledged</button>
         <button class="status-badge in-progress" onclick="setStatus('in-progress')">● In Progress</button>
+        <button class="status-badge in-progress" onclick="setStatus('replied')" style="background:rgba(167,139,250,.15);color:#A78BFA;border-color:rgba(167,139,250,.3)">● Reply Sent</button>
         <button class="status-badge resolved"    onclick="setStatus('resolved')">● Resolved</button>
       </div>
     </div>
@@ -1596,9 +1730,9 @@ function applyRankRestrictions(rank) {
   // Admin: can also see Users (no settings/config tabs)
   // Sr Admin + Owner: full access
   const restricted = {
-    trainee:   ['tickets','users','districts','announcements','analytics','staff','applications','settings','appLibrary','changelog','emailBlast','auditLog','highlights','staffNotes'],
-    jr_admin:  ['districts','settings','appLibrary','changelog','emailBlast','auditLog','highlights','analytics'],
-    admin:     ['districts','announcements','settings','appLibrary','changelog','emailBlast','auditLog','highlights'],
+    trainee:   ['tickets','users','districts','announcements','analytics','staff','applications','helpArticles','settings','appLibrary','changelog','emailBlast','auditLog','highlights','staffNotes'],
+    jr_admin:  ['districts','settings','appLibrary','changelog','emailBlast','auditLog','highlights','analytics','helpArticles'],
+    admin:     ['districts','announcements','settings','appLibrary','changelog','emailBlast','auditLog','highlights','helpArticles'],
     developer: ['districts','announcements','users','settings','appLibrary','changelog','emailBlast','auditLog','highlights'],
     marketing: ['districts','users','settings','appLibrary','changelog','emailBlast','auditLog','highlights','staffNotes'],
     mod:       ['districts','settings','appLibrary','changelog','emailBlast','auditLog','highlights'],
@@ -1843,7 +1977,10 @@ window.renderTickets = function() {
       ? t.createdAt.toDate().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})
       : '—';
     const catLabels = { bug:'🐛 Bug', account:'🔐 Account', feature:'💡 Feature',
-                        appeal:'📋 Appeal', privacy:'🔒 Privacy', district:'🏛 District Request', other:'💬 Other' };
+                        classroom:'🏫 Classroom', schedule:'🗓 Schedule',
+                        appeal:'📋 Appeal', privacy:'🔒 Privacy',
+                        developer:'🛠 Developer', district:'🏛 District',
+                        partnership:'🤝 Partnership', other:'💬 Other' };
     return `
       <div class="ticket-row" onclick="openTicket('${t._docId}')" style="cursor:pointer" data-ticket-id="${t._docId}">
         <div class="ticket-cell ticket-id-cell" style="display:flex;align-items:center;gap:7px">
@@ -1887,16 +2024,25 @@ window.openTicket = function(docId) {
   updateUnreadDot(docId);
 
   const catLabels = { bug:'🐛 Bug', account:'🔐 Account Issue', feature:'💡 Feature Request',
-                      appeal:'📋 Suspension Appeal', privacy:'🔒 Privacy Concern', district:'🏛 District Request', other:'💬 Other' };
+                      classroom:'🏫 Classroom Issue', schedule:'🗓 Schedule Issue',
+                      appeal:'📋 Suspension Appeal', privacy:'🔒 Privacy Concern',
+                      developer:'🛠 Developer', district:'🏛 District Request',
+                      partnership:'🤝 Partnership', other:'💬 Other' };
   const date = t.createdAt?.toDate
     ? t.createdAt.toDate().toLocaleString('en-US', {month:'long',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'})
     : 'Unknown date';
 
   document.getElementById('modalSubject').textContent  = t.subject || '(no subject)';
-  document.getElementById('modalMeta').textContent     = `${t.ticketId || ''} · Submitted ${date}`;
-  document.getElementById('modalFrom').textContent     = `${t.firstName||''} ${t.lastName||''} — ${t.email||''}`;
+  document.getElementById('modalMeta').textContent     = `${t.ticketId || ''} · Submitted ${date}${t.priority && t.priority !== 'low' ? ' · Priority: ' + t.priority : ''}`;
+  document.getElementById('modalFrom').textContent     = `${t.firstName||''} ${t.lastName||''} — ${t.email||''}${t.role ? ' (' + t.role + ')' : ''}`;
   document.getElementById('modalCategory').textContent = catLabels[t.category] || t.category || '—';
   document.getElementById('modalBody').textContent     = t.body || '(no description)';
+  // Show device info if present
+  const deviceEl = document.getElementById('modalDevice');
+  if (deviceEl) {
+    deviceEl.textContent = t.device || '';
+    deviceEl.parentElement.style.display = t.device ? 'block' : 'none';
+  }
 
   document.getElementById('modalOverlay').classList.add('open');
   // Store email for quick suspend
@@ -2016,20 +2162,22 @@ window.setStatus = async function(newStatus) {
   if (t) t.status = newStatus;
   updateStats();
   renderTickets();
-  showToast('Status updated to ' + (newStatus === 'in-progress' ? 'In Progress' : newStatus.charAt(0).toUpperCase()+newStatus.slice(1)));
+  const slLabel = { open:'Open', acknowledged:'Acknowledged', 'in-progress':'In Progress', replied:'Reply Sent', resolved:'Resolved' };
+  showToast('Status updated to ' + (slLabel[newStatus] || newStatus));
 };
 
 window.cycleStatus = async function(e, docId) {
   e.stopPropagation();
   const t = allTickets.find(x => x._docId === docId);
   if (!t) return;
-  const cycle = { 'open': 'in-progress', 'in-progress': 'resolved', 'resolved': 'open' };
-  const next  = cycle[t.status || 'open'];
+  const cycle = { 'open':'acknowledged', 'acknowledged':'in-progress', 'in-progress':'replied', 'replied':'resolved', 'resolved':'open' };
+  const slLabel = { open:'Open', acknowledged:'Acknowledged', 'in-progress':'In Progress', replied:'Reply Sent', resolved:'Resolved' };
+  const next = cycle[t.status || 'open'];
   await updateDoc(doc(db, 'tickets', docId), { status: next });
   t.status = next;
   updateStats();
   renderTickets();
-  showToast('Status → ' + (next === 'in-progress' ? 'In Progress' : next.charAt(0).toUpperCase()+next.slice(1)));
+  showToast('Status \u2192 ' + slLabel[next]);
 };
 
 /* ════════════════════════
@@ -2158,7 +2306,7 @@ window.replyEmail = function(e, email, subject, ticketId) {
    ADMIN TABS
 ════════════════════════ */
 window.switchAdminTab = function(tab) {
-  const ALL_TABS = ['tickets','users','districts','announcements','analytics','staff','applications','settings','appLibrary','changelog','emailBlast','auditLog','highlights','staffNotes','training','status'];
+  const ALL_TABS = ['tickets','users','districts','announcements','analytics','staff','applications','helpArticles','settings','appLibrary','changelog','emailBlast','auditLog','highlights','staffNotes','training','status'];
   ALL_TABS.forEach(t => {
     const el = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
     if (el) el.style.display = t === tab ? 'block' : 'none';
@@ -2179,6 +2327,7 @@ window.switchAdminTab = function(tab) {
   if (tab === 'staffNotes')    loadStaffNotes();
   if (tab === 'training')      loadTrainingTab();
   if (tab === 'applications')  loadApplications();
+  if (tab === 'helpArticles')  loadHelpArticles();
   if (tab === 'status')        loadStatusTab();
 };
 
@@ -3965,38 +4114,78 @@ window.renderApplications = function() {
     (statusF === 'all' || a.status === statusF) &&
     (roleF   === 'all' || a.role   === roleF)
   );
-  const rankColors = { admin:'#FB923C', developer:'#60A5FA', marketing:'#7DBE8E', mod:'#FBBF24', sr_admin:'#A78BFA' };
-  const rankLabels = { admin:'Admin', developer:'Developer', marketing:'Marketing', mod:'Mod', sr_admin:'Sr. Mod' };
+  const rankColors = {
+    'trial-mod':'#94A3B8', 'jr-moderator':'#FB923C',
+    'frontend-dev':'#60A5FA', 'firebase-engineer':'#FBBF24', 'qa-engineer':'#6EE7B7',
+    'community-manager':'#A78BFA', 'content-writer':'#F472B6',
+    'support-specialist':'#38BDF8', 'general':'#9CA3AF',
+    // legacy values
+    admin:'#FB923C', developer:'#60A5FA', marketing:'#7DBE8E', mod:'#FBBF24', sr_admin:'#A78BFA'
+  };
+  const rankLabels = {
+    'trial-mod':'Trial Mod', 'jr-moderator':'Jr. Mod',
+    'frontend-dev':'Frontend Dev', 'firebase-engineer':'Firebase Eng', 'qa-engineer':'QA',
+    'community-manager':'Community Mgr', 'content-writer':'Content Writer',
+    'support-specialist':'Support Spec', 'general':'General',
+    // legacy
+    admin:'Admin', developer:'Developer', marketing:'Marketing', mod:'Mod', sr_admin:'Sr. Mod'
+  };
   const statusColors = { pending:'#FBBF24', accepted:'#34D399', rejected:'var(--coral)' };
   if (!filtered.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:.88rem">No applications match your filter.</div>'; return; }
   el.innerHTML = filtered.map(a => {
-    const date = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+    const date   = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
     const skills = (a.skills||[]).join(', ') || '—';
+    const dept   = a.department ? `<span style="font-family:DM Mono,monospace;font-size:.58rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.05);color:var(--faint)">${escHtml(a.department)}</span>` : '';
+    const usedMap = {'yes-active':'Uses it regularly','yes-tried':'Has tried it','no-not-yet':'Not yet','no':'No'};
     return `<div style="background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:24px;margin-bottom:14px${!a.read?';border-left:3px solid #F472B6':''}">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+      <!-- Header row -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px">
         <div>
           <div style="font-weight:700;color:var(--txt);font-size:.95rem;margin-bottom:4px">${escHtml(a.firstName||'')} ${escHtml(a.lastName||'')}</div>
-          <div style="font-size:.8rem;color:var(--muted)">${escHtml(a.email||'—')} · Age ${a.age||'?'} · ${escHtml(a.availability||'—')}</div>
+          <div style="font-size:.8rem;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <span>${escHtml(a.email||'—')}</span>
+            <span>· Age ${a.age||'?'}</span>
+            ${a.location ? `<span>· ${escHtml(a.location)}</span>` : ''}
+            ${a.timezone ? `<span>· ${escHtml(a.timezone)}</span>` : ''}
+            ${a.availability ? `<span>· ${escHtml(a.availability)}/wk</span>` : ''}
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <span style="font-family:DM Mono,monospace;font-size:.6rem;padding:3px 10px;border-radius:4px;background:rgba(255,255,255,.07);color:${rankColors[a.role]||'var(--muted)'};text-transform:uppercase;letter-spacing:.06em">${rankLabels[a.role]||a.role||'?'}</span>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          ${dept}
+          <span style="font-family:DM Mono,monospace;font-size:.6rem;padding:3px 10px;border-radius:4px;background:rgba(255,255,255,.07);color:${rankColors[a.role]||'var(--muted)'};text-transform:uppercase;letter-spacing:.06em">${rankLabels[a.role]||escHtml(a.role)||'?'}</span>
           <span style="font-family:DM Mono,monospace;font-size:.6rem;padding:3px 10px;border-radius:4px;background:rgba(255,255,255,.06);color:${statusColors[a.status]||'var(--muted)'};text-transform:uppercase;letter-spacing:.06em">${a.status||'pending'}</span>
           <span style="font-family:DM Mono,monospace;font-size:.6rem;color:var(--faint)">${date}</span>
+          ${a.usedBefore ? `<span style="font-family:DM Mono,monospace;font-size:.58rem;padding:2px 8px;border-radius:4px;background:rgba(125,190,142,.1);color:#6EE7B7" title="Uses Elaborate">${usedMap[a.usedBefore]||a.usedBefore}</span>` : ''}
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <!-- Essay responses -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
         <div>
-          <div style="font-family:DM Mono,monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Why they want to join</div>
-          <div style="font-size:.84rem;color:rgba(240,238,248,.7);line-height:1.55">${escHtml(a.why||'—')}</div>
+          <div style="font-family:DM Mono,monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">Why Elaborate?</div>
+          <div style="font-size:.83rem;color:rgba(240,238,248,.7);line-height:1.55;max-height:80px;overflow:hidden">${escHtml(a.why||'—')}</div>
         </div>
         <div>
-          <div style="font-family:DM Mono,monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Experience</div>
-          <div style="font-size:.84rem;color:rgba(240,238,248,.7);line-height:1.55">${escHtml(a.experience||'—')}</div>
+          <div style="font-family:DM Mono,monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">Experience</div>
+          <div style="font-size:.83rem;color:rgba(240,238,248,.7);line-height:1.55;max-height:80px;overflow:hidden">${escHtml(a.experience||'—')}</div>
         </div>
+        ${a.problemSolving ? `<div>
+          <div style="font-family:DM Mono,monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">Problem they solved</div>
+          <div style="font-size:.83rem;color:rgba(240,238,248,.7);line-height:1.55;max-height:80px;overflow:hidden">${escHtml(a.problemSolving)}</div>
+        </div>` : ''}
+        ${a.improvements ? `<div>
+          <div style="font-family:DM Mono,monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">What they would improve</div>
+          <div style="font-size:.83rem;color:rgba(240,238,248,.7);line-height:1.55;max-height:80px;overflow:hidden">${escHtml(a.improvements)}</div>
+        </div>` : ''}
       </div>
-      ${a.extra ? `<div style="margin-bottom:16px"><div style="font-family:DM Mono,monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Additional notes</div><div style="font-size:.84rem;color:rgba(240,238,248,.6)">${escHtml(a.extra)}</div></div>` : ''}
-      <div style="font-size:.78rem;color:var(--muted);margin-bottom:14px">Skills: ${escHtml(skills)}</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <!-- Skills + links + extra -->
+      <div style="font-size:.77rem;color:var(--muted);margin-bottom:8px">
+        <span style="font-family:DM Mono,monospace;font-size:.57rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-right:6px">Skills:</span>${escHtml(skills)}
+      </div>
+      ${a.links ? `<div style="font-size:.77rem;margin-bottom:8px"><span style="font-family:DM Mono,monospace;font-size:.57rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-right:6px">Links:</span><a href="${escHtml(a.links)}" target="_blank" rel="noopener" style="color:#60A5FA;text-decoration:none;word-break:break-all">${escHtml(a.links)}</a></div>` : ''}
+      ${a.source ? `<div style="font-size:.77rem;color:var(--muted);margin-bottom:8px"><span style="font-family:DM Mono,monospace;font-size:.57rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-right:6px">Source:</span>${escHtml(a.source)}</div>` : ''}
+      ${a.extra ? `<div style="margin-bottom:10px"><div style="font-family:DM Mono,monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">Additional notes</div><div style="font-size:.83rem;color:rgba(240,238,248,.6)">${escHtml(a.extra)}</div></div>` : ''}
+      <!-- Action buttons -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
         ${a.status !== 'accepted' ? `<button onclick="updateAppStatus('${a.id}','accepted')" style="padding:7px 16px;border-radius:6px;border:1px solid rgba(52,211,153,.3);background:rgba(52,211,153,.1);color:#34D399;font-family:DM Sans,sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .15s">✓ Accept</button>` : ''}
         ${a.status !== 'rejected' ? `<button onclick="updateAppStatus('${a.id}','rejected')" style="padding:7px 16px;border-radius:6px;border:1px solid rgba(255,87,51,.2);background:transparent;color:var(--coral);font-family:DM Sans,sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .15s">✕ Reject</button>` : ''}
         ${a.status === 'accepted' && !a.enrolledInTraining ? `<button onclick="addStaffFromApp('${a.id}')" style="padding:7px 16px;border-radius:6px;border:none;background:#A78BFA;color:#fff;font-family:DM Sans,sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;display:flex;align-items:center;gap:6px">🎓 Enroll in Training</button>` : ''}
@@ -4101,8 +4290,210 @@ window.deleteApplication = async function(id) {
 };
 
 /* ════════════════════════════════════════
-   STAFF NOTES
+   HELP ARTICLES
 ════════════════════════════════════════ */
+let articlesCache = [];
+let editingArticleId = null;
+
+const ARTICLE_CAT_LABELS = {
+  account:'Account & Login', apps:'Apps & Library', schedule:'Schedule',
+  classroom:'Classroom', teachers:'For Teachers', billing:'Billing & Plans',
+  privacy:'Privacy & Data', general:'General'
+};
+const ARTICLE_CAT_COLORS = {
+  account:'#A78BFA', apps:'#38BDF8', schedule:'#7DBE8E',
+  classroom:'#FBBF24', teachers:'#FB923C', billing:'#F472B6',
+  privacy:'#94A3B8', general:'#6B7280'
+};
+
+async function loadHelpArticles() {
+  const el = document.getElementById('articleList');
+  if (!el) return;
+  el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--muted)">Loading…</div>';
+  try {
+    const snap = await getDocs(collection(db, 'supportArticles'));
+    articlesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .sort((a,b) => (b.updatedAt?.seconds||0) - (a.updatedAt?.seconds||0));
+    renderArticleList();
+  } catch(e) {
+    el.innerHTML = `<div style="color:var(--coral);padding:16px;font-size:.84rem">Error: ${e.message}</div>`;
+  }
+}
+
+window.renderArticleList = function() {
+  const el = document.getElementById('articleList');
+  if (!el) return;
+  const catF    = document.getElementById('articleCatFilter')?.value || 'all';
+  const statusF = document.getElementById('articleStatusFilter')?.value || 'all';
+  const filtered = articlesCache.filter(a =>
+    (catF    === 'all' || a.category === catF) &&
+    (statusF === 'all' || a.status   === statusF)
+  );
+  const countEl = document.getElementById('articleCount');
+  if (countEl) countEl.textContent = `${filtered.length} article${filtered.length!==1?'s':''}`;
+  if (!filtered.length) {
+    el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:.88rem">No articles yet. Click "+ New Article" to write one.</div>';
+    return;
+  }
+  el.innerHTML = filtered.map(a => {
+    const date     = a.updatedAt?.toDate ? a.updatedAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+    const catColor = ARTICLE_CAT_COLORS[a.category] || '#6B7280';
+    const catLabel = ARTICLE_CAT_LABELS[a.category] || a.category || 'General';
+    const isPublished = a.status === 'published';
+    const tags = (a.tags || []).slice(0,4);
+    return `<div style="background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:20px 24px;margin-bottom:10px;display:flex;align-items:flex-start;gap:16px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='rgba(56,189,248,.3)'" onmouseout="this.style.borderColor='var(--border)'" onclick="openArticleEditor('${a.id}')">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+          <span style="font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.06);color:${catColor};text-transform:uppercase;letter-spacing:.06em">${catLabel}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 8px;border-radius:4px;background:${isPublished?'rgba(56,189,248,.12)':'rgba(255,255,255,.05)'};color:${isPublished?'#38BDF8':'var(--muted)'}">${isPublished?'Published':'Draft'}</span>
+          ${tags.map(t => `<span style="font-family:'DM Mono',monospace;font-size:.55rem;padding:1px 7px;border-radius:4px;background:rgba(255,255,255,.04);color:var(--faint)">${escHtml(t)}</span>`).join('')}
+        </div>
+        <div style="font-weight:700;color:var(--txt);font-size:.95rem;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(a.title||'Untitled')}</div>
+        <div style="font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(a.summary||'No summary')}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+        <span style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--faint)">${date}</span>
+        <div style="display:flex;gap:6px">
+          <button onclick="event.stopPropagation();toggleArticlePublish('${a.id}')" style="padding:5px 12px;border-radius:6px;border:1px solid rgba(56,189,248,.25);background:transparent;color:#38BDF8;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.75rem;cursor:pointer;white-space:nowrap">${isPublished?'Unpublish':'Publish'}</button>
+          <button onclick="event.stopPropagation();deleteArticle('${a.id}')" style="padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.75rem;cursor:pointer">Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+};
+
+window.openArticleEditor = function(id) {
+  editingArticleId = id;
+  const overlay = document.getElementById('articleEditorOverlay');
+  overlay.style.display = 'block';
+  overlay.scrollTop = 0;
+
+  if (id) {
+    const a = articlesCache.find(x => x.id === id);
+    if (a) {
+      document.getElementById('articleTitle').value   = a.title   || '';
+      document.getElementById('articleSummary').value = a.summary || '';
+      document.getElementById('articleCat').value     = a.category || 'general';
+      document.getElementById('articleTags').value    = (a.tags||[]).join(', ');
+      document.getElementById('articleBody').innerHTML = a.bodyHtml || '';
+      document.getElementById('articleEditorStatus').textContent = a.status === 'published' ? '● Published' : '○ Draft';
+      document.getElementById('articleEditorStatus').style.color  = a.status === 'published' ? '#38BDF8' : 'var(--muted)';
+    }
+  } else {
+    document.getElementById('articleTitle').value   = '';
+    document.getElementById('articleSummary').value = '';
+    document.getElementById('articleCat').value     = 'general';
+    document.getElementById('articleTags').value    = '';
+    document.getElementById('articleBody').innerHTML = '<p>Start writing your article here…</p>';
+    document.getElementById('articleEditorStatus').textContent = '○ Draft';
+    document.getElementById('articleEditorStatus').style.color  = 'var(--muted)';
+    document.getElementById('articleSaveMsg').textContent = '';
+  }
+};
+
+window.closeArticleEditor = function() {
+  document.getElementById('articleEditorOverlay').style.display = 'none';
+  editingArticleId = null;
+};
+
+window.saveArticle = async function(status) {
+  const title   = document.getElementById('articleTitle').value.trim();
+  const summary = document.getElementById('articleSummary').value.trim();
+  const cat     = document.getElementById('articleCat').value;
+  const tagsRaw = document.getElementById('articleTags').value;
+  const bodyHtml = document.getElementById('articleBody').innerHTML;
+  const bodyText = document.getElementById('articleBody').innerText || '';
+
+  if (!title) { showToast('Please enter a title.'); return; }
+
+  const tags = tagsRaw.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+  const saveBtn = document.getElementById(status === 'published' ? 'articlePublishBtn' : 'articleSaveDraftBtn');
+  const origText = saveBtn.textContent;
+  saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
+
+  try {
+    const data = {
+      title, summary, category: cat, tags, bodyHtml, bodyText,
+      status, updatedAt: serverTimestamp(),
+      author: currentAdmin?.displayName || 'Admin',
+    };
+    if (editingArticleId) {
+      await updateDoc(doc(db, 'supportArticles', editingArticleId), data);
+      const idx = articlesCache.findIndex(x => x.id === editingArticleId);
+      if (idx > -1) articlesCache[idx] = { ...articlesCache[idx], ...data };
+    } else {
+      data.createdAt = serverTimestamp();
+      const ref = await addDoc(collection(db, 'supportArticles'), data);
+      editingArticleId = ref.id;
+      articlesCache.unshift({ id: ref.id, ...data });
+    }
+    document.getElementById('articleEditorStatus').textContent = status === 'published' ? '● Published' : '○ Draft';
+    document.getElementById('articleEditorStatus').style.color  = status === 'published' ? '#38BDF8' : 'var(--muted)';
+    const msg = document.getElementById('articleSaveMsg');
+    msg.textContent = status === 'published' ? '✓ Published — visible in support search' : '✓ Draft saved';
+    setTimeout(() => { msg.textContent = ''; }, 3000);
+    renderArticleList();
+  } catch(e) { showToast('Save failed: ' + e.message); }
+  saveBtn.disabled = false; saveBtn.textContent = origText;
+};
+
+window.toggleArticlePublish = async function(id) {
+  const a = articlesCache.find(x => x.id === id);
+  if (!a) return;
+  const newStatus = a.status === 'published' ? 'draft' : 'published';
+  try {
+    await updateDoc(doc(db, 'supportArticles', id), { status: newStatus, updatedAt: serverTimestamp() });
+    a.status = newStatus;
+    renderArticleList();
+    showToast(newStatus === 'published' ? 'Article published.' : 'Article unpublished.');
+  } catch(e) { showToast('Failed: ' + e.message); }
+};
+
+window.deleteArticle = async function(id) {
+  if (!confirm('Delete this article? This cannot be undone.')) return;
+  try {
+    await deleteDoc(doc(db, 'supportArticles', id));
+    articlesCache = articlesCache.filter(x => x.id !== id);
+    renderArticleList();
+    showToast('Article deleted.');
+  } catch(e) { showToast('Failed: ' + e.message); }
+};
+
+// Editor formatting helpers
+window.articleFmt = function(cmd) {
+  document.getElementById('articleBody').focus();
+  document.execCommand(cmd, false, null);
+};
+window.articleInsertH2 = function() {
+  document.getElementById('articleBody').focus();
+  document.execCommand('formatBlock', false, 'h2');
+};
+window.articleInsertUL = function() {
+  document.getElementById('articleBody').focus();
+  document.execCommand('insertUnorderedList', false, null);
+};
+window.articleInsertOL = function() {
+  document.getElementById('articleBody').focus();
+  document.execCommand('insertOrderedList', false, null);
+};
+window.articleInsertCode = function() {
+  document.getElementById('articleBody').focus();
+  document.execCommand('insertHTML', false, '<code style="font-family:DM Mono,monospace;background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-size:.88em">code</code>');
+};
+window.articleInsertLink = function() {
+  const url = prompt('Enter URL:');
+  if (!url) return;
+  document.getElementById('articleBody').focus();
+  document.execCommand('createLink', false, url);
+};
+window.articleInsertDivider = function() {
+  document.getElementById('articleBody').focus();
+  document.execCommand('insertHTML', false, '<hr style="border:none;border-top:1px solid rgba(255,255,255,.12);margin:20px 0"/>');
+};
+window.articleInsertCallout = function() {
+  document.getElementById('articleBody').focus();
+  document.execCommand('insertHTML', false, '<div style="background:rgba(56,189,248,.08);border-left:3px solid #38BDF8;border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.9rem;line-height:1.65">💡 Your callout text here</div>');
+};
 let staffNotesUnsub = null;
 
 async function loadStaffNotes() {
