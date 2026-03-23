@@ -224,6 +224,30 @@ footer{background:var(--navy);position:relative;overflow:hidden}
 .delay-1{animation-delay:.08s}
 .delay-2{animation-delay:.16s}
 .delay-3{animation-delay:.24s}
+
+/* ── UNIVERSAL FOOTER ── */
+.u-footer{background:#0D1B2A;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif}
+.u-footer-top{padding:64px 64px 48px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:48px;max-width:1200px;margin:0 auto;position:relative;z-index:1;border-bottom:1px solid rgba(255,255,255,.07)}
+.u-footer-brand-name{font-family:'Fraunces',serif;font-weight:900;font-size:1.2rem;color:#fff;letter-spacing:-.02em;margin-bottom:10px;text-decoration:none;display:block}
+.u-footer-brand-name span{color:#FF5733}
+.u-footer-brand-sub{font-size:.82rem;color:rgba(255,255,255,.32);line-height:1.7;max-width:200px}
+.u-footer-cols{display:flex;gap:56px;flex-wrap:wrap}
+.u-footer-col-title{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px}
+.u-footer-col a{display:block;font-size:.84rem;color:rgba(255,255,255,.42);text-decoration:none;margin-bottom:10px;transition:color .15s}
+.u-footer-col a:hover{color:#fff}
+.u-footer-big{padding:0 64px;overflow:hidden;position:relative;z-index:1;line-height:1}
+.u-footer-big-text{font-family:'Fraunces',serif;font-size:clamp(5rem,14vw,13rem);font-weight:900;color:rgba(255,255,255,.055);letter-spacing:-.04em;white-space:nowrap;user-select:none;display:block;margin-bottom:-0.12em}
+.u-footer-bottom{padding:20px 64px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.u-footer-copy{font-size:.76rem;color:rgba(255,255,255,.22)}
+.u-footer-small-links{display:flex;gap:18px;flex-wrap:wrap}
+.u-footer-small-links a{font-size:.76rem;color:rgba(255,255,255,.22);text-decoration:none;transition:color .15s}
+.u-footer-small-links a:hover{color:rgba(255,255,255,.6)}
+@media(max-width:768px){
+  .u-footer-top{padding:48px 24px 36px;gap:36px}
+  .u-footer-big{padding:0 24px}
+  .u-footer-bottom{padding:16px 24px}
+  .u-footer-cols{gap:28px}
+}
 </style>
 </head>
 <body>
@@ -258,7 +282,7 @@ footer{background:var(--navy);position:relative;overflow:hidden}
     <div class="hero-orb3"></div>
     <div class="hero-eyebrow animate-in">Elaborate Help Center</div>
     <h1 class="hero-h1 animate-in delay-1">Need help?<br/><em>We've got you.</em></h1>
-    <p class="hero-sub animate-in delay-2">Search articles, browse by topic, or open a support ticket. We read every one.</p>
+    <p class="hero-sub animate-in delay-2">Start here. Search articles and browse by category. If you still need help, our support team is one click away.</p>
     <div class="search-wrap animate-in delay-3">
       <div class="search-box" onclick="document.getElementById('heroSearch').focus()">
         <span class="search-icon">🔍</span>
@@ -270,13 +294,14 @@ footer{background:var(--navy);position:relative;overflow:hidden}
   </section>
 
   <!-- TAGLINE -->
-  <div class="tagline-strip">
-    <h2 class="tagline-h2">From account settings to scheduling,<br/><em>find help for everything Elaborate.</em></h2>
-    <p class="tagline-sub" style="margin-top:12px">If you're new and looking for tips, check out our <a href="#" onclick="openCategory('account');return false" style="color:var(--coral);font-weight:600">Getting Started guide →</a></p>
+  <div class="tagline-strip" style="padding:72px 48px 16px">
+    <div style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px">Step 1 — Search & browse</div>
+    <h2 class="tagline-h2" style="font-size:clamp(1.8rem,3.5vw,2.8rem)">From account settings to scheduling,<br/><em>find help for everything Elaborate.</em></h2>
+    <p class="tagline-sub" style="margin-top:14px;font-size:.95rem;color:var(--muted);max-width:520px;margin-left:auto;margin-right:auto;line-height:1.75">Most answers are right here. If you cannot find what you need, <a href="/support.html" style="color:var(--coral);font-weight:600;text-decoration:none">our support team is one click away →</a></p>
   </div>
 
   <!-- CATEGORY GRID -->
-  <div class="cat-section">
+  <div class="cat-section" style="padding:56px 64px 80px;max-width:1200px;margin:0 auto">
     <div class="cat-grid" id="catGrid">
       <div style="grid-column:1/-1">
         <div class="pulse-line" style="width:40%;margin-bottom:20px"></div>
@@ -298,30 +323,45 @@ footer{background:var(--navy);position:relative;overflow:hidden}
     </div>
   </section>
 
-  <!-- OTHER WAYS TO GET HELP -->
-  <div style="background:var(--cream);padding:72px 48px">
-    <div style="max-width:1100px;margin:0 auto">
-      <h2 style="font-family:'Fraunces',serif;font-size:clamp(1.4rem,2.5vw,1.8rem);font-weight:900;letter-spacing:-.02em;margin-bottom:36px;text-align:center">Other ways to get help</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px">
-        <a href="/support.html#ticket-form" style="text-decoration:none;color:inherit;background:var(--card);border-radius:20px;padding:28px 26px;border:1.5px solid var(--border);transition:all .2s;display:block" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(13,27,42,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="font-size:2rem;margin-bottom:14px">🎫</div>
-          <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem;margin-bottom:6px">Open a Ticket</div>
-          <div style="font-size:.84rem;color:var(--muted);line-height:1.6">Can't find your answer? Submit a support ticket and our team will get back to you.</div>
+  <!-- STILL NEED HELP — escalation CTA -->
+  <div style="background:var(--navy);padding:80px 64px">
+    <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:14px">Step 2 — Still need help?</div>
+        <h2 style="font-family:'Fraunces',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-.03em;line-height:1.1;color:#fff;margin-bottom:14px">Our support team<br/><em style="font-style:italic;font-weight:300;color:var(--coral)">has your back.</em></h2>
+        <p style="font-size:.95rem;color:rgba(255,255,255,.45);line-height:1.75;margin-bottom:28px;max-width:400px">Did not find your answer here? Submit a ticket and a real team member will get back to you — usually within a week.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="/support.html" style="padding:13px 28px;border-radius:50px;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.92rem;text-decoration:none;transition:all .18s;display:inline-block" onmouseover="this.style.background='#e84520';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='var(--coral)';this.style.transform=''">Open a Ticket →</a>
+          <a href="/my-tickets.html" style="padding:13px 28px;border-radius:50px;border:1.5px solid rgba(255,255,255,.15);color:rgba(255,255,255,.65);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.92rem;text-decoration:none;transition:all .18s;display:inline-block" onmouseover="this.style.borderColor='rgba(255,255,255,.4)';this.style.color='#fff'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='rgba(255,255,255,.65)'">Track My Ticket</a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <a href="/support.html#ticket-form" style="text-decoration:none;color:inherit;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 24px;transition:all .2s;display:block" onmouseover="this.style.background='rgba(255,255,255,.09)';this.style.borderColor='rgba(255,255,255,.16)'" onmouseout="this.style.background='rgba(255,255,255,.05)';this.style.borderColor='rgba(255,255,255,.08)'">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="font-size:1.6rem;flex-shrink:0">🎫</div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-weight:900;font-size:.95rem;color:#fff;margin-bottom:3px">Submit a Support Ticket</div>
+              <div style="font-size:.8rem;color:rgba(255,255,255,.38);line-height:1.55">Describe your issue and a team member will reply to your email, usually within a week.</div>
+            </div>
+          </div>
         </a>
-        <a href="/my-tickets.html" style="text-decoration:none;color:inherit;background:var(--card);border-radius:20px;padding:28px 26px;border:1.5px solid var(--border);transition:all .2s;display:block" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(13,27,42,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="font-size:2rem;margin-bottom:14px">📬</div>
-          <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem;margin-bottom:6px">Track My Ticket</div>
-          <div style="font-size:.84rem;color:var(--muted);line-height:1.6">Check on an existing ticket, read replies from the team, and continue the conversation.</div>
+        <a href="/my-tickets.html" style="text-decoration:none;color:inherit;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 24px;transition:all .2s;display:block" onmouseover="this.style.background='rgba(255,255,255,.09)';this.style.borderColor='rgba(255,255,255,.16)'" onmouseout="this.style.background='rgba(255,255,255,.05)';this.style.borderColor='rgba(255,255,255,.08)'">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="font-size:1.6rem;flex-shrink:0">📬</div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-weight:900;font-size:.95rem;color:#fff;margin-bottom:3px">Track an Existing Ticket</div>
+              <div style="font-size:.8rem;color:rgba(255,255,255,.38);line-height:1.55">View replies, continue the conversation, and check on your ticket status.</div>
+            </div>
+          </div>
         </a>
-        <a href="/docs.html" style="text-decoration:none;color:inherit;background:var(--card);border-radius:20px;padding:28px 26px;border:1.5px solid var(--border);transition:all .2s;display:block" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(13,27,42,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="font-size:2rem;margin-bottom:14px">📖</div>
-          <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem;margin-bottom:6px">Documentation</div>
-          <div style="font-size:.84rem;color:var(--muted);line-height:1.6">Full technical docs for students, teachers, developers, and district admins.</div>
-        </a>
-        <a href="/careers.html" style="text-decoration:none;color:inherit;background:var(--card);border-radius:20px;padding:28px 26px;border:1.5px solid var(--border);transition:all .2s;display:block" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(13,27,42,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="font-size:2rem;margin-bottom:14px">💼</div>
-          <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem;margin-bottom:6px">Join the Team</div>
-          <div style="font-size:.84rem;color:var(--muted);line-height:1.6">Interested in helping build Elaborate? See our open volunteer roles.</div>
+        <a href="/docs.html" style="text-decoration:none;color:inherit;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 24px;transition:all .2s;display:block" onmouseover="this.style.background='rgba(255,255,255,.09)';this.style.borderColor='rgba(255,255,255,.16)'" onmouseout="this.style.background='rgba(255,255,255,.05)';this.style.borderColor='rgba(255,255,255,.08)'">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="font-size:1.6rem;flex-shrink:0">📖</div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-weight:900;font-size:.95rem;color:#fff;margin-bottom:3px">Read the Docs</div>
+              <div style="font-size:.8rem;color:rgba(255,255,255,.38);line-height:1.55">Full technical documentation for students, teachers, developers, and admins.</div>
+            </div>
+          </div>
         </a>
       </div>
     </div>
@@ -387,45 +427,47 @@ footer{background:var(--navy);position:relative;overflow:hidden}
 </div>
 
 <!-- FOOTER (shown on all views) -->
-<footer>
-  <div class="footer-top">
+<footer class="u-footer">
+  <div class="u-footer-top">
     <div>
-      <div class="footer-brand">Elaborate<span>.</span></div>
-      <div class="footer-brand-sub">A student hub built for the way school actually works.</div>
+      <a class="u-footer-brand-name" href="/index.html">Elaborate<span>.</span></a>
+      <div class="u-footer-brand-sub">A student hub built for the way school actually works.</div>
     </div>
-    <div class="footer-cols">
-      <div class="footer-col">
-        <div class="footer-col-title">Product</div>
+    <div class="u-footer-cols">
+      <div class="u-footer-col">
+        <div class="u-footer-col-title">Product</div>
         <a href="/index.html">Hub</a>
         <a href="/about.html">About</a>
         <a href="/status.html">Status</a>
         <a href="/developers.html">Developers</a>
+        <a href="/districts.html">Districts</a>
       </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Support</div>
+      <div class="u-footer-col">
+        <div class="u-footer-col-title">Support</div>
         <a href="/help.html">Help Center</a>
         <a href="/support.html">Open a Ticket</a>
         <a href="/my-tickets.html">My Tickets</a>
         <a href="/docs.html">Documentation</a>
       </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Company</div>
+      <div class="u-footer-col">
+        <div class="u-footer-col-title">Company</div>
         <a href="/about.html">About</a>
         <a href="/careers.html">Careers</a>
-        <a href="/districts.html">Districts</a>
-        <a href="/legal.html?tab=terms">Terms</a>
-        <a href="/legal.html?tab=privacy">Privacy</a>
+        <a href="/donate.html">Donate</a>
+        <a href="/legal.html?tab=terms">Terms of Service</a>
+        <a href="/legal.html?tab=privacy">Privacy Policy</a>
       </div>
     </div>
   </div>
-  <div class="footer-bigtext">
-    <div class="footer-bigtext-inner">Elaborate.</div>
+  <div class="u-footer-big">
+    <span class="u-footer-big-text">Elaborate.</span>
   </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2025 Elaborate. All rights reserved.</div>
-    <div class="footer-links-small">
+  <div class="u-footer-bottom">
+    <div class="u-footer-copy">&copy; 2025 Elaborate. All rights reserved.</div>
+    <div class="u-footer-small-links">
       <a href="/legal.html?tab=privacy">Privacy</a>
       <a href="/legal.html?tab=terms">Terms</a>
+      <a href="/help.html">Help</a>
       <a href="/support.html">Support</a>
     </div>
   </div>

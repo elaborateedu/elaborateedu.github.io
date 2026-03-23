@@ -204,6 +204,30 @@ footer{border-top:1px solid var(--border);padding:24px 64px;display:flex;align-i
   .form-row{grid-template-columns:1fr}
   footer{padding:20px}
 }
+
+/* ── UNIVERSAL FOOTER ── */
+.u-footer{background:#0D1B2A;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif}
+.u-footer-top{padding:64px 64px 48px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:48px;max-width:1200px;margin:0 auto;position:relative;z-index:1;border-bottom:1px solid rgba(255,255,255,.07)}
+.u-footer-brand-name{font-family:'Fraunces',serif;font-weight:900;font-size:1.2rem;color:#fff;letter-spacing:-.02em;margin-bottom:10px;text-decoration:none;display:block}
+.u-footer-brand-name span{color:#FF5733}
+.u-footer-brand-sub{font-size:.82rem;color:rgba(255,255,255,.32);line-height:1.7;max-width:200px}
+.u-footer-cols{display:flex;gap:56px;flex-wrap:wrap}
+.u-footer-col-title{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px}
+.u-footer-col a{display:block;font-size:.84rem;color:rgba(255,255,255,.42);text-decoration:none;margin-bottom:10px;transition:color .15s}
+.u-footer-col a:hover{color:#fff}
+.u-footer-big{padding:0 64px;overflow:hidden;position:relative;z-index:1;line-height:1}
+.u-footer-big-text{font-family:'Fraunces',serif;font-size:clamp(5rem,14vw,13rem);font-weight:900;color:rgba(255,255,255,.055);letter-spacing:-.04em;white-space:nowrap;user-select:none;display:block;margin-bottom:-0.12em}
+.u-footer-bottom{padding:20px 64px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.u-footer-copy{font-size:.76rem;color:rgba(255,255,255,.22)}
+.u-footer-small-links{display:flex;gap:18px;flex-wrap:wrap}
+.u-footer-small-links a{font-size:.76rem;color:rgba(255,255,255,.22);text-decoration:none;transition:color .15s}
+.u-footer-small-links a:hover{color:rgba(255,255,255,.6)}
+@media(max-width:768px){
+  .u-footer-top{padding:48px 24px 36px;gap:36px}
+  .u-footer-big{padding:0 24px}
+  .u-footer-bottom{padding:16px 24px}
+  .u-footer-cols{gap:28px}
+}
 </style>
 </head>
 <body>
@@ -233,7 +257,7 @@ footer{border-top:1px solid var(--border);padding:24px 64px;display:flex;align-i
   <div class="hero-inner">
     <div class="hero-eyebrow">Elaborate Support Center</div>
     <h1 class="hero-h1">How can we<br/><em>help you?</em></h1>
-    <p class="hero-sub">Search the FAQ, browse quick guides, or open a support ticket. We read and respond to every one.</p>
+    <p class="hero-sub">Could not find your answer in the <a href="/help.html" style="color:var(--coral);font-weight:700;text-decoration:none">Help Center</a>? Submit a ticket and a real person will reply — usually within a week.</p>
     <div class="hero-chips">
       <a class="hero-chip" href="#quick-help">Quick guides</a>
       <a class="hero-chip" href="#ticket-form">Open a ticket</a>
@@ -257,6 +281,11 @@ footer{border-top:1px solid var(--border);padding:24px 64px;display:flex;align-i
   <div class="quick-inner">
     <div class="section-eyebrow">Quick help</div>
     <div class="quick-grid">
+      <a class="quick-card" href="/help.html" style="border-color:rgba(255,87,51,.25);background:linear-gradient(135deg,rgba(255,87,51,.04),var(--card))">
+        <div class="quick-icon">🏠</div>
+        <div class="quick-title" style="color:var(--coral)">Help Center ↗</div>
+        <div class="quick-desc">Browse all help articles by category — the fastest way to find your answer before opening a ticket.</div>
+      </a>
       <a class="quick-card" href="/docs.html#getting-started">
         <div class="quick-icon">🚀</div>
         <div class="quick-title">Getting Started</div>
@@ -282,7 +311,6 @@ footer{border-top:1px solid var(--border);padding:24px 64px;display:flex;align-i
         <div class="quick-title">For Teachers</div>
         <div class="quick-desc">Create classrooms, pin apps for students, and post announcements.</div>
       </a>
-      <a class="quick-card" href="/help.html"><div class="quick-icon">📖</div><div class="quick-title">Help Center</div><div class="quick-desc">Browse all help articles by category. Find answers without opening a ticket.</div></a>
       <a class="quick-card" href="/careers.html">
         <div class="quick-icon">💼</div>
         <div class="quick-title">Join the Team</div>
@@ -300,7 +328,7 @@ footer{border-top:1px solid var(--border);padding:24px 64px;display:flex;align-i
     <div class="form-card">
       <div class="form-card-header">
         <div class="form-card-title">Open a Support Ticket</div>
-        <div class="form-card-sub">Describe your issue and we will get back to you. For smaller issues expect a reply within a week; larger issues may take up to a month.</div>
+        <div class="form-card-sub">Still stuck after checking the <a href="/help.html" style="color:var(--coral);font-weight:600;text-decoration:none">Help Center</a>? Describe your issue below and we will get back to you. Smaller issues: within a week. Larger requests: up to a month.</div>
       </div>
 
       <div class="form-error" id="formError"></div>
@@ -538,15 +566,49 @@ footer{border-top:1px solid var(--border);padding:24px 64px;display:flex;align-i
   </div>
 </section>
 
-<footer>
-  <div class="footer-logo">Elaborate<span>.</span></div>
-  <div class="footer-links">
-    <a href="/index.html">Hub</a>
-    <a href="/about.html">About</a>
-    <a href="/docs.html">Docs</a>
-    <a href="/careers.html">Careers</a>
-    <a href="/legal.html?tab=terms">Terms</a>
-    <a href="/legal.html?tab=privacy">Privacy</a>
+<footer class="u-footer">
+  <div class="u-footer-top">
+    <div>
+      <a class="u-footer-brand-name" href="/index.html">Elaborate<span>.</span></a>
+      <div class="u-footer-brand-sub">A student hub built for the way school actually works.</div>
+    </div>
+    <div class="u-footer-cols">
+      <div class="u-footer-col">
+        <div class="u-footer-col-title">Product</div>
+        <a href="/index.html">Hub</a>
+        <a href="/about.html">About</a>
+        <a href="/status.html">Status</a>
+        <a href="/developers.html">Developers</a>
+        <a href="/districts.html">Districts</a>
+      </div>
+      <div class="u-footer-col">
+        <div class="u-footer-col-title">Support</div>
+        <a href="/help.html">Help Center</a>
+        <a href="/support.html">Open a Ticket</a>
+        <a href="/my-tickets.html">My Tickets</a>
+        <a href="/docs.html">Documentation</a>
+      </div>
+      <div class="u-footer-col">
+        <div class="u-footer-col-title">Company</div>
+        <a href="/about.html">About</a>
+        <a href="/careers.html">Careers</a>
+        <a href="/donate.html">Donate</a>
+        <a href="/legal.html?tab=terms">Terms of Service</a>
+        <a href="/legal.html?tab=privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="u-footer-big">
+    <span class="u-footer-big-text">Elaborate.</span>
+  </div>
+  <div class="u-footer-bottom">
+    <div class="u-footer-copy">&copy; 2025 Elaborate. All rights reserved.</div>
+    <div class="u-footer-small-links">
+      <a href="/legal.html?tab=privacy">Privacy</a>
+      <a href="/legal.html?tab=terms">Terms</a>
+      <a href="/help.html">Help</a>
+      <a href="/support.html">Support</a>
+    </div>
   </div>
 </footer>
 
