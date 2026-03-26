@@ -1,969 +1,582 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-  <meta http-equiv="Pragma" content="no-cache"/>
-  <meta http-equiv="Expires" content="0"/>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Support — Elaborate</title>
-  <link rel="icon" type="image/png" href="/favicon.png"/>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<title>Support — Elaborate</title>
+<link rel="icon" type="image/png" href="/favicon.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0G7WFX3JZ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-C0G7WFX3JZ');</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --cream:#F5F0E8;--navy:#0D1B2A;--coral:#FF5733;--gold:#F4C542;
-  --sage:#7DBE8E;--lav:#A78BFA;--sky:#38BDF8;
-  --muted:rgba(13,27,42,.5);--border:rgba(13,27,42,.09);--border2:rgba(13,27,42,.14);
-  --card:#fff;--tr:.18s cubic-bezier(.4,0,.2,1);
-}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-
+:root{--cream:#F5F0E8;--navy:#0D1B2A;--coral:#FF5733;--muted:rgba(13,27,42,.5);--border:rgba(13,27,42,.09);--border2:rgba(13,27,42,.14);--card:#fff;--sage:#7DBE8E}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);-webkit-font-smoothing:antialiased}
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(245,240,232,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:var(--navy);text-decoration:none;letter-spacing:-.02em}
-.nav-logo span{color:var(--coral)}
-.nav-links{display:flex;align-items:center;gap:6px}
-.nav-link{font-size:.84rem;font-weight:600;color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:8px;transition:all .15s}
-.nav-link:hover{color:var(--navy);background:rgba(13,27,42,.05)}
-.nav-cta{padding:8px 18px;border-radius:50px;background:var(--navy);color:var(--cream);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.84rem;text-decoration:none;transition:all .15s;border:none;cursor:pointer;display:inline-block}
-.nav-cta:hover{background:var(--coral);transform:translateY(-1px)}
-
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(245,240,232,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:var(--navy);text-decoration:none;letter-spacing:-.02em}.logo span{color:var(--coral)}
+.nav-r{display:flex;align-items:center;gap:6px}
+.nl{font-size:.84rem;font-weight:600;color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:8px;transition:.15s}.nl:hover{color:var(--navy);background:rgba(13,27,42,.05)}
+.ncta{padding:8px 18px;border-radius:50px;background:var(--navy);color:var(--cream);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.84rem;text-decoration:none;transition:.15s}.ncta:hover{background:var(--coral)}
 /* HERO */
-.hero{background:var(--navy);padding:100px 64px 0;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,87,51,.2),transparent 65%);top:-200px;right:-100px;pointer-events:none}
-.hero::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.12),transparent 65%);bottom:-100px;left:-80px;pointer-events:none}
-.hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}
-.hero-eyebrow{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:18px}
-.hero-h1{font-family:'Fraunces',serif;font-size:clamp(2.8rem,5.5vw,4.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;color:#fff;margin-bottom:16px}
-.hero-h1 em{font-style:italic;font-weight:300;color:var(--coral)}
-.hero-sub{font-size:1rem;color:rgba(255,255,255,.5);max-width:480px;line-height:1.75;margin-bottom:40px}
-.hero-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:48px}
-.hero-chip{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:50px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.45);background:rgba(255,255,255,.04);cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block}
-.hero-chip:hover{border-color:rgba(255,255,255,.3);color:#fff;background:rgba(255,255,255,.08)}
-/* Floating search bar inside hero */
-.hero-search-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px 20px 0 0;padding:28px 32px 0;margin-top:0}
-.search-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px}
-.search-bar{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px 16px;transition:all .18s}
-.search-bar:focus-within{border-color:rgba(255,87,51,.4);background:rgba(255,255,255,.1)}
-.search-bar input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:.95rem}
-.search-bar input::placeholder{color:rgba(255,255,255,.3)}
-.search-icon{font-size:1rem;color:rgba(255,255,255,.3);flex-shrink:0}
-.search-results{padding:8px 0 0;min-height:8px}
-.search-hit{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer}
-.search-hit:last-child{border-bottom:none}
-.search-hit-q{font-size:.86rem;font-weight:600;color:rgba(255,255,255,.8)}
-.search-hit-a{font-size:.78rem;color:rgba(255,255,255,.4);margin-top:3px;line-height:1.5}
-.search-none{font-size:.84rem;color:rgba(255,255,255,.3);padding:10px 0 8px}
-
-/* QUICK HELP */
-.quick-section{background:var(--cream);padding:0 64px 72px}
-.quick-inner{max-width:1100px;margin:0 auto;padding-top:56px}
-.section-eyebrow{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:14px;margin-bottom:32px}
-.section-eyebrow::after{content:'';flex:1;height:1px;background:var(--border)}
-.quick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-.quick-card{background:var(--card);border-radius:16px;padding:22px 20px;border:1.5px solid var(--border);cursor:pointer;transition:all var(--tr);text-decoration:none;color:inherit;display:block}
-.quick-card:hover{box-shadow:0 8px 28px rgba(13,27,42,.1);transform:translateY(-3px);border-color:var(--border2)}
-.quick-icon{font-size:1.4rem;margin-bottom:12px}
-.quick-title{font-weight:700;font-size:.9rem;margin-bottom:4px}
-.quick-desc{font-size:.78rem;color:var(--muted);line-height:1.6}
-
-/* MAIN LAYOUT */
-.main-section{background:var(--cream);padding:0 64px 80px}
-.main-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start}
-
-/* TICKET FORM CARD */
-.form-card{background:var(--card);border-radius:24px;padding:40px;border:1.5px solid var(--border)}
-.form-card-header{margin-bottom:28px}
-.form-card-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;letter-spacing:-.02em;margin-bottom:6px}
-.form-card-sub{font-size:.86rem;color:var(--muted);line-height:1.6}
-.form-section-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:20px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-.form-group{margin-bottom:16px}
-.form-label{display:block;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.form-input,.form-select,.form-textarea{width:100%;padding:11px 14px;border-radius:11px;border:1.5px solid var(--border2);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--navy);background:var(--cream);outline:none;transition:border-color .18s;-webkit-appearance:none}
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--coral);background:#fff}
-.form-textarea{resize:vertical;min-height:120px;line-height:1.65}
+.hero{background:var(--navy);padding:100px 64px 72px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,87,51,.18),transparent 65%);top:-180px;right:-80px;pointer-events:none}
+.hero::after{content:'';position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.1),transparent 65%);bottom:-80px;left:-60px;pointer-events:none}
+.hero-inner{max-width:640px;margin:0 auto;position:relative;z-index:1}
+.eyebrow{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.4rem,5vw,3.6rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;color:#fff;margin-bottom:14px}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--coral)}
+.hero-sub{font-size:.95rem;color:rgba(255,255,255,.45);line-height:1.75;margin-bottom:28px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.chip{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 13px;border-radius:50px;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.45);text-decoration:none;transition:.15s}.chip:hover{border-color:rgba(255,255,255,.35);color:#fff}
+/* LAYOUT */
+.wrap{max-width:1080px;margin:0 auto;padding:56px 64px 80px}
+.grid{display:grid;grid-template-columns:1fr 320px;gap:36px;align-items:start}
+/* CARD */
+.card{background:var(--card);border-radius:22px;padding:32px;border:1.5px solid var(--border)}
+.card-title{font-family:'Fraunces',serif;font-weight:900;font-size:1.3rem;letter-spacing:-.02em;margin-bottom:6px}
+.card-sub{font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:24px}
+/* TRIAGE */
+.tq-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
+.topic-btn{display:flex;align-items:center;gap:10px;padding:13px 15px;border-radius:12px;border:1.5px solid var(--border2);background:var(--cream);font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:600;color:var(--navy);cursor:pointer;transition:.18s;text-align:left;width:100%}
+.topic-btn:hover{border-color:var(--coral);background:#fff;box-shadow:0 4px 14px rgba(255,87,51,.08);transform:translateY(-2px)}
+.topic-icon{font-size:1.1rem;flex-shrink:0;width:24px;text-align:center}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:none;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;color:var(--muted);cursor:pointer;padding:0;margin-bottom:14px;transition:.15s}.back-btn:hover{color:var(--navy)}
+.topic-header{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.topic-header-icon{font-size:1.3rem}
+.topic-header-name{font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem;letter-spacing:-.01em}
+.opt-btn{display:block;width:100%;padding:11px 14px;border-radius:11px;border:1.5px solid var(--border2);background:#fff;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:500;color:var(--navy);cursor:pointer;transition:.15s;text-align:left;margin-bottom:7px}
+.opt-btn:hover{border-color:var(--coral);color:var(--coral)}
+.opt-btn.sel{border-color:var(--coral);background:rgba(255,87,51,.05);color:var(--coral);font-weight:700}
+.answer-box{display:none;margin-top:4px;padding:18px 20px;border-radius:14px;border:1.5px solid var(--border);background:rgba(13,27,42,.02)}
+.answer-title{font-family:'Fraunces',serif;font-weight:900;font-size:1rem;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.answer-body{font-size:.87rem;color:var(--navy);line-height:1.78}
+.answer-links{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--border)}
+.answer-link{padding:7px 14px;border-radius:50px;border:1.5px solid var(--border2);background:#fff;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;color:var(--navy);text-decoration:none;transition:.15s}.answer-link:hover{border-color:var(--coral);color:var(--coral)}
+.resolve-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.resolve-label{font-size:.84rem;color:var(--muted)}
+.yes-btn{padding:8px 18px;border-radius:50px;border:1.5px solid rgba(125,190,142,.35);background:rgba(125,190,142,.08);color:#2E7D47;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:.15s}.yes-btn:hover{background:rgba(125,190,142,.2)}
+.no-btn{padding:8px 20px;border-radius:50px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:.15s}.no-btn:hover{background:var(--coral)}
+.resolved-msg{display:none;text-align:center;padding:28px 0}
+/* REAL TICKET FORM */
+#realCard{display:none;margin-top:18px;border-top:3px solid var(--coral)}
+.sec-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:18px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.fg{margin-bottom:13px}
+.fl{display:block;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.fi,.fs,.ft{width:100%;padding:10px 13px;border-radius:10px;border:1.5px solid var(--border2);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--navy);background:var(--cream);outline:none;transition:.18s;-webkit-appearance:none}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--coral);background:#fff}
+.ft{resize:vertical;min-height:120px;line-height:1.65}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-/* Category helper panels */
-.cat-helper{border-radius:13px;padding:16px 18px;margin-top:2px;margin-bottom:4px;display:none}
-.cat-helper.show{display:block}
-.cat-helper-title{font-weight:700;font-size:.84rem;margin-bottom:8px}
-.cat-helper ul{margin:0;padding-left:16px;font-size:.81rem;line-height:1.85;color:rgba(13,27,42,.6)}
-.cat-helper a{color:var(--coral);font-weight:600;text-decoration:none}
-/* Priority selector */
-.priority-row{display:flex;gap:8px}
-.priority-opt{flex:1;padding:9px 6px;border-radius:10px;border:1.5px solid var(--border2);text-align:center;cursor:pointer;transition:all .15s;user-select:none}
-.priority-opt input{display:none}
-.priority-opt span{font-size:.76rem;font-weight:700;display:block;margin-top:3px}
-.priority-opt:hover{border-color:var(--border2);background:rgba(13,27,42,.03)}
-.priority-opt.selected-low{border-color:rgba(125,190,142,.4);background:rgba(125,190,142,.08)}
-.priority-opt.selected-normal{border-color:rgba(56,189,248,.4);background:rgba(56,189,248,.06)}
-.priority-opt.selected-high{border-color:rgba(255,87,51,.35);background:rgba(255,87,51,.06)}
-.form-error{background:rgba(255,87,51,.07);border:1.5px solid rgba(255,87,51,.22);border-radius:10px;padding:10px 14px;font-size:.84rem;color:var(--coral);margin-bottom:14px;display:none}
-.form-error.show{display:block}
-.submit-btn{width:100%;padding:14px;border-radius:50px;border:none;background:var(--navy);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:6px}
-.submit-btn:hover:not(:disabled){background:var(--coral);transform:translateY(-1px)}
-.submit-btn:disabled{opacity:.55;cursor:not-allowed}
-/* Success state */
-.success-state{display:none;text-align:center;padding:16px 0}
-.success-state.show{display:block}
-.success-icon-wrap{width:68px;height:68px;border-radius:50%;background:rgba(125,190,142,.12);border:2px solid rgba(125,190,142,.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 20px}
-.success-h3{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:900;margin-bottom:8px}
-.success-p{font-size:.88rem;color:var(--muted);line-height:1.7;margin-bottom:6px}
-.ticket-id-badge{font-family:'DM Mono',monospace;font-size:.8rem;font-weight:600;color:var(--coral);background:rgba(255,87,51,.08);border:1.5px solid rgba(255,87,51,.18);padding:7px 16px;border-radius:50px;display:inline-block;margin:12px 0 24px;letter-spacing:.05em}
-.success-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.action-btn{font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;padding:10px 22px;border-radius:50px;cursor:pointer;transition:all .18s;text-decoration:none;display:inline-flex;align-items:center;gap:6px;border:none}
-.action-btn.fill{background:var(--navy);color:#fff}.action-btn.fill:hover{background:var(--coral)}
-.action-btn.outline{background:transparent;color:var(--navy);border:2px solid var(--border2)}.action-btn.outline:hover{border-color:var(--navy);background:rgba(13,27,42,.04)}
-.btn-spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
-@keyframes spin{to{transform:rotate(360deg)}}
-
+.pri-row{display:flex;gap:8px}
+.pri-opt{flex:1;padding:9px 6px;border-radius:10px;border:1.5px solid var(--border2);text-align:center;cursor:pointer;transition:.15s;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600}
+.pri-opt.sl{border-color:rgba(125,190,142,.4);background:rgba(125,190,142,.08);color:#2E7D47}
+.pri-opt.sn{border-color:rgba(56,189,248,.4);background:rgba(56,189,248,.06);color:#0284c7}
+.pri-opt.sh{border-color:rgba(255,87,51,.35);background:rgba(255,87,51,.06);color:var(--coral)}
+.ferr{background:rgba(255,87,51,.07);border:1.5px solid rgba(255,87,51,.22);border-radius:10px;padding:10px 14px;font-size:.84rem;color:var(--coral);margin-bottom:13px;display:none}
+.ferr.show{display:block}
+.sub-btn{width:100%;padding:13px;border-radius:50px;border:none;background:var(--navy);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s;margin-top:6px}
+.sub-btn:hover:not(:disabled){background:var(--coral)}
+.sub-btn:disabled{opacity:.55;cursor:not-allowed}
+.success{display:none;text-align:center;padding:16px 0}.success.show{display:block}
+.suc-icon{width:60px;height:60px;border-radius:50%;background:rgba(125,190,142,.12);border:2px solid rgba(125,190,142,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 16px}
+.suc-h{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:900;margin-bottom:8px}
+.suc-p{font-size:.87rem;color:var(--muted);line-height:1.7;margin-bottom:6px}
+.tid{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--coral);background:rgba(255,87,51,.08);border:1.5px solid rgba(255,87,51,.18);padding:6px 14px;border-radius:50px;display:inline-block;margin:10px 0 20px}
+.suc-actions{display:flex;gap:10px;justify-content:center}
+.abtn{font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;padding:10px 22px;border-radius:50px;cursor:pointer;transition:.18s;text-decoration:none;border:none}
+.abtn.fill{background:var(--navy);color:#fff}.abtn.fill:hover{background:var(--coral)}
+.abtn.out{background:transparent;color:var(--navy);border:2px solid var(--border2)}.abtn.out:hover{border-color:var(--navy)}
 /* SIDEBAR */
-.sidebar{display:flex;flex-direction:column;gap:16px;position:sticky;top:80px}
-.s-card{background:var(--card);border-radius:20px;padding:24px;border:1.5px solid var(--border)}
-.s-card-title{font-family:'Fraunces',serif;font-weight:900;font-size:.95rem;margin-bottom:14px;letter-spacing:-.01em}
-/* Status card */
-.status-indicator{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:rgba(13,27,42,.03);margin-bottom:10px}
-.status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.status-dot.green{background:#7DBE8E;box-shadow:0 0 0 3px rgba(125,190,142,.2)}
-.status-dot.red{background:var(--coral);box-shadow:0 0 0 3px rgba(255,87,51,.2)}
-.status-dot.grey{background:#9CA3AF;box-shadow:0 0 0 3px rgba(156,163,175,.2)}
-.status-text{font-size:.85rem;font-weight:600}
-.status-time{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);margin-top:4px}
-/* Ticket preview */
-.my-tickets-empty{font-size:.84rem;color:var(--muted);line-height:1.65}
-.mini-ticket{padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all .15s;text-decoration:none;display:block}
-.mini-ticket:last-child{border-bottom:none}
-.mini-ticket:hover .mt-subject{color:var(--coral)}
-.mt-subject{font-size:.86rem;font-weight:600;color:var(--navy);transition:color .15s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mt-meta{display:flex;align-items:center;gap:6px;margin-top:3px}
-.mt-status{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;border-radius:50px}
-.mt-status.open{background:rgba(255,87,51,.1);color:var(--coral)}
-.mt-status.in-progress{background:rgba(244,197,66,.15);color:#9a7200}
-.mt-status.resolved{background:rgba(125,190,142,.15);color:#2E7D47}
-.mt-date{font-size:.72rem;color:var(--muted)}
-/* FAQ */
-.faq-search{width:100%;padding:8px 12px;border-radius:9px;border:1.5px solid var(--border2);font-family:'DM Sans',sans-serif;font-size:.84rem;color:var(--navy);background:var(--cream);outline:none;margin-bottom:12px;transition:border-color .15s}
-.faq-search:focus{border-color:var(--coral)}
-.faq-item{padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer}
-.faq-item:last-child{border-bottom:none;padding-bottom:0}
-.faq-item.hidden{display:none}
-.faq-q{font-size:.86rem;font-weight:600;color:var(--navy);display:flex;justify-content:space-between;align-items:center;gap:8px;user-select:none}
-.faq-arrow{font-size:.65rem;color:var(--muted);transition:transform .2s;flex-shrink:0}
-.faq-item.open .faq-arrow{transform:rotate(180deg)}
-.faq-a{font-size:.8rem;color:var(--muted);line-height:1.65;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s}
-.faq-item.open .faq-a{max-height:300px;padding-top:8px}
-.faq-none{font-size:.82rem;color:var(--muted);padding:8px 0;display:none}
-/* Resources */
-.resource-link{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:.86rem;font-weight:600;color:var(--navy);text-decoration:none;transition:color .15s}
-.resource-link:last-child{border-bottom:none}
-.resource-link:hover{color:var(--coral)}
-.resource-link span{font-size:.7rem;color:var(--muted);transition:color .15s}
-.resource-link:hover span{color:var(--coral)}
-
+.sidebar{display:flex;flex-direction:column;gap:14px;position:sticky;top:76px}
+.sc-title{font-family:'Fraunces',serif;font-weight:900;font-size:.95rem;margin-bottom:12px}
+.sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.sdot.g{background:#7DBE8E;box-shadow:0 0 0 3px rgba(125,190,142,.2)}
+.sdot.r{background:var(--coral);box-shadow:0 0 0 3px rgba(255,87,51,.2)}
+.sdot.grey{background:#9CA3AF}
+.status-row{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:11px;background:rgba(13,27,42,.03);margin-bottom:10px}
+.faq-item{padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-size:.85rem;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.faq-arr{font-size:.65rem;color:var(--muted);transition:.2s;flex-shrink:0}
+.faq-item.open .faq-arr{transform:rotate(180deg)}
+.faq-a{font-size:.8rem;color:var(--muted);line-height:1.65;max-height:0;overflow:hidden;transition:.3s}
+.faq-item.open .faq-a{max-height:300px;padding-top:7px}
+.rlink{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:.85rem;font-weight:600;color:var(--navy);text-decoration:none;transition:.15s}
+.rlink:last-child{border-bottom:none}.rlink:hover{color:var(--coral)}
 /* FOOTER */
-footer{border-top:1px solid var(--border);padding:24px 64px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
-.footer-logo{font-family:'Fraunces',serif;font-weight:900;font-size:1rem;color:var(--navy);letter-spacing:-.02em}
-.footer-logo span{color:var(--coral)}
-.footer-links{display:flex;gap:18px;flex-wrap:wrap}
-.footer-links a{font-size:.8rem;color:var(--muted);text-decoration:none;transition:color .15s}
-.footer-links a:hover{color:var(--navy)}
-
-/* ARTICLE OVERLAY */
-.article-overlay{position:fixed;inset:0;z-index:150;background:var(--cream);overflow-y:auto;opacity:0;pointer-events:none;transform:translateY(16px);transition:opacity .25s,transform .25s}
-.article-overlay.open{opacity:1;pointer-events:all;transform:translateY(0)}
-.article-overlay-inner{max-width:680px;margin:0 auto;padding:80px 40px 80px}
-.article-overlay-bar{position:sticky;top:0;z-index:10;background:rgba(245,240,232,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.article-body-render{font-size:.95rem;line-height:1.8;color:var(--navy)}
-.article-body-render h2{font-family:'Fraunces',serif;font-weight:900;font-size:1.3rem;letter-spacing:-.02em;margin:28px 0 10px;color:var(--navy)}
-.article-body-render p{margin-bottom:14px}
-.article-body-render ul,.article-body-render ol{padding-left:22px;margin-bottom:14px}
-.article-body-render li{margin-bottom:6px}
-.article-body-render code{font-family:'DM Mono',monospace;background:rgba(13,27,42,.07);padding:2px 6px;border-radius:4px;font-size:.88em}
-.article-body-render hr{border:none;border-top:1px solid var(--border);margin:20px 0}
-.article-body-render a{color:var(--coral);text-decoration:none;font-weight:600}
-.article-body-render a:hover{text-decoration:underline}
-@media(max-width:600px){.article-overlay-inner{padding:70px 20px 60px}.article-overlay-bar{padding:0 20px}}
-#_sysdown{display:none;position:fixed;inset:0;z-index:99999;background:var(--navy);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;font-family:'DM Sans',sans-serif}
-#_sysdown.show{display:flex}
-#_sysdown h1{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#fff;margin-bottom:10px}
-#_sysdown h1 em{color:var(--coral);font-style:italic;font-weight:300}
-#_sysdown p{color:rgba(255,255,255,.5);max-width:400px;line-height:1.7;margin-bottom:24px}
-#_sysdown a,#_sysdown button{padding:10px 24px;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;margin:4px;border:none;cursor:pointer;text-decoration:none;display:inline-block}
-#_sysdown a{background:var(--coral);color:#fff}
-#_sysdown button{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
-
-@media(max-width:900px){
-  nav{padding:0 20px}
-  .hero{padding:90px 20px 0}
-  .hero-search-wrap{padding:20px 20px 0}
-  .quick-section,.main-section{padding-left:20px;padding-right:20px}
-  .main-inner{grid-template-columns:1fr}
-  .sidebar{position:static}
-  .form-row{grid-template-columns:1fr}
-  footer{padding:20px}
-}
-
-/* ── UNIVERSAL FOOTER ── */
-.u-footer{background:#0D1B2A;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif}
-.u-footer-top{padding:64px 64px 48px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:48px;max-width:1200px;margin:0 auto;position:relative;z-index:1;border-bottom:1px solid rgba(255,255,255,.07)}
-.u-footer-brand-name{font-family:'Fraunces',serif;font-weight:900;font-size:1.2rem;color:#fff;letter-spacing:-.02em;margin-bottom:10px;text-decoration:none;display:block}
-.u-footer-brand-name span{color:#FF5733}
-.u-footer-brand-sub{font-size:.82rem;color:rgba(255,255,255,.32);line-height:1.7;max-width:200px}
-.u-footer-cols{display:flex;gap:56px;flex-wrap:wrap}
-.u-footer-col-title{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px}
-.u-footer-col a{display:block;font-size:.84rem;color:rgba(255,255,255,.42);text-decoration:none;margin-bottom:10px;transition:color .15s}
-.u-footer-col a:hover{color:#fff}
-.u-footer-big{padding:0 64px;overflow:hidden;position:relative;z-index:1;line-height:1}
+.u-footer{background:#0D1B2A;overflow:hidden;font-family:'DM Sans',sans-serif}
+.u-footer-top{padding:56px 64px 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;max-width:1200px;margin:0 auto;border-bottom:1px solid rgba(255,255,255,.07)}
+.u-footer-brand{font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:#fff;text-decoration:none;display:block;margin-bottom:8px}
+.u-footer-brand span{color:#FF5733}
+.u-footer-brand-sub{font-size:.8rem;color:rgba(255,255,255,.3);line-height:1.65;max-width:180px}
+.u-footer-cols{display:flex;gap:48px;flex-wrap:wrap}
+.u-footer-col-title{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.26);margin-bottom:12px}
+.u-footer-col a{display:block;font-size:.82rem;color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:9px;transition:.15s}.u-footer-col a:hover{color:#fff}
+.u-footer-big{padding:0 64px;overflow:hidden;line-height:1}
 .u-footer-big-text{font-family:'Fraunces',serif;font-size:clamp(5rem,14vw,13rem);font-weight:900;color:rgba(255,255,255,.055);letter-spacing:-.04em;white-space:nowrap;user-select:none;display:block;margin-bottom:-0.12em}
-.u-footer-bottom{padding:20px 64px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;max-width:1200px;margin:0 auto;position:relative;z-index:1}
-.u-footer-copy{font-size:.76rem;color:rgba(255,255,255,.22)}
-.u-footer-small-links{display:flex;gap:18px;flex-wrap:wrap}
-.u-footer-small-links a{font-size:.76rem;color:rgba(255,255,255,.22);text-decoration:none;transition:color .15s}
-.u-footer-small-links a:hover{color:rgba(255,255,255,.6)}
-@media(max-width:768px){
-  .u-footer-top{padding:48px 24px 36px;gap:36px}
-  .u-footer-big{padding:0 24px}
-  .u-footer-bottom{padding:16px 24px}
-  .u-footer-cols{gap:28px}
+.u-footer-bottom{padding:18px 64px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;max-width:1200px;margin:0 auto}
+.u-footer-copy{font-size:.75rem;color:rgba(255,255,255,.22)}
+.u-footer-links{display:flex;gap:16px}
+.u-footer-links a{font-size:.75rem;color:rgba(255,255,255,.22);text-decoration:none;transition:.15s}.u-footer-links a:hover{color:rgba(255,255,255,.6)}
+@media(max-width:900px){
+  nav{padding:0 20px}.wrap{padding:40px 20px 60px}.grid{grid-template-columns:1fr}.sidebar{position:static}.form-row{grid-template-columns:1fr}
+  .hero{padding:84px 24px 56px}.u-footer-top{padding:40px 24px 32px}.u-footer-big{padding:0 24px}.u-footer-bottom{padding:14px 24px}.u-footer-cols{gap:24px}
 }
 </style>
 </head>
 <body>
 
-<div id="_sysdown">
-  <h1>System <em>Down.</em></h1>
-  <p>Elaborate is having trouble connecting. Try again in a moment.</p>
-  <div>
-    <a href="/status.html">Status Page</a>
-    <button onclick="location.reload()">Try Again</button>
-  </div>
-</div>
-
 <nav>
-  <a class="nav-logo" href="/index.html">Elaborate<span>.</span></a>
-  <div class="nav-links">
-    <a class="nav-link" href="/index.html">Hub</a>
-    <a class="nav-link" href="/about.html">About</a>
-    <a class="nav-link" href="/docs.html">Docs</a>
-    <a class="nav-link" id="myTicketsLink" href="/my-tickets.html" style="display:none">My Tickets</a>
-    <a class="nav-cta" href="#ticket-form">Open a Ticket</a>
+  <a class="logo" href="/index.html">Elaborate<span>.</span></a>
+  <div class="nav-r">
+    <a class="nl" href="/index.html">Hub</a>
+    <a class="nl" href="/help.html">Help Center</a>
+    <a class="nl" href="/my-tickets.html">My Tickets</a>
+    <a class="ncta" href="#triage">Get Help</a>
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow">Elaborate Support Center</div>
-    <h1 class="hero-h1">How can we<br/><em>help you?</em></h1>
-    <p class="hero-sub">Could not find your answer in the <a href="/help.html" style="color:var(--coral);font-weight:700;text-decoration:none">Help Center</a>? Submit a ticket and a real person will reply — usually within a week.</p>
-    <div class="hero-chips">
-      <a class="hero-chip" href="#quick-help">Quick guides</a>
-      <a class="hero-chip" href="#ticket-form">Open a ticket</a>
-      <a class="hero-chip" href="/my-tickets.html">Track my ticket</a>
-      <a class="hero-chip" href="/status.html">System status</a>
-      <a class="hero-chip" href="/docs.html">Documentation</a>
-    </div>
-    <div class="hero-search-wrap">
-      <div class="search-label">Search help articles</div>
-      <div class="search-bar">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="heroSearch" placeholder="e.g. reset password, add custom app, change theme…" oninput="heroSearchInput(this.value)" autocomplete="off"/>
-      </div>
-      <div class="search-results" id="heroSearchResults"></div>
+    <div class="eyebrow">Elaborate Support</div>
+    <h1>Still need <em>help?</em></h1>
+    <p class="hero-sub">Could not find your answer in the <a href="/help.html" style="color:var(--coral);font-weight:700;text-decoration:none">Help Center</a>? Our triage wizard will guide you to the right answer &mdash; or unlock a support ticket if you truly need one.</p>
+    <div class="chips">
+      <a class="chip" href="/help.html">Help Center</a>
+      <a class="chip" href="#triage">Get Help</a>
+      <a class="chip" href="/my-tickets.html">My Tickets</a>
+      <a class="chip" href="/status.html">Status</a>
     </div>
   </div>
 </section>
 
-<!-- QUICK HELP -->
-<section class="quick-section" id="quick-help">
-  <div class="quick-inner">
-    <div class="section-eyebrow">Quick help</div>
-    <div class="quick-grid">
-      <a class="quick-card" href="/help.html" style="border-color:rgba(255,87,51,.25);background:linear-gradient(135deg,rgba(255,87,51,.04),var(--card))">
-        <div class="quick-icon">🏠</div>
-        <div class="quick-title" style="color:var(--coral)">Help Center ↗</div>
-        <div class="quick-desc">Browse all help articles by category — the fastest way to find your answer before opening a ticket.</div>
-      </a>
-      <a class="quick-card" href="/docs.html#getting-started">
-        <div class="quick-icon">🚀</div>
-        <div class="quick-title">Getting Started</div>
-        <div class="quick-desc">New to Elaborate? Set up your account, add apps, and explore the hub.</div>
-      </a>
-      <a class="quick-card" href="/docs.html#account">
-        <div class="quick-icon">🔐</div>
-        <div class="quick-title">Account & Login</div>
-        <div class="quick-desc">Reset your password, change your email, or recover a disabled account.</div>
-      </a>
-      <a class="quick-card" href="/docs.html#apps">
-        <div class="quick-icon">📱</div>
-        <div class="quick-title">Apps & Library</div>
-        <div class="quick-desc">Add custom apps, request new ones, or manage your collections.</div>
-      </a>
-      <a class="quick-card" href="/docs.html#schedule">
-        <div class="quick-icon">🗓</div>
-        <div class="quick-title">Schedule</div>
-        <div class="quick-desc">Set up your class schedule, import from Aspen, and configure block days.</div>
-      </a>
-      <a class="quick-card" href="/docs.html#teachers">
-        <div class="quick-icon">🏫</div>
-        <div class="quick-title">For Teachers</div>
-        <div class="quick-desc">Create classrooms, pin apps for students, and post announcements.</div>
-      </a>
-      <a class="quick-card" href="/careers.html">
-        <div class="quick-icon">💼</div>
-        <div class="quick-title">Join the Team</div>
-        <div class="quick-desc">Interested in contributing to Elaborate? See our open volunteer roles.</div>
-      </a>
-    </div>
-  </div>
-</section>
+<div class="wrap" id="triage">
+  <div class="grid">
+    <!-- LEFT: TRIAGE + TICKET -->
+    <div>
+      <!-- TRIAGE CARD -->
+      <div class="card" id="triageCard">
+        <div class="card-title">Get Help</div>
+        <div class="card-sub">Answer a couple of quick questions &mdash; most issues resolve here without waiting for our team. A real ticket form only unlocks if we genuinely cannot help.</div>
 
-<!-- MAIN: FORM + SIDEBAR -->
-<section class="main-section" id="ticket-form">
-  <div class="main-inner">
-
-    <!-- FORM -->
-    <div class="form-card">
-      <div class="form-card-header">
-        <div class="form-card-title">Open a Support Ticket</div>
-        <div class="form-card-sub">Still stuck after checking the <a href="/help.html" style="color:var(--coral);font-weight:600;text-decoration:none">Help Center</a>? Describe your issue below and we will get back to you. Smaller issues: within a week. Larger requests: up to a month.</div>
-      </div>
-
-      <div class="form-error" id="formError"></div>
-      <div id="ticketForm">
-
-        <div class="form-section-label">01 — About You</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">First Name</label>
-            <input class="form-input" id="ticketFirst" type="text" placeholder="Alex" maxlength="40"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Last Name</label>
-            <input class="form-input" id="ticketLast" type="text" placeholder="Rivera" maxlength="40"/>
+        <!-- Step 1 -->
+        <div id="step1">
+          <div class="tq-label">What do you need help with?</div>
+          <div class="topic-grid">
+            <button class="topic-btn" onclick="pick('account')"><span class="topic-icon">&#128272;</span>Account &amp; Login</button>
+            <button class="topic-btn" onclick="pick('apps')"><span class="topic-icon">&#128241;</span>Apps &amp; Library</button>
+            <button class="topic-btn" onclick="pick('bug')"><span class="topic-icon">&#128027;</span>Something is Broken</button>
+            <button class="topic-btn" onclick="pick('classroom')"><span class="topic-icon">&#127979;</span>Classroom / Teacher</button>
+            <button class="topic-btn" onclick="pick('schedule')"><span class="topic-icon">&#128467;</span>Schedule</button>
+            <button class="topic-btn" onclick="pick('district')"><span class="topic-icon">&#127959;</span>District / School</button>
+            <button class="topic-btn" onclick="pick('developer')"><span class="topic-icon">&#128296;</span>Developer / App Listing</button>
+            <button class="topic-btn" onclick="pick('other')"><span class="topic-icon">&#128172;</span>Something Else</button>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input class="form-input" id="ticketEmail" type="email" placeholder="you@school.edu"/>
+
+        <!-- Step 2 -->
+        <div id="step2" style="display:none">
+          <button class="back-btn" onclick="goBack()">&#8592; Back</button>
+          <div class="topic-header">
+            <span class="topic-header-icon" id="t2icon"></span>
+            <span class="topic-header-name" id="t2name"></span>
           </div>
-          <div class="form-group">
-            <label class="form-label">Your Role</label>
-            <select class="form-select" id="ticketRole">
-              <option value="">Select…</option>
-              <option value="student">Student</option>
-              <option value="teacher">Teacher</option>
-              <option value="admin">School / IT Admin</option>
-              <option value="parent">Parent</option>
-              <option value="developer">Developer</option>
+          <div id="optList"></div>
+          <div class="answer-box" id="answerBox">
+            <div id="answerContent"></div>
+            <div class="resolve-bar">
+              <span class="resolve-label">Did this solve it?</span>
+              <button class="yes-btn" onclick="solved()">Yes, sorted!</button>
+              <button class="no-btn" onclick="needHelp()">Still need help &#8594;</button>
+            </div>
+          </div>
+          <div class="resolved-msg" id="resolvedMsg">
+            <div style="font-size:2rem;margin-bottom:10px">&#127881;</div>
+            <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1.15rem;margin-bottom:8px">Glad that helped!</div>
+            <div style="font-size:.86rem;color:var(--muted);line-height:1.7;margin-bottom:16px">The Help Center is always here if you need it again.</div>
+            <a href="/help.html" style="display:inline-block;padding:10px 22px;border-radius:50px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.86rem;text-decoration:none" onmouseover="this.style.background='var(--coral)'" onmouseout="this.style.background='var(--navy)'">Back to Help Center</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- REAL TICKET FORM -->
+      <div class="card" id="realCard" style="display:none">
+        <div style="margin-bottom:8px">
+          <span style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);padding:3px 10px;border-radius:50px;background:rgba(255,87,51,.08);border:1px solid rgba(255,87,51,.2)">Human support</span>
+        </div>
+        <div class="card-title">Open a Support Ticket</div>
+        <div class="card-sub">Our team will take a look and reply to your email &mdash; typically within a week.</div>
+        <div class="ferr" id="ferr"></div>
+        <div id="tform">
+          <div class="sec-label" style="margin-top:0">01 &mdash; About You</div>
+          <div class="form-row">
+            <div class="fg"><label class="fl">First Name</label><input class="fi" id="tFirst" type="text" placeholder="Alex" maxlength="40"/></div>
+            <div class="fg"><label class="fl">Last Name</label><input class="fi" id="tLast" type="text" placeholder="Rivera" maxlength="40"/></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label class="fl">Email</label><input class="fi" id="tEmail" type="email" placeholder="you@school.edu"/></div>
+            <div class="fg"><label class="fl">Your Role</label>
+              <select class="fs" id="tRole">
+                <option value="">Select&hellip;</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="admin">School / IT Admin</option>
+                <option value="parent">Parent</option>
+                <option value="developer">Developer</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="sec-label">02 &mdash; Your Issue</div>
+          <div class="fg"><label class="fl">Category</label>
+            <select class="fs" id="tCategory">
+              <option value="" disabled selected>Select&hellip;</option>
+              <option value="bug">Bug &mdash; something is broken</option>
+              <option value="account">Account issue</option>
+              <option value="feature">Feature request</option>
+              <option value="classroom">Classroom / teacher issue</option>
+              <option value="schedule">Schedule issue</option>
+              <option value="appeal">Account suspension appeal</option>
+              <option value="privacy">Privacy concern or data request</option>
+              <option value="developer">Developer / app listing</option>
+              <option value="district">District account request</option>
+              <option value="partnership">Partnership inquiry</option>
               <option value="other">Other</option>
             </select>
           </div>
-        </div>
-
-        <div class="form-section-label">02 — Your Issue</div>
-        <div class="form-group">
-          <label class="form-label">Category</label>
-          <select class="form-select" id="ticketCategory" onchange="handleCategoryChange()">
-            <option value="" disabled selected>Select a category…</option>
-            <option value="bug">🐛 Bug — something is broken</option>
-            <option value="account">🔐 Account issue</option>
-            <option value="feature">💡 Feature request</option>
-            <option value="classroom">🏫 Classroom / teacher issue</option>
-            <option value="schedule">🗓 Schedule issue</option>
-            <option value="appeal">📋 Account suspension appeal</option>
-            <option value="privacy">🔒 Privacy concern or data request</option>
-            <option value="developer">🛠 Developer / app listing</option>
-            <option value="district">🏛 District account request</option>
-            <option value="partnership">🤝 Partnership inquiry</option>
-            <option value="other">💬 Other</option>
-          </select>
-        </div>
-
-        <!-- Category helpers -->
-        <div class="cat-helper" id="helper-bug" style="background:rgba(255,87,51,.05);border:1.5px solid rgba(255,87,51,.18)">
-          <div class="cat-helper-title">🐛 Reporting a bug</div>
-          <ul>
-            <li>Describe exactly what you did, what you expected, and what happened instead</li>
-            <li>Include your browser and device (e.g. Chrome on Windows 11)</li>
-            <li>Paste any error messages you see in the console or on screen</li>
-          </ul>
-        </div>
-        <div class="cat-helper" id="helper-appeal" style="background:rgba(167,139,250,.05);border:1.5px solid rgba(167,139,250,.2)">
-          <div class="cat-helper-title">📋 Suspension appeals</div>
-          <ul>
-            <li>Include the email address tied to your account</li>
-            <li>Explain why you believe the suspension was issued in error</li>
-            <li>Appeals are reviewed within 2 weeks</li>
-          </ul>
-        </div>
-        <div class="cat-helper" id="helper-district" style="background:rgba(244,197,66,.05);border:1.5px solid rgba(244,197,66,.25)">
-          <div class="cat-helper-title">🏛 District account requests</div>
-          <ul>
-            <li>Your district or school name and location</li>
-            <li>Your role (principal, IT admin, superintendent, etc.)</li>
-            <li>Estimated number of teachers and students</li>
-            <li>Preferred subscription plan (Trial / Monthly / Annual)</li>
-          </ul>
-        </div>
-        <div class="cat-helper" id="helper-developer" style="background:rgba(56,189,248,.05);border:1.5px solid rgba(56,189,248,.2)">
-          <div class="cat-helper-title">🛠 Developer tickets</div>
-          <ul>
-            <li>For <strong>new app submissions</strong> — use the <a href="/developers.html">submission form</a> instead, it is faster</li>
-            <li>For <strong>listing updates</strong> — include your app name, current URL, and what needs changing</li>
-            <li>For <strong>API or integration questions</strong> — include your app URL and what you are building</li>
-          </ul>
-        </div>
-        <div class="cat-helper" id="helper-partnership" style="background:rgba(125,190,142,.05);border:1.5px solid rgba(125,190,142,.22)">
-          <div class="cat-helper-title">🤝 Partnership inquiries</div>
-          <ul>
-            <li>Your company or organization name and what you do</li>
-            <li>The kind of partnership you have in mind</li>
-            <li>A contact email and best time to reach you</li>
-          </ul>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Priority</label>
-          <div class="priority-row" id="priorityRow">
-            <label class="priority-opt selected-low" id="pri-low" onclick="selectPriority('low')">
-              <span>🟢</span><span>Low</span>
-            </label>
-            <label class="priority-opt" id="pri-normal" onclick="selectPriority('normal')">
-              <span>🔵</span><span>Normal</span>
-            </label>
-            <label class="priority-opt" id="pri-high" onclick="selectPriority('high')">
-              <span>🔴</span><span>High</span>
-            </label>
+          <div class="fg"><label class="fl">Priority</label>
+            <div class="pri-row">
+              <label class="pri-opt sl" id="pl" onclick="setPri('l')">Low</label>
+              <label class="pri-opt" id="pn" onclick="setPri('n')">Normal</label>
+              <label class="pri-opt" id="ph" onclick="setPri('h')">High</label>
+            </div>
           </div>
+          <div class="fg"><label class="fl">Subject</label><input class="fi" id="tSubject" type="text" placeholder="Brief summary of your issue" maxlength="120"/></div>
+          <div class="fg"><label class="fl">Description</label><textarea class="ft" id="tBody" placeholder="Describe your issue in detail. Steps to reproduce, error messages, browser/device &mdash; the more context the better." style="min-height:130px"></textarea></div>
+          <div class="sec-label">03 &mdash; Final Details</div>
+          <div class="fg"><label class="fl">Browser &amp; Device <span style="opacity:.6;font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label><input class="fi" id="tDevice" type="text" placeholder="e.g. Chrome 124 on Windows 11" maxlength="100"/></div>
+          <div class="fg"><label class="fl">Anything else? <span style="opacity:.6;font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label><textarea class="ft" id="tExtra" placeholder="Links, account email if different, anything else&hellip;" style="min-height:70px"></textarea></div>
+          <button class="sub-btn" id="subBtn" onclick="submitTicket()"><span id="subTxt">Send Ticket &rarr;</span></button>
         </div>
-        <div class="form-group">
-          <label class="form-label">Subject</label>
-          <input class="form-input" id="ticketSubject" type="text" placeholder="Brief summary of your issue" maxlength="120"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Description</label>
-          <textarea class="form-textarea" id="ticketBody" placeholder="Describe your issue in detail. The more context you give, the faster we can help. Steps to reproduce, error messages, screenshots — all welcome." style="min-height:140px"></textarea>
-        </div>
-
-        <div class="form-section-label">03 — Final Details</div>
-        <div class="form-group">
-          <label class="form-label">Browser & Device <span style="font-weight:400;text-transform:none;letter-spacing:0;opacity:.6">(optional but helpful for bug reports)</span></label>
-          <input class="form-input" id="ticketDevice" type="text" placeholder="e.g. Chrome 124 on Windows 11 / Safari on iPhone 15" maxlength="100"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Anything else? <span style="font-weight:400;text-transform:none;letter-spacing:0;opacity:.6">(optional)</span></label>
-          <textarea class="form-textarea" id="ticketExtra" placeholder="Links, screenshots described in text, account email if different from above, anything else…" style="min-height:72px"></textarea>
-        </div>
-
-        <button class="submit-btn" id="submitBtn" onclick="submitTicket()">
-          <span id="submitBtnText">Send Ticket →</span>
-        </button>
-      </div>
-
-      <div class="success-state" id="successState">
-        <div class="success-icon-wrap">✓</div>
-        <div class="success-h3">Ticket submitted!</div>
-        <p class="success-p">Thanks for reaching out. We have received your ticket and will respond to your email as soon as possible.</p>
-        <p class="success-p" style="margin-top:4px">Your ticket ID:</p>
-        <div class="ticket-id-badge" id="ticketIdDisplay"></div>
-        <div class="success-actions">
-          <a class="action-btn fill" href="/my-tickets.html">View My Tickets →</a>
-          <button class="action-btn outline" onclick="resetForm()">Submit another</button>
+        <div class="success" id="successState">
+          <div class="suc-icon">&#10003;</div>
+          <div class="suc-h">Ticket submitted!</div>
+          <p class="suc-p">We received your ticket and will reply to your email as soon as possible.</p>
+          <p class="suc-p">Your ticket ID:</p>
+          <div class="tid" id="tidDisplay"></div>
+          <div class="suc-actions">
+            <a class="abtn fill" href="/my-tickets.html">View My Tickets &rarr;</a>
+            <button class="abtn out" onclick="resetForm()">Submit another</button>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-
-      <!-- System status -->
-      <div class="s-card">
-        <div class="s-card-title">System Status</div>
-        <div class="status-indicator">
-          <div class="status-dot grey" id="statusDot"></div>
+      <div class="card">
+        <div class="sc-title">System Status</div>
+        <div class="status-row">
+          <div class="sdot grey" id="sdot"></div>
           <div>
-            <div class="status-text" id="statusLabel">Checking…</div>
-            <div class="status-time" id="statusTime"></div>
+            <div style="font-size:.85rem;font-weight:600" id="slabel">Checking&hellip;</div>
+            <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);margin-top:3px" id="stime"></div>
           </div>
         </div>
-        <a href="/status.html" style="font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--coral)'" onmouseout="this.style.color='var(--muted)'">Full status page →</a>
+        <a href="/status.html" style="font-size:.8rem;font-weight:600;color:var(--muted);text-decoration:none" onmouseover="this.style.color='var(--coral)'" onmouseout="this.style.color='var(--muted)'">Full status page &rarr;</a>
       </div>
-
-      <!-- Your tickets -->
-      <div class="s-card" id="sidebarTicketsCard">
-        <div class="s-card-title">Your Recent Tickets</div>
-        <div id="sidebarTickets">
-          <div class="my-tickets-empty">Sign in to Elaborate to track your tickets here.</div>
-        </div>
-        <a href="/my-tickets.html" id="sidebarAllTickets" style="display:none;margin-top:14px;font-size:.82rem;font-weight:700;color:var(--navy);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--coral)'" onmouseout="this.style.color='var(--navy)'">All tickets →</a>
+      <div class="card" id="ticketsCard">
+        <div class="sc-title">Your Recent Tickets</div>
+        <div id="sideTickets"><p style="font-size:.84rem;color:var(--muted)">Sign in to track your tickets here.</p></div>
+        <a href="/my-tickets.html" id="allTicketsLink" style="display:none;margin-top:12px;font-size:.82rem;font-weight:700;color:var(--navy);text-decoration:none" onmouseover="this.style.color='var(--coral)'" onmouseout="this.style.color='var(--navy)'">All tickets &rarr;</a>
       </div>
-
-      <!-- FAQ -->
-      <div class="s-card">
-        <div class="s-card-title">Common Questions</div>
-        <input class="faq-search" type="text" placeholder="Search questions…" oninput="faqSearch(this.value)"/>
+      <div class="card">
+        <div class="sc-title">Common Questions</div>
         <div id="faqList">
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">How do I add a custom app?<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">Go to your hub and click the Add App card at the end of the grid. Give it a name, URL, icon, and color. It will appear in your hub immediately.</div>
-          </div>
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">I forgot my password.<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">On the login screen click "Forgot password" to reset via email. If you signed up with Google, use Google Sign-In instead — there is no separate password.</div>
-          </div>
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">Why was my account disabled?<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">Accounts can be disabled for violating the usage policy or at the request of a school administrator. Submit a ticket with the Suspension Appeal category to contest it.</div>
-          </div>
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">Is Elaborate free?<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">Yes, completely free for students and teachers. No ads, no premium tiers, no hidden fees. District plans are available for schools wanting additional features.</div>
-          </div>
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">How do I change my theme?<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">Click your avatar in the hub top-right, go to Settings, then Theme. Choose from Default, Dark, Ocean, and Forest.</div>
-          </div>
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">How do I set up my class schedule?<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">Click the Schedule button in the hub sidebar. You can add periods manually or import from Follett Aspen using an .ics file. Block day schedules (A/B/C) are also supported.</div>
-          </div>
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">How do I join a classroom?<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">Ask your teacher for the classroom code. In your hub, click Join Classroom in the sidebar and enter the code. You will see teacher-pinned apps and announcements immediately.</div>
-          </div>
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">Can I submit an app to the library?<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">Yes. Visit the Developers page and fill out the app submission form. Apps are reviewed by the team before being added to the public library.</div>
-          </div>
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">How long does support take to reply?<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">For most issues: within a week. For suspension appeals and larger requests: up to a month. All tickets are read by a real team member.</div>
-          </div>
-          <div class="faq-item" onclick="toggleFaq(this)">
-            <div class="faq-q">How do I delete my account?<span class="faq-arrow">▼</span></div>
-            <div class="faq-a">Submit a Privacy concern ticket with your account email and request deletion. We will process it within 30 days in accordance with our privacy policy.</div>
-          </div>
+          <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How do I add a custom app?<span class="faq-arr">&#9660;</span></div><div class="faq-a">Go to your hub and click the Add App card at the end of the grid.</div></div>
+          <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">I forgot my password.<span class="faq-arr">&#9660;</span></div><div class="faq-a">Click Forgot password on the login screen. If you used Google Sign-In, click Continue with Google.</div></div>
+          <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Why was my account disabled?<span class="faq-arr">&#9660;</span></div><div class="faq-a">Accounts can be disabled for policy violations or by a school admin. Use the Suspension Appeal category to contest it.</div></div>
+          <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Is Elaborate free?<span class="faq-arr">&#9660;</span></div><div class="faq-a">Yes, completely free for students and teachers. No ads, no premium tiers.</div></div>
+          <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How long does support take to reply?<span class="faq-arr">&#9660;</span></div><div class="faq-a">Most issues: within a week. Suspension appeals and larger requests: up to a month.</div></div>
         </div>
-        <div class="faq-none" id="faqNone">No questions match your search.</div>
       </div>
-
-      <!-- Resources -->
-      <div class="s-card">
-        <div class="s-card-title">Resources</div>
-        <a class="resource-link" href="/docs.html"><span>Documentation</span><span>→</span></a>
-        <a class="resource-link" href="/about.html"><span>About Elaborate</span><span>→</span></a>
-        <a class="resource-link" href="/careers.html"><span>Join the Team</span><span>→</span></a>
-        <a class="resource-link" href="/legal.html?tab=terms"><span>Terms of Service</span><span>→</span></a>
-        <a class="resource-link" href="/legal.html?tab=privacy"><span>Privacy Policy</span><span>→</span></a>
-        <a class="resource-link" href="/status.html"><span>System Status</span><span>→</span></a>
+      <div class="card">
+        <div class="sc-title">Resources</div>
+        <a class="rlink" href="/help.html"><span>Help Center</span><span>&#8594;</span></a>
+        <a class="rlink" href="/docs.html"><span>Documentation</span><span>&#8594;</span></a>
+        <a class="rlink" href="/about.html"><span>About Elaborate</span><span>&#8594;</span></a>
+        <a class="rlink" href="/legal.html?tab=privacy"><span>Privacy Policy</span><span>&#8594;</span></a>
       </div>
-
     </div>
   </div>
-</section>
+</div>
 
+<!-- FOOTER -->
 <footer class="u-footer">
   <div class="u-footer-top">
     <div>
-      <a class="u-footer-brand-name" href="/index.html">Elaborate<span>.</span></a>
+      <a class="u-footer-brand" href="/index.html">Elaborate<span>.</span></a>
       <div class="u-footer-brand-sub">A student hub built for the way school actually works.</div>
     </div>
     <div class="u-footer-cols">
       <div class="u-footer-col">
         <div class="u-footer-col-title">Product</div>
-        <a href="/index.html">Hub</a>
-        <a href="/about.html">About</a>
-        <a href="/status.html">Status</a>
-        <a href="/developers.html">Developers</a>
-        <a href="/districts.html">Districts</a>
+        <a href="/index.html">Hub</a><a href="/about.html">About</a><a href="/status.html">Status</a><a href="/developers.html">Developers</a><a href="/districts.html">Districts</a>
       </div>
       <div class="u-footer-col">
         <div class="u-footer-col-title">Support</div>
-        <a href="/help.html">Help Center</a>
-        <a href="/support.html">Open a Ticket</a>
-        <a href="/my-tickets.html">My Tickets</a>
-        <a href="/docs.html">Documentation</a>
+        <a href="/help.html">Help Center</a><a href="/support.html">Open a Ticket</a><a href="/my-tickets.html">My Tickets</a><a href="/docs.html">Documentation</a>
       </div>
       <div class="u-footer-col">
         <div class="u-footer-col-title">Company</div>
-        <a href="/about.html">About</a>
-        <a href="/careers.html">Careers</a>
-        <a href="/donate.html">Donate</a>
-        <a href="/legal.html?tab=terms">Terms of Service</a>
-        <a href="/legal.html?tab=privacy">Privacy Policy</a>
+        <a href="/about.html">About</a><a href="/careers.html">Careers</a><a href="/donate.html">Donate</a><a href="/legal.html?tab=terms">Terms</a><a href="/legal.html?tab=privacy">Privacy</a>
       </div>
     </div>
   </div>
-  <div class="u-footer-big">
-    <span class="u-footer-big-text">Elaborate.</span>
-  </div>
+  <div class="u-footer-big"><span class="u-footer-big-text">Elaborate.</span></div>
   <div class="u-footer-bottom">
     <div class="u-footer-copy">&copy; 2025 Elaborate. All rights reserved.</div>
-    <div class="u-footer-small-links">
-      <a href="/legal.html?tab=privacy">Privacy</a>
-      <a href="/legal.html?tab=terms">Terms</a>
-      <a href="/help.html">Help</a>
-      <a href="/support.html">Support</a>
-    </div>
+    <div class="u-footer-links"><a href="/legal.html?tab=privacy">Privacy</a><a href="/legal.html?tab=terms">Terms</a><a href="/help.html">Help</a></div>
   </div>
 </footer>
 
 <script type="module">
-import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, query, where, orderBy,
-         getDocs, doc, getDoc, serverTimestamp }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const FB = {
-  apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',
-  authDomain:'elaborate-edc16.firebaseapp.com',
-  projectId:'elaborate-edc16',
-  storageBucket:'elaborate-edc16.firebasestorage.app',
-  messagingSenderId:'923385978777',
-  appId:'1:923385978777:web:7d0fdb0472e14e8500bd08'
-};
-const app  = getApps().length ? getApps()[0] : initializeApp(FB);
-const auth = getAuth(app);
-const db   = getFirestore(app);
-let currentUser = null;
-
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+import{initializeApp,getApps}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import{getAuth,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import{getFirestore,collection,addDoc,query,where,orderBy,getDocs,doc,getDoc,serverTimestamp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+const FB={apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',authDomain:'elaborate-edc16.firebaseapp.com',projectId:'elaborate-edc16',storageBucket:'elaborate-edc16.firebasestorage.app',messagingSenderId:'923385978777',appId:'1:923385978777:web:7d0fdb0472e14e8500bd08'};
+const app=getApps().length?getApps()[0]:initializeApp(FB);
+const auth=getAuth(app);const db=getFirestore(app);
+let user=null;
 
 // Maintenance check
-(async () => {
-  try {
-    const snap = await getDoc(doc(db,'siteConfig','maintenance'));
-    if (snap.exists() && snap.data()['support']?.enabled === true) {
-      window.location.href = '/maintenance.html?page=support';
-    }
-  } catch(e) {
-    if (e.code === 'unavailable' || e.message?.includes('fetch')) {
-      document.getElementById('_sysdown').classList.add('show');
-    }
-  }
-})();
+(async()=>{try{const s=await getDoc(doc(db,'siteConfig','maintenance'));if(s.exists()&&s.data()['support']?.enabled)location.href='/maintenance.html?page=support';}catch(e){}})();
 
 // Auth
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  if (user) {
-    document.getElementById('myTicketsLink').style.display = 'inline-block';
-    const name = (user.displayName || '').split(' ');
-    if (name[0]) document.getElementById('ticketFirst').value = name[0];
-    if (name[1]) document.getElementById('ticketLast').value  = name.slice(1).join(' ');
-    if (user.email) document.getElementById('ticketEmail').value = user.email;
-    loadSidebarTickets(user.uid);
-  }
+onAuthStateChanged(auth,u=>{
+  user=u;
+  if(!u)return;
+  const n=(u.displayName||'').split(' ');
+  if(n[0])document.getElementById('tFirst').value=n[0];
+  if(n[1])document.getElementById('tLast').value=n.slice(1).join(' ');
+  if(u.email)document.getElementById('tEmail').value=u.email;
+  (async()=>{
+    try{
+      const q=query(collection(db,'tickets'),where('uid','==',u.uid),orderBy('createdAt','desc'));
+      const snap=await getDocs(q);
+      if(snap.empty)return;
+      const el=document.getElementById('sideTickets');
+      const lbl={open:'Open','in-progress':'In Progress',resolved:'Resolved'};
+      el.innerHTML=snap.docs.slice(0,4).map(d=>{
+        const t=d.data();const s=t.status||'open';
+        const dt=t.createdAt?.toDate?.().toLocaleDateString('en-US',{month:'short',day:'numeric'})||'';
+        return`<a href="/my-tickets.html" style="display:block;padding:9px 0;border-bottom:1px solid var(--border);text-decoration:none"><div style="font-size:.85rem;font-weight:600;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.subject||'(no subject)')}</div><div style="display:flex;gap:6px;align-items:center;margin-top:3px"><span style="font-family:DM Mono,monospace;font-size:.56rem;padding:2px 7px;border-radius:50px;background:${s==='resolved'?'rgba(125,190,142,.15)':s==='in-progress'?'rgba(244,197,66,.15)':'rgba(255,87,51,.1)'};color:${s==='resolved'?'#2E7D47':s==='in-progress'?'#9a7200':'var(--coral)'}">${lbl[s]||s}</span><span style="font-size:.72rem;color:var(--muted)">${dt}</span></div></a>`;
+      }).join('');
+      document.getElementById('allTicketsLink').style.display='block';
+    }catch(e){}
+  })();
 });
 
-async function loadSidebarTickets(uid) {
-  try {
-    const q = query(collection(db,'tickets'), where('uid','==',uid), orderBy('createdAt','desc'));
-    const snap = await getDocs(q);
-    const el = document.getElementById('sidebarTickets');
-    const allBtn = document.getElementById('sidebarAllTickets');
-    if (snap.empty) {
-      el.innerHTML = '<div class="my-tickets-empty">No tickets yet. Submit one below if you need help.</div>';
-      return;
-    }
-    const sl = {open:'open','in-progress':'in-progress',resolved:'resolved'};
-    const slLabel = {open:'Open','in-progress':'In Progress',resolved:'Resolved'};
-    const tickets = snap.docs.slice(0,4).map(d => d.data());
-    el.innerHTML = tickets.map(t => {
-      const s = t.status || 'open';
-      const date = t.createdAt?.toDate?.().toLocaleDateString('en-US',{month:'short',day:'numeric'}) || '';
-      return `<a class="mini-ticket" href="/my-tickets.html">
-        <div class="mt-subject">${esc(t.subject||'(no subject)')}</div>
-        <div class="mt-meta">
-          <span class="mt-status ${s}">${slLabel[s]||s}</span>
-          <span class="mt-date">${date}</span>
-        </div>
-      </a>`;
-    }).join('');
-    allBtn.style.display = 'block';
-  } catch(e) { console.warn('sidebar tickets:', e); }
-}
-
-// System status
-(async () => {
-  const dot = document.getElementById('statusDot');
-  const lbl = document.getElementById('statusLabel');
-  const time = document.getElementById('statusTime');
-  try {
-    const snap = await getDoc(doc(db,'siteConfig','status'));
-    let allOp = true;
-    if (snap.exists()) {
-      const d = snap.data();
-      const statuses = Object.values(d).filter(v => typeof v === 'string');
-      allOp = statuses.every(s => s === 'operational' || s === 'Operational');
-    }
-    dot.className = 'status-dot ' + (allOp ? 'green' : 'red');
-    lbl.textContent = allOp ? 'All systems operational' : 'Some systems may be affected';
-  } catch(e) {
-    dot.className = 'status-dot grey';
-    lbl.textContent = 'Status unavailable';
-  }
-  time.textContent = 'Checked ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+// Status
+(async()=>{
+  try{
+    const s=await getDoc(doc(db,'siteConfig','status'));
+    let ok=true;if(s.exists()){const v=Object.values(s.data()).filter(x=>typeof x==='string');ok=v.every(x=>x.toLowerCase()==='operational');}
+    document.getElementById('sdot').className='sdot '+(ok?'g':'r');
+    document.getElementById('slabel').textContent=ok?'All systems operational':'Some systems affected';
+  }catch(e){document.getElementById('slabel').textContent='Status unavailable';}
+  document.getElementById('stime').textContent='Checked '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 })();
 
-// Expose submit function — needs Firebase so stays in module
-window.submitTicket = async function() {
-  const first    = document.getElementById('ticketFirst').value.trim();
-  const last     = document.getElementById('ticketLast').value.trim();
-  const email    = document.getElementById('ticketEmail').value.trim();
-  const role     = document.getElementById('ticketRole').value;
-  const category = document.getElementById('ticketCategory').value;
-  const subject  = document.getElementById('ticketSubject').value.trim();
-  const body     = document.getElementById('ticketBody').value.trim();
-  const device   = document.getElementById('ticketDevice').value.trim();
-  const extra    = document.getElementById('ticketExtra').value.trim();
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-  if (!first || !last)               return window._showErr('Please enter your full name.');
-  if (!email || !email.includes('@')) return window._showErr('Please enter a valid email address.');
-  if (!category)                     return window._showErr('Please select a category.');
-  if (!subject)                      return window._showErr('Please enter a subject.');
-  if (body.length < 20)              return window._showErr('Please describe your issue in a bit more detail.');
-
-  const btn = document.getElementById('submitBtn');
-  const txt = document.getElementById('submitBtnText');
-  btn.disabled = true;
-  txt.innerHTML = '<span class="btn-spinner"></span>Sending\u2026';
-  document.getElementById('formError').classList.remove('show');
-
-  try {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let ticketId = 'TKT-';
-    for (let i = 0; i < 8; i++) ticketId += chars[Math.floor(Math.random()*chars.length)];
-    await addDoc(collection(db,'tickets'), {
-      ticketId, firstName: first, lastName: last,
-      email, role: role || '',
-      category, subject, body,
-      device: device || '', extra: extra || '',
-      priority: window._selectedPriority || 'low',
-      status: 'open',
-      uid: currentUser ? currentUser.uid : null,
-      read: false,
-      createdAt: serverTimestamp()
+// Submit ticket
+window.submitTicket=async function(){
+  const first=document.getElementById('tFirst').value.trim();
+  const last=document.getElementById('tLast').value.trim();
+  const email=document.getElementById('tEmail').value.trim();
+  const cat=document.getElementById('tCategory').value;
+  const subj=document.getElementById('tSubject').value.trim();
+  const body=document.getElementById('tBody').value.trim();
+  if(!first||!last)return showErr('Please enter your full name.');
+  if(!email||!email.includes('@'))return showErr('Please enter a valid email address.');
+  if(!cat)return showErr('Please select a category.');
+  if(!subj)return showErr('Please enter a subject.');
+  if(body.length<20)return showErr('Please describe your issue in a bit more detail.');
+  const btn=document.getElementById('subBtn');const txt=document.getElementById('subTxt');
+  btn.disabled=true;txt.innerHTML='<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px"></span>Sending\u2026';
+  document.getElementById('ferr').classList.remove('show');
+  try{
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let tid='TKT-';for(let i=0;i<8;i++)tid+=chars[Math.floor(Math.random()*chars.length)];
+    await addDoc(collection(db,'tickets'),{
+      ticketId:tid,firstName:first,lastName:last,email,
+      role:document.getElementById('tRole').value||'',
+      category:cat,subject:subj,body,
+      device:document.getElementById('tDevice').value.trim()||'',
+      extra:document.getElementById('tExtra').value.trim()||'',
+      priority:window._pri||'low',status:'open',
+      uid:user?user.uid:null,read:false,createdAt:serverTimestamp()
     });
-    document.getElementById('ticketIdDisplay').textContent = ticketId;
-    document.getElementById('ticketForm').style.display = 'none';
+    document.getElementById('tidDisplay').textContent=tid;
+    document.getElementById('tform').style.display='none';
     document.getElementById('successState').classList.add('show');
-  } catch(e) {
-    window._showErr('Something went wrong: ' + e.message + '. Please try again.');
-    btn.disabled = false;
-    txt.textContent = 'Send Ticket \u2192';
-  }
+  }catch(e){showErr('Something went wrong: '+e.message);btn.disabled=false;txt.textContent='Send Ticket \u2192';}
+};
+
+function showErr(msg){const el=document.getElementById('ferr');el.textContent=msg;el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'nearest'});setTimeout(()=>el.classList.remove('show'),6000);}
+
+window.resetForm=function(){
+  ['tFirst','tLast','tEmail','tSubject','tBody','tDevice','tExtra'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('tCategory').value='';
+  document.getElementById('tRole').value='';
+  document.getElementById('subBtn').disabled=false;
+  document.getElementById('subTxt').textContent='Send Ticket \u2192';
+  document.getElementById('tform').style.display='block';
+  document.getElementById('successState').classList.remove('show');
+  setPri('l');
 };
 </script>
 
 <script>
-// Plain script — all onclick-callable functions live here, no module scope issues
-
-window._selectedPriority = 'low';
-
-window._showErr = function(msg) {
-  var el = document.getElementById('formError');
-  el.textContent = msg; el.classList.add('show');
-  el.scrollIntoView({behavior:'smooth',block:'nearest'});
-  setTimeout(function(){ el.classList.remove('show'); }, 6000);
-};
-
-window.selectPriority = function(level) {
-  window._selectedPriority = level;
-  ['low','normal','high'].forEach(function(l) {
-    var el = document.getElementById('pri-'+l);
-    if (el) el.className = 'priority-opt' + (l===level ? ' selected-'+l : '');
+window._pri='l';
+function setPri(v){
+  window._pri=v;
+  const map={l:'sl',n:'sn',h:'sh'};
+  ['l','n','h'].forEach(x=>{
+    const el=document.getElementById('p'+x);
+    el.className='pri-opt'+(x===v?' '+map[v]:'');
   });
+}
+window.setPri=setPri;
+
+// TRIAGE DATA
+var T={
+  account:{icon:'&#128272;',name:'Account & Login',q:'What is the issue?',opts:[
+    {t:'I forgot my password',icon:'&#128273;',title:'Reset your password',body:'On the login screen, click <strong>Forgot password?</strong> and enter your email. Check your spam folder if the link does not arrive.<br/><br/>If you signed up with Google, click <strong>Continue with Google</strong> &mdash; there is no separate password.',links:[{l:'Go to Hub',h:'/index.html'}]},
+    {t:'I cannot log in or my account is locked',icon:'&#128274;',title:'Account access issues',body:'Try in order:<br/>1. Clear your browser cache and retry<br/>2. Try incognito / private window<br/>3. Make sure you are using the same Google account you signed up with<br/>4. If a school admin disabled your account, contact them directly<br/><br/>If none of these work, use the button below.',links:[]},
+    {t:'I want to change my name or email',icon:'&#9999;',title:'Updating your profile',body:'Click your avatar in the hub top-right then go to <strong>Settings &rarr; Profile</strong> to update your display name.<br/><br/>To change your email, sign out and back in with the new one. If you used Google Sign-In, your name is pulled from your Google account.',links:[{l:'My Profile',h:'/profile.html'}]},
+    {t:'I want to delete my account',icon:'&#128465;',title:'Account deletion',body:'Submit a ticket with the <strong>Privacy concern</strong> category and include your account email. We process deletions within 30 days in line with our Privacy Policy.',links:[{l:'Privacy Policy',h:'/legal.html?tab=privacy'}]},
+  ]},
+  apps:{icon:'&#128241;',name:'Apps & Library',q:'What do you need help with?',opts:[
+    {t:'Adding a custom app',icon:'&#10133;',title:'Adding a custom app',body:'In your hub, scroll to the end of your app grid and click the <strong>Add App</strong> card. Enter the name, URL, icon emoji, and color. It appears immediately.<br/><br/>Long-press or right-click a card to reorder, edit, or remove it.',links:[{l:'Go to Hub',h:'/index.html'}]},
+    {t:'Requesting an app for the library',icon:'&#128236;',title:'Requesting an app',body:'As a <strong>student</strong> &mdash; use the Request an App button in your classroom sidebar.<br/>As a <strong>developer</strong> &mdash; submit via the Developers page. Apps are reviewed before being added to the public library.',links:[{l:'Developers page',h:'/developers.html'}]},
+    {t:'An app card is broken or not loading',icon:'&#128027;',title:'App not loading?',body:'Apps load directly from their own source, so if the app is down that is outside our control.<br/><br/>To fix a broken URL: click the pencil icon on the card to edit it.<br/><br/>If the Elaborate hub itself is broken, use the button below.',links:[]},
+    {t:'Organising or rearranging my apps',icon:'&#128193;',title:'Organising your apps',body:'Drag and drop cards to reorder them. Use <strong>Collections</strong> in the sidebar to group apps. On mobile, long-press a card to drag it.',links:[{l:'Go to Hub',h:'/index.html'}]},
+  ]},
+  bug:{icon:'&#128027;',name:'Something is Broken',q:'What is broken?',opts:[
+    {t:'The hub is not loading at all',icon:'&#9889;',title:'Hub not loading',body:'First check our status page for known outages. If everything is green:<br/>1. Hard refresh (Ctrl+Shift+R / Cmd+Shift+R)<br/>2. Clear your browser cache<br/>3. Try a different browser or device<br/>4. Check your internet connection<br/><br/>If still broken, use the button below and include your browser and device.',links:[{l:'Check System Status',h:'/status.html'}]},
+    {t:'Something in the hub is not working right',icon:'&#128296;',title:'Something not working?',body:'Before opening a ticket, try:<br/>1. Hard refresh (Ctrl+Shift+R / Cmd+Shift+R)<br/>2. Incognito / private window<br/>3. A different browser<br/><br/>If it persists across all of these it is a real bug &mdash; use the button below and include your browser, device, what you did, and any error messages.',links:[]},
+    {t:'My data is missing',icon:'&#128190;',title:'Missing data',body:'1. Sign out and sign back in<br/>2. Confirm you are signed in to the correct account<br/><br/>Your data is stored in your account, not your browser, so it should reappear after re-signing in. If still missing, contact us.',links:[]},
+    {t:'I found a security issue',icon:'&#128272;',title:'Security issues',body:'Please do not post security issues publicly. Submit a ticket with the <strong>Privacy concern</strong> category and describe what you found. We treat these seriously and respond quickly.',links:[]},
+  ]},
+  classroom:{icon:'&#127979;',name:'Classroom & Teachers',q:'Are you a student or a teacher?',opts:[
+    {t:'Student &mdash; joining a classroom',icon:'&#127979;',title:'Joining a classroom',body:'Ask your teacher for the classroom join code. Then:<br/>1. Click <strong>Join Classroom</strong> in your hub sidebar<br/>2. Enter the code<br/>3. You will see pinned apps and announcements immediately<br/><br/>If the code is not working, ask your teacher to confirm it.',links:[{l:'Go to Hub',h:'/index.html'}]},
+    {t:'Teacher &mdash; creating or managing a classroom',icon:'&#127822;',title:'Teacher classroom tools',body:'Create a classroom from your hub sidebar. Then you can:<br/>&#8226; Pin apps for all students<br/>&#8226; Post announcements at the top of student hubs<br/>&#8226; Share your join code<br/>&#8226; Request apps for the library',links:[{l:'Teacher docs',h:'/docs.html#teachers'}]},
+    {t:'Teacher &mdash; students are having trouble',icon:'&#128101;',title:'Student issues',body:'Most common causes:<br/>&#8226; Students not signed in to Elaborate<br/>&#8226; Joined with a different account<br/>&#8226; Join code expired &mdash; generate a new one from classroom settings<br/><br/>If it is something else, use the button below.',links:[]},
+  ]},
+  schedule:{icon:'&#128467;',name:'Schedule',q:'What do you need help with?',opts:[
+    {t:'Setting up my schedule',icon:'&#128467;',title:'Setting up your schedule',body:'Click <strong>Schedule</strong> in your hub sidebar. Choose <strong>Mon&ndash;Fri</strong> or <strong>Block Days</strong> (A/B/C rotation). Click <strong>Add a Class</strong> to add your first period.',links:[{l:'Go to Hub',h:'/index.html'}]},
+    {t:'Importing from Follett Aspen',icon:'&#127891;',title:'Importing from Aspen',body:'1. Log in to your school Aspen portal<br/>2. Go to <strong>My Info &rarr; Schedule</strong> and download the .ics export<br/>3. In Elaborate: Schedule &rarr; Add a Class &rarr; Import from Aspen<br/>4. Upload the file<br/><br/>Your credentials never touch Elaborate &mdash; reading happens entirely in your browser.',links:[]},
+    {t:'Block days / A-B-C rotation',icon:'&#128260;',title:'Block day schedules',body:'Switch to <strong>Block Days</strong> format in the Schedule section. Customise labels (A, B, C or anything) and add or remove days with the + button.<br/><br/>Each morning use the &ldquo;Today is...?&rdquo; dropdown to set the current block &mdash; Elaborate remembers until midnight.',links:[{l:'Go to Hub',h:'/index.html'}]},
+    {t:'Something is wrong with my schedule',icon:'&#128027;',title:'Schedule issue',body:'1. Hard refresh (Ctrl+Shift+R / Cmd+Shift+R)<br/>2. Sign out and back in<br/>3. Check you are on the right format (Mon&ndash;Fri vs Block Days)<br/><br/>If periods are still missing after re-login, please contact us.',links:[]},
+  ]},
+  district:{icon:'&#127959;',name:'District & School',q:'What is your enquiry about?',opts:[
+    {t:'Setting up Elaborate for my school or district',icon:'&#127959;',title:'District setup',body:'Elaborate offers district plans for IT admins and principals to manage teachers and students at scale.<br/><br/>Submit a ticket below and select <strong>District account request</strong>. Include your school/district name, your role, and estimated number of students and teachers.',links:[{l:'Learn about Districts',h:'/districts.html'}]},
+    {t:'I am already a district admin',icon:'&#9881;',title:'District admin support',body:'Most settings are managed from your district admin panel. For anything not in the documentation, submit a ticket and select <strong>District account request</strong>.',links:[{l:'Documentation',h:'/docs.html'}]},
+    {t:'Partnership or integration enquiry',icon:'&#129309;',title:'Partnerships',body:'Submit a ticket and select <strong>Partnership inquiry</strong>. Include your organisation name and what kind of partnership you have in mind.',links:[]},
+  ]},
+  developer:{icon:'&#128296;',name:'Developer & App Listing',q:'What do you need help with?',opts:[
+    {t:'Submitting a new app to the library',icon:'&#128236;',title:'App submissions',body:'The fastest path is through the Developers page &mdash; it has a dedicated submission form that goes directly to our review queue.',links:[{l:'Developers page',h:'/developers.html'}]},
+    {t:'Updating an existing app listing',icon:'&#9999;',title:'Updating a listing',body:'Submit a ticket and select <strong>Developer / app listing</strong>. Include your app name, the current listing URL, and what needs to change.',links:[]},
+    {t:'API or integration questions',icon:'&#128268;',title:'API & integration',body:'Check the developer documentation first. If your question is not covered, submit a ticket with your app URL and what you are trying to build.',links:[{l:'Developer docs',h:'/docs.html#dev-overview'}]},
+  ]},
+  other:{icon:'&#128172;',name:'Something Else',q:'What is closest to your issue?',opts:[
+    {t:'Feature request or feedback',icon:'&#128161;',title:'Feature requests',body:'Submit a ticket and select <strong>Feature request</strong>. Describe the feature, why it would help, and how you imagine it working. We read every one.',links:[]},
+    {t:'Privacy or data concern',icon:'&#128274;',title:'Privacy & data',body:'Submit a ticket with the <strong>Privacy concern</strong> category. We respond within 30 days in line with our Privacy Policy.',links:[{l:'Privacy Policy',h:'/legal.html?tab=privacy'}]},
+    {t:'Account suspension appeal',icon:'&#128203;',title:'Suspension appeals',body:'Submit a ticket with <strong>Account suspension appeal</strong>. Include your account email and why you believe the suspension was issued in error. Appeals are reviewed within 2 weeks.',links:[]},
+    {t:'Something not listed here',icon:'&#128172;',title:'Something else',body:'Submit a ticket below and describe your issue as clearly as you can. The more context, the faster we can help.',links:[]},
+  ]},
 };
 
-window.handleCategoryChange = function() {
-  var val = document.getElementById('ticketCategory').value;
-  var helperMap = {
-    bug:'helper-bug', appeal:'helper-appeal',
-    district:'helper-district', developer:'helper-developer',
-    partnership:'helper-partnership'
-  };
-  document.querySelectorAll('.cat-helper').forEach(function(el){ el.classList.remove('show'); });
-  if (helperMap[val]) document.getElementById(helperMap[val]).classList.add('show');
-  var subjectMap = {
-    district:'District account request',
-    developer:'Developer inquiry',
-    partnership:'Partnership inquiry',
-    appeal:'Account suspension appeal'
-  };
-  var sub = document.getElementById('ticketSubject');
-  if (sub && subjectMap[val] && !sub.value.trim()) sub.value = subjectMap[val];
+var currentTopic=null;
+
+window.pick=function(key){
+  currentTopic=key;
+  var topic=T[key];
+  document.getElementById('step1').style.display='none';
+  document.getElementById('step2').style.display='block';
+  document.getElementById('t2icon').innerHTML=topic.icon;
+  document.getElementById('t2name').textContent=topic.name;
+  var html='<div class="tq-label">'+topic.q+'</div>';
+  topic.opts.forEach(function(o,i){html+='<button class="opt-btn" onclick="pickOpt('+i+',this)">'+o.t+'</button>';});
+  document.getElementById('optList').innerHTML=html;
+  document.getElementById('answerBox').style.display='none';
+  document.getElementById('resolvedMsg').style.display='none';
 };
 
-window.resetForm = function() {
-  ['ticketFirst','ticketLast','ticketEmail','ticketSubject','ticketBody','ticketDevice','ticketExtra']
-    .forEach(function(id){ var el = document.getElementById(id); if(el) el.value = ''; });
-  var cat = document.getElementById('ticketCategory'); if(cat) cat.value = '';
-  var role = document.getElementById('ticketRole'); if(role) role.value = '';
-  document.querySelectorAll('.cat-helper').forEach(function(el){ el.classList.remove('show'); });
-  window.selectPriority('low');
-  var btn = document.getElementById('submitBtn'); if(btn) btn.disabled = false;
-  var txt = document.getElementById('submitBtnText'); if(txt) txt.textContent = 'Send Ticket \u2192';
-  document.getElementById('ticketForm').style.display = 'block';
-  document.getElementById('successState').classList.remove('show');
+window.pickOpt=function(i,btn){
+  document.querySelectorAll('.opt-btn').forEach(function(b){b.classList.remove('sel');});
+  btn.classList.add('sel');
+  var o=T[currentTopic].opts[i];
+  var links='';
+  if(o.links&&o.links.length){
+    links='<div class="answer-links">';
+    o.links.forEach(function(l){links+='<a href="'+l.h+'" class="answer-link">'+l.l+' &#8594;</a>';});
+    links+='</div>';
+  }
+  document.getElementById('answerContent').innerHTML=
+    '<div class="answer-title"><span>'+o.icon+'</span>'+o.title+'</div>'+
+    '<div class="answer-body">'+o.body+'</div>'+links;
+  var box=document.getElementById('answerBox');
+  box.style.display='block';
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
 };
 
-// Auto-select category from URL param — runs immediately
-(function() {
-  var cat = new URLSearchParams(window.location.search).get('category');
-  if (cat) {
-    var sel = document.getElementById('ticketCategory');
-    if (sel && Array.prototype.find.call(sel.options, function(o){ return o.value === cat; })) {
-      sel.value = cat;
-      window.handleCategoryChange();
+window.solved=function(){
+  document.getElementById('answerBox').style.display='none';
+  document.getElementById('optList').style.display='none';
+  document.getElementById('t2icon').innerHTML='';
+  document.getElementById('t2name').textContent='';
+  document.querySelector('.back-btn').style.display='none';
+  document.getElementById('resolvedMsg').style.display='block';
+};
+
+window.needHelp=function(){
+  var card=document.getElementById('realCard');
+  card.style.display='block';
+  var catMap={account:'account',apps:'other',bug:'bug',classroom:'classroom',schedule:'schedule',district:'district',developer:'developer',other:'other'};
+  var sel=document.getElementById('tCategory');
+  if(sel&&catMap[currentTopic])sel.value=catMap[currentTopic];
+  card.scrollIntoView({behavior:'smooth',block:'start'});
+};
+
+window.goBack=function(){
+  currentTopic=null;
+  document.getElementById('step1').style.display='block';
+  document.getElementById('step2').style.display='none';
+  document.getElementById('answerBox').style.display='none';
+  document.getElementById('resolvedMsg').style.display='none';
+  document.getElementById('optList').innerHTML='';
+  document.getElementById('optList').style.display='block';
+  document.querySelector('.back-btn').style.display='inline-flex';
+  document.getElementById('realCard').style.display='none';
+};
+
+// URL param prefill
+(function(){
+  var cat=new URLSearchParams(window.location.search).get('category');
+  if(cat){
+    var sel=document.getElementById('tCategory');
+    if(sel){
+      for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===cat){sel.value=cat;break;}}
+      document.getElementById('realCard').style.display='block';
     }
   }
 })();
-
-// FAQ search & toggle
-const FAQ_DATA = [
-  {q:'How do I add a custom app?', a:'Go to your hub and click the Add App card at the end of the grid. Give it a name, URL, icon, and color.'},
-  {q:'I forgot my password.', a:'On the login screen click Forgot password to reset via email.'},
-  {q:'Why was my account disabled?', a:'Submit a ticket with the Suspension Appeal category to contest it.'},
-  {q:'Is Elaborate free?', a:'Yes, completely free for students and teachers. No ads, no premium tiers.'},
-  {q:'How do I change my theme?', a:'Click your avatar, go to Settings, then Theme.'},
-  {q:'How do I set up my class schedule?', a:'Click Schedule in the hub sidebar. Add manually or import from Aspen.'},
-  {q:'How do I join a classroom?', a:'Ask your teacher for the code and click Join Classroom in the sidebar.'},
-  {q:'Can I submit an app to the library?', a:'Yes. Visit the Developers page and fill out the submission form.'},
-  {q:'How long does support take to reply?', a:'Most issues: within a week. Larger requests: up to a month.'},
-  {q:'How do I delete my account?', a:'Submit a Privacy concern ticket with your account email.'},
-];
-
-// Hero search — queries both FAQ_DATA and Firestore supportArticles
-let supportArticlesCache = [];
-(async () => {
-  try {
-    const snap = await getDocs(collection(db, 'supportArticles'));
-    supportArticlesCache = snap.docs
-      .map(d => ({ id: d.id, ...d.data() }))
-      .filter(a => a.status === 'published');
-  } catch(e) { /* silently fail — FAQ search still works */ }
-})();
-
-window.heroSearchInput = function(val) {
-  const res = document.getElementById('heroSearchResults');
-  const q = val.trim().toLowerCase();
-  if (!q) { res.innerHTML = ''; return; }
-
-  // Search FAQ
-  const faqHits = FAQ_DATA
-    .filter(f => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q))
-    .slice(0, 2)
-    .map(f => ({
-      type: 'faq',
-      title: f.q,
-      preview: f.a.slice(0, 90) + (f.a.length > 90 ? '…' : ''),
-      onclick: `scrollToFaq('${f.q.replace(/'/g, "\\'").replace(/\n/g, ' ')}')`,
-    }));
-
-  // Search articles
-  const artHits = supportArticlesCache
-    .filter(a => {
-      const blob = [(a.title||''), (a.summary||''), (a.bodyText||''), ...(a.tags||[])].join(' ').toLowerCase();
-      return blob.includes(q);
-    })
-    .slice(0, 4)
-    .map(a => ({
-      type: 'article',
-      title: a.title || 'Untitled',
-      preview: a.summary || '',
-      cat: a.category || 'general',
-      id: a.id,
-      onclick: `openArticleOverlay('${a.id}')`,
-    }));
-
-  const hits = [...artHits, ...faqHits];
-  if (!hits.length) {
-    res.innerHTML = '<div class="search-none">No results — try opening a ticket below.</div>';
-    return;
-  }
-  const CAT_COLORS_FRONT = {account:'#A78BFA',apps:'#38BDF8',schedule:'#7DBE8E',classroom:'#FBBF24',teachers:'#FB923C',billing:'#F472B6',privacy:'#94A3B8',general:'rgba(255,255,255,.3)'};
-  res.innerHTML = hits.map(h => {
-    const badge = h.type === 'article'
-      ? `<span style="font-family:'DM Mono',monospace;font-size:.55rem;padding:1px 7px;border-radius:4px;background:rgba(56,189,248,.15);color:#38BDF8;margin-right:6px">Article</span>`
-      : `<span style="font-family:'DM Mono',monospace;font-size:.55rem;padding:1px 7px;border-radius:4px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.4);margin-right:6px">FAQ</span>`;
-    return `<div class="search-hit" onclick="${h.onclick}">
-      <div class="search-hit-q">${badge}${h.title}</div>
-      ${h.preview ? `<div class="search-hit-a">${h.preview}</div>` : ''}
-    </div>`;
-  }).join('');
-};
-
-window.scrollToFaq = function(question) {
-  const items = document.querySelectorAll('.faq-item');
-  items.forEach(item => {
-    const qEl = item.querySelector('.faq-q');
-    if (qEl && qEl.textContent.trim().startsWith(question.slice(0,20))) {
-      item.scrollIntoView({behavior:'smooth',block:'center'});
-      setTimeout(() => { if (!item.classList.contains('open')) item.click(); }, 400);
-    }
-  });
-};
-
-// Article overlay
-window.openArticleOverlay = function(id) {
-  const a = supportArticlesCache.find(x => x.id === id);
-  if (!a) return;
-  const CAT_LABELS = {account:'Account & Login',apps:'Apps & Library',schedule:'Schedule',classroom:'Classroom',teachers:'For Teachers',billing:'Billing & Plans',privacy:'Privacy & Data',general:'General'};
-  const date = a.updatedAt?.toDate?.().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) || '';
-  document.getElementById('articleOverlayContent').innerHTML = `
-    <div style="margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span style="font-family:'DM Mono',monospace;font-size:.62rem;padding:3px 10px;border-radius:50px;background:rgba(13,27,42,.07);color:var(--muted);letter-spacing:.06em;text-transform:uppercase">${CAT_LABELS[a.category]||a.category||'General'}</span>
-      ${(a.tags||[]).map(t=>`<span style="font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 8px;border-radius:4px;background:rgba(13,27,42,.05);color:var(--muted)">${t}</span>`).join('')}
-    </div>
-    <h1 style="font-family:'Fraunces',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:10px;color:var(--navy)">${a.title||'Untitled'}</h1>
-    ${a.summary?`<p style="font-size:1rem;color:var(--muted);line-height:1.7;margin-bottom:8px">${a.summary}</p>`:''}
-    <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid rgba(13,27,42,.09)">${a.author?`By ${a.author} · `:''}${date}</div>
-    <div class="article-body-render">${a.bodyHtml||''}</div>
-    <div style="margin-top:40px;padding-top:20px;border-top:1px solid rgba(13,27,42,.09);font-size:.84rem;color:var(--muted)">
-      Was this article helpful?
-      <button onclick="this.textContent='Thanks!';this.disabled=true" style="margin-left:10px;padding:5px 14px;border-radius:50px;border:1.5px solid rgba(125,190,142,.3);background:rgba(125,190,142,.08);color:#2E7D47;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer">👍 Yes</button>
-      <button onclick="document.getElementById('ticketForm').scrollIntoView({behavior:'smooth'});closeArticleOverlay()" style="margin-left:6px;padding:5px 14px;border-radius:50px;border:1.5px solid rgba(255,87,51,.25);background:rgba(255,87,51,.05);color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer">👎 No — open a ticket</button>
-    </div>`;
-  document.getElementById('articleOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-};
-
-window.closeArticleOverlay = function() {
-  document.getElementById('articleOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-};
-
-// FAQ sidebar search
-window.faqSearch = function(val) {
-  const q = val.trim().toLowerCase();
-  let any = false;
-  document.querySelectorAll('.faq-item').forEach(item => {
-    const text = item.textContent.toLowerCase();
-    const match = !q || text.includes(q);
-    item.classList.toggle('hidden', !match);
-    if (match) any = true;
-  });
-  document.getElementById('faqNone').style.display = any ? 'none' : 'block';
-};
-
-window.toggleFaq = function(el) { el.classList.toggle('open'); };
 </script>
-<!-- ARTICLE OVERLAY -->
-<div class="article-overlay" id="articleOverlay">
-  <div class="article-overlay-bar">
-    <a class="nav-logo" href="/support.html" onclick="closeArticleOverlay();return false;">Elaborate<span>.</span></a>
-    <button onclick="closeArticleOverlay()" style="padding:7px 16px;border-radius:50px;border:1.5px solid var(--border2);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .15s" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--muted)'">← Back to Support</button>
-  </div>
-  <div class="article-overlay-inner">
-    <div id="articleOverlayContent"></div>
-  </div>
-</div>
-
 </body>
 </html>
