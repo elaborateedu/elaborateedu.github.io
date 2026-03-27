@@ -1324,7 +1324,10 @@
   <div class="blob blob-2" style="opacity:.2"></div>
   <div class="auth-card">
     <div class="auth-logo">Elaborate<span>.</span></div>
-    <!-- LOGIN -->
+    <!-- Maintenance notice (shown when maintenanceMode flag is on) -->
+    <div id="authMaintenanceBanner" style="display:none;background:rgba(244,197,66,.12);border:1.5px solid rgba(244,197,66,.35);border-radius:10px;padding:12px 14px;font-size:.83rem;font-weight:600;color:#9a7200;line-height:1.55;margin-bottom:16px">
+      🔧 Elaborate is undergoing maintenance. You can still log in, but some features may be temporarily unavailable. <a href="/status.html" style="color:#0D1B2A;text-decoration:underline">Status page →</a>
+    </div>
     <div id="loginPanel">
       <h2>Welcome back!</h2>
       <p class="auth-sub">Log in to open your Elaboration Center.</p>
@@ -1345,6 +1348,10 @@
     <div id="signupPanel" class="hidden">
       <h2>Join Elaborate</h2>
       <p class="auth-sub">You're almost there!</p>
+      <!-- Registration closed message (shown when registrationOpen flag is false) -->
+      <div id="signupClosedMsg" style="display:none;background:rgba(244,197,66,.1);border:1.5px solid rgba(244,197,66,.3);border-radius:12px;padding:14px 16px;font-size:.88rem;color:#9a7200;line-height:1.6;margin-bottom:16px">
+        ⚠️ Registration is currently closed. Check back soon or <a href="/support.html" style="color:var(--coral);font-weight:700;text-decoration:none">contact support</a> if you believe this is an error.
+      </div>
       <div class="auth-error" id="signupError"></div>
       <button class="google-btn" onclick="doGoogleSignIn()">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
@@ -1364,7 +1371,7 @@
           <button class="role-opt" id="roleTeacher" onclick="setRole('teacher')">🍎 Teacher</button>
         </div>
       </div>
-      <button class="auth-submit" onclick="doSignup()">Create Account →</button>
+      <button class="auth-submit" id="signupSubmitBtn" onclick="doSignup()">Create Account →</button>
       <p class="auth-switch">Already have an account? <a onclick="switchAuthPanel('login')">Log in</a></p>
     </div>
     <!-- FORGOT PASSWORD -->
@@ -1382,7 +1389,11 @@
 
 <!-- HUB -->
 <div id="hub" class="screen">
-  <!-- mobile sidebar toggle -->
+  <!-- MAINTENANCE BANNER — shown when maintenanceMode flag is enabled -->
+  <div id="maintenanceBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:200;background:#F4C542;color:#0D1B2A;padding:9px 20px;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;align-items:center;justify-content:center;gap:10px;text-align:center">
+    🔧 Elaborate is currently undergoing maintenance. Some features may be unavailable.
+    <a href="/status.html" style="color:#0D1B2A;text-decoration:underline;margin-left:6px;font-weight:700">Status page →</a>
+  </div>
   <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" style="display:none;position:fixed;bottom:24px;left:24px;z-index:95;width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;border:none;font-size:1.2rem;box-shadow:0 4px 20px rgba(13,27,42,.3);cursor:pointer;align-items:center;justify-content:center">☰</button>
 
   <div class="hub-layout">
@@ -2141,7 +2152,7 @@ import { getAuth, createUserWithEmailAndPassword,
          signInWithPopup, EmailAuthProvider,
          reauthenticateWithCredential, deleteUser,
          sendPasswordResetEmail }                           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, serverTimestamp, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, serverTimestamp, updateDoc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const app      = initializeApp(firebaseConfig);
 const auth     = getAuth(app);
@@ -2184,6 +2195,63 @@ let loadedClassrooms = {};        // classroomId → classroom data cache
 let googleRoleSelected = 'student';
 let pendingGoogleUser  = null;
 
+// Platform flags — live listener on siteConfig/flags
+// Uses onSnapshot so changes from admin take effect instantly without reload
+let platformFlags = {
+  registrationOpen:  true,
+  maintenanceMode:   false,
+  allowCustomApps:   true,
+  allowGoogleSignin: true,
+};
+
+// Start listening as soon as db is ready — this replaces the one-shot getDoc
+onSnapshot(doc(db, 'siteConfig', 'flags'), (snap) => {
+  if (snap.exists()) {
+    const data = snap.data();
+    if (data.registrationOpen  !== undefined) platformFlags.registrationOpen  = data.registrationOpen;
+    if (data.maintenanceMode   !== undefined) platformFlags.maintenanceMode   = data.maintenanceMode;
+    if (data.allowCustomApps   !== undefined) platformFlags.allowCustomApps   = data.allowCustomApps;
+    if (data.allowGoogleSignin !== undefined) platformFlags.allowGoogleSignin = data.allowGoogleSignin;
+  }
+  applyPlatformFlags();
+}, (err) => { console.warn('Could not load platform flags:', err); });
+
+function applyPlatformFlags() {
+  // Maintenance banner — show on both auth screen and hub
+  const banner = document.getElementById('maintenanceBanner');
+  if (banner) banner.style.display = platformFlags.maintenanceMode ? 'flex' : 'none';
+
+  // Also show a banner on the auth card when in maintenance
+  const authBanner = document.getElementById('authMaintenanceBanner');
+  if (authBanner) authBanner.style.display = platformFlags.maintenanceMode ? 'block' : 'none';
+
+  // Google sign-in buttons — hide all if disabled
+  document.querySelectorAll('.google-btn').forEach(btn => {
+    btn.style.display = platformFlags.allowGoogleSignin ? '' : 'none';
+  });
+
+  // Registration closed — grey out signup form and show warning
+  const signupClosedMsg = document.getElementById('signupClosedMsg');
+  const signupSubmitBtn = document.getElementById('signupSubmitBtn');
+  const signupInputs    = document.querySelectorAll('#signupPanel input, #signupPanel .role-opt');
+  if (!platformFlags.registrationOpen) {
+    if (signupClosedMsg) signupClosedMsg.style.display = 'block';
+    if (signupSubmitBtn) { signupSubmitBtn.disabled = true; signupSubmitBtn.style.opacity = '.45'; }
+    signupInputs.forEach(el => { el.disabled = true; el.style.opacity = '.45'; });
+  } else {
+    if (signupClosedMsg) signupClosedMsg.style.display = 'none';
+    if (signupSubmitBtn) { signupSubmitBtn.disabled = false; signupSubmitBtn.style.opacity = ''; }
+    signupInputs.forEach(el => { el.disabled = false; el.style.opacity = ''; });
+  }
+
+  // Add App card — visually dim it when custom apps are disabled
+  const addCards = document.querySelectorAll('.add-card');
+  addCards.forEach(card => {
+    card.style.opacity = platformFlags.allowCustomApps ? '' : '0.4';
+    card.title = platformFlags.allowCustomApps ? '' : 'Custom apps are currently disabled';
+  });
+}
+
 /* ════════════════════════════════════
    FIRESTORE
 ════════════════════════════════════ */
@@ -2202,6 +2270,11 @@ async function saveProfile() {
    AUTH ACTIONS
 ════════════════════════════════════ */
 window.doGoogleSignIn = async function() {
+  if (!platformFlags.allowGoogleSignin) {
+    const err = document.getElementById('loginError') || document.getElementById('signupError');
+    if (err) { err.textContent = 'Google Sign-In is currently disabled. Please use email and password.'; err.style.display = 'block'; }
+    return;
+  }
   try {
     const result = await signInWithPopup(auth, gProvider);
     const user   = result.user;
@@ -2232,6 +2305,11 @@ window.doGoogleSignIn = async function() {
 };
 
 window.doSignup = async function() {
+  if (!platformFlags.registrationOpen) {
+    const err = document.getElementById('signupError');
+    if (err) { err.textContent = 'Registration is currently closed. Please check back soon.'; err.style.display = 'block'; }
+    return;
+  }
   const first = document.getElementById('signupFirst').value.trim();
   const last  = document.getElementById('signupLast').value.trim();
   const email = document.getElementById('signupEmail').value.trim();
@@ -2802,6 +2880,7 @@ onAuthStateChanged(auth, async (user) => {
     }
     applyTheme(userProfile.settings.theme || 'default', false);
     applyPrefs();
+    applyPlatformFlags();  // re-apply so maintenance banner shows correctly in hub
     updateNav(true);
     updateGreeting();
     // Show classroom nav items based on role
@@ -3358,6 +3437,10 @@ window.removeApp = async function(e, id) {
    ADD APP MODAL
 ════════════════════════════════════ */
 function openModal() {
+  if (!platformFlags.allowCustomApps) {
+    showToast('Custom apps are currently disabled by an administrator.');
+    return;
+  }
   buildColorPicker();
   document.getElementById('appName').value = '';
   document.getElementById('appUrl').value  = '';
