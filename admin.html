@@ -904,8 +904,35 @@
 
     <!-- Flags -->
     <div style="background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:28px;margin-bottom:20px">
-      <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:20px">Platform Flags</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Platform Flags</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:20px">Changes take effect instantly for all users — no page reload needed.</div>
       <div id="settingsFlagsList"></div>
+    </div>
+
+    <!-- Global Announcement -->
+    <div style="background:var(--surface);border-radius:12px;border:1px solid rgba(56,189,248,.2);padding:28px;margin-bottom:20px">
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sky);margin-bottom:6px">Global Hub Announcement</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:18px">This message appears as a dismissible banner at the top of every logged-in user's hub. Leave blank to hide it.</div>
+      <div style="margin-bottom:12px">
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:7px">Banner Text</div>
+        <input type="text" id="globalBannerText" placeholder="e.g. New feature: Block day schedules are now live! Check your Schedule tab." maxlength="200"
+          style="width:100%;padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s"
+          onfocus="this.style.borderColor='var(--sky)'" onblur="this.style.borderColor='var(--border)'"/>
+      </div>
+      <div style="margin-bottom:16px">
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:7px">Type</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.84rem;color:var(--txt)"><input type="radio" name="globalBannerType" value="info" checked style="accent-color:var(--sky)"/> ℹ️ Info</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.84rem;color:var(--txt)"><input type="radio" name="globalBannerType" value="success" style="accent-color:#34D399"/> ✅ Success</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.84rem;color:var(--txt)"><input type="radio" name="globalBannerType" value="warning" style="accent-color:var(--gold)"/> ⚠️ Warning</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.84rem;color:var(--txt)"><input type="radio" name="globalBannerType" value="error" style="accent-color:var(--coral)"/> 🔴 Critical</label>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button onclick="saveGlobalAnnouncement()" style="padding:9px 20px;border-radius:8px;border:none;background:var(--sky);color:var(--navy);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s">📢 Publish Banner</button>
+        <button onclick="clearGlobalAnnouncement()" style="padding:9px 20px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s">✕ Clear Banner</button>
+      </div>
+      <div id="announcementPreview" style="display:none;margin-top:14px;padding:10px 14px;border-radius:8px;font-size:.84rem;font-weight:600"></div>
     </div>
 
     <!-- Page Maintenance -->
@@ -935,22 +962,48 @@
     </div>
 
     <!-- Danger zone -->
-    <div style="background:var(--surface);border-radius:12px;border:1px solid rgba(255,87,51,.18);padding:28px">
+    <div style="background:var(--surface);border-radius:12px;border:1px solid rgba(255,87,51,.18);padding:28px;margin-bottom:20px">
+      <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--coral);margin-bottom:16px">Firestore Readback — Verify Writes</div>
+      <div style="font-size:.82rem;color:var(--muted);margin-bottom:14px">Click to read what is actually stored in Firestore right now. If a toggle says it saved but this shows the old value, your Firestore rules are blocking the write.</div>
+      <button onclick="readbackSettings()" style="padding:9px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--txt);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;margin-bottom:14px">&#128270; Read Firestore Now</button>
+      <pre id="settingsReadback" style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--txt);background:var(--bg);border-radius:8px;padding:14px;white-space:pre-wrap;border:1px solid var(--border);display:none"></pre>
+    </div>
       <div style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--coral);margin-bottom:20px">Danger Zone</div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border)">
           <div>
             <div style="font-weight:600;color:var(--txt);font-size:.9rem;margin-bottom:3px">Export All Ticket Data</div>
-            <div style="font-size:.78rem;color:var(--muted)">Download a JSON file of every ticket in Firestore.</div>
+            <div style="font-size:.78rem;color:var(--muted)">Download a JSON file of every support ticket in Firestore.</div>
           </div>
           <button onclick="exportTickets()" style="padding:9px 18px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--txt);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap">⬇ Export JSON</button>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border)">
           <div>
             <div style="font-weight:600;color:var(--txt);font-size:.9rem;margin-bottom:3px">Export All User Data</div>
-            <div style="font-size:.78rem;color:var(--muted)">Download a JSON file of every user profile.</div>
+            <div style="font-size:.78rem;color:var(--muted)">Download a JSON file of every user profile in Firestore.</div>
           </div>
           <button onclick="exportUsers()" style="padding:9px 18px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--txt);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap">⬇ Export JSON</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border)">
+          <div>
+            <div style="font-weight:600;color:var(--txt);font-size:.9rem;margin-bottom:3px">Export All Applications</div>
+            <div style="font-size:.78rem;color:var(--muted)">Download a JSON file of every staff application submitted.</div>
+          </div>
+          <button onclick="exportApplications()" style="padding:9px 18px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--txt);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap">⬇ Export JSON</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;background:var(--bg);border-radius:8px;border:1px solid rgba(255,87,51,.15)">
+          <div>
+            <div style="font-weight:600;color:var(--coral);font-size:.9rem;margin-bottom:3px">Close All Open Tickets</div>
+            <div style="font-size:.78rem;color:var(--muted)">Mark every ticket with status "open" as resolved. Cannot be undone.</div>
+          </div>
+          <button onclick="bulkCloseTickets()" style="padding:9px 18px;border-radius:8px;border:1px solid rgba(255,87,51,.3);background:rgba(255,87,51,.08);color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap">⚠ Close All Open</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;background:var(--bg);border-radius:8px;border:1px solid rgba(255,87,51,.15)">
+          <div>
+            <div style="font-weight:600;color:var(--coral);font-size:.9rem;margin-bottom:3px">Delete All Read Tickets</div>
+            <div style="font-size:.78rem;color:var(--muted)">Permanently delete every ticket marked as read. Cannot be undone.</div>
+          </div>
+          <button onclick="deleteReadTickets()" style="padding:9px 18px;border-radius:8px;border:1px solid rgba(255,87,51,.3);background:rgba(255,87,51,.08);color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap">⚠ Delete Read Tickets</button>
         </div>
       </div>
     </div>
@@ -3392,10 +3445,14 @@ window.removeStaff = async function(uid, name) {
    SETTINGS
 ════════════════════════════════════════ */
 const PLATFORM_FLAGS = [
-  { key: 'registrationOpen',   label: 'Registration Open',     desc: 'Allow new users to sign up. Turn off to freeze signups.',      default: true,  color: '#34D399' },
-  { key: 'maintenanceMode',    label: 'Maintenance Mode',      desc: 'Show a maintenance banner on the main hub for all users.',     default: false, color: 'var(--gold)' },
-  { key: 'allowCustomApps',    label: 'Allow Custom Apps',     desc: 'Let users add their own custom apps. Disable to restrict.',    default: true,  color: 'var(--sky)' },
-  { key: 'allowGoogleSignin',  label: 'Google Sign-In',        desc: 'Allow sign-in with Google. Disable to force email/password.',  default: true,  color: '#F472B6' },
+  { key: 'registrationOpen',   label: 'Registration Open',       desc: 'Allow new users to sign up. Turn off to freeze all new account creation.',                  default: true,  color: '#34D399' },
+  { key: 'allowGoogleSignin',  label: 'Google Sign-In',          desc: 'Allow sign-in with Google. Disable to force email and password only.',                       default: true,  color: '#F472B6' },
+  { key: 'allowCustomApps',    label: 'Custom Apps',             desc: 'Let users add their own custom apps to the hub. Disable to lock the app grid.',             default: true,  color: 'var(--sky)' },
+  { key: 'allowSchedule',      label: 'Schedule Feature',        desc: 'Show the Schedule tab in the hub sidebar. Disable to hide it from all users.',              default: true,  color: 'var(--sage)' },
+  { key: 'allowClassrooms',    label: 'Classroom Feature',       desc: 'Allow students to join classrooms and teachers to create them.',                            default: true,  color: '#FB923C' },
+  { key: 'allowCollections',   label: 'Collections Feature',     desc: 'Allow users to create app collections in the hub sidebar.',                                  default: true,  color: 'var(--lav)' },
+  { key: 'maintenanceMode',    label: 'Global Maintenance Banner', desc: 'Show a maintenance banner across the hub and login screen for all users.',                 default: false, color: 'var(--gold)' },
+  { key: 'enableDevMode',      label: 'Developer Mode',          desc: 'Expose debug info and extra logging in the hub console. Does not affect normal users.',      default: false, color: '#94A3B8' },
 ];
 
 /* ════════════════════════
@@ -3579,18 +3636,20 @@ async function loadSettings() {
 
 const MAINTENANCE_PAGES = [
   { key:'index',      label:'Student Hub',       icon:'🏠' },
-  { key:'profile',    label:'Profile',            icon:'👤' },
-  { key:'classroom',  label:'Classroom',          icon:'🏫' },
-  { key:'support',    label:'Support',            icon:'🎫' },
-  { key:'docs',       label:'Documentation',      icon:'📖' },
-  { key:'developers', label:'Developer Portal',   icon:'🛠' },
-  { key:'status',     label:'Status Page',        icon:'🟢' },
-  { key:'about',      label:'About',              icon:'ℹ️' },
-  { key:'careers',    label:'Careers',             icon:'💼' },
-  { key:'help',       label:'Help Center',         icon:'📖' },
-  { key:'districts',  label:'Districts',          icon:'🏛' },
-  { key:'donate',     label:'Donate',             icon:'💛' },
-  { key:'legal',      label:'Legal',              icon:'⚖️' },
+  { key:'profile',    label:'Profile',           icon:'👤' },
+  { key:'classroom',  label:'Classroom',         icon:'🏫' },
+  { key:'support',    label:'Support',           icon:'🎫' },
+  { key:'help',       label:'Help Center',       icon:'📖' },
+  { key:'my-tickets', label:'My Tickets',        icon:'🎟' },
+  { key:'docs',       label:'Documentation',     icon:'📄' },
+  { key:'developers', label:'Developer Portal',  icon:'🛠' },
+  { key:'status',     label:'Status Page',       icon:'🟢' },
+  { key:'about',      label:'About',             icon:'ℹ️' },
+  { key:'careers',    label:'Careers',           icon:'💼' },
+  { key:'districts',  label:'Districts',         icon:'🏛' },
+  { key:'donate',     label:'Donate',            icon:'💛' },
+  { key:'legal',      label:'Legal',             icon:'⚖️' },
+  { key:'training',   label:'Staff Training',    icon:'🎓' },
 ];
 
 async function loadMaintenanceList() {
@@ -3643,11 +3702,13 @@ window.toggleMaintenance = async function(pageKey, el) {
     await setDoc(doc(db, 'siteConfig', 'maintenance'), {
       [pageKey]: { enabled: newVal, updatedAt: new Date().toISOString(), updatedBy: currentAdmin?.displayName || 'Admin' }
     }, { merge: true });
-    // Update toggle UI
+    // Verify
+    const check = await getDoc(doc(db, 'siteConfig', 'maintenance'));
+    const written = check.exists() && check.data()[pageKey]?.enabled === newVal;
+    if (!written) { showToast('⚠️ Write did not persist — check Firestore rules.'); return; }
     el.dataset.on = String(newVal);
     el.style.background = newVal ? 'var(--gold)' : 'var(--border2)';
     el.querySelector('div').style.left = newVal ? '22px' : '3px';
-    // Update row border and label
     const row = document.getElementById('mrow_' + pageKey);
     const lbl = document.getElementById('mlbl_' + pageKey);
     if (row) row.style.borderColor = newVal ? 'rgba(244,197,66,.3)' : 'var(--border)';
@@ -3657,8 +3718,11 @@ window.toggleMaintenance = async function(pageKey, el) {
       lbl.style.color = newVal ? 'var(--gold)' : 'var(--muted)';
     }
     const page = MAINTENANCE_PAGES.find(p => p.key === pageKey);
-    showToast(newVal ? `🔧 ${page?.label} set to maintenance.` : `✅ ${page?.label} is live again.`);
-  } catch(e) { showToast('Error: ' + e.message); }
+    showToast(newVal ? `🔧 ${page?.label} set to maintenance — users will see the maintenance screen.` : `✅ ${page?.label} is live again.`);
+  } catch(e) {
+    console.error('toggleMaintenance error:', e);
+    showToast('✗ Failed: ' + e.message + ' — have you deployed your Firestore rules?');
+  }
 };
 
 window.saveMaintenanceMessage = async function() {
@@ -3680,13 +3744,20 @@ window.toggleFlag = async function(key, el) {
   const f = PLATFORM_FLAGS.find(x => x.key === key);
   try {
     await setDoc(doc(db, 'siteConfig', 'flags'), { [key]: newVal }, { merge: true });
+    // Verify the write actually landed
+    const check = await getDoc(doc(db, 'siteConfig', 'flags'));
+    const written = check.exists() && check.data()[key] === newVal;
+    if (!written) { showToast('⚠️ Write did not persist — check Firestore rules.'); return; }
     el.dataset.on = String(newVal);
     el.style.background = newVal ? (f?.color || '#34D399') : 'var(--border2)';
     el.querySelector('div').style.left = newVal ? '22px' : '3px';
     const lbl = document.getElementById('flag-label-' + key);
     if (lbl) { lbl.textContent = newVal ? 'ENABLED' : 'DISABLED'; lbl.style.color = newVal ? (f?.color || '#34D399') : 'var(--muted)'; }
-    showToast(`${f?.label||key} ${newVal ? 'enabled' : 'disabled'}.`);
-  } catch(e) { showToast('Failed to update setting.'); }
+    showToast(`✓ ${f?.label||key} ${newVal ? 'enabled' : 'disabled'} — saved to Firestore.`);
+  } catch(e) {
+    console.error('toggleFlag error:', e);
+    showToast('✗ Failed: ' + e.message + ' — deploy Firestore rules if this is a permissions error.');
+  }
 };
 
 /* ════════════════════════════════════════
@@ -3714,6 +3785,109 @@ window.exportUsers = async function() {
     a.click();
     showToast('✓ Users exported.');
   } catch(e) { showToast('Export failed.'); }
+};
+
+window.exportApplications = async function() {
+  try {
+    showToast('Preparing export…');
+    const snap = await getDocs(collection(db, 'jobApplications'));
+    const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'elaborate-applications.json' });
+    a.click();
+    showToast('✓ Applications exported (' + data.length + ' records).');
+  } catch(e) { showToast('Export failed: ' + e.message); }
+};
+
+window.bulkCloseTickets = async function() {
+  if (!confirm('Mark ALL open tickets as resolved? This cannot be undone.')) return;
+  showToast('Working…');
+  try {
+    const snap = await getDocs(query(collection(db, 'tickets'), where('status', '==', 'open')));
+    if (!snap.empty) {
+      const batch = [];
+      snap.docs.forEach(d => batch.push(updateDoc(doc(db, 'tickets', d.id), { status: 'resolved' })));
+      await Promise.all(batch);
+      showToast('✓ ' + snap.docs.length + ' tickets closed.');
+      auditLog('tickets.bulk_close', { count: snap.docs.length });
+      if (allTickets.length) { allTickets.forEach(t => { if (t.status === 'open') t.status = 'resolved'; }); updateStats(); renderTickets(); }
+    } else {
+      showToast('No open tickets found.');
+    }
+  } catch(e) { showToast('Failed: ' + e.message); }
+};
+
+window.deleteReadTickets = async function() {
+  if (!confirm('Permanently delete all tickets marked as read? This cannot be undone.')) return;
+  showToast('Working…');
+  try {
+    const snap = await getDocs(query(collection(db, 'tickets'), where('read', '==', true)));
+    if (!snap.empty) {
+      await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'tickets', d.id))));
+      showToast('✓ ' + snap.docs.length + ' read tickets deleted.');
+      auditLog('tickets.bulk_delete_read', { count: snap.docs.length });
+      allTickets = allTickets.filter(t => !t.read);
+      updateStats(); renderTickets();
+    } else {
+      showToast('No read tickets found.');
+    }
+  } catch(e) { showToast('Failed: ' + e.message); }
+};
+
+window.saveGlobalAnnouncement = async function() {
+  const text = document.getElementById('globalBannerText')?.value.trim();
+  if (!text) { showToast('Please enter a banner message.'); return; }
+  const type = document.querySelector('input[name="globalBannerType"]:checked')?.value || 'info';
+  const typeColors = { info:'#38BDF8', success:'#34D399', warning:'#F4C542', error:'#FF5733' };
+  try {
+    await setDoc(doc(db, 'siteConfig', 'globalBanner'), {
+      text, type, color: typeColors[type] || '#38BDF8',
+      active: true, updatedAt: serverTimestamp(), updatedBy: currentAdmin?.displayName || 'Admin'
+    });
+    // Preview
+    const prev = document.getElementById('announcementPreview');
+    if (prev) {
+      prev.style.display = 'block';
+      prev.style.background = (typeColors[type] || '#38BDF8') + '18';
+      prev.style.border = '1.5px solid ' + (typeColors[type] || '#38BDF8') + '44';
+      prev.style.color = typeColors[type] || '#38BDF8';
+      prev.textContent = '✓ Preview: ' + text;
+    }
+    showToast('✓ Global banner published — visible to all users immediately.');
+    auditLog('settings.global_banner_set', { text, type });
+  } catch(e) { showToast('Failed: ' + e.message); }
+};
+
+window.clearGlobalAnnouncement = async function() {
+  if (!confirm('Clear the global hub banner? It will disappear for all users immediately.')) return;
+  try {
+    await setDoc(doc(db, 'siteConfig', 'globalBanner'), { active: false, updatedAt: serverTimestamp() });
+    const bannerTextEl = document.getElementById('globalBannerText');
+    if (bannerTextEl) bannerTextEl.value = '';
+    const prev = document.getElementById('announcementPreview');
+    if (prev) prev.style.display = 'none';
+    showToast('✓ Global banner cleared.');
+    auditLog('settings.global_banner_cleared', {});
+  } catch(e) { showToast('Failed: ' + e.message); }
+};
+
+window.readbackSettings = async function() {
+  const el = document.getElementById('settingsReadback');
+  if (!el) return;
+  try {
+    const [flags, maintenance, banner] = await Promise.all([
+      getDoc(doc(db, 'siteConfig', 'flags')),
+      getDoc(doc(db, 'siteConfig', 'maintenance')),
+      getDoc(doc(db, 'siteConfig', 'globalBanner')),
+    ]);
+    const out = {
+      flags: flags.exists() ? flags.data() : '(no document)',
+      maintenance: maintenance.exists() ? maintenance.data() : '(no document)',
+      globalBanner: banner.exists() ? banner.data() : '(no document)',
+    };
+    el.style.display = 'block';
+    el.textContent = JSON.stringify(out, null, 2);
+  } catch(e) { el.style.display = 'block'; el.textContent = 'Error: ' + e.message; }
 };
 
 

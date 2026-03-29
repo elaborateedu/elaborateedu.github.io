@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C0G7WFX3JZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-C0G7WFX3JZ');
+  </script>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
   <meta http-equiv="Pragma" content="no-cache"/>
   <meta http-equiv="Expires" content="0"/>
@@ -192,6 +200,30 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;d
   .modal-body,.modal-top{padding:20px 20px}
   .site-footer{padding:20px 24px}
   .dept-group[style*="none"]{display:none!important}
+}
+
+/* ── UNIVERSAL FOOTER ── */
+.u-footer{background:#0D1B2A;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif}
+.u-footer-top{padding:64px 64px 48px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:48px;max-width:1200px;margin:0 auto;position:relative;z-index:1;border-bottom:1px solid rgba(255,255,255,.07)}
+.u-footer-brand-name{font-family:'Fraunces',serif;font-weight:900;font-size:1.2rem;color:#fff;letter-spacing:-.02em;margin-bottom:10px;text-decoration:none;display:block}
+.u-footer-brand-name span{color:#FF5733}
+.u-footer-brand-sub{font-size:.82rem;color:rgba(255,255,255,.32);line-height:1.7;max-width:200px}
+.u-footer-cols{display:flex;gap:56px;flex-wrap:wrap}
+.u-footer-col-title{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px}
+.u-footer-col a{display:block;font-size:.84rem;color:rgba(255,255,255,.42);text-decoration:none;margin-bottom:10px;transition:color .15s}
+.u-footer-col a:hover{color:#fff}
+.u-footer-big{padding:0 64px;overflow:hidden;position:relative;z-index:1;line-height:1}
+.u-footer-big-text{font-family:'Fraunces',serif;font-size:clamp(5rem,14vw,13rem);font-weight:900;color:rgba(255,255,255,.055);letter-spacing:-.04em;white-space:nowrap;user-select:none;display:block;margin-bottom:-0.12em}
+.u-footer-bottom{padding:20px 64px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.u-footer-copy{font-size:.76rem;color:rgba(255,255,255,.22)}
+.u-footer-small-links{display:flex;gap:18px;flex-wrap:wrap}
+.u-footer-small-links a{font-size:.76rem;color:rgba(255,255,255,.22);text-decoration:none;transition:color .15s}
+.u-footer-small-links a:hover{color:rgba(255,255,255,.6)}
+@media(max-width:768px){
+  .u-footer-top{padding:48px 24px 36px;gap:36px}
+  .u-footer-big{padding:0 24px}
+  .u-footer-bottom{padding:16px 24px}
+  .u-footer-cols{gap:28px}
 }
 </style>
 </head>
@@ -521,15 +553,49 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;d
 </section>
 
 <!-- FOOTER -->
-<footer class="site-footer">
-  <div class="site-footer-logo">Elaborate<span>.</span></div>
-  <div class="site-footer-links">
-    <a href="/index.html">Hub</a>
-    <a href="/about.html">About</a>
-    <a href="/docs.html">Docs</a>
-    <a href="/developers.html">Developers</a>
-    <a href="/support.html">Support</a>
-    <a href="/legal.html">Legal</a>
+<footer class="u-footer">
+  <div class="u-footer-top">
+    <div>
+      <a class="u-footer-brand-name" href="/index.html">Elaborate<span>.</span></a>
+      <div class="u-footer-brand-sub">A student hub built for the way school actually works.</div>
+    </div>
+    <div class="u-footer-cols">
+      <div class="u-footer-col">
+        <div class="u-footer-col-title">Product</div>
+        <a href="/index.html">Hub</a>
+        <a href="/about.html">About</a>
+        <a href="/status.html">Status</a>
+        <a href="/developers.html">Developers</a>
+        <a href="/districts.html">Districts</a>
+      </div>
+      <div class="u-footer-col">
+        <div class="u-footer-col-title">Support</div>
+        <a href="/help.html">Help Center</a>
+        <a href="/support.html">Open a Ticket</a>
+        <a href="/my-tickets.html">My Tickets</a>
+        <a href="/docs.html">Documentation</a>
+      </div>
+      <div class="u-footer-col">
+        <div class="u-footer-col-title">Company</div>
+        <a href="/about.html">About</a>
+        <a href="/careers.html">Careers</a>
+        <a href="/donate.html">Donate</a>
+        <a href="/legal.html?tab=terms">Terms of Service</a>
+        <a href="/legal.html?tab=privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="u-footer-big">
+    <span class="u-footer-big-text">Elaborate.</span>
+  </div>
+  <div class="u-footer-bottom">
+    <div class="u-footer-copy">&copy; 2025 Elaborate. All rights reserved.</div>
+    <div class="u-footer-small-links">
+      <a href="/legal.html?tab=privacy">Privacy</a>
+      <a href="/legal.html?tab=terms">Terms</a>
+      <a href="/help.html">Help</a>
+      <a href="/support.html">Support</a>
+    </div>
   </div>
 </footer>
 
@@ -544,6 +610,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;d
     </div>
     <div class="modal-body">
       <div id="applyFormWrap">
+
+        <!-- Section 1: About You -->
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07)">01 &mdash; About You</div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">First Name</label>
@@ -556,7 +625,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;d
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Email</label>
+            <label class="form-label">Email Address</label>
             <input class="form-input" id="appEmail" type="email" placeholder="jane@example.com"/>
           </div>
           <div class="form-group">
@@ -564,8 +633,40 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;d
             <input class="form-input" id="appAge" type="number" placeholder="16" min="13" max="99"/>
           </div>
         </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Location <span style="opacity:.45;font-weight:400;text-transform:none;letter-spacing:0">(City, State/Country)</span></label>
+            <input class="form-input" id="appLocation" type="text" placeholder="e.g. Boston, MA" maxlength="60"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time Zone</label>
+            <select class="form-select" id="appTimezone">
+              <option value="">Select...</option>
+              <option value="ET">Eastern (ET)</option>
+              <option value="CT">Central (CT)</option>
+              <option value="MT">Mountain (MT)</option>
+              <option value="PT">Pacific (PT)</option>
+              <option value="GMT">GMT / UK</option>
+              <option value="CET">Central Europe (CET)</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
         <div class="form-group">
-          <label class="form-label">Role</label>
+          <label class="form-label">Availability <span style="opacity:.45;font-weight:400;text-transform:none;letter-spacing:0">(hours per week you can realistically commit)</span></label>
+          <select class="form-select" id="appAvailability">
+            <option value="">Select...</option>
+            <option value="1-3">1–3 hours / week</option>
+            <option value="3-6">3–6 hours / week</option>
+            <option value="6-10">6–10 hours / week</option>
+            <option value="10+">10+ hours / week</option>
+          </select>
+        </div>
+
+        <!-- Section 2: The Role -->
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07);margin-top:8px">02 &mdash; The Role</div>
+        <div class="form-group">
+          <label class="form-label">Position Applying For</label>
           <select class="form-select" id="appRole">
             <option value="">Select a role...</option>
             <optgroup label="Moderation">
@@ -590,7 +691,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;d
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Relevant Skills</label>
+          <label class="form-label">Relevant Skills <span style="opacity:.45;font-weight:400;text-transform:none;letter-spacing:0">(select all that apply)</span></label>
           <div class="cb-group">
             <label class="cb-opt"><input type="checkbox" name="skills" value="moderation"/><span>Community moderation or online safety</span></label>
             <label class="cb-opt"><input type="checkbox" name="skills" value="support"/><span>Customer or community support</span></label>
@@ -599,21 +700,66 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;d
             <label class="cb-opt"><input type="checkbox" name="skills" value="writing"/><span>Writing, communication, or documentation</span></label>
             <label class="cb-opt"><input type="checkbox" name="skills" value="design"/><span>UI / UX design</span></label>
             <label class="cb-opt"><input type="checkbox" name="skills" value="education"/><span>Education or teaching background</span></label>
+            <label class="cb-opt"><input type="checkbox" name="skills" value="social"/><span>Social media or community management</span></label>
           </div>
         </div>
         <div class="form-group">
+          <label class="form-label">Have you used Elaborate before?</label>
+          <select class="form-select" id="appUsedBefore">
+            <option value="">Select...</option>
+            <option value="yes-active">Yes, I use it regularly</option>
+            <option value="yes-tried">Yes, I have tried it</option>
+            <option value="no-not-yet">No, but I plan to before applying</option>
+            <option value="no">No</option>
+          </select>
+          <div class="form-hint">We love seeing applicants who actually use what they are helping build.</div>
+        </div>
+
+        <!-- Section 3: Your Application -->
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07);margin-top:8px">03 &mdash; Your Application</div>
+        <div class="form-group">
           <label class="form-label">Why Elaborate?</label>
-          <textarea class="form-textarea" id="appWhy" placeholder="Tell us what drew you to this platform and what you want to contribute. Be specific."></textarea>
-          <div class="form-hint">Generic answers are easy to spot. The best ones are honest and specific.</div>
+          <textarea class="form-textarea" id="appWhy" placeholder="Tell us what drew you to this platform, why this role, and what you specifically want to contribute. Be honest and direct." style="min-height:120px"></textarea>
+          <div class="form-hint">Generic answers are easy to spot. The best applications are specific and personal.</div>
         </div>
         <div class="form-group">
-          <label class="form-label">Relevant Experience</label>
-          <textarea class="form-textarea" id="appExperience" placeholder="Any past roles, projects, or experience that is relevant. No experience is fine, just be honest." style="min-height:90px"></textarea>
+          <label class="form-label">Relevant Experience or Background</label>
+          <textarea class="form-textarea" id="appExperience" placeholder="Past roles, projects, or anything that is relevant to this position. No formal experience is completely fine — just be honest about what you know." style="min-height:100px"></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label">Anything else? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.75rem;opacity:.6">(optional)</span></label>
-          <textarea class="form-textarea" id="appExtra" placeholder="Questions, links to past work, ideas for the platform, or anything you want us to know." style="min-height:68px"></textarea>
+          <label class="form-label">Tell us about a time you solved a difficult problem</label>
+          <textarea class="form-textarea" id="appProblem" placeholder="Could be technical, interpersonal, creative — anything. Walk us through what happened, what you did, and what the outcome was." style="min-height:100px"></textarea>
+          <div class="form-hint">This does not have to be a professional example. School projects, personal situations, and online communities all count.</div>
         </div>
+        <div class="form-group">
+          <label class="form-label">What would you improve about Elaborate?</label>
+          <textarea class="form-textarea" id="appImprove" placeholder="Be specific. What have you noticed that could be better — in the product, the community, the documentation, anywhere?" style="min-height:90px"></textarea>
+          <div class="form-hint">We genuinely want your honest take. Flattery does not help your application.</div>
+        </div>
+
+        <!-- Section 4: Final Details -->
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07);margin-top:8px">04 &mdash; Final Details</div>
+        <div class="form-group">
+          <label class="form-label">Links <span style="opacity:.45;font-weight:400;text-transform:none;letter-spacing:0">(optional &mdash; GitHub, portfolio, LinkedIn, etc.)</span></label>
+          <input class="form-input" id="appLinks" type="text" placeholder="https://github.com/..." maxlength="300"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">How did you hear about this?</label>
+          <select class="form-select" id="appSource">
+            <option value="">Select...</option>
+            <option value="using-elaborate">I use Elaborate and found it there</option>
+            <option value="friend">Friend or teammate told me</option>
+            <option value="social">Social media</option>
+            <option value="search">Search engine</option>
+            <option value="teacher">My teacher mentioned it</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Anything else? <span style="opacity:.45;font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+          <textarea class="form-textarea" id="appExtra" placeholder="Questions, ideas, anything you want us to know that did not fit above." style="min-height:68px"></textarea>
+        </div>
+
         <div id="appError" class="form-error" style="display:none"></div>
         <button class="submit-btn" id="submitBtn" onclick="submitApplication()">
           <span id="submitBtnText">Submit Application &rarr;</span>
@@ -640,7 +786,6 @@ var FB_CONFIG = {
 
 var db = null;
 
-// Bootstrap Firebase via dynamic import (avoids module scope issue)
 (async function() {
   try {
     var fim = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
@@ -648,11 +793,9 @@ var db = null;
     var app = fim.getApps().length ? fim.getApps()[0] : fim.initializeApp(FB_CONFIG);
     db = ffs.getFirestore(app);
     window._ffs = ffs;
-
-    // Maintenance check
     var snap = await ffs.getDoc(ffs.doc(db, 'siteConfig', 'maintenance'));
-    if (snap.exists() && snap.data()['jobs'] && snap.data()['jobs'].enabled === true) {
-      window.location.href = '/maintenance.html?page=jobs';
+    if (snap.exists() && snap.data()['careers'] && snap.data()['careers'].enabled === true) {
+      window.location.href = '/maintenance.html?page=careers';
     }
   } catch(e) {
     if (e.code === 'unavailable' || (e.message && e.message.indexOf('fetch') > -1)) {
@@ -684,7 +827,7 @@ function filterDept(dept, btn) {
 
 function openApply(roleKey) {
   var role = ROLES[roleKey] || ROLES['general'];
-  document.getElementById('applyDept').textContent = role.dept + ' — Elaborate';
+  document.getElementById('applyDept').textContent = role.dept + ' \u2014 Elaborate';
   document.getElementById('applyTitle').textContent = role.title;
 
   var sel = document.getElementById('appRole');
@@ -695,7 +838,7 @@ function openApply(roleKey) {
   document.getElementById('applySuccess').style.display = 'none';
   document.getElementById('appError').style.display = 'none';
   document.getElementById('submitBtn').disabled = false;
-  document.getElementById('submitBtnText').textContent = 'Submit Application →';
+  document.getElementById('submitBtnText').textContent = 'Submit Application \u2192';
 
   document.getElementById('applyModal').classList.add('open');
   document.getElementById('applyModalInner').scrollTop = 0;
@@ -707,15 +850,23 @@ function closeApply() {
 }
 
 function submitApplication() {
-  var first      = document.getElementById('appFirst').value.trim();
-  var last       = document.getElementById('appLast').value.trim();
-  var email      = document.getElementById('appEmail').value.trim();
-  var age        = document.getElementById('appAge').value.trim();
-  var role       = document.getElementById('appRole').value;
-  var why        = document.getElementById('appWhy').value.trim();
-  var experience = document.getElementById('appExperience').value.trim();
-  var extra      = document.getElementById('appExtra').value.trim();
-  var skills     = Array.prototype.map.call(
+  var first        = document.getElementById('appFirst').value.trim();
+  var last         = document.getElementById('appLast').value.trim();
+  var email        = document.getElementById('appEmail').value.trim();
+  var age          = document.getElementById('appAge').value.trim();
+  var location     = document.getElementById('appLocation').value.trim();
+  var timezone     = document.getElementById('appTimezone').value;
+  var availability = document.getElementById('appAvailability').value;
+  var role         = document.getElementById('appRole').value;
+  var usedBefore   = document.getElementById('appUsedBefore').value;
+  var why          = document.getElementById('appWhy').value.trim();
+  var experience   = document.getElementById('appExperience').value.trim();
+  var problem      = document.getElementById('appProblem').value.trim();
+  var improve      = document.getElementById('appImprove').value.trim();
+  var links        = document.getElementById('appLinks').value.trim();
+  var source       = document.getElementById('appSource').value;
+  var extra        = document.getElementById('appExtra').value.trim();
+  var skills       = Array.prototype.map.call(
     document.querySelectorAll('input[name=skills]:checked'),
     function(c) { return c.value; }
   );
@@ -728,22 +879,25 @@ function submitApplication() {
   }
 
   errEl.style.display = 'none';
-  if (!first || !last)                return show('Please enter your full name.');
+  if (!first || !last)                  return show('Please enter your full name.');
   if (!email || email.indexOf('@') < 0) return show('Please enter a valid email address.');
-  if (!age || parseInt(age) < 13)     return show('You must be at least 13 to apply.');
-  if (!role)                          return show('Please select the role you are applying for.');
-  if (!why)                           return show('Please tell us why you want to join Elaborate.');
-  if (!experience)                    return show('Please share your relevant experience.');
+  if (!age || parseInt(age) < 13)       return show('You must be at least 13 to apply.');
+  if (!role)                            return show('Please select the role you are applying for.');
+  if (!availability)                    return show('Please tell us how many hours per week you can commit.');
+  if (!why || why.length < 80)          return show('Please give a more detailed answer for why you want to join Elaborate (at least 80 characters).');
+  if (!experience)                      return show('Please share your relevant experience.');
+  if (!problem || problem.length < 60)  return show('Please describe a time you solved a difficult problem (at least 60 characters).');
+  if (!improve || improve.length < 40)  return show('Please tell us what you would improve about Elaborate.');
 
   var btn = document.getElementById('submitBtn');
   var txt = document.getElementById('submitBtnText');
   btn.disabled = true;
-  txt.textContent = 'Submitting…';
+  txt.textContent = 'Submitting\u2026';
 
   if (!db || !window._ffs) {
     show('Still connecting to the server. Please wait a moment and try again.');
     btn.disabled = false;
-    txt.textContent = 'Submit Application →';
+    txt.textContent = 'Submit Application \u2192';
     return;
   }
 
@@ -751,9 +905,16 @@ function submitApplication() {
   window._ffs.addDoc(window._ffs.collection(db, 'jobApplications'), {
     firstName: first, lastName: last,
     email: email, age: parseInt(age),
+    location: location, timezone: timezone,
+    availability: availability,
     role: role, roleLabel: roleInfo.title || role,
     department: roleInfo.dept || '',
+    usedBefore: usedBefore,
     why: why, experience: experience,
+    problemSolving: problem,
+    improvements: improve,
+    links: links || '',
+    source: source || '',
     extra: extra || '',
     skills: skills,
     status: 'pending',
@@ -766,7 +927,7 @@ function submitApplication() {
   }).catch(function(e) {
     show('Submission failed: ' + e.message + '. Please try again.');
     btn.disabled = false;
-    txt.textContent = 'Submit Application →';
+    txt.textContent = 'Submit Application \u2192';
   });
 }
 </script>
