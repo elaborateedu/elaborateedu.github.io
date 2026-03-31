@@ -1,678 +1,873 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C0G7WFX3JZ"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-C0G7WFX3JZ');</script>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-  <meta http-equiv="Pragma" content="no-cache"/>
-  <meta http-equiv="Expires" content="0"/>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="icon" type="image/png" href="/favicon.png">
-<title>My Classroom — Elaborate</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <title>My Classroom — Elaborate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-  :root{--cream:#F5F0E8;--navy:#0D1B2A;--coral:#FF5733;--gold:#F4C542;--sage:#7DBE8E;--lavender:#A78BFA;--card-bg:#FFFFFF;--text:#1A1A2E;--muted:#6B7280;--radius:16px;--shadow:0 4px 24px rgba(13,27,42,.10);--tr:.2s cubic-bezier(.4,0,.2,1)}
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:68px;background:rgba(245,240,232,.92);backdrop-filter:blur(14px);border-bottom:1.5px solid rgba(13,27,42,.07)}
-  .logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem;color:var(--navy);letter-spacing:-.02em;text-decoration:none;transition:color var(--tr)}.logo span{color:var(--coral)}.logo:hover{color:var(--coral)}
-  .nav-btn{font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;padding:9px 20px;border-radius:50px;border:none;cursor:pointer;transition:all var(--tr);text-decoration:none;display:inline-flex;align-items:center}
-  .nav-btn.ghost{background:transparent;color:var(--navy)}.nav-btn.ghost:hover{background:rgba(13,27,42,.06)}
-  .nav-btn.primary{background:var(--navy);color:var(--cream)}.nav-btn.primary:hover{background:var(--coral);transform:translateY(-1px)}
-  .guard{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px}
-  .guard h2{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);margin-bottom:12px}
-  .guard p{color:var(--muted);margin-bottom:24px;line-height:1.7}
-  .page{max-width:1100px;margin:0 auto;padding:88px 40px 80px;display:none}
-  .page.active{display:block}
-  .page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:32px;flex-wrap:wrap}
-  .page-heading h1{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--navy);letter-spacing:-.02em}
-  .page-heading h1 em{font-style:italic;font-weight:300;color:var(--coral)}
-  .page-heading p{font-size:.88rem;color:var(--muted);margin-top:4px}
-  .code-card{background:var(--navy);color:#fff;border-radius:20px;padding:28px 32px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
-  .code-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px}
-  .code-value{font-family:'Fraunces',serif;font-size:2.8rem;font-weight:900;letter-spacing:.18em;color:var(--gold);line-height:1}
-  .code-hint{font-size:.82rem;color:rgba(255,255,255,.4);margin-top:8px;line-height:1.5}
-  .copy-btn{padding:10px 22px;border-radius:50px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all var(--tr)}
-  .copy-btn:hover{background:rgba(255,255,255,.1)}
-  .regen-btn{padding:10px 22px;border-radius:50px;border:none;background:rgba(255,87,51,.2);color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:all var(--tr)}
-  .regen-btn:hover{background:rgba(255,87,51,.35)}
-  .tabs{display:flex;gap:6px;margin-bottom:28px;border-bottom:1.5px solid rgba(13,27,42,.08);padding-bottom:0}
-  .tab-btn{font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;padding:10px 20px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all var(--tr)}
-  .tab-btn.active{color:var(--navy);border-bottom-color:var(--coral)}
-  .tab-btn:hover:not(.active){color:var(--navy)}
-  .tab-panel{display:none}.tab-panel.active{display:block}
-  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px}
-  .stat-card{background:var(--card-bg);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05)}
-  .stat-value{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;letter-spacing:-.02em;color:var(--navy);margin-bottom:4px}
-  .stat-label{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-  .student-table{background:var(--card-bg);border-radius:20px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05);overflow:hidden}
-  .student-header{display:grid;grid-template-columns:1fr 80px 100px 40px;padding:12px 20px;background:rgba(13,27,42,.03);border-bottom:1.5px solid rgba(13,27,42,.06);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .student-row{display:grid;grid-template-columns:1fr 80px 100px 40px;padding:14px 20px;border-bottom:1.5px solid rgba(13,27,42,.04);align-items:center;transition:background var(--tr)}
-  .student-row:last-child{border-bottom:none}
-  .student-row:hover{background:rgba(13,27,42,.02)}
-  .student-cell{font-size:.88rem;color:var(--text);padding-right:12px}
-  .student-name{font-weight:600}.student-email{font-size:.75rem;color:var(--muted);margin-top:2px}
-  .remove-student-btn{width:28px;height:28px;border-radius:8px;border:none;background:rgba(255,87,51,.08);color:var(--coral);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
-  .remove-student-btn:hover{background:var(--coral);color:#fff}
-  .empty-row{text-align:center;padding:48px;color:var(--muted);font-size:.9rem}
-  .app-mgmt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-  .app-mgmt-card{background:var(--card-bg);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05);display:flex;flex-direction:column;gap:10px}
-  .app-mgmt-top{display:flex;align-items:center;gap:12px}
-  .app-mgmt-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
-  .app-mgmt-name{font-weight:700;font-size:.9rem;color:var(--navy)}
-  .app-mgmt-url{font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .app-mgmt-controls{display:flex;gap:8px;flex-wrap:wrap}
-  .toggle-pill{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:50px;border:1.5px solid;cursor:pointer;transition:all var(--tr);font-family:'DM Sans',sans-serif}
-  .toggle-pill.locked-off{background:rgba(167,139,250,.1);color:#6D4FBB;border-color:rgba(167,139,250,.3)}
-  .toggle-pill.locked-on{background:#A78BFA;color:#fff;border-color:#A78BFA}
-  .remove-app-btn{font-size:.72rem;font-weight:700;padding:5px 12px;border-radius:50px;border:1.5px solid rgba(255,87,51,.2);background:rgba(255,87,51,.06);color:var(--coral);cursor:pointer;transition:all var(--tr);font-family:'DM Sans',sans-serif}
-  .remove-app-btn:hover{background:var(--coral);color:#fff;border-color:var(--coral)}
-  .add-app-form{background:var(--card-bg);border-radius:20px;padding:28px 32px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05);margin-bottom:28px}
-  .add-app-form h3{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;color:var(--navy);margin-bottom:6px}
-  .add-app-form p{font-size:.85rem;color:var(--muted);margin-bottom:18px}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-bottom:16px}
-  .fg{display:flex;flex-direction:column;gap:6px}
-  .fg label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .fg input{padding:11px 14px;border-radius:12px;border:1.5px solid rgba(13,27,42,.12);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);background:var(--cream);outline:none;transition:border-color var(--tr)}
-  .fg input:focus{border-color:var(--coral)}
-  .add-btn{padding:11px 24px;border-radius:50px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:all var(--tr);white-space:nowrap;align-self:flex-end}
-  .add-btn:hover{background:var(--coral);transform:translateY(-1px)}
-  .emoji-row{display:flex;gap:6px;flex-wrap:wrap}
-  .emoji-opt{width:34px;height:34px;border-radius:8px;border:1.5px solid rgba(13,27,42,.1);background:transparent;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
-  .emoji-opt.selected,.emoji-opt:hover{background:var(--navy);border-color:var(--navy)}
-  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 24px;border-radius:50px;font-size:.88rem;font-weight:600;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  .mini-spinner{width:18px;height:18px;border:2px solid rgba(13,27,42,.1);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  @media(max-width:768px){nav{padding:0 16px}.page{padding:88px 16px 60px}.code-card{flex-direction:column}.student-header,.student-row{grid-template-columns:1fr 60px 40px}.form-grid{grid-template-columns:1fr}}
-</style>
-<style id="_sysdown_style">
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5F0E8;--navy:#0D1B2A;--coral:#FF5733;--gold:#F4C542;
+  --sage:#7DBE8E;--lav:#A78BFA;--sky:#38BDF8;
+  --muted:rgba(13,27,42,.48);--border:rgba(13,27,42,.09);--border2:rgba(13,27,42,.14);
+  --card:#fff;--tr:.2s cubic-bezier(.4,0,.2,1);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(245,240,232,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;color:var(--navy);text-decoration:none;letter-spacing:-.02em}.logo span{color:var(--coral)}
+.nbtn{font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;padding:8px 18px;border-radius:50px;text-decoration:none;transition:all var(--tr);border:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.nbtn.ghost{background:transparent;color:var(--navy)}.nbtn.ghost:hover{background:rgba(13,27,42,.06)}
+.nbtn.primary{background:var(--navy);color:var(--cream)}.nbtn.primary:hover{background:var(--coral)}
+.nbtn.coral{background:var(--coral);color:#fff}.nbtn.coral:hover{background:#e84520;transform:translateY(-1px)}
+
+/* GUARDS */
+.guard{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px}
+.guard h2{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;margin-bottom:10px}
+.guard p{color:var(--muted);line-height:1.7;margin-bottom:20px}
+
+/* PAGE */
+.page{max-width:1100px;margin:0 auto;padding:84px 40px 80px;display:none}.page.active{display:block}
+
+/* HEADER */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.ph h1{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;letter-spacing:-.02em}
+.ph h1 em{font-style:italic;font-weight:300;color:var(--coral)}
+.ph-sub{font-size:.86rem;color:var(--muted);margin-top:4px}
+.ph-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* JOIN CODE CARD */
+.code-card{background:var(--navy);color:#fff;border-radius:20px;padding:24px 30px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.code-lbl{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:6px}
+.code-val{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:900;letter-spacing:.18em;color:var(--gold);line-height:1}
+.code-hint{font-size:.78rem;color:rgba(255,255,255,.35);margin-top:6px;line-height:1.5}
+.code-actions{display:flex;flex-direction:column;gap:8px}
+.cbtn{padding:9px 18px;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.84rem;cursor:pointer;transition:all var(--tr);white-space:nowrap;border:none}
+.cbtn.outline{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:#fff}.cbtn.outline:hover{background:rgba(255,255,255,.1)}
+.cbtn.danger{background:rgba(255,87,51,.18);color:var(--coral)}.cbtn.danger:hover{background:rgba(255,87,51,.32)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;border-bottom:1.5px solid var(--border);margin-bottom:24px}
+.tab-btn{font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;padding:10px 18px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all var(--tr);white-space:nowrap;position:relative}
+.tab-btn:hover:not(.active){color:var(--navy)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--coral)}
+.tbadge{background:var(--coral);color:#fff;font-size:.58rem;padding:1px 5px;border-radius:50px;margin-left:5px;vertical-align:middle;font-family:'DM Mono',monospace}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* STREAM */
+.stream-compose{background:var(--card);border-radius:20px;border:1.5px solid var(--border);padding:0;margin-bottom:20px;overflow:hidden;transition:all var(--tr)}
+.compose-bar{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:text}
+.compose-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--coral),#ff8c6b);color:#fff;font-family:'Fraunces',serif;font-weight:900;font-size:.88rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.compose-placeholder{font-size:.9rem;color:rgba(13,27,42,.35);flex:1}
+.compose-type-bar{display:flex;gap:0;border-bottom:1px solid var(--border)}
+.ctype-btn{flex:1;padding:10px 8px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;border-bottom:2px solid transparent}
+.ctype-btn:hover{color:var(--navy);background:rgba(13,27,42,.02)}
+.ctype-btn.active{color:var(--coral);border-bottom-color:var(--coral)}
+.compose-form{padding:18px 20px;display:none}
+.compose-form.open{display:block}
+.cf-input{width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border2);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--navy);background:var(--cream);outline:none;transition:border-color .18s;margin-bottom:10px}
+.cf-input:focus{border-color:var(--coral);background:#fff}
+.cf-textarea{width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border2);font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--navy);background:var(--cream);outline:none;resize:vertical;min-height:80px;line-height:1.65;transition:border-color .18s;margin-bottom:10px}
+.cf-textarea:focus{border-color:var(--coral);background:#fff}
+.cf-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.cf-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex-shrink:0}
+.cf-date{padding:8px 12px;border-radius:9px;border:1.5px solid var(--border2);font-family:'DM Sans',sans-serif;font-size:.86rem;color:var(--navy);background:var(--cream);outline:none;transition:border-color .18s}
+.cf-date:focus{border-color:var(--coral)}
+.cf-actions{display:flex;justify-content:space-between;align-items:center;margin-top:4px;flex-wrap:wrap;gap:8px}
+.cf-post-btn{padding:9px 24px;border-radius:50px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.86rem;cursor:pointer;transition:all .18s}
+.cf-post-btn:hover:not(:disabled){background:var(--coral)}
+.cf-post-btn:disabled{opacity:.45;cursor:not-allowed}
+.cf-cancel-btn{padding:9px 16px;border-radius:50px;border:1px solid var(--border2);background:transparent;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.86rem;cursor:pointer;color:var(--muted);transition:all .18s}
+.cf-cancel-btn:hover{color:var(--navy);border-color:var(--border)}
+
+/* STREAM POSTS */
+.stream-post{background:var(--card);border-radius:18px;border:1.5px solid var(--border);padding:20px 22px;margin-bottom:14px;transition:all var(--tr);position:relative}
+.stream-post:hover{border-color:var(--border2);box-shadow:0 4px 20px rgba(13,27,42,.07)}
+.sp-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.sp-type-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.sp-type-icon.announcement{background:rgba(244,197,66,.15)}
+.sp-type-icon.assignment{background:rgba(255,87,51,.1)}
+.sp-type-icon.material{background:rgba(56,189,248,.1)}
+.sp-type-icon.question{background:rgba(167,139,250,.1)}
+.sp-meta{flex:1;min-width:0}
+.sp-title{font-weight:700;font-size:.95rem;color:var(--navy);margin-bottom:2px}
+.sp-subtitle{font-size:.76rem;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sp-type-tag{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:4px}
+.sp-type-tag.announcement{background:rgba(244,197,66,.15);color:#9a7200}
+.sp-type-tag.assignment{background:rgba(255,87,51,.1);color:var(--coral)}
+.sp-type-tag.material{background:rgba(56,189,248,.1);color:#0284c7}
+.sp-type-tag.question{background:rgba(167,139,250,.15);color:#6D4FBB}
+.sp-actions{display:flex;gap:6px;opacity:0;transition:opacity .18s}
+.stream-post:hover .sp-actions{opacity:1}
+.sp-act-btn{padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;font-family:'DM Sans',sans-serif;font-size:.74rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s}
+.sp-act-btn:hover{color:var(--navy);border-color:var(--border2);background:rgba(13,27,42,.03)}
+.sp-act-btn.del:hover{color:var(--coral);border-color:rgba(255,87,51,.3)}
+.sp-body{font-size:.88rem;color:var(--navy);line-height:1.72;margin-bottom:10px;white-space:pre-wrap;word-break:break-word}
+.sp-due{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:.64rem;padding:4px 10px;border-radius:50px;background:rgba(255,87,51,.08);color:var(--coral);font-weight:600}
+.sp-due.soon{background:rgba(244,197,66,.15);color:#9a7200}
+.sp-due.past{background:rgba(255,87,51,.12);color:var(--coral);opacity:.7}
+.sp-links{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.sp-link{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:1px solid var(--border);background:var(--cream);text-decoration:none;color:var(--navy);font-size:.84rem;font-weight:600;transition:all .15s}
+.sp-link:hover{border-color:var(--border2);background:#fff;color:var(--coral)}
+.sp-link-icon{font-size:.9rem;flex-shrink:0}
+.sp-responses{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.sp-resp-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.sp-resp-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.84rem}
+.sp-resp-item:last-child{border-bottom:none}
+.sp-resp-name{font-weight:600;color:var(--navy);min-width:120px;flex-shrink:0}
+.sp-resp-text{color:var(--muted)}
+.empty-stream{text-align:center;padding:60px 24px;color:var(--muted)}
+.empty-stream .icon{font-size:2.4rem;margin-bottom:12px;opacity:.5}
+.empty-stream h3{font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:var(--navy);margin-bottom:6px}
+.empty-stream p{font-size:.86rem;line-height:1.7}
+
+/* EDIT OVERLAY */
+.edit-overlay{position:fixed;inset:0;z-index:200;background:rgba(13,27,42,.45);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:24px}
+.edit-overlay.open{display:flex}
+.edit-modal{background:var(--card);border-radius:24px;padding:32px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(13,27,42,.25)}
+.edit-modal h3{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:900;margin-bottom:20px}
+
+/* STUDENTS TAB */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--card);border-radius:16px;padding:18px 20px;border:1.5px solid var(--border)}
+.stat-val{font-family:'Fraunces',serif;font-size:1.9rem;font-weight:900;letter-spacing:-.02em;margin-bottom:3px}
+.stat-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+.student-table{background:var(--card);border-radius:18px;border:1.5px solid var(--border);overflow:hidden}
+.student-header{display:grid;grid-template-columns:1fr 70px 90px 36px;padding:11px 18px;background:rgba(13,27,42,.03);border-bottom:1px solid var(--border);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.student-row{display:grid;grid-template-columns:1fr 70px 90px 36px;padding:13px 18px;border-bottom:1px solid var(--border);align-items:center;transition:background var(--tr)}
+.student-row:last-child{border-bottom:none}
+.student-row:hover{background:rgba(13,27,42,.02)}
+.scell{font-size:.87rem;color:var(--navy);padding-right:10px}
+.sname{font-weight:600}.semail{font-size:.73rem;color:var(--muted);margin-top:2px}
+.rem-btn{width:26px;height:26px;border-radius:7px;border:none;background:rgba(255,87,51,.08);color:var(--coral);cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+.rem-btn:hover{background:var(--coral);color:#fff}
+.empty-row{text-align:center;padding:40px;color:var(--muted);font-size:.88rem}
+
+/* APPS TAB */
+.app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+.app-card{background:var(--card);border-radius:16px;border:1.5px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:10px;transition:all var(--tr)}
+.app-card:hover{border-color:var(--border2);box-shadow:0 4px 16px rgba(13,27,42,.07)}
+.app-top{display:flex;align-items:center;gap:10px}
+.app-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.app-name{font-weight:700;font-size:.88rem}
+.app-url{font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app-ctrls{display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:.7rem;font-weight:700;letter-spacing:.05em;padding:4px 11px;border-radius:50px;border:1.5px solid;cursor:pointer;transition:all var(--tr);font-family:'DM Sans',sans-serif;white-space:nowrap}
+.pill.lock-off{background:rgba(167,139,250,.1);color:#6D4FBB;border-color:rgba(167,139,250,.3)}.pill.lock-off:hover{background:rgba(167,139,250,.2)}
+.pill.lock-on{background:var(--lav);color:#fff;border-color:var(--lav)}
+.pill.remove{background:rgba(255,87,51,.07);color:var(--coral);border-color:rgba(255,87,51,.2)}.pill.remove:hover{background:var(--coral);color:#fff;border-color:var(--coral)}
+.add-app-form{background:var(--card);border-radius:18px;border:1.5px solid var(--border);padding:24px;margin-bottom:22px}
+.add-app-form h3{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900;margin-bottom:4px}
+.add-app-form p{font-size:.84rem;color:var(--muted);margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-bottom:14px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fi{padding:10px 13px;border-radius:10px;border:1.5px solid var(--border2);font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--navy);background:var(--cream);outline:none;transition:border-color .18s}.fi:focus{border-color:var(--coral);background:#fff}
+.add-btn{padding:10px 22px;border-radius:50px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:all var(--tr);white-space:nowrap}
+.add-btn:hover{background:var(--coral)}
+.emoji-row{display:flex;gap:5px;flex-wrap:wrap}
+.emo{width:32px;height:32px;border-radius:7px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+.emo.sel,.emo:hover{background:var(--navy);border-color:var(--navy)}
+
+/* REQUESTS TAB */
+.req-card{background:var(--card);border-radius:14px;border:1.5px solid var(--border);padding:18px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px;transition:all var(--tr)}
+.req-card:hover{border-color:var(--border2)}
+.req-info{flex:1;min-width:200px}
+.req-name{font-weight:700;font-size:.9rem;margin-bottom:3px}
+.req-student{font-size:.78rem;color:var(--muted)}
+.req-actions{display:flex;gap:8px;flex-shrink:0}
+.req-btn{padding:7px 16px;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .15s;border:none}
+.req-btn.approve{background:rgba(125,190,142,.15);color:#2E7D47}.req-btn.approve:hover{background:rgba(125,190,142,.3)}
+.req-btn.decline{background:rgba(255,87,51,.08);color:var(--coral)}.req-btn.decline:hover{background:rgba(255,87,51,.15)}
+
+/* MISC */
+.section-head{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:900;margin-bottom:14px}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:11px 22px;border-radius:50px;font-size:.86rem;font-weight:600;opacity:0;transition:all .28s;z-index:999;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.spinner{width:16px;height:16px;border:2px solid rgba(13,27,42,.12);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:7px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:768px){nav{padding:0 16px}.page{padding:80px 16px 60px}.form-grid{grid-template-columns:1fr}.student-header,.student-row{grid-template-columns:1fr 60px 36px}}
 #_sysdown{display:none;position:fixed;inset:0;z-index:99999;background:#0D1B2A;color:#fff;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:'DM Sans',sans-serif}
 #_sysdown.show{display:flex}
-#_sysdown h1{font-size:2.2rem;font-weight:900;letter-spacing:-.03em;margin-bottom:12px;font-family:'Fraunces',serif}
-#_sysdown h1 em{color:#FF5733;font-style:italic;font-weight:300}
-#_sysdown p{color:rgba(255,255,255,.5);max-width:420px;line-height:1.7;margin-bottom:28px;font-size:.95rem}
-#_sysdown a{padding:11px 26px;border-radius:50px;background:#FF5733;color:#fff;text-decoration:none;font-weight:700;font-size:.88rem;margin:4px}
-#_sysdown .ghost{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15)}
-#_sysdown .dot{width:8px;height:8px;border-radius:50%;background:#F4C542;animation:_sdpulse 2s ease infinite;display:inline-block;margin-bottom:24px}
-@keyframes _sdpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
-</style></head>
+#_sysdown h1{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;margin-bottom:10px}
+#_sysdown h1 em{color:var(--coral);font-style:italic;font-weight:300}
+#_sysdown p{color:rgba(255,255,255,.48);max-width:380px;line-height:1.7;margin-bottom:20px}
+#_sysdown a{padding:10px 22px;border-radius:50px;background:var(--coral);color:#fff;text-decoration:none;font-weight:700;font-size:.86rem;margin:4px;display:inline-block}
+</style>
+</head>
 <body>
-<div id="_sysdown">
-  <div class="dot"></div>
-  <h1>System <em>Down.</em></h1>
-  <p>Elaborate is having trouble connecting right now. Try again in a few minutes.</p>
-  <div>
-    <a href="/status.html">View Status Page</a>
-    <a href="javascript:location.reload()" class="ghost">Try Again</a>
-  </div>
-</div>
 
+<div id="_sysdown"><h1>System <em>Down.</em></h1><p>Elaborate is having trouble connecting. Try again in a moment.</p><a href="/status.html">Status Page</a></div>
 
 <nav>
-  <a class="logo" href="index.html">Elaborate<span>.</span></a>
-  <div style="display:flex;gap:8px">
-    <a class="nav-btn ghost" href="index.html">← My Hub</a>
-    <a class="nav-btn primary" href="support.html">Support</a>
+  <a class="logo" href="/index.html">Elaborate<span>.</span></a>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="nbtn ghost" onclick="promptSwitchClass()" id="switchClassBtn" style="display:none">⇄ Switch Class</button>
+    <a class="nbtn ghost" href="/index.html">← My Hub</a>
+    <a class="nbtn primary" href="/support.html">Support</a>
   </div>
 </nav>
 
 <div class="guard" id="guardLogin" style="display:none">
-  <div><div style="font-size:2.5rem;margin-bottom:16px">🔒</div>
-  <h2>Sign in first</h2><p>You need an Elaborate account to access your classroom.</p>
-  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-    <a class="nav-btn primary" href="index.html">Go to Elaborate →</a>
-    <a class="nav-btn ghost" href="index.html" onclick="sessionStorage.setItem('openSettings','1')" style="border:2px solid var(--navy)">Open Settings</a>
-  </div></div>
+  <div><div style="font-size:2.5rem;margin-bottom:14px">🔒</div><h2>Sign in first</h2><p>You need an Elaborate account to access your classroom.</p><a class="nbtn primary" href="/index.html">Go to Elaborate →</a></div>
 </div>
 
 <div class="guard" id="guardTeacher" style="display:none">
-  <div><div style="font-size:2.5rem;margin-bottom:16px">🎒</div>
-  <h2>Teachers only</h2><p>This page is for teachers. If you're a student, ask your teacher for the classroom join code.</p>
-  <a class="nav-btn primary" href="index.html" style="margin:0 auto">Back to Hub →</a></div>
+  <div><div style="font-size:2.5rem;margin-bottom:14px">🎒</div><h2>Teachers only</h2><p>This page is for teachers. If you're a student, ask your teacher for the classroom join code.</p><a class="nbtn primary" href="/index.html">Back to Hub →</a></div>
 </div>
 
 <div class="page" id="mainPage">
 
-  <div class="page-heading">
+  <!-- PAGE HEADER -->
+  <div class="ph">
     <div>
       <h1 id="classroomTitle">My <em>Classroom</em></h1>
-      <p id="classroomSubtitle" style="font-size:.88rem;color:var(--muted);margin-top:4px">Loading…</p>
+      <div class="ph-sub" id="classroomSubtitle">Loading…</div>
     </div>
-    <button class="nav-btn ghost" onclick="renameClassroom()">✏ Rename</button>
+    <div class="ph-actions">
+      <button class="nbtn ghost" onclick="renameClassroom()">✏ Rename</button>
+    </div>
   </div>
 
+  <!-- JOIN CODE -->
   <div class="code-card">
     <div>
-      <div class="code-label">Student Join Code</div>
-      <div class="code-value" id="joinCodeDisplay">——</div>
-      <div class="code-hint">Share this with your students — they enter it in Elaborate → Join Classroom.</div>
+      <div class="code-lbl">Student Join Code</div>
+      <div class="code-val" id="joinCodeDisplay">——</div>
+      <div class="code-hint">Share with students — they enter it in Elaborate → Join Classroom.</div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
-      <button class="regen-btn" onclick="regenCode()">↻ New Code</button>
+    <div class="code-actions">
+      <button class="cbtn outline" onclick="copyCode()">📋 Copy Code</button>
+      <button class="cbtn danger" onclick="regenCode()">↻ New Code</button>
     </div>
   </div>
 
-  <!-- ANNOUNCEMENT -->
-  <div style="background:rgba(244,197,66,.1);border:1.5px solid rgba(244,197,66,.35);border-radius:16px;padding:18px 24px;margin-bottom:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-    <span style="font-size:1.2rem">📢</span>
-    <input type="text" id="announcementInput" placeholder="Post an announcement to all students (leave blank to clear)…"
-      style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1.5px solid rgba(244,197,66,.4);background:transparent;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--navy);outline:none" />
-    <button onclick="saveAnnouncement()" style="padding:10px 20px;border-radius:50px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s;white-space:nowrap">Post →</button>
-  </div>
-
+  <!-- TABS -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('students',this)">👥 Students</button>
-    <button class="tab-btn" onclick="switchTab('apps',this)">📱 App Management</button>
-    <button class="tab-btn" onclick="switchTab('requests',this)">💬 App Requests <span id="requestsBadge" style="display:none;background:var(--coral);color:#fff;font-size:.65rem;padding:2px 6px;border-radius:50px;margin-left:4px">0</span></button>
+    <button class="tab-btn active" onclick="switchTab('stream',this)">📋 Stream</button>
+    <button class="tab-btn" onclick="switchTab('students',this)">👥 Students</button>
+    <button class="tab-btn" onclick="switchTab('apps',this)">📱 Apps</button>
+    <button class="tab-btn" onclick="switchTab('requests',this)">💬 Requests <span id="reqBadge" class="tbadge" style="display:none">0</span></button>
     <button class="tab-btn" onclick="switchTab('stats',this)">📊 Stats</button>
   </div>
 
-  <!-- STUDENTS -->
-  <div class="tab-panel active" id="tab-students">
+  <!-- ══ STREAM TAB ══ -->
+  <div class="tab-panel active" id="tab-stream">
+
+    <!-- Compose card -->
+    <div class="stream-compose" id="composeCard">
+      <div class="compose-bar" onclick="openCompose()">
+        <div class="compose-avatar" id="teacherAvatar">T</div>
+        <div class="compose-placeholder">Post to your class — announcement, assignment, material, or question…</div>
+      </div>
+      <div class="compose-type-bar" id="composeTypebar" style="display:none">
+        <button class="ctype-btn active" onclick="setComposeType('announcement',this)">📢 Announcement</button>
+        <button class="ctype-btn" onclick="setComposeType('assignment',this)">📝 Assignment</button>
+        <button class="ctype-btn" onclick="setComposeType('material',this)">📎 Material</button>
+        <button class="ctype-btn" onclick="setComposeType('question',this)">❓ Question</button>
+      </div>
+      <div class="compose-form" id="composeForm">
+        <input class="cf-input" id="cfTitle" placeholder="Title (optional for announcements)…" autocomplete="off"/>
+        <textarea class="cf-textarea" id="cfBody" placeholder="Write your message here…" rows="3"></textarea>
+        <!-- Link attachments -->
+        <div id="cfLinksWrap">
+          <div class="cf-row" style="margin-bottom:6px">
+            <span class="cf-label">Links</span>
+            <button type="button" onclick="addLinkField()" style="padding:3px 10px;border-radius:6px;border:1px solid var(--border2);background:transparent;font-family:'DM Sans',sans-serif;font-size:.76rem;color:var(--muted);cursor:pointer">+ Add link</button>
+          </div>
+          <div id="cfLinkFields"></div>
+        </div>
+        <!-- Due date (assignments only) -->
+        <div class="cf-row" id="cfDueWrap" style="display:none">
+          <span class="cf-label">Due</span>
+          <input class="cf-date" type="date" id="cfDue"/>
+          <input class="cf-date" type="time" id="cfDueTime" style="width:110px"/>
+        </div>
+        <div class="cf-actions">
+          <button class="cf-cancel-btn" onclick="closeCompose()">Cancel</button>
+          <button class="cf-post-btn" onclick="submitPost()" id="cfPostBtn">Post →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stream feed -->
+    <div id="streamFeed">
+      <div class="empty-stream">
+        <div class="icon">📋</div>
+        <h3>Your stream is empty</h3>
+        <p>Post an announcement, assignment, material, or question above.<br/>Students will see everything here in real time.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STUDENTS TAB ══ -->
+  <div class="tab-panel" id="tab-students">
     <div class="stats-row">
-      <div class="stat-card"><div class="stat-value" id="statStudents">—</div><div class="stat-label">Students</div></div>
-      <div class="stat-card"><div class="stat-value" id="statAvgApps">—</div><div class="stat-label">Avg Apps / Student</div></div>
-      <div class="stat-card"><div class="stat-value" id="statPinnedCount">—</div><div class="stat-label">Pinned Apps</div></div>
+      <div class="stat-card"><div class="stat-val" id="statStudents">—</div><div class="stat-lbl">Students</div></div>
+      <div class="stat-card"><div class="stat-val" id="statAvgApps">—</div><div class="stat-lbl">Avg Apps</div></div>
+      <div class="stat-card"><div class="stat-val" id="statPinned">—</div><div class="stat-lbl">Pinned Apps</div></div>
     </div>
     <div class="student-table">
       <div class="student-header"><div>Student</div><div>Apps</div><div>Joined</div><div></div></div>
-      <div id="studentRows"><div class="empty-row"><span class="mini-spinner"></span> Loading…</div></div>
+      <div id="studentRows"><div class="empty-row"><span class="spinner"></span>Loading…</div></div>
     </div>
   </div>
 
-  <!-- APP MANAGEMENT -->
+  <!-- ══ APPS TAB ══ -->
   <div class="tab-panel" id="tab-apps">
     <div class="add-app-form">
       <h3>Push an App to All Students</h3>
-      <p>Apps you add here appear in every student's hub. Lock an app to prevent students from removing it.</p>
+      <p>Apps added here appear in every student's hub. Lock an app to prevent students from removing it.</p>
       <div class="form-grid">
-        <div class="fg"><label>App Name</label><input type="text" id="newAppName" placeholder="e.g. Khan Academy" /></div>
-        <div class="fg"><label>URL</label><input type="text" id="newAppUrl" placeholder="https://example.com" /></div>
-        <button class="add-btn" onclick="addPinnedApp()">Add App ✦</button>
+        <div class="fg"><label>App Name</label><input class="fi" type="text" id="newAppName" placeholder="e.g. Khan Academy"/></div>
+        <div class="fg"><label>URL</label><input class="fi" type="text" id="newAppUrl" placeholder="https://example.com"/></div>
+        <button class="add-btn" onclick="addPinnedApp()">Add ✦</button>
       </div>
       <div>
-        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Pick an Icon</div>
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px">Pick an Icon</div>
         <div class="emoji-row" id="teacherEmojiPicker"></div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <h3 style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:900;color:var(--navy)">Pinned Apps <span id="pinnedCount" style="font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;color:var(--muted)"></span></h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="section-head">Pinned Apps <span id="pinnedCount" style="font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:var(--muted)"></span></div>
     </div>
-    <div id="pinnedAppGrid" class="app-mgmt-grid"></div>
-    <div id="noPinnedMsg" style="display:none;text-align:center;padding:40px;color:var(--muted);font-size:.9rem">No apps pinned yet. Add one above to push it to all students.</div>
+    <div id="pinnedAppGrid" class="app-grid"></div>
+    <div id="noPinnedMsg" style="display:none;text-align:center;padding:36px;color:var(--muted);font-size:.88rem">No apps pinned yet.</div>
   </div>
 
-  <!-- APP REQUESTS -->
+  <!-- ══ REQUESTS TAB ══ -->
   <div class="tab-panel" id="tab-requests">
-    <div id="requestsLoading" style="text-align:center;padding:48px;color:var(--muted);font-size:.9rem"><span class="mini-spinner"></span> Loading requests…</div>
-    <div id="requestsList" style="display:flex;flex-direction:column;gap:12px"></div>
-    <div id="requestsEmpty" style="display:none;text-align:center;padding:60px 24px;color:var(--muted)">
-      <div style="font-size:2rem;margin-bottom:12px">💬</div>
-      <p style="font-size:.9rem">No app requests yet. Students can request apps from their hub.</p>
+    <div id="reqLoading" style="text-align:center;padding:40px;color:var(--muted)"><span class="spinner"></span>Loading…</div>
+    <div id="reqList"></div>
+    <div id="reqEmpty" style="display:none;text-align:center;padding:48px;color:var(--muted)">
+      <div style="font-size:1.8rem;margin-bottom:10px">💬</div>
+      <p style="font-size:.88rem">No app requests yet.</p>
     </div>
   </div>
 
-  <!-- STATS -->
+  <!-- ══ STATS TAB ══ -->
   <div class="tab-panel" id="tab-stats">
-    <div class="stats-row" style="margin-bottom:28px">
-      <div class="stat-card"><div class="stat-value" id="statTotalApps">—</div><div class="stat-label">Total App Installs</div></div>
-      <div class="stat-card"><div class="stat-value" id="statTopApp" style="font-size:1.1rem;padding-top:4px">—</div><div class="stat-label">Most Popular App</div></div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val" id="statTotalApps">—</div><div class="stat-lbl">Total App Installs</div></div>
+      <div class="stat-card"><div class="stat-val" id="statTopApp" style="font-size:1rem;padding-top:6px">—</div><div class="stat-lbl">Most Popular App</div></div>
     </div>
-    <div style="background:var(--card-bg);border-radius:20px;box-shadow:var(--shadow);border:1.5px solid rgba(13,27,42,.05);overflow:hidden">
-      <div style="display:grid;grid-template-columns:1fr 80px;padding:12px 20px;border-bottom:1.5px solid rgba(13,27,42,.06);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">
+    <div style="background:var(--card);border-radius:18px;border:1.5px solid var(--border);overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr 80px;padding:11px 18px;border-bottom:1px solid var(--border);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">
         <div>App</div><div style="text-align:right">Students</div>
       </div>
       <div id="appLeaderboard"></div>
     </div>
   </div>
 
-</div>
+</div><!-- /mainPage -->
 
 <div class="toast" id="toast"></div>
 
+<!-- EDIT POST OVERLAY -->
+<div class="edit-overlay" id="editOverlay" onclick="handleEditOverlayClick(event)">
+  <div class="edit-modal">
+    <h3 id="editModalTitle">Edit Post</h3>
+    <input class="cf-input" id="editTitle" placeholder="Title (optional)…" style="margin-bottom:10px"/>
+    <textarea class="cf-textarea" id="editBody" rows="4" style="margin-bottom:10px"></textarea>
+    <div id="editLinksWrap" style="margin-bottom:10px">
+      <div class="cf-row" style="margin-bottom:6px">
+        <span class="cf-label">Links</span>
+        <button type="button" onclick="addEditLinkField()" style="padding:3px 10px;border-radius:6px;border:1px solid var(--border2);background:transparent;font-family:'DM Sans',sans-serif;font-size:.76rem;color:var(--muted);cursor:pointer">+ Add link</button>
+      </div>
+      <div id="editLinkFields"></div>
+    </div>
+    <div class="cf-row" id="editDueWrap" style="display:none;margin-bottom:10px">
+      <span class="cf-label">Due</span>
+      <input class="cf-date" type="date" id="editDue"/>
+      <input class="cf-date" type="time" id="editDueTime" style="width:110px"/>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+      <button class="cf-cancel-btn" onclick="closeEditOverlay()">Cancel</button>
+      <button class="cf-post-btn" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
-const firebaseConfig={apiKey:"AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs",authDomain:"elaborate-edc16.firebaseapp.com",projectId:"elaborate-edc16",storageBucket:"elaborate-edc16.firebasestorage.app",messagingSenderId:"923385978777",appId:"1:923385978777:web:7d0fdb0472e14e8500bd08"};
-import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+const FB={apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',authDomain:'elaborate-edc16.firebaseapp.com',projectId:'elaborate-edc16',storageBucket:'elaborate-edc16.firebasestorage.app',messagingSenderId:'923385978777',appId:'1:923385978777:web:7d0fdb0472e14e8500bd08'};
+import{initializeApp,getApps}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import{getAuth,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import{getFirestore,doc,getDoc,setDoc,updateDoc,deleteDoc,collection,query,where,getDocs,addDoc,onSnapshot,orderBy,serverTimestamp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import{getFirestore,doc,getDoc,setDoc,updateDoc,deleteDoc,collection,query,where,getDocs,addDoc,onSnapshot,orderBy,serverTimestamp,limit}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+const app=getApps().length?getApps()[0]:initializeApp(FB);
+const auth=getAuth(app);const db=getFirestore(app);
 
-const firebaseApp=initializeApp(firebaseConfig);
-const auth=getAuth(firebaseApp);
-const db=getFirestore(firebaseApp);
+// Maintenance check
+(async()=>{try{var s=await getDoc(doc(db,'siteConfig','maintenance'));if(s.exists()&&s.data()['classroom']?.enabled)location.href='/maintenance.html?page=classroom';}catch(e){if(e.code==='unavailable')document.getElementById('_sysdown').classList.add('show');}})();
 
-const EMOJIS=['📚','🔬','🎨','🧮','🌍','💡','🎵','📝','🏆','🔭','💻','✏️','🗺️','🧪','📊','🎯'];
-const COLORS=[{val:'rgba(255,87,51,.12)',dot:'#FF5733'},{val:'rgba(244,197,66,.18)',dot:'#F4C542'},{val:'rgba(125,190,142,.18)',dot:'#7DBE8E'},{val:'rgba(167,139,250,.18)',dot:'#A78BFA'},{val:'rgba(56,189,248,.15)',dot:'#38BDF8'},{val:'rgba(13,27,42,.08)',dot:'#0D1B2A'}];
+const EMOJIS=['📚','🔬','🎨','🧮','🌍','💡','🎵','📝','🏆','🔭','💻','✏️','🗺️','🧪','📊','🎯','🖥️','📐','🔑','🌱'];
 
-let currentUser=null,teacherProfile=null,classroom=null,classroomId=null,students=[],selectedEmoji='📚';
-// Classroom ID can come from ?id= param (multi-classroom) or from user profile (legacy)
-const URL_CLASS_ID = new URLSearchParams(window.location.search).get('id');
+let currentUser=null,classroom=null,classroomId=null,students=[],selectedEmoji='📚';
+let composeType='announcement',editingPostId=null,streamUnsub=null;
+const URL_CLASS_ID=new URLSearchParams(window.location.search).get('id');
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toast(msg='✓ Saved'){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function show(id){['guardLogin','guardTeacher','mainPage'].forEach(i=>{const el=document.getElementById(i);if(el)el.style.display=i===id?'block':'none';});}
+function fmtDate(ts){if(!ts)return'';const d=ts.toDate?ts.toDate():new Date(ts);return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function fmtTime(ts){if(!ts)return'';const d=ts.toDate?ts.toDate():new Date(ts);return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
 
 onAuthStateChanged(auth,async user=>{
   if(!user){show('guardLogin');return;}
   currentUser=user;
-  const snap=await getDoc(doc(db,'users',user.uid));
-  if(!snap.exists()){show('guardLogin');return;}
-  teacherProfile=snap.data();
 
-  // Auto-upgrade: if no role set, prompt upgrade
-  if((teacherProfile.role||'')!=='teacher'){
-    const upgrade=confirm(
-      'Your account is not set as a Teacher yet.\n\nClick OK to upgrade to a Teacher account and create your classroom now.\nClick Cancel to go back to the hub.'
-    );
-    if(!upgrade){window.location.href='index.html';return;}
+  // Set teacher avatar initial
+  const name=(user.displayName||'T');
+  document.getElementById('teacherAvatar').textContent=name[0].toUpperCase();
+
+  // Load profile
+  const profileSnap=await getDoc(doc(db,'users',user.uid));
+  const profile=profileSnap.exists()?profileSnap.data():{};
+
+  // Only teachers can access this page
+  if(profile.role!=='teacher'){show('guardTeacher');return;}
+
+  // Determine classroom ID
+  let cid=URL_CLASS_ID||profile.classroomId||null;
+  if(!cid){
+    // Create first classroom automatically
     const code=genCode();
     const ref=doc(collection(db,'classrooms'));
-    await setDoc(ref,{
-      name:`${teacherProfile.firstName||''} ${teacherProfile.lastName||''}'s Class`,
-      teacherUid:user.uid,
-      teacherName:`${teacherProfile.firstName||''} ${teacherProfile.lastName||''}`,
-      joinCode:code,pinnedApps:[],lockedAppIds:[],
-      createdAt:serverTimestamp()
-    });
-    teacherProfile.role='teacher';
-    teacherProfile.classroomId=ref.id;
-    teacherProfile.classroomIds=[ref.id];
-    await setDoc(doc(db,'users',user.uid),teacherProfile);
-    if(!URL_CLASS_ID) window.location.href='classroom.html?id='+ref.id;
+    const name2=(user.displayName||'').split(' ')[0]||'My';
+    await setDoc(ref,{name:`${name2}'s Class`,teacherUid:user.uid,teacherName:user.displayName||'Teacher',joinCode:code,pinnedApps:[],lockedAppIds:[],announcement:'',createdAt:serverTimestamp()});
+    await setDoc(doc(db,'users',user.uid),{...profile,classroomId:ref.id,classroomIds:[ref.id]});
+    window.location.href='classroom.html?id='+ref.id;
     return;
   }
+  if(!URL_CLASS_ID&&cid){window.location.href='classroom.html?id='+cid;return;}
 
-  // If ?id= was provided, use it directly (verify ownership below)
-  if(URL_CLASS_ID){
-    classroomId=URL_CLASS_ID;
-  } else {
-    // Legacy: use classroomId from profile, or pick first owned classroom
-    if(teacherProfile.classroomId){
-      classroomId=teacherProfile.classroomId;
-    } else {
-      // Find any classroom owned by this teacher
-      const q=query(collection(db,'classrooms'),where('teacherUid','==',user.uid));
-      const owned=await getDocs(q);
-      if(!owned.empty){
-        classroomId=owned.docs[0].id;
-        teacherProfile.classroomId=classroomId;
-        await setDoc(doc(db,'users',user.uid),teacherProfile);
-      } else {
-        // Create first classroom
-        const code=genCode();
-        const ref=doc(collection(db,'classrooms'));
-        await setDoc(ref,{
-          name:`${teacherProfile.firstName||''} ${teacherProfile.lastName||''}'s Class`,
-          teacherUid:user.uid,
-          teacherName:`${teacherProfile.firstName||''} ${teacherProfile.lastName||''}`,
-          joinCode:code,pinnedApps:[],lockedAppIds:[],
-          createdAt:serverTimestamp()
-        });
-        classroomId=ref.id;
-        teacherProfile.classroomId=classroomId;
-        await setDoc(doc(db,'users',user.uid),teacherProfile);
-        window.location.href='classroom.html?id='+classroomId;
-        return;
-      }
-    }
-    window.location.href='classroom.html?id='+classroomId;
-    return;
-  }
+  classroomId=cid;
+  const clsSnap=await getDoc(doc(db,'classrooms',cid));
+  if(!clsSnap.exists()||clsSnap.data().teacherUid!==user.uid){show('guardTeacher');return;}
 
-  const clsSnap=await getDoc(doc(db,'classrooms',classroomId));
-  if(!clsSnap.exists()||clsSnap.data().teacherUid!==user.uid){
-    alert('Classroom not found or you do not have access.');
-    window.location.href='index.html';
-    return;
-  }
-  classroom=clsSnap.data();
-
-  // Show the page immediately so layout is visible even if data takes time
-  show('mainPage');
+  classroom={...clsSnap.data()};
   renderHeader();
   buildEmojiPicker();
-  renderPinnedApps();
-
-  try {
-    await loadStudents();
-    renderStudents();
-    renderStats();
-    renderHeader(); // re-render with student count
-  } catch(e) {
-    console.error('loadStudents error:', e);
-    document.getElementById('studentRows').innerHTML =
-      `<div class="empty-row" style="color:var(--coral)">
-        ⚠ Could not load students. If this is your first time, you may need a Firestore index.<br>
-        <span style="font-size:.8rem;color:var(--muted)">Check the browser console for a link to create it.</span>
-      </div>`;
-  }
+  loadStudents();
+  loadRequests();
+  subscribeStream();
+  checkMultiClass();
+  show('mainPage');
 });
 
-function show(id){
-  // Hide all guards with inline style; remove active from pages
-  document.querySelectorAll('.guard').forEach(el=>el.style.display='none');
-  document.querySelectorAll('.page').forEach(el=>{el.classList.remove('active');el.style.display='';});
-  const el=document.getElementById(id);
-  if(el.classList.contains('page')){
-    el.style.display=''; // clear any inline override
-    el.classList.add('active');
-  } else {
-    el.style.display='flex';
-  }
-}
-
-function genCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];return s;}
-
+// ── HEADER ────────────────────────────────────────────────────────
 function renderHeader(){
-  document.getElementById('classroomTitle').innerHTML=`<em>${esc(classroom.name||'My Classroom')}</em>`;
-  document.getElementById('classroomSubtitle').textContent=`${students.length} student${students.length===1?'':'s'} enrolled`;
+  document.getElementById('classroomTitle').innerHTML=esc(classroom.name||'My')+" <em>Classroom</em>";
+  document.getElementById('classroomSubtitle').textContent=(classroom.teacherName||'')+(classroom.period?' · Period '+classroom.period:'');
   document.getElementById('joinCodeDisplay').textContent=classroom.joinCode||'——';
-  const annInput=document.getElementById('announcementInput');
-  if(annInput)annInput.value=classroom.announcement||'';
 }
-
-window.copyCode=function(){navigator.clipboard.writeText(classroom.joinCode||'').then(()=>toast('✓ Code copied to clipboard!'));};
+window.copyCode=function(){navigator.clipboard.writeText(classroom.joinCode||'').then(()=>toast('✓ Code copied!'));};
 window.regenCode=async function(){
-  if(!confirm('Generate a new join code? The old one will stop working immediately.'))return;
+  if(!confirm('Generate a new join code? The old one will stop working.'))return;
   const code=genCode();
   await updateDoc(doc(db,'classrooms',classroomId),{joinCode:code});
   classroom.joinCode=code;
   document.getElementById('joinCodeDisplay').textContent=code;
-  toast('✓ New code generated!');
+  toast('✓ New code generated.');
 };
 window.renameClassroom=function(){
-  const name=prompt('New classroom name:',classroom.name||'');
-  if(!name?.trim())return;
+  const name=prompt('Class name:',classroom.name||'');
+  if(!name||!name.trim())return;
   updateDoc(doc(db,'classrooms',classroomId),{name:name.trim()});
   classroom.name=name.trim();
   renderHeader();
-  toast('✓ Renamed!');
+  toast('✓ Renamed.');
 };
 
+// ── TABS ──────────────────────────────────────────────────────────
 window.switchTab=function(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('tab-'+tab).classList.add('active');
-  if(tab==='requests')loadRequests();
+  if(btn)btn.classList.add('active');
+  document.getElementById('tab-'+tab)?.classList.add('active');
 };
 
-let requestsLoaded=false;
-async function loadRequests(){
-  if(requestsLoaded)return;
-  requestsLoaded=true;
-  document.getElementById('requestsLoading').style.display='block';
-  document.getElementById('requestsList').innerHTML='';
-  document.getElementById('requestsEmpty').style.display='none';
-  try{
-    const q=query(collection(db,'classrooms',classroomId,'appRequests'),orderBy('createdAt','desc'));
-    onSnapshot(q,snap=>{
-      const reqs=snap.docs.map(d=>({id:d.id,...d.data()}));
-      const pending=reqs.filter(r=>r.status==='pending');
-      const badge=document.getElementById('requestsBadge');
-      if(badge){badge.textContent=pending.length;badge.style.display=pending.length?'inline':'none';}
-      document.getElementById('requestsLoading').style.display='none';
-      if(reqs.length===0){document.getElementById('requestsEmpty').style.display='block';return;}
-      document.getElementById('requestsList').innerHTML=reqs.map(r=>{
-        const isPending=r.status==='pending';
-        const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
-        return `<div style="background:var(--card-bg);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow);border:1.5px solid ${isPending?'rgba(167,139,250,.3)':'rgba(13,27,42,.06)'};display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
-          <div style="flex:1;min-width:0">
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
-              <span style="font-weight:700;font-size:.95rem;color:var(--navy)">${esc(r.appName)}</span>
-              <span style="font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:50px;background:${isPending?'rgba(167,139,250,.12)':'rgba(125,190,142,.12)'};color:${isPending?'#6D4FBB':'#2E7D47'}">${r.status}</span>
-            </div>
-            ${r.appUrl?`<div style="font-size:.78rem;color:var(--muted);margin-bottom:4px">🔗 ${esc(r.appUrl)}</div>`:''}
-            ${r.reason?`<div style="font-size:.85rem;color:var(--text);margin-bottom:6px;line-height:1.55">"${esc(r.reason)}"</div>`:''}
-            <div style="font-size:.75rem;color:var(--muted)">From <strong>${esc(r.studentName||'Student')}</strong> · ${date}</div>
-          </div>
-          ${isPending?`<div style="display:flex;gap:8px;flex-shrink:0">
-            <button onclick="approveRequest('${r.id}','${esc(r.appName)}','${esc(r.appUrl||'')}')" style="padding:8px 16px;border-radius:50px;border:none;background:var(--sage);color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer;transition:all .2s">✓ Add App</button>
-            <button onclick="declineRequest('${r.id}')" style="padding:8px 16px;border-radius:50px;border:1.5px solid rgba(255,87,51,.25);background:transparent;color:var(--coral);font-family:'DM Sans',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer;transition:all .2s">✕ Decline</button>
-          </div>`:''}
-        </div>`;
-      }).join('');
-    });
-  }catch(e){
-    console.error(e);
-    document.getElementById('requestsLoading').innerHTML='<span style="color:var(--coral)">⚠ Could not load requests. Check console.</span>';
-  }
+// ── STREAM ────────────────────────────────────────────────────────
+const POST_ICONS={announcement:'📢',assignment:'📝',material:'📎',question:'❓'};
+const POST_LABELS={announcement:'Announcement',assignment:'Assignment',material:'Material',question:'Question'};
+
+function subscribeStream(){
+  if(streamUnsub)streamUnsub();
+  const q=query(collection(db,'classrooms',classroomId,'posts'),orderBy('createdAt','desc'),limit(50));
+  streamUnsub=onSnapshot(q,snap=>{
+    const posts=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderStream(posts);
+  });
 }
 
-window.approveRequest=async function(reqId,appName,appUrl){
-  let url=appUrl||prompt(`Enter the URL for "${appName}":`,`https://`);
-  if(!url)return;
-  if(!/^https?:\/\//i.test(url))url='https://'+url;
-  const ICONS=['📚','🔬','🎨','🧮','🌍','💡','🎵','📝','🏆','🔭','💻','✏️','📊','🎯'];
-  const color=COLORS[Math.floor(Math.random()*COLORS.length)];
-  const icon=ICONS[Math.floor(Math.random()*ICONS.length)];
-  const newApp={id:Date.now(),name:appName,url,icon,color,cat:'learning',custom:false};
+function renderStream(posts){
+  const feed=document.getElementById('streamFeed');
+  if(!posts.length){
+    feed.innerHTML=`<div class="empty-stream"><div class="icon">📋</div><h3>Your stream is empty</h3><p>Post an announcement, assignment, material, or question above.<br/>Students will see everything here in real time.</p></div>`;
+    return;
+  }
+  feed.innerHTML=posts.map(p=>{
+    const type=p.type||'announcement';
+    const dateStr=p.createdAt?fmtDate(p.createdAt):'Just now';
+    const timeStr=p.createdAt?fmtTime(p.createdAt):'';
+    // Due date
+    let dueHtml='';
+    if(p.dueDate){
+      const due=new Date(p.dueDate);
+      const now=new Date();
+      const diff=due-now;
+      const dueCls=diff<0?'past':diff<86400000*2?'soon':'';
+      dueHtml=`<span class="sp-due ${dueCls}">📅 Due ${due.toLocaleDateString('en-US',{month:'short',day:'numeric'})}${p.dueTime?' at '+p.dueTime:''}</span>`;
+    }
+    // Links
+    let linksHtml='';
+    if(p.links&&p.links.length){
+      linksHtml=`<div class="sp-links">${p.links.map(l=>`<a class="sp-link" href="${esc(l.url)}" target="_blank" rel="noopener"><span class="sp-link-icon">🔗</span>${esc(l.label||l.url)}</a>`).join('')}</div>`;
+    }
+    return `<div class="stream-post" id="post_${p.id}">
+      <div class="sp-header">
+        <div class="sp-type-icon ${type}">${POST_ICONS[type]||'📋'}</div>
+        <div class="sp-meta">
+          <div class="sp-title">${p.title?esc(p.title):`<span style="color:var(--muted);font-weight:400;font-size:.88rem">${POST_LABELS[type]}</span>`}</div>
+          <div class="sp-subtitle">
+            <span class="sp-type-tag ${type}">${POST_LABELS[type]}</span>
+            <span>${dateStr}${timeStr?' · '+timeStr:''}</span>
+            ${p.editedAt?'<span style="opacity:.5">· edited</span>':''}
+          </div>
+        </div>
+        <div class="sp-actions">
+          <button class="sp-act-btn" onclick="openEditPost('${p.id}')">Edit</button>
+          <button class="sp-act-btn del" onclick="deletePost('${p.id}')">Delete</button>
+        </div>
+      </div>
+      ${p.body?`<div class="sp-body">${esc(p.body)}</div>`:''}
+      ${dueHtml}
+      ${linksHtml}
+    </div>`;
+  }).join('');
+}
+
+// Compose
+window.openCompose=function(){
+  document.getElementById('composeTypebar').style.display='flex';
+  document.getElementById('composeForm').classList.add('open');
+  document.querySelector('.compose-bar').style.display='none';
+  document.getElementById('cfBody').focus();
+};
+window.closeCompose=function(){
+  document.querySelector('.compose-bar').style.display='flex';
+  document.getElementById('composeTypebar').style.display='none';
+  document.getElementById('composeForm').classList.remove('open');
+  document.getElementById('cfTitle').value='';
+  document.getElementById('cfBody').value='';
+  document.getElementById('cfLinkFields').innerHTML='';
+  document.getElementById('cfDue').value='';
+  document.getElementById('cfDueTime').value='';
+  document.querySelectorAll('.ctype-btn').forEach((b,i)=>{b.classList.toggle('active',i===0);});
+  composeType='announcement';
+  document.getElementById('cfDueWrap').style.display='none';
+};
+window.setComposeType=function(type,btn){
+  composeType=type;
+  document.querySelectorAll('.ctype-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cfDueWrap').style.display=type==='assignment'?'flex':'none';
+  document.getElementById('cfTitle').placeholder=type==='announcement'?'Title (optional)…':'Title…';
+};
+window.addLinkField=function(){
+  const wrap=document.getElementById('cfLinkFields');
+  const div=document.createElement('div');
+  div.style.cssText='display:flex;gap:8px;margin-bottom:7px;align-items:center';
+  div.innerHTML=`<input class="cf-input" placeholder="URL (https://…)" style="flex:2;margin:0"/><input class="cf-input" placeholder="Label (optional)" style="flex:1;margin:0"/><button type="button" onclick="this.parentElement.remove()" style="padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.8rem;flex-shrink:0">✕</button>`;
+  wrap.appendChild(div);
+};
+window.submitPost=async function(){
+  const title=document.getElementById('cfTitle').value.trim();
+  const body=document.getElementById('cfBody').value.trim();
+  if(!body&&!title){toast('Add a title or message first.');return;}
+  const btn=document.getElementById('cfPostBtn');
+  btn.disabled=true;btn.textContent='Posting…';
+  const links=[];
+  document.querySelectorAll('#cfLinkFields > div').forEach(row=>{
+    const inputs=row.querySelectorAll('input');
+    const url=inputs[0]?.value.trim();
+    const label=inputs[1]?.value.trim();
+    if(url)links.push({url,label:label||url});
+  });
+  const data={type:composeType,title,body,links,createdAt:serverTimestamp(),teacherName:classroom.teacherName||currentUser.displayName||'Teacher'};
+  if(composeType==='assignment'){
+    const due=document.getElementById('cfDue').value;
+    const dueTime=document.getElementById('cfDueTime').value;
+    if(due){data.dueDate=due;data.dueTime=dueTime||null;}
+  }
+  try{
+    await addDoc(collection(db,'classrooms',classroomId,'posts'),data);
+    closeCompose();
+    toast('✓ Posted to stream!');
+  }catch(e){toast('Error: '+e.message);}
+  btn.disabled=false;btn.textContent='Post →';
+};
+
+// Edit
+window.openEditPost=async function(postId){
+  const snap=await getDoc(doc(db,'classrooms',classroomId,'posts',postId));
+  if(!snap.exists())return;
+  const p={...snap.data()};
+  editingPostId=postId;
+  document.getElementById('editModalTitle').textContent='Edit '+POST_LABELS[p.type||'announcement'];
+  document.getElementById('editTitle').value=p.title||'';
+  document.getElementById('editBody').value=p.body||'';
+  const dw=document.getElementById('editDueWrap');
+  dw.style.display=p.type==='assignment'?'flex':'none';
+  if(p.dueDate)document.getElementById('editDue').value=p.dueDate;
+  if(p.dueTime)document.getElementById('editDueTime').value=p.dueTime;
+  const lf=document.getElementById('editLinkFields');lf.innerHTML='';
+  (p.links||[]).forEach(l=>{
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;gap:8px;margin-bottom:7px;align-items:center';
+    div.innerHTML=`<input class="cf-input" placeholder="URL" value="${esc(l.url)}" style="flex:2;margin:0"/><input class="cf-input" placeholder="Label" value="${esc(l.label||'')}" style="flex:1;margin:0"/><button type="button" onclick="this.parentElement.remove()" style="padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.8rem;flex-shrink:0">✕</button>`;
+    lf.appendChild(div);
+  });
+  document.getElementById('editOverlay').classList.add('open');
+};
+window.handleEditOverlayClick=function(e){if(e.target===document.getElementById('editOverlay'))closeEditOverlay();};
+window.closeEditOverlay=function(){document.getElementById('editOverlay').classList.remove('open');editingPostId=null;};
+window.addEditLinkField=function(){
+  const wrap=document.getElementById('editLinkFields');
+  const div=document.createElement('div');
+  div.style.cssText='display:flex;gap:8px;margin-bottom:7px;align-items:center';
+  div.innerHTML=`<input class="cf-input" placeholder="URL (https://…)" style="flex:2;margin:0"/><input class="cf-input" placeholder="Label (optional)" style="flex:1;margin:0"/><button type="button" onclick="this.parentElement.remove()" style="padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.8rem;flex-shrink:0">✕</button>`;
+  wrap.appendChild(div);
+};
+window.saveEdit=async function(){
+  if(!editingPostId)return;
+  const title=document.getElementById('editTitle').value.trim();
+  const body=document.getElementById('editBody').value.trim();
+  const links=[];
+  document.querySelectorAll('#editLinkFields > div').forEach(row=>{
+    const inputs=row.querySelectorAll('input');
+    const url=inputs[0]?.value.trim();const label=inputs[1]?.value.trim();
+    if(url)links.push({url,label:label||url});
+  });
+  const upd={title,body,links,editedAt:serverTimestamp()};
+  const due=document.getElementById('editDue').value;
+  const dueTime=document.getElementById('editDueTime').value;
+  if(due)upd.dueDate=due,upd.dueTime=dueTime||null;
+  try{
+    await updateDoc(doc(db,'classrooms',classroomId,'posts',editingPostId),upd);
+    closeEditOverlay();
+    toast('✓ Post updated.');
+  }catch(e){toast('Error: '+e.message);}
+};
+window.deletePost=async function(postId){
+  if(!confirm('Delete this post? Students will no longer see it.'))return;
+  await deleteDoc(doc(db,'classrooms',classroomId,'posts',postId));
+  toast('Post deleted.');
+};
+
+// ── STUDENTS ──────────────────────────────────────────────────────
+async function loadStudents(){
+  const q=query(collection(db,'users'),where('classroomIds','array-contains',classroomId));
+  const snap=await getDocs(q);
+  students=snap.docs.map(d=>({uid:d.id,...d.data()}));
+  renderStudents();
+  renderStats();
+}
+function renderStudents(){
+  const el=document.getElementById('studentRows');
+  if(!students.length){el.innerHTML='<div class="empty-row">No students yet. Share the join code!</div>';return;}
+  el.innerHTML=students.map(s=>{
+    const joined=s.createdAt?new Date(s.createdAt.seconds*1000).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}):'—';
+    return`<div class="student-row">
+      <div class="scell"><div class="sname">${esc((s.firstName||'')+' '+(s.lastName||''))}</div><div class="semail">${esc(s.email||'')}</div></div>
+      <div class="scell">${(s.apps||[]).length}</div>
+      <div class="scell">${joined}</div>
+      <div><button class="rem-btn" onclick="removeStudent('${s.uid}')" title="Remove from class">✕</button></div>
+    </div>`;
+  }).join('');
+}
+window.removeStudent=async function(uid){
+  if(!confirm('Remove this student from your classroom?'))return;
+  const s=students.find(x=>x.uid===uid);
+  if(!s)return;
+  const ids=(s.classroomIds||[]).filter(id=>id!==classroomId);
+  const primary=s.classroomId===classroomId?ids[0]||null:s.classroomId;
+  await updateDoc(doc(db,'users',uid),{classroomIds:ids,classroomId:primary});
+  students=students.filter(x=>x.uid!==uid);
+  renderStudents();renderStats();
+  toast('Student removed.');
+};
+
+// ── APP MANAGEMENT ────────────────────────────────────────────────
+function buildEmojiPicker(){
+  const el=document.getElementById('teacherEmojiPicker');
+  el.innerHTML=EMOJIS.map(e=>`<button class="emo${e===selectedEmoji?' sel':''}" onclick="pickEmoji('${e}',this)">${e}</button>`).join('');
+}
+window.pickEmoji=function(e,btn){selectedEmoji=e;document.querySelectorAll('.emo').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');};
+window.addPinnedApp=async function(){
+  const name=document.getElementById('newAppName').value.trim();
+  const url=document.getElementById('newAppUrl').value.trim();
+  if(!name||!url){toast('Name and URL required.');return;}
+  const id=Date.now();
+  const newApp={id,name,url,icon:selectedEmoji,color:'rgba(13,27,42,.08)'};
   const pinnedApps=[...(classroom.pinnedApps||[]),newApp];
   await updateDoc(doc(db,'classrooms',classroomId),{pinnedApps});
   classroom.pinnedApps=pinnedApps;
-  await pushAppsToStudents();
-  await updateDoc(doc(db,'classrooms',classroomId,'appRequests',reqId),{status:'approved'});
+  document.getElementById('newAppName').value='';document.getElementById('newAppUrl').value='';
   renderPinnedApps();
-  toast(`✓ "${appName}" added to all students' hubs!`);
+  await pushAppsToStudents();
+  toast('✓ App pushed to all students!');
+};
+async function pushAppsToStudents(){
+  const pinned=classroom.pinnedApps||[];const locked=new Set(classroom.lockedAppIds||[]);
+  const snap=await getDocs(query(collection(db,'users'),where('classroomIds','array-contains',classroomId)));
+  const writes=snap.docs.map(async d=>{
+    const p=d.data();const existing=p.apps||[];
+    const existingUrls=new Set(existing.map(a=>a.url));
+    const toAdd=pinned.filter(pa=>!existingUrls.has(pa.url));
+    if(!toAdd.length)return;
+    const nextId=p.nextId||10;
+    const newApps=[...existing,...toAdd.map((pa,i)=>({...pa,id:nextId+i}))];
+    return updateDoc(doc(db,'users',d.id),{apps:newApps,nextId:nextId+toAdd.length});
+  });
+  await Promise.all(writes);
+}
+function renderPinnedApps(){
+  const pinned=classroom.pinnedApps||[];
+  const locked=new Set(classroom.lockedAppIds||[]);
+  const grid=document.getElementById('pinnedAppGrid');
+  const none=document.getElementById('noPinnedMsg');
+  document.getElementById('pinnedCount').textContent=pinned.length?`(${pinned.length})`:'';
+  if(!pinned.length){grid.innerHTML='';none.style.display='block';return;}
+  none.style.display='none';
+  grid.innerHTML=pinned.map(a=>{
+    const isLocked=locked.has(a.id);
+    return`<div class="app-card">
+      <div class="app-top">
+        <div class="app-icon" style="background:${a.color||'rgba(13,27,42,.08)'}">${a.icon||'📱'}</div>
+        <div><div class="app-name">${esc(a.name)}</div><div class="app-url">${esc(a.url)}</div></div>
+      </div>
+      <div class="app-ctrls">
+        <button class="pill ${isLocked?'lock-on':'lock-off'}" onclick="toggleLock(${a.id})">${isLocked?'🔒 Locked':'🔓 Lock'}</button>
+        <button class="pill remove" onclick="removePinnedApp(${a.id})">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+window.toggleLock=async function(appId){
+  const locked=new Set(classroom.lockedAppIds||[]);
+  locked.has(appId)?locked.delete(appId):locked.add(appId);
+  const lockedAppIds=[...locked];
+  await updateDoc(doc(db,'classrooms',classroomId),{lockedAppIds});
+  classroom.lockedAppIds=lockedAppIds;
+  renderPinnedApps();toast(locked.has(appId)?'App locked for students.':'App unlocked.');
+};
+window.removePinnedApp=async function(appId){
+  const pinnedApps=(classroom.pinnedApps||[]).filter(a=>a.id!==appId);
+  const lockedAppIds=(classroom.lockedAppIds||[]).filter(id=>id!==appId);
+  await updateDoc(doc(db,'classrooms',classroomId),{pinnedApps,lockedAppIds});
+  classroom.pinnedApps=pinnedApps;classroom.lockedAppIds=lockedAppIds;
+  renderPinnedApps();toast('App removed from classroom.');
 };
 
+// ── APP REQUESTS ──────────────────────────────────────────────────
+async function loadRequests(){
+  const q=query(collection(db,'classrooms',classroomId,'appRequests'),orderBy('createdAt','desc'));
+  onSnapshot(q,snap=>{
+    const reqs=snap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.status==='pending');
+    const badge=document.getElementById('reqBadge');
+    badge.textContent=reqs.length;badge.style.display=reqs.length?'inline':'none';
+    const el=document.getElementById('reqList');
+    const loading=document.getElementById('reqLoading');
+    const empty=document.getElementById('reqEmpty');
+    if(loading)loading.style.display='none';
+    if(!reqs.length){el.innerHTML='';empty.style.display='block';return;}
+    empty.style.display='none';
+    el.innerHTML=reqs.map(r=>`<div class="req-card">
+      <div class="req-info">
+        <div class="req-name">${esc(r.appName||'Unknown App')} <span style="font-size:.75rem;color:var(--muted)">— <a href="${esc(r.appUrl||'')}" target="_blank" style="color:var(--coral);text-decoration:none">${esc(r.appUrl||'')}</a></span></div>
+        <div class="req-student">Requested by ${esc(r.studentName||'a student')}</div>
+      </div>
+      <div class="req-actions">
+        <button class="req-btn approve" onclick="approveRequest('${r.id}','${esc(r.appName||'')}','${esc(r.appUrl||'')}')">✓ Approve</button>
+        <button class="req-btn decline" onclick="declineRequest('${r.id}')">✕ Decline</button>
+      </div>
+    </div>`).join('');
+  });
+}
+window.approveRequest=async function(reqId,appName,appUrl){
+  const icon='📱',color='rgba(13,27,42,.08)',id=Date.now();
+  const newApp={id,name:appName,url:appUrl,icon,color};
+  const pinnedApps=[...(classroom.pinnedApps||[]),newApp];
+  await updateDoc(doc(db,'classrooms',classroomId),{pinnedApps});
+  classroom.pinnedApps=pinnedApps;
+  await updateDoc(doc(db,'classrooms',classroomId,'appRequests',reqId),{status:'approved'});
+  await pushAppsToStudents();
+  renderPinnedApps();toast('✓ Request approved and app pushed!');
+};
 window.declineRequest=async function(reqId){
   await updateDoc(doc(db,'classrooms',classroomId,'appRequests',reqId),{status:'declined'});
   toast('Request declined.');
 };
 
-async function loadStudents(){
-  // Query both old single-id field and new array field
-  const q=query(collection(db,'users'),where('classroomIds','array-contains',classroomId));
-  const snap=await getDocs(q);
-  students=snap.docs.map(d=>({uid:d.id,profile:d.data()})).filter(s=>s.uid!==currentUser.uid);
-}
-
-function renderStudents(){
-  document.getElementById('statStudents').textContent=students.length;
-  const counts=students.map(s=>(s.profile.apps||[]).length);
-  document.getElementById('statAvgApps').textContent=students.length?Math.round(counts.reduce((a,b)=>a+b,0)/students.length):'—';
-  document.getElementById('statPinnedCount').textContent=(classroom.pinnedApps||[]).length;
-  const container=document.getElementById('studentRows');
-  if(students.length===0){container.innerHTML='<div class="empty-row">No students have joined yet. Share your join code above!</div>';return;}
-  container.innerHTML=students.map(s=>{
-    const p=s.profile;
-    const name=`${p.firstName||''} ${p.lastName||''}`.trim()||(p.email||s.uid);
-    const apps=(p.apps||[]).length;
-    const joined=p.createdAt?.toDate?p.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
-    return `<div class="student-row">
-      <div class="student-cell"><div class="student-name">${esc(name)}</div><div class="student-email">${esc(p.email||'')}</div></div>
-      <div class="student-cell" style="font-weight:700;color:var(--navy)">${apps}</div>
-      <div class="student-cell" style="font-size:.8rem;color:var(--muted)">${joined}</div>
-      <div class="student-cell"><button class="remove-student-btn" onclick="removeStudent('${s.uid}')" title="Remove from classroom">✕</button></div>
-    </div>`;
-  }).join('');
-}
-
-window.removeStudent=async function(uid){
-  if(!confirm('Remove this student from your classroom? They will keep their apps but lose access to your pinned/locked apps.'))return;
-  await updateDoc(doc(db,'users',uid),{classroomId:null});
-  students=students.filter(s=>s.uid!==uid);
-  renderStudents();renderStats();toast('Student removed.');
-};
-
-function buildEmojiPicker(){
-  const wrap=document.getElementById('teacherEmojiPicker');wrap.innerHTML='';
-  EMOJIS.forEach(em=>{
-    const btn=document.createElement('button');
-    btn.className='emoji-opt'+(em===selectedEmoji?' selected':'');
-    btn.textContent=em;
-    btn.onclick=()=>{selectedEmoji=em;wrap.querySelectorAll('.emoji-opt').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');};
-    wrap.appendChild(btn);
-  });
-}
-
-window.addPinnedApp=async function(){
-  const name=document.getElementById('newAppName').value.trim();
-  let url=document.getElementById('newAppUrl').value.trim();
-  if(!name||!url){toast('Please enter a name and URL.');return;}
-  if(!/^https?:\/\//i.test(url))url='https://'+url;
-  const color=COLORS[Math.floor(Math.random()*COLORS.length)];
-  const id=Date.now();
-  const newApp={id,name,url,icon:selectedEmoji,color,cat:'learning',custom:false};
-  const pinnedApps=[...(classroom.pinnedApps||[]),newApp];
-  await updateDoc(doc(db,'classrooms',classroomId),{pinnedApps});
-  classroom.pinnedApps=pinnedApps;
-  document.getElementById('newAppName').value='';
-  document.getElementById('newAppUrl').value='';
-  renderPinnedApps();
-  renderStudents();
-  await pushAppsToStudents();
-  toast('✓ App pushed to all students!');
-};
-
-async function pushAppsToStudents(){
-  const pinned=classroom.pinnedApps||[];
-  const locked=new Set(classroom.lockedAppIds||[]);
-  for(const s of students){
-    const p=s.profile;
-    const existingUrls=new Set((p.apps||[]).map(a=>a.url));
-    let apps=[...(p.apps||[])];
-    for(const a of pinned){
-      if(!existingUrls.has(a.url)){apps.push({...a,locked:locked.has(a.id)});}
-    }
-    // Refresh lock status on all apps
-    apps=apps.map(a=>({...a,locked:locked.has(a.id)}));
-    await updateDoc(doc(db,'users',s.uid),{apps});
-    s.profile.apps=apps;
-  }
-}
-
-function renderPinnedApps(){
-  const pinned=classroom.pinnedApps||[];
-  const locked=new Set(classroom.lockedAppIds||[]);
-  document.getElementById('pinnedCount').textContent=`(${pinned.length})`;
-  document.getElementById('noPinnedMsg').style.display=pinned.length?'none':'block';
-  document.getElementById('pinnedAppGrid').innerHTML=pinned.map(a=>{
-    const isLocked=locked.has(a.id);
-    return `<div class="app-mgmt-card">
-      <div class="app-mgmt-top">
-        <div class="app-mgmt-icon" style="background:${a.color?.val||'rgba(13,27,42,.08)'}">${a.icon||'📱'}</div>
-        <div style="min-width:0"><div class="app-mgmt-name">${esc(a.name)}</div><div class="app-mgmt-url">${esc(a.url)}</div></div>
-      </div>
-      <div class="app-mgmt-controls">
-        <button class="toggle-pill ${isLocked?'locked-on':'locked-off'}" onclick="toggleLock(${a.id})">${isLocked?'🔒 Locked':'🔓 Unlocked'}</button>
-        <button class="remove-app-btn" onclick="removePinnedApp(${a.id})">Remove</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-window.toggleLock=async function(appId){
-  const locked=new Set(classroom.lockedAppIds||[]);
-  if(locked.has(appId))locked.delete(appId);else locked.add(appId);
-  const lockedAppIds=[...locked];
-  await updateDoc(doc(db,'classrooms',classroomId),{lockedAppIds});
-  classroom.lockedAppIds=lockedAppIds;
-  renderPinnedApps();
-  await pushAppsToStudents();
-  toast(locked.has(appId)?'🔒 App locked — students cannot remove it':'🔓 App unlocked');
-};
-
-window.removePinnedApp=async function(appId){
-  if(!confirm("Remove this app from all students' hubs?"))return;
-  const pinnedApps=(classroom.pinnedApps||[]).filter(a=>a.id!==appId);
-  const lockedAppIds=(classroom.lockedAppIds||[]).filter(id=>id!==appId);
-  await updateDoc(doc(db,'classrooms',classroomId),{pinnedApps,lockedAppIds});
-  classroom.pinnedApps=pinnedApps;classroom.lockedAppIds=lockedAppIds;
-  for(const s of students){
-    const apps=(s.profile.apps||[]).filter(a=>a.id!==appId);
-    await updateDoc(doc(db,'users',s.uid),{apps});s.profile.apps=apps;
-  }
-  renderPinnedApps();renderStudents();renderStats();toast('App removed from all students.');
-};
-
+// ── STATS ─────────────────────────────────────────────────────────
 function renderStats(){
-  const appMap={};let total=0;
-  for(const s of students){for(const a of(s.profile.apps||[])){total++;appMap[a.name]=(appMap[a.name]||0)+1;}}
+  document.getElementById('statStudents').textContent=students.length;
+  const total=students.reduce((s,u)=>s+(u.apps||[]).length,0);
+  document.getElementById('statAvgApps').textContent=students.length?Math.round(total/students.length):0;
+  document.getElementById('statPinned').textContent=(classroom.pinnedApps||[]).length;
+}
+// Stats tab
+function renderFullStats(){
+  const allApps=students.flatMap(s=>s.apps||[]);
+  const total=allApps.length;
   document.getElementById('statTotalApps').textContent=total;
-  const sorted=Object.entries(appMap).sort((a,b)=>b[1]-a[1]);
-  document.getElementById('statTopApp').textContent=sorted[0]?.[0]||'—';
-  const board=document.getElementById('appLeaderboard');
-  if(!sorted.length){board.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:.9rem">No data yet — stats will appear once students have joined.</div>';return;}
-  const max=sorted[0][1];
-  board.innerHTML=sorted.slice(0,20).map(([name,count])=>`
-    <div style="display:grid;grid-template-columns:1fr 80px;padding:12px 20px;border-bottom:1.5px solid rgba(13,27,42,.04);align-items:center">
-      <div>
-        <div style="font-weight:600;font-size:.88rem;color:var(--navy);margin-bottom:5px">${esc(name)}</div>
-        <div style="height:5px;border-radius:4px;background:rgba(13,27,42,.06)"><div style="height:100%;border-radius:4px;background:var(--coral);width:${Math.round(count/max*100)}%;transition:width .6s ease"></div></div>
-      </div>
-      <div style="text-align:right;font-weight:700;font-size:.9rem;color:var(--navy)">${count}</div>
-    </div>`).join('');
+  const counts={};
+  allApps.forEach(a=>{const k=a.name+' | '+a.url;counts[k]=(counts[k]||{name:a.name,url:a.url,icon:a.icon||'📱',count:0});counts[k].count++;});
+  const sorted=Object.values(counts).sort((a,b)=>b.count-a.count);
+  document.getElementById('statTopApp').textContent=sorted[0]?`${sorted[0].icon} ${sorted[0].name}`:'—';
+  const lb=document.getElementById('appLeaderboard');
+  lb.innerHTML=sorted.slice(0,15).map(a=>`<div style="display:grid;grid-template-columns:1fr 80px;padding:11px 18px;border-bottom:1px solid var(--border);align-items:center">
+    <div style="font-size:.86rem;font-weight:600">${esc(a.icon)} ${esc(a.name)}</div>
+    <div style="text-align:right;font-family:'DM Mono',monospace;font-size:.8rem;color:var(--muted)">${a.count}</div>
+  </div>`).join('')||'<div style="padding:24px;text-align:center;color:var(--muted);font-size:.86rem">No app data yet.</div>';
 }
 
-window.saveAnnouncement=async function(){
-  const msg=document.getElementById('announcementInput').value.trim();
-  await updateDoc(doc(db,'classrooms',classroomId),{announcement:msg});
-  classroom.announcement=msg;
-  toast(msg?'📢 Announcement posted to all students!':'Announcement cleared.');
+// Override switchTab to load stats lazily
+const _switchTab=window.switchTab;
+window.switchTab=function(tab,btn){
+  _switchTab(tab,btn);
+  if(tab==='stats')renderFullStats();
 };
 
+// ── MULTI-CLASS ───────────────────────────────────────────────────
+async function checkMultiClass(){
+  const q=query(collection(db,'classrooms'),where('teacherUid','==',currentUser.uid));
+  const snap=await getDocs(q);
+  if(snap.docs.length>1)document.getElementById('switchClassBtn').style.display='inline-flex';
+}
 window.promptSwitchClass=async function(){
   const q=query(collection(db,'classrooms'),where('teacherUid','==',currentUser.uid));
-  const owned=await getDocs(q);
-  if(owned.empty){toast('No other classrooms found.');return;}
-  const others=owned.docs.filter(d=>d.id!==classroomId);
-  if(!others.length){toast('You only have one classroom. Use + New Classroom in your Hub to create more.');return;}
+  const snap=await getDocs(q);
+  const others=snap.docs.filter(d=>d.id!==classroomId);
+  if(!others.length){toast('No other classrooms found.');return;}
   const opts=others.map((d,i)=>`${i+1}. ${d.data().name||d.id}`).join('\n');
   const idx=parseInt(prompt('Switch to which classroom?\n'+opts+'\n\nEnter a number:'));
-  if(!idx||idx<1||idx>others.length)return;
+  if(isNaN(idx)||idx<1||idx>others.length)return;
   window.location.href='classroom.html?id='+others[idx-1].id;
 };
 
-// Show switch button if teacher has >1 classroom
-async function checkMultiClass(){
-  try{
-    const q=query(collection(db,'classrooms'),where('teacherUid','==',currentUser.uid));
-    const owned=await getDocs(q);
-    if(owned.docs.length>1){
-      document.getElementById('switchClassBtn').style.display='inline-flex';
-    }
-  }catch(e){}
-}
+// ── HELPERS ───────────────────────────────────────────────────────
+function genCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];return s;}
 
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function toast(msg='✓ Saved!'){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-</script>
-
-<!-- ══ MAINTENANCE + SYSTEM DOWN CHECK ══ -->
-<div id="elaborateSystemDown" style="display:none;position:fixed;inset:0;background:#0D1B2A;z-index:99999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;font-family:'DM Sans',sans-serif">
-  <div style="font-size:3rem;margin-bottom:20px">⚡</div>
-  <div style="font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:12px">System <em style="font-style:italic;font-weight:300;color:#FF5733">Down</em></div>
-  <div style="color:rgba(255,255,255,.5);font-size:.95rem;max-width:400px;line-height:1.7;margin-bottom:28px">Elaborate couldn't connect to its servers. Check your internet connection or visit the status page.</div>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
-    <button onclick="location.reload()" style="padding:11px 24px;border-radius:50px;border:none;background:#FF5733;color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer">Try Again</button>
-    <a href="/status.html" style="padding:11px 24px;border-radius:50px;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;text-decoration:none">Status Page</a>
-  </div>
-</div>
-
-
-
-
-
-<script type="module">
-import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-(async function() {
-  var PAGE_KEY = 'classroom';
-  try {
-    var app = getApps().length ? getApps()[0] : initializeApp({apiKey:'AIzaSyA4f0NpoH1LLmbejrNmOgIxbD__MIUZkGs',authDomain:'elaborate-edc16.firebaseapp.com',projectId:'elaborate-edc16'});
-    var db = getFirestore(app);
-    var snap = await getDoc(doc(db,'siteConfig','maintenance'));
-    if (snap.exists()) {
-      var data = snap.data();
-      if (data[PAGE_KEY] && data[PAGE_KEY].enabled === true) {
-        window.location.href = '/maintenance.html?page=' + PAGE_KEY;
-      }
-    }
-  } catch(e) {
-    if (e.code === 'unavailable' || (e.message && e.message.indexOf('Failed to fetch') > -1)) {
-      var el = document.getElementById('_sysdown');
-      if (el) el.classList.add('show');
-    }
-  }
-})();
+// Init renders that need classroom data
+renderPinnedApps();
 </script>
 </body>
 </html>

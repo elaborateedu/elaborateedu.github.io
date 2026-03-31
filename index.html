@@ -794,6 +794,27 @@
       padding:12px 14px;
       border-radius:12px;
     }
+    /* Class stream cards in hub */
+    .hub-stream-post{background:var(--card-bg);border-radius:14px;border:1.5px solid rgba(13,27,42,.07);padding:14px 16px;margin-bottom:10px;transition:all .18s;cursor:default}
+    .hub-stream-post:hover{border-color:rgba(13,27,42,.13);box-shadow:0 3px 14px rgba(13,27,42,.07)}
+    .hsp-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .hsp-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+    .hsp-icon.announcement{background:rgba(244,197,66,.14)}
+    .hsp-icon.assignment{background:rgba(255,87,51,.1)}
+    .hsp-icon.material{background:rgba(56,189,248,.1)}
+    .hsp-icon.question{background:rgba(167,139,250,.12)}
+    .hsp-meta{flex:1;min-width:0}
+    .hsp-title{font-size:.88rem;font-weight:700;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .hsp-date{font-size:.7rem;color:var(--muted);margin-top:1px}
+    .hsp-body{font-size:.84rem;color:var(--navy);line-height:1.65;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+    .hsp-due{display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:.62rem;padding:3px 9px;border-radius:50px;background:rgba(255,87,51,.08);color:#FF5733;font-weight:600;margin-top:8px}
+    .hsp-due.soon{background:rgba(244,197,66,.14);color:#9a7200}
+    .hsp-done-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:50px;border:1.5px solid rgba(125,190,142,.3);background:rgba(125,190,142,.08);color:#2E7D47;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;margin-top:10px;width:fit-content}
+    .hsp-done-btn:hover{background:rgba(125,190,142,.2)}
+    .hsp-done-btn.done{background:rgba(125,190,142,.18);border-color:rgba(125,190,142,.4)}
+    .hsp-link{display:flex;align-items:center;gap:7px;padding:7px 11px;border-radius:8px;border:1px solid rgba(13,27,42,.08);background:var(--cream);text-decoration:none;color:var(--navy);font-size:.8rem;font-weight:600;transition:all .15s;margin-top:8px}
+    .hsp-link:hover{border-color:rgba(13,27,42,.16);color:var(--coral)}
+    .hsp-done-check{color:#2E7D47;font-size:1rem}
 
     /* ── Changelog drawer ── */
     .cl-drawer{border-radius:24px 24px 0 0 !important;max-height:88vh}
@@ -1486,6 +1507,15 @@
         <button onclick="dismissAnnouncement()" style="background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:0;flex-shrink:0;line-height:1;opacity:.6;transition:opacity .2s" title="Dismiss">✕</button>
       </div>
     </div>
+
+    <!-- CLASS STREAM — shown when viewing a classroom -->
+    <div id="classStreamSection" style="display:none;margin-top:20px;max-width:760px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1rem;letter-spacing:-.01em;color:var(--navy)" id="streamSectionTitle">Class Stream</div>
+        <span style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)" id="streamPostCount"></span>
+      </div>
+      <div id="classStreamFeed"></div>
+    </div>
     <div class="hub-search-wrap" id="searchWrap">
       <canvas id="searchRingCanvas"></canvas>
       <svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -2157,7 +2187,7 @@ import { getAuth, createUserWithEmailAndPassword,
          signInWithPopup, EmailAuthProvider,
          reauthenticateWithCredential, deleteUser,
          sendPasswordResetEmail }                           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, serverTimestamp, updateDoc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, serverTimestamp, updateDoc, deleteDoc, onSnapshot, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const app      = initializeApp(firebaseConfig);
 const auth     = getAuth(app);
@@ -3907,12 +3937,141 @@ window.setSidebarView = function(view, btn) {
     } else {
       document.getElementById('announcementBanner').style.display = 'none';
     }
+    // Load class stream
+    loadClassStream(cid);
   } else {
     document.getElementById('announcementBanner').style.display = 'none';
+    document.getElementById('classStreamSection').style.display = 'none';
+    if (window._streamUnsub) { window._streamUnsub(); window._streamUnsub = null; }
   }
   renderApps();
   // Close sidebar on mobile after selection
   if (window.innerWidth <= 768) document.getElementById('hubSidebar').classList.remove('open');
+};
+
+/* ══════════════════════════════════════════════
+   CLASS STREAM (student view)
+══════════════════════════════════════════════ */
+window._streamUnsub = null;
+const _streamDoneCache = {}; // postId → bool
+
+function loadClassStream(cid) {
+  // Tear down previous listener
+  if (window._streamUnsub) { window._streamUnsub(); window._streamUnsub = null; }
+
+  const section   = document.getElementById('classStreamSection');
+  const feed      = document.getElementById('classStreamFeed');
+  const titleEl   = document.getElementById('streamSectionTitle');
+  const countEl   = document.getElementById('streamPostCount');
+  const cls       = loadedClassrooms[cid];
+  if (titleEl) titleEl.textContent = (cls?.name || 'Classroom') + ' Stream';
+  feed.innerHTML = '<div style="padding:16px;text-align:center;color:var(--muted);font-size:.86rem"><span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(13,27,42,.15);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px"></span>Loading stream…</div>';
+  section.style.display = 'block';
+
+  const q = query(
+    collection(db, 'classrooms', cid, 'posts'),
+    orderBy('createdAt', 'desc'),
+    limit(20)
+  );
+
+  window._streamUnsub = onSnapshot(q, async snap => {
+    const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    // Load done-state for assignments
+    const uid = currentUser?.uid;
+    if (uid) {
+      const assignmentPosts = posts.filter(p => p.type === 'assignment');
+      await Promise.all(assignmentPosts.map(async p => {
+        if (_streamDoneCache[p.id] !== undefined) return;
+        try {
+          const subSnap = await getDoc(doc(db, 'classrooms', cid, 'posts', p.id, 'submissions', uid));
+          _streamDoneCache[p.id] = subSnap.exists() && subSnap.data().done === true;
+        } catch(e) { _streamDoneCache[p.id] = false; }
+      }));
+    }
+
+    if (countEl) countEl.textContent = posts.length ? posts.length + ' post' + (posts.length !== 1 ? 's' : '') : '';
+
+    if (!posts.length) {
+      feed.innerHTML = '<div style="text-align:center;padding:28px;color:var(--muted);font-size:.86rem;background:rgba(13,27,42,.03);border-radius:14px;border:1.5px solid rgba(13,27,42,.06)">No posts yet — check back later.</div>';
+      return;
+    }
+
+    feed.innerHTML = posts.map(p => renderStreamPost(p, cid)).join('');
+  }, () => {
+    feed.innerHTML = '<div style="padding:16px;color:var(--muted);font-size:.84rem">Could not load stream.</div>';
+  });
+}
+
+function renderStreamPost(p, cid) {
+  const type  = p.type || 'announcement';
+  const icons = { announcement:'📢', assignment:'📝', material:'📎', question:'❓' };
+  const icon  = icons[type] || '📋';
+
+  // Date
+  const dateStr = p.createdAt?.toDate
+    ? p.createdAt.toDate().toLocaleDateString('en-US', { month:'short', day:'numeric' })
+    : '';
+
+  // Due date
+  let dueHtml = '';
+  if (p.dueDate) {
+    const due  = new Date(p.dueDate + (p.dueTime ? 'T' + p.dueTime : ''));
+    const now  = new Date();
+    const diff = due - now;
+    const cls2 = diff < 0 ? '' : diff < 172800000 ? 'soon' : '';
+    const dueLabel = due.toLocaleDateString('en-US', { month:'short', day:'numeric' }) + (p.dueTime ? ' at ' + p.dueTime : '');
+    dueHtml = `<div class="hsp-due ${cls2}">📅 Due ${escHtml(dueLabel)}</div>`;
+  }
+
+  // Links
+  let linksHtml = '';
+  if (p.links && p.links.length) {
+    linksHtml = p.links.map(l =>
+      `<a class="hsp-link" href="${escHtml(l.url)}" target="_blank" rel="noopener">🔗 ${escHtml(l.label || l.url)}</a>`
+    ).join('');
+  }
+
+  // Mark done button for assignments
+  let doneHtml = '';
+  if (type === 'assignment' && currentUser) {
+    const isDone = _streamDoneCache[p.id] === true;
+    doneHtml = `<button class="hsp-done-btn ${isDone?'done':''}" onclick="toggleAssignmentDone('${p.id}','${cid}',this)" id="donebtn_${p.id}">
+      <span class="hsp-done-check">${isDone ? '✓' : '○'}</span> ${isDone ? 'Marked as done' : 'Mark as done'}
+    </button>`;
+  }
+
+  return `<div class="hub-stream-post">
+    <div class="hsp-header">
+      <div class="hsp-icon ${type}">${icon}</div>
+      <div class="hsp-meta">
+        <div class="hsp-title">${p.title ? escHtml(p.title) : `<em style="font-weight:400;color:var(--muted)">${type.charAt(0).toUpperCase()+type.slice(1)}</em>`}</div>
+        <div class="hsp-date">${escHtml(p.teacherName || 'Teacher')}${dateStr ? ' · ' + dateStr : ''}</div>
+      </div>
+    </div>
+    ${p.body ? `<div class="hsp-body">${escHtml(p.body)}</div>` : ''}
+    ${dueHtml}
+    ${linksHtml}
+    ${doneHtml}
+  </div>`;
+}
+
+window.toggleAssignmentDone = async function(postId, cid, btn) {
+  if (!currentUser) return;
+  const uid   = currentUser.uid;
+  const isDone = _streamDoneCache[postId] === true;
+  const newDone = !isDone;
+  try {
+    await setDoc(
+      doc(db, 'classrooms', cid, 'posts', postId, 'submissions', uid),
+      { done: newDone, updatedAt: serverTimestamp(), studentName: `${userProfile?.firstName||''} ${userProfile?.lastName||''}`.trim() },
+      { merge: true }
+    );
+    _streamDoneCache[postId] = newDone;
+    btn.className = 'hsp-done-btn' + (newDone ? ' done' : '');
+    btn.innerHTML = `<span class="hsp-done-check">${newDone ? '✓' : '○'}</span> ${newDone ? 'Marked as done' : 'Mark as done'}`;
+    showToast(newDone ? '✓ Marked as done!' : 'Marked as not done.');
+  } catch(e) { showToast('Could not update.'); }
 };
 
 /* ══════════════════════════════════════════════
