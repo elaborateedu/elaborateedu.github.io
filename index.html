@@ -308,11 +308,107 @@
   .tab-btn.active{background:var(--navy);color:#fff;box-shadow:0 2px 12px rgba(13,27,42,.18)}
   .tab-btn:hover:not(.active){background:rgba(13,27,42,.06);color:var(--navy)}
 
-  /* ── HUB BODY ── */
-  .hub-body{
-    padding:32px 40px 80px;
-    background:var(--cream);
-    position:relative;
+  /* ══ THREE-TAB NAV ══ */
+  .main-nav-tabs{
+    position:sticky;top:0;z-index:80;
+    display:flex;align-items:center;gap:2px;
+    background:rgba(245,240,232,.96);backdrop-filter:blur(12px);
+    padding:10px 20px 0;
+    border-bottom:1.5px solid rgba(13,27,42,.07);
+  }
+  .mnt-btn{
+    font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;
+    padding:10px 22px;border:none;background:transparent;
+    color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;
+    margin-bottom:-1.5px;transition:all .18s;display:flex;align-items:center;gap:7px;
+    border-radius:0;white-space:nowrap;
+  }
+  .mnt-btn:hover:not(.active){color:var(--navy);background:rgba(13,27,42,.04)}
+  .mnt-btn.active{color:var(--navy);border-bottom-color:var(--coral)}
+  .mnt-badge{background:var(--coral);color:#fff;font-size:.58rem;padding:1px 6px;border-radius:50px;font-family:'DM Mono',monospace;min-width:16px;text-align:center}
+
+  /* ══ CLASSROOM PANEL ══ */
+  .cls-panel{display:none;max-width:860px;margin:0 auto;padding:28px 40px 80px}
+  .cls-panel.active{display:block}
+  .cls-no-class{text-align:center;padding:80px 24px;color:var(--muted)}
+  .cls-no-class .icon{font-size:2.8rem;margin-bottom:14px;opacity:.4}
+  .cls-no-class h3{font-family:'Fraunces',serif;font-weight:900;font-size:1.3rem;color:var(--navy);margin-bottom:8px}
+  .cls-no-class p{font-size:.9rem;line-height:1.7;max-width:360px;margin:0 auto}
+
+  /* Classroom sub-tabs */
+  .cls-tabs{display:flex;gap:4px;border-bottom:1.5px solid rgba(13,27,42,.07);margin-bottom:24px}
+  .cls-tab{font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:600;padding:9px 16px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all .16s}
+  .cls-tab:hover:not(.active){color:var(--navy)}
+  .cls-tab.active{color:var(--navy);border-bottom-color:var(--coral)}
+  .cls-tab-panel{display:none}.cls-tab-panel.active{display:block}
+  .cls-due-badge{display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:.62rem;padding:3px 9px;border-radius:50px;background:rgba(255,87,51,.08);color:var(--coral);font-weight:600;margin-top:8px}
+  .cls-due-badge.soon{background:rgba(244,197,66,.14);color:#9a7200}
+
+  /* Stream posts (embedded in hub) */
+  .cls-post{background:var(--card-bg);border-radius:16px;border:1.5px solid rgba(13,27,42,.06);padding:18px 20px;margin-bottom:12px;transition:all .18s}
+  .cls-post:hover{border-color:rgba(13,27,42,.12);box-shadow:0 3px 16px rgba(13,27,42,.07)}
+  .cls-post-header{display:flex;align-items:flex-start;gap:11px;margin-bottom:9px}
+  .cls-post-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.88rem;flex-shrink:0}
+  .cls-post-icon.announcement{background:rgba(244,197,66,.14)}
+  .cls-post-icon.assignment{background:rgba(255,87,51,.1)}
+  .cls-post-icon.material{background:rgba(56,189,248,.1)}
+  .cls-post-icon.question{background:rgba(167,139,250,.12)}
+  .cls-post-meta{flex:1;min-width:0}
+  .cls-post-title{font-weight:700;font-size:.9rem;margin-bottom:1px}
+  .cls-post-sub{font-size:.73rem;color:var(--muted)}
+  .cls-post-body{font-size:.86rem;line-height:1.72;color:var(--text);white-space:pre-wrap;word-break:break-word;margin-bottom:6px}
+  .cls-post-link{display:flex;align-items:center;gap:7px;padding:7px 11px;border-radius:8px;border:1px solid rgba(13,27,42,.08);background:var(--cream);text-decoration:none;color:var(--navy);font-size:.8rem;font-weight:600;transition:all .14s;margin-top:6px;width:fit-content}
+  .cls-post-link:hover{border-color:rgba(13,27,42,.18);color:var(--coral)}
+  .cls-done-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:50px;border:1.5px solid rgba(125,190,142,.3);background:rgba(125,190,142,.08);color:#2E7D47;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;margin-top:10px}
+  .cls-done-btn:hover{background:rgba(125,190,142,.2)}
+  .cls-done-btn.done{background:rgba(125,190,142,.18);border-color:rgba(125,190,142,.45)}
+
+  /* Assignments list */
+  .asgn-card{background:var(--card-bg);border-radius:14px;border:1.5px solid rgba(13,27,42,.06);padding:16px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px;transition:all .16s}
+  .asgn-card:hover{border-color:rgba(13,27,42,.12)}
+  .asgn-icon{width:38px;height:38px;border-radius:11px;background:rgba(255,87,51,.1);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+  .asgn-info{flex:1;min-width:0}
+  .asgn-title{font-weight:700;font-size:.9rem;margin-bottom:3px}
+  .asgn-due{font-size:.75rem;color:var(--muted)}
+  .asgn-due.soon{color:#9a7200;font-weight:600}
+  .asgn-due.overdue{color:var(--coral);font-weight:600}
+  .asgn-done-pill{font-family:'DM Mono',monospace;font-size:.6rem;padding:3px 9px;border-radius:50px;flex-shrink:0}
+  .asgn-done-pill.done{background:rgba(125,190,142,.15);color:#2E7D47}
+  .asgn-done-pill.pending{background:rgba(255,87,51,.09);color:var(--coral)}
+
+  /* People list */
+  .people-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(13,27,42,.06)}
+  .people-row:last-child{border-bottom:none}
+  .people-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.9rem;flex-shrink:0;color:#fff}
+  .people-name{font-weight:600;font-size:.9rem}
+  .people-role{font-size:.72rem;color:var(--muted)}
+
+  /* ══ CHAT PANEL ══ */
+  .chat-panel{display:none;flex-direction:column;height:calc(100vh - 130px);max-width:860px;margin:0 auto}
+  .chat-panel.active{display:flex}
+  .chat-messages-wrap{flex:1;overflow-y:auto;padding:20px 40px 8px;display:flex;flex-direction:column;gap:4px}
+  .chat-messages-wrap::-webkit-scrollbar{width:4px}
+  .chat-messages-wrap::-webkit-scrollbar-thumb{background:rgba(13,27,42,.12);border-radius:4px}
+  .chat-msg{display:flex;gap:10px;padding:3px 0;align-items:flex-start}
+  .chat-msg.mine{flex-direction:row-reverse}
+  .chat-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:.72rem;flex-shrink:0;margin-top:2px;color:#fff}
+  .chat-bubble{max-width:72%;padding:9px 13px;border-radius:16px;font-size:.88rem;line-height:1.55;word-break:break-word}
+  .chat-bubble.them{background:var(--card-bg);border:1px solid rgba(13,27,42,.08);border-radius:16px 16px 16px 4px;color:var(--text)}
+  .chat-bubble.mine{background:var(--navy);color:#fff;border-radius:16px 16px 4px 16px}
+  .chat-name{font-size:.68rem;color:var(--muted);font-weight:600;margin-bottom:3px}
+  .chat-time{font-size:.62rem;color:var(--muted);margin-top:4px;font-family:'DM Mono',monospace;opacity:.7}
+  .chat-input-bar{padding:12px 40px 20px;background:var(--cream);border-top:1px solid rgba(13,27,42,.07);display:flex;gap:10px;align-items:flex-end}
+  .chat-textarea{flex:1;padding:11px 16px;border-radius:20px;border:1.5px solid rgba(13,27,42,.1);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);background:var(--card-bg);outline:none;resize:none;min-height:44px;max-height:140px;line-height:1.5;transition:border-color .18s}
+  .chat-textarea:focus{border-color:var(--coral)}
+  .chat-send-btn{width:42px;height:42px;border-radius:50%;border:none;background:var(--navy);color:#fff;font-size:1rem;cursor:pointer;flex-shrink:0;transition:all .18s;display:flex;align-items:center;justify-content:center}
+  .chat-send-btn:hover{background:var(--coral);transform:scale(1.05)}
+  .chat-no-class{text-align:center;padding:60px 24px;color:var(--muted);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .chat-day-divider{text-align:center;font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);padding:8px 0;letter-spacing:.08em;text-transform:uppercase}
+  @media(max-width:768px){
+    .cls-panel{padding:20px 16px 60px}
+    .chat-messages-wrap{padding:16px 16px 8px}
+    .chat-input-bar{padding:10px 16px 16px}
+    .mnt-btn{padding:10px 14px;font-size:.84rem}
   }
   .section-title{
     font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:700;
@@ -1526,6 +1622,21 @@
     </div>
     <div class="hub-header-clip"></div>
   </div>
+  <!-- THREE-TAB MAIN NAV -->
+  <div class="main-nav-tabs" id="mainNavTabs">
+    <button class="mnt-btn active" id="mnt-hub" onclick="switchMainTab('hub',this)">🏠 Hub</button>
+    <button class="mnt-btn" id="mnt-classroom" onclick="switchMainTab('classroom',this)" style="display:none">
+      🏫 Classroom
+      <span class="mnt-badge" id="clsUnreadBadge" style="display:none">0</span>
+    </button>
+    <button class="mnt-btn" id="mnt-chat" onclick="switchMainTab('chat',this)" style="display:none">
+      💬 Chat
+      <span class="mnt-badge" id="chatUnreadBadge" style="display:none">0</span>
+    </button>
+  </div>
+
+  <!-- HUB TAB (original content) -->
+  <div id="mainTab-hub">
   <div class="hub-tabs">
     <div class="tab-pills">
       <button class="tab-btn active" onclick="setTab(this,'all')">All Apps</button>
@@ -1572,6 +1683,102 @@
       <button class="sched-add-btn" onclick="openSchedModal()">＋ Add a Class</button>
     </div>
   </div>
+  </div><!-- /mainTab-hub -->
+
+  <!-- CLASSROOM TAB -->
+  <div id="mainTab-classroom" style="display:none">
+    <!-- No classroom state -->
+    <div id="clsNoClass" class="cls-panel active">
+      <div class="cls-no-class">
+        <div class="icon">🏫</div>
+        <h3>No classroom yet</h3>
+        <p>Join a classroom using a code from your teacher, or ask your teacher to set one up.</p>
+        <button onclick="showJoinModal()" style="margin-top:18px;padding:10px 24px;border-radius:50px;border:none;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='var(--coral)'" onmouseout="this.style.background='var(--navy)'">Join a Classroom →</button>
+      </div>
+    </div>
+
+    <!-- Classroom content (shown when enrolled) -->
+    <div id="clsContent" class="cls-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;letter-spacing:-.02em" id="clsTitle">Classroom</div>
+          <div style="font-size:.82rem;color:var(--muted);margin-top:3px" id="clsTeacherName"></div>
+        </div>
+        <div id="clsClassroomLink" style="display:none">
+          <a id="clsManageLink" href="/classroom.html" style="padding:8px 18px;border-radius:50px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;text-decoration:none;transition:all .2s" onmouseover="this.style.background='var(--coral)'" onmouseout="this.style.background='var(--navy)'">⚙ Manage Class</a>
+        </div>
+      </div>
+
+      <!-- Announcement banner -->
+      <div id="clsAnnouncement" style="display:none;background:rgba(244,197,66,.1);border:1.5px solid rgba(244,197,66,.4);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:flex-start;gap:11px">
+        <span style="font-size:1.2rem;flex-shrink:0">📢</span>
+        <div id="clsAnnouncementText" style="font-size:.9rem;color:var(--navy);line-height:1.65;font-weight:500"></div>
+      </div>
+
+      <!-- Sub-tabs: Stream, Assignments, Materials, People -->
+      <div class="cls-tabs">
+        <button class="cls-tab active" onclick="switchClsTab('stream',this)">📋 Stream</button>
+        <button class="cls-tab" onclick="switchClsTab('assignments',this)">📝 Assignments <span id="pendingBadge" class="mnt-badge" style="display:none;margin-left:4px">0</span></button>
+        <button class="cls-tab" onclick="switchClsTab('materials',this)">📎 Materials</button>
+        <button class="cls-tab" onclick="switchClsTab('people',this)">👥 People</button>
+      </div>
+
+      <!-- Stream -->
+      <div class="cls-tab-panel active" id="clsTab-stream">
+        <div id="clsStreamFeed">
+          <div style="text-align:center;padding:40px;color:var(--muted);font-size:.9rem"><span id="clsStreamSpinner" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(13,27,42,.12);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px"></span>Loading stream…</div>
+        </div>
+      </div>
+
+      <!-- Assignments -->
+      <div class="cls-tab-panel" id="clsTab-assignments">
+        <div id="clsAssignmentsList">
+          <div style="text-align:center;padding:40px;color:var(--muted);font-size:.86rem">No assignments yet.</div>
+        </div>
+      </div>
+
+      <!-- Materials -->
+      <div class="cls-tab-panel" id="clsTab-materials">
+        <div id="clsMaterialsList">
+          <div style="text-align:center;padding:40px;color:var(--muted);font-size:.86rem">No materials posted yet.</div>
+        </div>
+      </div>
+
+      <!-- People -->
+      <div class="cls-tab-panel" id="clsTab-people">
+        <div id="clsPeopleList">
+          <div style="text-align:center;padding:40px;color:var(--muted);font-size:.86rem">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /mainTab-classroom -->
+
+  <!-- CHAT TAB -->
+  <div id="mainTab-chat" style="display:none">
+    <!-- No classroom chat state -->
+    <div class="chat-no-class" id="chatNoClass">
+      <div style="font-size:2.4rem;margin-bottom:14px;opacity:.35">💬</div>
+      <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;color:var(--navy);margin-bottom:7px">No classroom chat yet</div>
+      <div style="font-size:.88rem;line-height:1.7;max-width:300px">Join a classroom first — the group chat with your teacher and classmates will appear here.</div>
+    </div>
+    <!-- Chat UI -->
+    <div class="chat-panel" id="chatPanel">
+      <div style="padding:12px 40px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-family:'Fraunces',serif;font-weight:900;font-size:1rem;letter-spacing:-.01em" id="chatRoomName">Class Chat</div>
+          <div style="font-size:.74rem;color:var(--muted);margin-top:2px" id="chatMemberCount"></div>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;padding:3px 10px;border-radius:50px;background:rgba(125,190,142,.12);color:#2E7D47;border:1px solid rgba(125,190,142,.25)" id="chatOnlineIndicator">● Live</div>
+      </div>
+      <div class="chat-messages-wrap" id="chatMessagesWrap"></div>
+      <div class="chat-input-bar">
+        <textarea class="chat-textarea" id="chatInput" placeholder="Message your class…" rows="1"
+          onkeydown="handleChatKey(event)"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,140)+'px'"></textarea>
+        <button class="chat-send-btn" onclick="sendChatMessage()" title="Send">➤</button>
+      </div>
+    </div>
+  </div><!-- /mainTab-chat -->
   </div><!-- /hub-main -->
   </div><!-- /hub-layout -->
 
@@ -3950,128 +4157,434 @@ window.setSidebarView = function(view, btn) {
 };
 
 /* ══════════════════════════════════════════════
-   CLASS STREAM (student view)
+   THREE-TAB MAIN NAVIGATION
 ══════════════════════════════════════════════ */
-window._streamUnsub = null;
-const _streamDoneCache = {}; // postId → bool
+let _activeMainTab = 'hub';
+let _clsUnsub = null;
+let _chatUnsub = null;
+let _currentChatCid = null;
+const _doneCache = {};
+let _allPosts = [];
+let _chatMessages = [];
+let _chatLastSeen = 0;
 
-function loadClassStream(cid) {
-  // Tear down previous listener
-  if (window._streamUnsub) { window._streamUnsub(); window._streamUnsub = null; }
+window.switchMainTab = function(tab, btn) {
+  _activeMainTab = tab;
+  document.querySelectorAll('.mnt-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  ['hub','classroom','chat'].forEach(t => {
+    const el = document.getElementById('mainTab-'+t);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+  });
+  // Chat panel needs flex
+  if (tab === 'chat') {
+    const cp = document.getElementById('chatPanel');
+    if (cp && cp.style.display !== 'none') cp.style.display = 'flex';
+    document.getElementById('chatUnreadBadge').style.display = 'none';
+    _chatLastSeen = Date.now();
+    scrollChatToBottom();
+  }
+  if (tab === 'classroom') {
+    document.getElementById('clsUnreadBadge').style.display = 'none';
+  }
+};
 
-  const section   = document.getElementById('classStreamSection');
-  const feed      = document.getElementById('classStreamFeed');
-  const titleEl   = document.getElementById('streamSectionTitle');
-  const countEl   = document.getElementById('streamPostCount');
-  const cls       = loadedClassrooms[cid];
-  if (titleEl) titleEl.textContent = (cls?.name || 'Classroom') + ' Stream';
-  feed.innerHTML = '<div style="padding:16px;text-align:center;color:var(--muted);font-size:.86rem"><span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(13,27,42,.15);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px"></span>Loading stream…</div>';
-  section.style.display = 'block';
+// Show/hide classroom + chat tabs based on whether user is enrolled
+function updateMainTabVisibility() {
+  const cids = getClassroomIds ? getClassroomIds() : [];
+  const inClass = cids.length > 0;
+  const role = userProfile?.role || 'student';
+  // Teachers always show classroom tab (they own classrooms)
+  const showCls = inClass || role === 'teacher';
+  document.getElementById('mnt-classroom').style.display = showCls ? 'flex' : 'none';
+  document.getElementById('mnt-chat').style.display = showCls ? 'flex' : 'none';
+  if (showCls) initClassroomTab();
+}
 
-  const q = query(
-    collection(db, 'classrooms', cid, 'posts'),
-    orderBy('createdAt', 'desc'),
-    limit(20)
-  );
+// ── CLASSROOM TAB ─────────────────────────────────────────────────
+async function initClassroomTab() {
+  const role = userProfile?.role || 'student';
+  const cids = getClassroomIds ? getClassroomIds() : [];
+  const cid  = cids[0] || (role === 'teacher' ? userProfile?.classroomId : null);
 
-  window._streamUnsub = onSnapshot(q, async snap => {
-    const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  if (!cid) {
+    document.getElementById('clsNoClass').classList.add('active');
+    document.getElementById('clsContent').classList.remove('active');
+    document.getElementById('chatNoClass').style.display = 'flex';
+    document.getElementById('chatPanel').style.display = 'none';
+    return;
+  }
 
-    // Load done-state for assignments
+  document.getElementById('clsNoClass').classList.remove('active');
+  document.getElementById('clsContent').classList.add('active');
+  document.getElementById('chatNoClass').style.display = 'none';
+
+  // Load classroom doc if not cached
+  if (!loadedClassrooms[cid]) {
+    try {
+      const s = await getDoc(doc(db,'classrooms',cid));
+      if (s.exists()) loadedClassrooms[cid] = s.data();
+    } catch(e) {}
+  }
+  const cls = loadedClassrooms[cid] || {};
+
+  // Header
+  document.getElementById('clsTitle').textContent = cls.name || 'Classroom';
+  document.getElementById('clsTeacherName').textContent = cls.teacherName ? '🍎 ' + cls.teacherName : '';
+
+  // Manage link (teachers only)
+  if (role === 'teacher') {
+    const linkWrap = document.getElementById('clsClassroomLink');
+    const link     = document.getElementById('clsManageLink');
+    if (linkWrap && link) {
+      linkWrap.style.display = 'block';
+      link.href = '/classroom.html?id=' + cid;
+    }
+  }
+
+  // Announcement
+  if (cls.announcement) {
+    document.getElementById('clsAnnouncement').style.display = 'flex';
+    document.getElementById('clsAnnouncementText').textContent = cls.announcement;
+  }
+
+  // Subscribe to posts stream
+  if (_clsUnsub) { _clsUnsub(); _clsUnsub = null; }
+  const postsQ = query(collection(db,'classrooms',cid,'posts'), orderBy('createdAt','desc'), limit(50));
+  _clsUnsub = onSnapshot(postsQ, async snap => {
+    _allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    // Load done states for assignments
     const uid = currentUser?.uid;
     if (uid) {
-      const assignmentPosts = posts.filter(p => p.type === 'assignment');
-      await Promise.all(assignmentPosts.map(async p => {
-        if (_streamDoneCache[p.id] !== undefined) return;
+      const assignments = _allPosts.filter(p => p.type === 'assignment');
+      await Promise.all(assignments.map(async p => {
+        if (_doneCache[p.id] !== undefined) return;
         try {
-          const subSnap = await getDoc(doc(db, 'classrooms', cid, 'posts', p.id, 'submissions', uid));
-          _streamDoneCache[p.id] = subSnap.exists() && subSnap.data().done === true;
-        } catch(e) { _streamDoneCache[p.id] = false; }
+          const sub = await getDoc(doc(db,'classrooms',cid,'posts',p.id,'submissions',uid));
+          _doneCache[p.id] = sub.exists() && sub.data().done === true;
+        } catch(e) { _doneCache[p.id] = false; }
       }));
     }
 
-    if (countEl) countEl.textContent = posts.length ? posts.length + ' post' + (posts.length !== 1 ? 's' : '') : '';
+    renderClsStream(cid);
+    renderClsAssignments(cid);
+    renderClsMaterials();
 
-    if (!posts.length) {
-      feed.innerHTML = '<div style="text-align:center;padding:28px;color:var(--muted);font-size:.86rem;background:rgba(13,27,42,.03);border-radius:14px;border:1.5px solid rgba(13,27,42,.06)">No posts yet — check back later.</div>';
-      return;
+    // Pending assignments badge
+    const pending = _allPosts.filter(p => p.type === 'assignment' && !_doneCache[p.id]).length;
+    const pb = document.getElementById('pendingBadge');
+    if (pb) { pb.textContent = pending; pb.style.display = pending ? 'inline' : 'none'; }
+  });
+
+  // Load people
+  renderClsPeople(cid, cls);
+
+  // Init chat
+  initChat(cid, cls);
+}
+
+// Stream rendering
+function renderClsStream(cid) {
+  const feed = document.getElementById('clsStreamFeed');
+  if (!_allPosts.length) {
+    feed.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:.88rem;background:rgba(13,27,42,.03);border-radius:14px;border:1.5px solid rgba(13,27,42,.06)">No posts yet — check back later.</div>';
+    return;
+  }
+  const POST_ICONS = { announcement:'📢', assignment:'📝', material:'📎', question:'❓' };
+  feed.innerHTML = _allPosts.map(p => {
+    const type = p.type || 'announcement';
+    const icon = POST_ICONS[type] || '📋';
+    const date = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+
+    let dueHtml = '';
+    if (p.dueDate) {
+      const due = new Date(p.dueDate + (p.dueTime ? 'T'+p.dueTime : ''));
+      const diff = due - new Date();
+      const cls2 = diff < 0 ? '' : diff < 172800000 ? 'soon' : '';
+      dueHtml = `<div class="cls-due-badge ${cls2}">📅 Due ${escHtml(due.toLocaleDateString('en-US',{month:'short',day:'numeric'}))}</div>`;
     }
 
-    feed.innerHTML = posts.map(p => renderStreamPost(p, cid)).join('');
-  }, () => {
-    feed.innerHTML = '<div style="padding:16px;color:var(--muted);font-size:.84rem">Could not load stream.</div>';
-  });
-}
-
-function renderStreamPost(p, cid) {
-  const type  = p.type || 'announcement';
-  const icons = { announcement:'📢', assignment:'📝', material:'📎', question:'❓' };
-  const icon  = icons[type] || '📋';
-
-  // Date
-  const dateStr = p.createdAt?.toDate
-    ? p.createdAt.toDate().toLocaleDateString('en-US', { month:'short', day:'numeric' })
-    : '';
-
-  // Due date
-  let dueHtml = '';
-  if (p.dueDate) {
-    const due  = new Date(p.dueDate + (p.dueTime ? 'T' + p.dueTime : ''));
-    const now  = new Date();
-    const diff = due - now;
-    const cls2 = diff < 0 ? '' : diff < 172800000 ? 'soon' : '';
-    const dueLabel = due.toLocaleDateString('en-US', { month:'short', day:'numeric' }) + (p.dueTime ? ' at ' + p.dueTime : '');
-    dueHtml = `<div class="hsp-due ${cls2}">📅 Due ${escHtml(dueLabel)}</div>`;
-  }
-
-  // Links
-  let linksHtml = '';
-  if (p.links && p.links.length) {
-    linksHtml = p.links.map(l =>
-      `<a class="hsp-link" href="${escHtml(l.url)}" target="_blank" rel="noopener">🔗 ${escHtml(l.label || l.url)}</a>`
+    const links = (p.links||[]).map(l =>
+      `<a class="cls-post-link" href="${escHtml(l.url)}" target="_blank" rel="noopener">🔗 ${escHtml(l.label||l.url)}</a>`
     ).join('');
-  }
 
-  // Mark done button for assignments
-  let doneHtml = '';
-  if (type === 'assignment' && currentUser) {
-    const isDone = _streamDoneCache[p.id] === true;
-    doneHtml = `<button class="hsp-done-btn ${isDone?'done':''}" onclick="toggleAssignmentDone('${p.id}','${cid}',this)" id="donebtn_${p.id}">
-      <span class="hsp-done-check">${isDone ? '✓' : '○'}</span> ${isDone ? 'Marked as done' : 'Mark as done'}
-    </button>`;
-  }
+    let doneBtn = '';
+    if (type === 'assignment' && currentUser) {
+      const done = _doneCache[p.id] === true;
+      doneBtn = `<button class="cls-done-btn ${done?'done':''}" onclick="toggleDone('${p.id}','${cid}',this)">
+        ${done ? '✓ Marked as done' : '○ Mark as done'}
+      </button>`;
+    }
 
-  return `<div class="hub-stream-post">
-    <div class="hsp-header">
-      <div class="hsp-icon ${type}">${icon}</div>
-      <div class="hsp-meta">
-        <div class="hsp-title">${p.title ? escHtml(p.title) : `<em style="font-weight:400;color:var(--muted)">${type.charAt(0).toUpperCase()+type.slice(1)}</em>`}</div>
-        <div class="hsp-date">${escHtml(p.teacherName || 'Teacher')}${dateStr ? ' · ' + dateStr : ''}</div>
+    return `<div class="cls-post">
+      <div class="cls-post-header">
+        <div class="cls-post-icon ${type}">${icon}</div>
+        <div class="cls-post-meta">
+          <div class="cls-post-title">${p.title ? escHtml(p.title) : `<span style="font-weight:400;color:var(--muted)">${type.charAt(0).toUpperCase()+type.slice(1)}</span>`}</div>
+          <div class="cls-post-sub">${escHtml(p.teacherName||'Teacher')}${date?' · '+date:''}</div>
+        </div>
       </div>
-    </div>
-    ${p.body ? `<div class="hsp-body">${escHtml(p.body)}</div>` : ''}
-    ${dueHtml}
-    ${linksHtml}
-    ${doneHtml}
-  </div>`;
+      ${p.body ? `<div class="cls-post-body">${escHtml(p.body)}</div>` : ''}
+      ${dueHtml}${links}${doneBtn}
+    </div>`;
+  }).join('');
 }
 
-window.toggleAssignmentDone = async function(postId, cid, btn) {
+// Assignments tab
+function renderClsAssignments(cid) {
+  const el = document.getElementById('clsAssignmentsList');
+  const assignments = _allPosts.filter(p => p.type === 'assignment');
+  if (!assignments.length) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:.88rem">No assignments yet.</div>';
+    return;
+  }
+  // Sort: undone first, then by due date
+  const sorted = [...assignments].sort((a, b) => {
+    const aDone = _doneCache[a.id] === true;
+    const bDone = _doneCache[b.id] === true;
+    if (aDone !== bDone) return aDone ? 1 : -1;
+    const aDate = a.dueDate ? new Date(a.dueDate) : new Date(9999,0);
+    const bDate = b.dueDate ? new Date(b.dueDate) : new Date(9999,0);
+    return aDate - bDate;
+  });
+
+  el.innerHTML = sorted.map(p => {
+    const done = _doneCache[p.id] === true;
+    let dueText = 'No due date', dueCls = '';
+    if (p.dueDate) {
+      const due = new Date(p.dueDate);
+      const diff = due - new Date();
+      if (diff < 0) { dueText = 'Overdue'; dueCls = 'overdue'; }
+      else if (diff < 86400000) { dueText = 'Due today'; dueCls = 'soon'; }
+      else if (diff < 172800000) { dueText = 'Due tomorrow'; dueCls = 'soon'; }
+      else dueText = 'Due ' + due.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    }
+    return `<div class="asgn-card">
+      <div class="asgn-icon">${done ? '✅' : '📝'}</div>
+      <div class="asgn-info">
+        <div class="asgn-title">${escHtml(p.title||'Untitled assignment')}</div>
+        ${p.body ? `<div style="font-size:.8rem;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(p.body)}</div>` : ''}
+        <div class="asgn-due ${dueCls}">📅 ${dueText}</div>
+      </div>
+      <button class="cls-done-btn ${done?'done':''}" style="flex-shrink:0" onclick="toggleDone('${p.id}','${cid}',this)">
+        ${done ? '✓ Done' : '○ Mark done'}
+      </button>
+    </div>`;
+  }).join('');
+}
+
+// Materials tab
+function renderClsMaterials() {
+  const el = document.getElementById('clsMaterialsList');
+  const materials = _allPosts.filter(p => p.type === 'material');
+  if (!materials.length) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:.88rem">No materials posted yet.</div>';
+    return;
+  }
+  el.innerHTML = materials.map(p => {
+    const links = (p.links||[]).map(l =>
+      `<a class="cls-post-link" href="${escHtml(l.url)}" target="_blank" rel="noopener" style="display:inline-flex">📎 ${escHtml(l.label||l.url)}</a>`
+    ).join('');
+    return `<div class="cls-post">
+      <div class="cls-post-header">
+        <div class="cls-post-icon material">📎</div>
+        <div class="cls-post-meta">
+          <div class="cls-post-title">${p.title ? escHtml(p.title) : 'Material'}</div>
+          <div class="cls-post-sub">${escHtml(p.teacherName||'Teacher')}</div>
+        </div>
+      </div>
+      ${p.body ? `<div class="cls-post-body">${escHtml(p.body)}</div>` : ''}
+      ${links}
+    </div>`;
+  }).join('');
+}
+
+// People tab
+async function renderClsPeople(cid, cls) {
+  const el = document.getElementById('clsPeopleList');
+  try {
+    const snap = await getDocs(query(collection(db,'users'), where('classroomIds','array-contains',cid)));
+    const students = snap.docs.map(d => d.data());
+    const colors = ['#FF5733','#A78BFA','#38BDF8','#7DBE8E','#F4C542','#F472B6'];
+    const colorFor = name => colors[name.charCodeAt(0)%colors.length];
+
+    let html = `<div style="margin-bottom:20px"><div style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Teacher</div>`;
+    const tName = cls.teacherName || 'Teacher';
+    html += `<div class="people-row">
+      <div class="people-avatar" style="background:${colorFor(tName)}">${tName[0]?.toUpperCase()||'T'}</div>
+      <div><div class="people-name">${escHtml(tName)}</div><div class="people-role">Teacher</div></div>
+    </div></div>`;
+
+    html += `<div><div style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Students (${students.length})</div>`;
+    if (!students.length) {
+      html += '<div style="color:var(--muted);font-size:.88rem;padding:8px 0">No students enrolled yet.</div>';
+    } else {
+      html += students.map(s => {
+        const name = `${s.firstName||''} ${s.lastName||''}`.trim() || 'Student';
+        return `<div class="people-row">
+          <div class="people-avatar" style="background:${colorFor(name)}">${name[0]?.toUpperCase()||'S'}</div>
+          <div><div class="people-name">${escHtml(name)}</div><div class="people-role">Student</div></div>
+        </div>`;
+      }).join('');
+    }
+    html += '</div>';
+    el.innerHTML = html;
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:.86rem;padding:16px">Could not load people.</div>';
+  }
+}
+
+window.switchClsTab = function(tab, btn) {
+  document.querySelectorAll('.cls-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.cls-tab-panel').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('clsTab-'+tab)?.classList.add('active');
+};
+
+window.toggleDone = async function(postId, cid, btn) {
   if (!currentUser) return;
-  const uid   = currentUser.uid;
-  const isDone = _streamDoneCache[postId] === true;
+  const uid = currentUser.uid;
+  const isDone = _doneCache[postId] === true;
   const newDone = !isDone;
+  btn.disabled = true;
   try {
     await setDoc(
-      doc(db, 'classrooms', cid, 'posts', postId, 'submissions', uid),
+      doc(db,'classrooms',cid,'posts',postId,'submissions',uid),
       { done: newDone, updatedAt: serverTimestamp(), studentName: `${userProfile?.firstName||''} ${userProfile?.lastName||''}`.trim() },
       { merge: true }
     );
-    _streamDoneCache[postId] = newDone;
-    btn.className = 'hsp-done-btn' + (newDone ? ' done' : '');
-    btn.innerHTML = `<span class="hsp-done-check">${newDone ? '✓' : '○'}</span> ${newDone ? 'Marked as done' : 'Mark as done'}`;
-    showToast(newDone ? '✓ Marked as done!' : 'Marked as not done.');
-  } catch(e) { showToast('Could not update.'); }
+    _doneCache[postId] = newDone;
+    // Update all buttons for this post
+    document.querySelectorAll(`[onclick*="toggleDone('${postId}'"]`).forEach(b => {
+      b.className = 'cls-done-btn' + (newDone ? ' done' : '');
+      b.innerHTML = newDone ? '✓ Done' : '○ Mark done';
+      b.disabled = false;
+    });
+    showToast(newDone ? '✓ Marked as done!' : 'Unmarked.');
+    // Refresh assignments tab
+    renderClsAssignments(cid);
+    // Update pending badge
+    const pending = _allPosts.filter(p => p.type === 'assignment' && !_doneCache[p.id]).length;
+    const pb = document.getElementById('pendingBadge');
+    if (pb) { pb.textContent = pending; pb.style.display = pending ? 'inline' : 'none'; }
+  } catch(e) { showToast('Error.'); btn.disabled = false; }
+};
+
+// ── CHAT ─────────────────────────────────────────────────────────
+function initChat(cid, cls) {
+  _currentChatCid = cid;
+  if (_chatUnsub) { _chatUnsub(); _chatUnsub = null; }
+
+  // Update header
+  document.getElementById('chatRoomName').textContent = (cls.name || 'Classroom') + ' Chat';
+
+  const chatPanel = document.getElementById('chatPanel');
+  chatPanel.style.display = 'flex';
+
+  // Count members async
+  getDocs(query(collection(db,'users'), where('classroomIds','array-contains',cid)))
+    .then(snap => {
+      const count = snap.size + 1; // +1 for teacher
+      const countEl = document.getElementById('chatMemberCount');
+      if (countEl) countEl.textContent = count + ' member' + (count !== 1 ? 's' : '');
+    }).catch(()=>{});
+
+  // Subscribe to messages
+  const msgQ = query(
+    collection(db,'classrooms',cid,'chat'),
+    orderBy('createdAt','asc'),
+    limit(200)
+  );
+  _chatUnsub = onSnapshot(msgQ, snap => {
+    const msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    _chatMessages = msgs;
+
+    // Unread badge if chat tab not active
+    if (_activeMainTab !== 'chat' && msgs.length > 0) {
+      const lastMsg = msgs[msgs.length - 1];
+      const lastTs = lastMsg.createdAt?.toDate?.().getTime() || 0;
+      if (lastTs > _chatLastSeen && lastMsg.senderUid !== currentUser?.uid) {
+        const badge = document.getElementById('chatUnreadBadge');
+        if (badge) { badge.style.display = 'inline'; badge.textContent = '•'; }
+      }
+    }
+
+    renderChatMessages(msgs);
+  });
+}
+
+function renderChatMessages(msgs) {
+  const wrap = document.getElementById('chatMessagesWrap');
+  if (!wrap) return;
+  const uid = currentUser?.uid;
+
+  if (!msgs.length) {
+    wrap.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:.88rem">No messages yet. Say hi! 👋</div>';
+    return;
+  }
+
+  const colors = ['#FF5733','#A78BFA','#38BDF8','#7DBE8E','#F4C542','#F472B6','#FB923C','#34D399'];
+  const colorFor = s => colors[(s||'').charCodeAt(0) % colors.length];
+
+  let html = '';
+  let lastDateStr = '';
+
+  msgs.forEach((m, i) => {
+    const isMine = m.senderUid === uid;
+    const date   = m.createdAt?.toDate ? m.createdAt.toDate() : new Date();
+    const dateStr = date.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    const timeStr = date.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+
+    if (dateStr !== lastDateStr) {
+      html += `<div class="chat-day-divider">${dateStr}</div>`;
+      lastDateStr = dateStr;
+    }
+
+    const prevMsg = i > 0 ? msgs[i-1] : null;
+    const sameAuthor = prevMsg && prevMsg.senderUid === m.senderUid;
+    const namePart = (!sameAuthor && !isMine) ? `<div class="chat-name">${escHtml(m.senderName||'User')}</div>` : '';
+
+    html += `<div class="chat-msg ${isMine?'mine':''}">
+      ${!isMine && !sameAuthor ? `<div class="chat-avatar" style="background:${colorFor(m.senderName)}">${(m.senderName||'U')[0].toUpperCase()}</div>` : `<div style="width:30px;flex-shrink:0"></div>`}
+      <div>
+        ${namePart}
+        <div class="chat-bubble ${isMine?'mine':'them'}">${escHtml(m.text||'')}</div>
+        <div class="chat-time">${timeStr}</div>
+      </div>
+    </div>`;
+  });
+
+  wrap.innerHTML = html;
+  scrollChatToBottom();
+}
+
+function scrollChatToBottom() {
+  const wrap = document.getElementById('chatMessagesWrap');
+  if (wrap) wrap.scrollTop = wrap.scrollHeight;
+}
+
+window.sendChatMessage = async function() {
+  const input = document.getElementById('chatInput');
+  const text = input?.value.trim();
+  if (!text || !_currentChatCid || !currentUser) return;
+  input.value = '';
+  input.style.height = 'auto';
+  const name = `${userProfile?.firstName||''} ${userProfile?.lastName||''}`.trim() || 'User';
+  try {
+    await addDoc(collection(db,'classrooms',_currentChatCid,'chat'), {
+      text, senderUid: currentUser.uid, senderName: name,
+      senderRole: userProfile?.role || 'student',
+      createdAt: serverTimestamp()
+    });
+  } catch(e) { showToast('Could not send.'); }
+};
+
+window.handleChatKey = function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
 };
 
 /* ══════════════════════════════════════════════
@@ -4698,6 +5211,8 @@ async function buildSidebar() {
       sbNew.style.display   = 'none';
     }
   }
+  // Show/hide classroom & chat tabs based on enrollment
+  updateMainTabVisibility();
 }
 
 function strHash(s) {
